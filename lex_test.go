@@ -1,0 +1,73 @@
+package main
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestLex(t *testing.T) {
+	abbrev := func(typ itemType) func(string) item {
+		return func(input string) item {
+			return item{typ, input}
+		}
+	}
+	N := abbrev(itemNumber)
+	LP := abbrev(itemLeftParen)
+	RP := abbrev(itemRightParen)
+	A := abbrev(itemAtom)
+	toks := func(items ...item) []item {
+		if len(items) == 0 {
+			return []item{}
+		}
+		return items
+	}
+	var tests = []struct {
+		input  string
+		output []item
+	}{
+		{"", toks()},
+		{" ", toks()},
+		{"\n\t\r   \r\n", toks()},
+		{"1", toks(N("1"))},
+		{"12", toks(N("12"))},
+		{"123 ", toks(N("123"))},
+		{" 312", toks(N("312"))},
+		{"111 222", toks(N("111"), N("222"))},
+		{" 111 \n222 ", toks(N("111"), N("222"))},
+		{"-1", toks(N("-1"))},
+		{"+0", toks(N("+0"))},
+		{"+3 -5 ", toks(N("+3"), N("-5"))},
+		{"(", toks(LP("("))},
+		{"( ", toks(LP("("))},
+		{" (", toks(LP("("))},
+		{"1 (", toks(N("1"), LP("("))},
+		{"(1", toks(LP("("), N("1"))},
+		{")", toks(RP(")"))},
+		{"(3)", toks(LP("("), N("3"), RP(")"))},
+		{"Z", toks(A("Z"))},
+		{"(EQUAL (TIMES 3 4) 12)", toks(
+			LP("("),
+			A("EQUAL"),
+			LP("("),
+			A("TIMES"),
+			N("3"),
+			N("4"),
+			RP(")"),
+			N("12"),
+			RP(")"),
+		)},
+		{"+", toks(A("+"))},
+		{"(+ +1 -2)", toks(LP("("), A("+"), N("+1"), N("-2"), RP(")"))},
+		{"/", toks(A("/"))},
+		{"(/ 1 2)", toks(LP("("), A("/"), N("1"), N("2"), RP(")"))},
+		{"(QUOTE (LAMBDA (X) (PLUS X X)))", toks(
+			LP("("), A("QUOTE"), LP("("), A("LAMBDA"), LP("("), A("X"), RP(")"),
+			LP("("), A("PLUS"), A("X"), A("X"), RP(")"), RP(")"), RP(")"))},
+	}
+
+	for _, test := range tests {
+		items := lexItems(test.input)
+		assert.Equal(t, test.output, items)
+	}
+}
