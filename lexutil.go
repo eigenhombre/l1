@@ -4,8 +4,9 @@ package main
 // https://www.youtube.com/watch?v=HxaD_trXwRE
 // https://talks.golang.org/2011/lex.slide
 //
-// Modified by John Jacobsen to work with a user-supplied set of lexemes
-// and state functions.
+// Slightly modified by John Jacobsen to work with a user-supplied set of
+// lexemes and state functions.
+// FIXME: Spin this out into a package.
 //
 // Copyright (c) 2011 The Go Authors. All rights reserved.
 
