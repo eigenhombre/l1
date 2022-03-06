@@ -62,3 +62,72 @@ func Num(ob interface{}) number {
 func Cons(i sexpr, cdr *consCell) *consCell {
 	return &consCell{i, cdr}
 }
+
+type atom struct {
+	s string
+}
+
+// Atom makes an atom from a string.  It doesn't check for lexical correctness
+// -- the lexer should do that.
+func Atom(s string) atom {
+	return atom{s}
+}
+
+func (a atom) String() string {
+	return a.s
+}
+
+func balancedParenPoints(tokens []item) (int, int) {
+	level := 0
+	start := 0
+	for i, token := range tokens[start:] {
+		switch token.typ {
+		case itemLeftParen:
+			level++
+		case itemRightParen:
+			level--
+			if level == 0 {
+				return 0, i
+			}
+		}
+	}
+	panic(fmt.Sprintf("balancedParenPoints: unbalanced parens in %q", tokens))
+}
+
+func mkList(xs []sexpr) *consCell {
+	if len(xs) == 0 {
+		return Nil
+	}
+	return Cons(xs[0], mkList(xs[1:]))
+}
+
+func parse(tokens []item) []sexpr {
+	ret := []sexpr{}
+	i := 0
+	for {
+		if i >= len(tokens) {
+			break
+		}
+		token := tokens[i]
+		switch token.typ {
+		case itemNumber:
+			ret = append(ret, Num(token.val))
+			i++
+		case itemAtom:
+			ret = append(ret, Atom(token.val))
+			i++
+		case itemLeftParen:
+			start, end := balancedParenPoints(tokens[i:])
+			ret = append(ret, mkList(parse(tokens[i+start+1:i+end])))
+			i = i + end + 1
+		default:
+			panic(fmt.Sprintf("strToSexpr: bad token type %d ", token.typ))
+		}
+	}
+	return ret
+}
+
+func lexAndParse(s string) []sexpr {
+	tokens := lexItems(s)
+	return parse(tokens)
+}

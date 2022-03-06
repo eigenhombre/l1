@@ -1,27 +1,30 @@
 # l1
 First attempt at a simple Lisp in Go
 
-WIP toy Lisp for fun projects.  Currently lexing works, parsing is next:
+WIP toy Lisp for fun projects.  Currently lexing and parsing works, eval is next:
 
-        12:37:03 l1 51.8F     ≡ * ☐ ~  >  go test
-        PASS
-        ok  	github.com/eigenhombre/l1	0.148s
-        12:38:18 l1 51.8F     ≡ * ☐ ~  >  go build
-        12:40:04 l1 52.7F     ≡ * ☐ ~  >  ./l1
+        11:57:20 l1 39.3F     ≡ * ☐ ~ (master) >  ./l1
         > (QUOTE (LAMBDA (X) (+ X X)))
-        LPAREN('(')
+
+        LEXEMES_____________
+        LP('(')
         ATOM('QUOTE')
-        LPAREN('(')
+        LP('(')
         ATOM('LAMBDA')
-        LPAREN('(')
+        LP('(')
         ATOM('X')
-        RPAREN(')')
-        LPAREN('(')
+        RP(')')
+        LP('(')
         ATOM('+')
         ATOM('X')
         ATOM('X')
-        RPAREN(')')
-        RPAREN(')')
-        RPAREN(')')
+        RP(')')
+        RP(')')
+        RP(')')
+
+        PARSED ITEMS________
+        [(QUOTE (LAMBDA (X) (+ X X)))]
+        > ^C
+        11:57:31 l1 39.3F     ≡ * ☐ ~ (master) >
 
 Take a look at the lexing tests and the rest of the code for a sense of what's there so far.

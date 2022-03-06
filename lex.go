@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Use with lexutil.go (which should eventually be its own package).
 
@@ -17,8 +20,23 @@ const (
 var typeMap = map[itemType]string{
 	itemNumber:     "NUM",
 	itemAtom:       "ATOM",
-	itemLeftParen:  "LPAREN",
-	itemRightParen: "RPAREN",
+	itemLeftParen:  "LP",
+	itemRightParen: "RP",
+}
+
+func (i item) String() string {
+	switch i.typ {
+	case itemNumber:
+		return fmt.Sprintf("%s(%s)", typeMap[i.typ], i.val)
+	case itemAtom:
+		return fmt.Sprintf("%s(%s)", typeMap[i.typ], i.val)
+	case itemLeftParen:
+		return "LP"
+	case itemRightParen:
+		return "RP"
+	default:
+		panic("bad item type")
+	}
 }
 
 func isDigit(r rune) bool {
