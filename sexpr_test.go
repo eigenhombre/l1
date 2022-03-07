@@ -129,6 +129,9 @@ func TestStrToSexprs(T *testing.T) {
 		{"(1 2 3)", S(L(Num(1), Num(2), Num(3)))},
 		{"(1 2 3 4)", S(L(Num(1), Num(2), Num(3), Num(4)))},
 		{"((1) (2))", S(L(L(Num(1)), L(Num(2))))},
+		{"((1 2) (3 4))", S(L(L(Num(1), Num(2)), L(Num(3), Num(4))))},
+		{"((1 2) (3 4) (5 6))", S(L(L(Num(1), Num(2)), L(Num(3), Num(4)), L(Num(5), Num(6))))},
+		{"(((1 2) (3 4)) (5 6))", S(L(L(L(Num(1), Num(2)), L(Num(3), Num(4))), L(Num(5), Num(6))))},
 	}
 	for _, test := range tests {
 		if !reflect.DeepEqual(lexAndParse(test.input), test.want) {
