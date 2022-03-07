@@ -27,5 +27,7 @@ func main() {
 		}
 		fmt.Println("\nPARSED ITEMS________________")
 		fmt.Println(lexAndParse(s))
+		fmt.Println("\nEVALUATED ITEMS_____________")
+		fmt.Println(eval(lexAndParse(s)[0])) // fixme: handle multiple items
 	}
 }

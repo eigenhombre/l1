@@ -101,6 +101,7 @@ func mkList(xs []sexpr) *consCell {
 	return Cons(xs[0], mkList(xs[1:]))
 }
 
+// parse returns a list of sexprs parsed from a list of tokens.
 func parse(tokens []item) []sexpr {
 	ret := []sexpr{}
 	i := 0
@@ -128,6 +129,19 @@ func parse(tokens []item) []sexpr {
 }
 
 func lexAndParse(s string) []sexpr {
-	tokens := lexItems(s)
-	return parse(tokens)
+	return parse(lexItems(s))
+}
+
+func eval(s sexpr) sexpr {
+	switch s.(type) {
+	case *consCell:
+		// Work to be done here
+		return Nil
+	case number:
+		return s
+	// case atom:
+	// Finish this when we have environments
+	default:
+		panic(fmt.Sprintf("eval: unknown type %T\n", s))
+	}
 }
