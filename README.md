@@ -32,19 +32,18 @@ WIP toy Lisp for fun projects.  Currently lexing and parsing works, eval is next
 
 Take a look at the tests and the rest of the code for a sense of what's there so far.
 
+# L1 features (planned)
+
+- [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace);
+- Sufficient power to [implement itself](http://www.paulgraham.com/rootsoflisp.html);
+- Implement math as bignums from the get-go;
+- Curses-based terminal control for text games, command line utilities, ...;
+
 # Goals
 
 - Improve my Go skills;
 - Build a small, fast-loading Lisp that I can extend how I like;
 - Learn more about [Lisp as a model for computation](http://www.paulgraham.com/rootsoflisp.html).
-
-# Possible Directions
-
-- See how far we can get without strings;
-- Implement math as bignums from the get-go;
-- Curses-like terminal control for games, command line utilities.
-- See if I can make a language that is powerful enough but also supplies
-  [helpful constraints](https://www.artistsjourney.com/blog/constraint-in-art).
 
 # Usage
 

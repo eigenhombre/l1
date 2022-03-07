@@ -18,6 +18,8 @@ type consCell struct {
 	cdr sexpr
 }
 
+type env map[string]sexpr
+
 // Nil is the empty list / cons cell.  Cons with Nil to create a list
 // of one item.
 var Nil *consCell = nil
@@ -132,16 +134,16 @@ func lexAndParse(s string) []sexpr {
 	return parse(lexItems(s))
 }
 
-func eval(s sexpr) sexpr {
-	switch s.(type) {
+func eval(expr sexpr, e env) sexpr {
+	switch expr := expr.(type) {
 	case *consCell:
 		// Work to be done here
 		return Nil
 	case number:
-		return s
-	// case atom:
-	// Finish this when we have environments
+		return expr
+	case atom:
+		return e[expr.s]
 	default:
-		panic(fmt.Sprintf("eval: unknown type %T\n", s))
+		panic(fmt.Sprintf("eval: unknown type %T\n", expr))
 	}
 }
