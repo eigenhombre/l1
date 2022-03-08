@@ -134,14 +134,28 @@ func lexAndParse(s string) []sexpr {
 	return parse(lexItems(s))
 }
 
+func evalCons(expr *consCell, e env) sexpr {
+	if expr == Nil {
+		return Nil
+	}
+	if carAtom, ok := expr.car.(atom); ok {
+		if carAtom.s == "quote" {
+			return expr.cdr.(*consCell).car
+		}
+	}
+	return Nil
+}
+
 func eval(expr sexpr, e env) sexpr {
 	switch expr := expr.(type) {
 	case *consCell:
-		// Work to be done here
-		return Nil
+		return evalCons(expr, e)
 	case number:
 		return expr
 	case atom:
+		if expr.s == "t" {
+			return expr
+		}
 		return e[expr.s]
 	default:
 		panic(fmt.Sprintf("eval: unknown type %T\n", expr))

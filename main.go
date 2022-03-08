@@ -3,31 +3,34 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 )
 
-func readLine() string {
+func readLine() (string, error) {
 	bio := bufio.NewReader(os.Stdin)
 	// FIXME: don't discard hasMoreInLine
 	line, _, err := bio.ReadLine()
-	if err != nil {
-		panic(err)
+	switch err {
+	case nil:
+		return string(line), nil
+	default:
+		return "", err
 	}
-	return string(line)
 }
 
 func main() {
 	for {
 		fmt.Print("> ")
-		s := readLine()
-		fmt.Println("\nLEXEMES______________________")
-		for _, item := range lexItems(s) {
-			fmt.Printf("%s('%s') ", typeMap[item.typ], item.val)
+		s, err := readLine()
+		switch err {
+		case nil:
+			fmt.Println(eval(lexAndParse(s)[0], env{})) // fixme: handle multiple items
+		case io.EOF:
 			fmt.Println()
+			return
+		default:
+			panic(err)
 		}
-		fmt.Println("\nPARSED ITEMS________________")
-		fmt.Println(lexAndParse(s))
-		fmt.Println("\nEVALUATED ITEMS_____________")
-		fmt.Println(eval(lexAndParse(s)[0], env{})) // fixme: handle multiple items
 	}
 }
