@@ -52,21 +52,6 @@ func TestSexprStrings(T *testing.T) {
 	}
 }
 
-func TestAtoms(T *testing.T) {
-	var tests = []struct {
-		input string
-	}{
-		{"Z"},
-		{"ZY"},
-		{"+"},
-	}
-	for _, test := range tests {
-		if Atom(test.input).String() != test.input {
-			T.Errorf("Atoms(%q).String() != %q", test.input, test.input)
-		}
-	}
-}
-
 func TestFindMatchingParens(T *testing.T) {
 	LP := item{itemLeftParen, "("}
 	RP := item{itemRightParen, ")"}
@@ -106,27 +91,30 @@ func TestStrToSexprs(T *testing.T) {
 		cons := mkList(xs)
 		return cons
 	}
+	A := func(s string) Atom {
+		return Atom{s}
+	}
 	var happyPathTests = []struct {
 		input string
 		want  []sexpr
 	}{
-		{"a", S(Atom("a"))},
-		{"b", S(Atom("b"))},
-		{"b c", S(Atom("b"), Atom("c"))},
-		{"+", S(Atom("+"))},
-		{"foo", S(Atom("foo"))},
+		{"a", S(A("a"))},
+		{"b", S(A("b"))},
+		{"b c", S(A("b"), A("c"))},
+		{"+", S(A("+"))},
+		{"foo", S(A("foo"))},
 		{"1", S(Num(1))},
-		{"a 3", S(Atom("a"), Num(3))},
+		{"a 3", S(A("a"), Num(3))},
 		{"()", S(L())},
-		{"(a)", S(L(Atom("a")))},
-		{"a ()", S(Atom("a"), Nil)},
+		{"(a)", S(L(A("a")))},
+		{"a ()", S(A("a"), Nil)},
 		{"(())", S(L(L()))},
 		{"((1))", S(L(L(Num(1))))},
-		{"(a)", S(L(Atom("a")))},
-		{"((a))", S(L(L(Atom("a"))))},
-		{"(a b)", S(L(Atom("a"), Atom("b")))},
-		{"(a (b))", S(L(Atom("a"), L(Atom("b"))))},
-		{"((a) b)", S(L(L(Atom("a")), Atom("b")))},
+		{"(a)", S(L(A("a")))},
+		{"((a))", S(L(L(A("a"))))},
+		{"(a b)", S(L(A("a"), A("b")))},
+		{"(a (b))", S(L(A("a"), L(A("b"))))},
+		{"((a) b)", S(L(L(A("a")), A("b")))},
 		{"(1)", S(L(Num(1)))},
 		{"(1 2)", S(L(Num(1), Num(2)))},
 		{"(1 2 3)", S(L(Num(1), Num(2), Num(3)))},

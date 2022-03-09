@@ -12,8 +12,8 @@ type sexpr interface {
 	String() string
 }
 
-// consCell is a cons cell.  Use Cons to create one.
-type consCell struct {
+// ConsCell is a cons cell.  Use Cons to create one.
+type ConsCell struct {
 	car sexpr
 	cdr sexpr
 }
@@ -22,11 +22,11 @@ type env map[string]sexpr
 
 // Nil is the empty list / cons cell.  Cons with Nil to create a list
 // of one item.
-var Nil *consCell = nil
+var Nil *ConsCell = nil
 
-func (j *consCell) String() string {
+func (j *ConsCell) String() string {
 	ret := "("
-	for car := j; car != Nil; car = car.cdr.(*consCell) {
+	for car := j; car != Nil; car = car.cdr.(*ConsCell) {
 		if car.car == Nil {
 			return ret + ")"
 		}
@@ -38,18 +38,20 @@ func (j *consCell) String() string {
 	return ret + ")"
 }
 
-// number is a big.Int, but narrower in its string representation.
-type number struct {
+// Number is a big.Int, but narrower in its string representation.
+type Number struct {
 	big.Int
 }
 
 // String returns the string representation of the number.
-func (n number) String() string {
+func (n Number) String() string {
 	return n.Text(10)
 }
 
-func Num(ob interface{}) number {
-	var n number
+// Num is a `number` constructor, which can take a string or a
+// ("normal" number).
+func Num(ob interface{}) Number {
+	var n Number
 	switch s := ob.(type) {
 	case string:
 		n.SetString(s, 10)
@@ -61,21 +63,17 @@ func Num(ob interface{}) number {
 	return n
 }
 
-func Cons(i sexpr, cdr *consCell) *consCell {
-	return &consCell{i, cdr}
+// Cons creates a cons cell.
+func Cons(i sexpr, cdr *ConsCell) *ConsCell {
+	return &ConsCell{i, cdr}
 }
 
-type atom struct {
+// Atom is the primitive symbolic type.
+type Atom struct {
 	s string
 }
 
-// Atom makes an atom from a string.  It doesn't check for lexical correctness
-// -- the lexer should do that.
-func Atom(s string) atom {
-	return atom{s}
-}
-
-func (a atom) String() string {
+func (a Atom) String() string {
 	return a.s
 }
 
@@ -96,7 +94,7 @@ func balancedParenPoints(tokens []item) (int, int, error) {
 	return 0, 0, fmt.Errorf("unbalanced parens")
 }
 
-func mkList(xs []sexpr) *consCell {
+func mkList(xs []sexpr) *ConsCell {
 	if len(xs) == 0 {
 		return Nil
 	}
@@ -117,7 +115,7 @@ func parse(tokens []item) ([]sexpr, error) {
 			ret = append(ret, Num(token.val))
 			i++
 		case itemAtom:
-			ret = append(ret, Atom(token.val))
+			ret = append(ret, Atom{token.val})
 			i++
 		case itemLeftParen:
 			start, end, err := balancedParenPoints(tokens[i:])
@@ -143,13 +141,13 @@ func lexAndParse(s string) ([]sexpr, error) {
 	return parse(lexItems(s))
 }
 
-func evalCons(expr *consCell, e env) sexpr {
+func evalCons(expr *ConsCell, e env) sexpr {
 	if expr == Nil {
 		return Nil
 	}
-	if carAtom, ok := expr.car.(atom); ok {
+	if carAtom, ok := expr.car.(Atom); ok {
 		if carAtom.s == "quote" {
-			return expr.cdr.(*consCell).car
+			return expr.cdr.(*ConsCell).car
 		}
 	}
 	return Nil
@@ -157,11 +155,11 @@ func evalCons(expr *consCell, e env) sexpr {
 
 func eval(expr sexpr, e env) sexpr {
 	switch expr := expr.(type) {
-	case *consCell:
+	case *ConsCell:
 		return evalCons(expr, e)
-	case number:
+	case Number:
 		return expr
-	case atom:
+	case Atom:
 		if expr.s == "t" {
 			return expr
 		}

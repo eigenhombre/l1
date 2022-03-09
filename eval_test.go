@@ -31,3 +31,23 @@ func TestEval(t *testing.T) {
 		}
 	}
 }
+
+func TestNum(t *testing.T) {
+	var tests = []struct {
+		in  interface{}
+		out string
+	}{
+		{"1", "1"},
+		{1, "1"},
+		// {int8(1), "1"},  // other int types not supported yet
+		{"1089710983751098757", "1089710983751098757"},
+	}
+	for _, test := range tests {
+		got := Num(test.in).String()
+		if got != test.out {
+			t.Errorf("Num(%q) = %q, want %q", test.in, got, test.out)
+		} else {
+			t.Logf("Num(%q) = %q", test.in, got)
+		}
+	}
+}
