@@ -2,6 +2,8 @@
 
 <img src="/l1.jpg" width="400">
 
+![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
+
 First attempt at a simple Lisp in Go.
 
 WIP toy Lisp for fun projects.  Currently lexing and parsing works, eval is next:
