@@ -11,7 +11,7 @@ ${PROG}: *.go
 	go build .
 
 test:
-	go test
+	go test -v
 
 lint:
 	golint -set_exit_status .
