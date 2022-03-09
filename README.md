@@ -7,16 +7,16 @@
 First attempt at a simple Lisp in Go.
 
 # Implemented
-- Lexing
-- Parsing
-- `t` as True, `()` as `nil`
-- Atoms bind to values in an environment
-- `quote`
+- Lexing and parsing
+- Eval
+  - `t` as True, `()` as `nil`
+  - Atoms bind to values in an environment
+  - `quote`
 - Simple error handling
 
 # Examples
 
-        09:41:06 l1 31.3F     ≡ * ☐ ~ (master) >  l1
+        $ l1
         > 1
         1
         > 31489071430987532109487513094875031984750983147
@@ -32,7 +32,7 @@ First attempt at a simple Lisp in Go.
         > )
         unexpected right paren
         > ^D
-        09:41:39 l1 31.3F     ≡ * ☐ ~ (master) >
+        $
 
 Take a look at the tests for a better sense of what's there so far.
 
