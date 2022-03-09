@@ -87,7 +87,10 @@ func TestFindMatchingParens(T *testing.T) {
 		{I(LP, A, LP, A, RP, RP), 0, 5},
 	}
 	for _, test := range tests {
-		begin, end := balancedParenPoints(test.input)
+		begin, end, err := balancedParenPoints(test.input)
+		if err != nil {
+			T.Errorf("%v: %v", test.input, err)
+		}
 		if begin != test.begin || end != test.end {
 			T.Errorf("balancedParenPoints(%v) = %d, %d, want %d, %d",
 				test.input, begin, end, test.begin, test.end)
@@ -103,7 +106,7 @@ func TestStrToSexprs(T *testing.T) {
 		cons := mkList(xs)
 		return cons
 	}
-	var tests = []struct {
+	var happyPathTests = []struct {
 		input string
 		want  []sexpr
 	}{
@@ -133,9 +136,29 @@ func TestStrToSexprs(T *testing.T) {
 		{"((1 2) (3 4) (5 6))", S(L(L(Num(1), Num(2)), L(Num(3), Num(4)), L(Num(5), Num(6))))},
 		{"(((1 2) (3 4)) (5 6))", S(L(L(L(Num(1), Num(2)), L(Num(3), Num(4))), L(Num(5), Num(6))))},
 	}
-	for _, test := range tests {
-		if !reflect.DeepEqual(lexAndParse(test.input), test.want) {
-			T.Errorf("%v != %v", lexAndParse(test.input), test.want)
+	for _, test := range happyPathTests {
+		parsed, err := lexAndParse(test.input)
+		if err != nil {
+			T.Errorf("lexAndParse(%q) failed: %v", test.input, err)
+		}
+		if !reflect.DeepEqual(parsed, test.want) {
+			T.Errorf("%v != %v", parsed, test.want)
+		}
+	}
+	var sadPathTests = []struct {
+		input string
+	}{
+		{"("},
+		{"(a"},
+		{"((a b"},
+		{")"},
+		{"))"},
+		{")())"},
+	}
+	for _, test := range sadPathTests {
+		_, err := lexAndParse(test.input)
+		if err == nil {
+			T.Errorf("lexAndParse(%q) should have failed", test.input)
 		}
 	}
 }

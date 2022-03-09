@@ -79,7 +79,7 @@ func (a atom) String() string {
 	return a.s
 }
 
-func balancedParenPoints(tokens []item) (int, int) {
+func balancedParenPoints(tokens []item) (int, int, error) {
 	level := 0
 	start := 0
 	for i, token := range tokens[start:] {
@@ -89,11 +89,11 @@ func balancedParenPoints(tokens []item) (int, int) {
 		case itemRightParen:
 			level--
 			if level == 0 {
-				return 0, i
+				return 0, i, nil
 			}
 		}
 	}
-	panic(fmt.Sprintf("balancedParenPoints: unbalanced parens in %q", tokens))
+	return 0, 0, fmt.Errorf("unbalanced parens")
 }
 
 func mkList(xs []sexpr) *consCell {
@@ -104,7 +104,7 @@ func mkList(xs []sexpr) *consCell {
 }
 
 // parse returns a list of sexprs parsed from a list of tokens.
-func parse(tokens []item) []sexpr {
+func parse(tokens []item) ([]sexpr, error) {
 	ret := []sexpr{}
 	i := 0
 	for {
@@ -120,17 +120,26 @@ func parse(tokens []item) []sexpr {
 			ret = append(ret, Atom(token.val))
 			i++
 		case itemLeftParen:
-			start, end := balancedParenPoints(tokens[i:])
-			ret = append(ret, mkList(parse(tokens[i+start+1:i+end])))
+			start, end, err := balancedParenPoints(tokens[i:])
+			if err != nil {
+				return nil, err
+			}
+			inner, err := parse(tokens[i+start+1 : i+end])
+			if err != nil {
+				return nil, err
+			}
+			ret = append(ret, mkList(inner))
 			i = i + end + 1
+		case itemRightParen:
+			return nil, fmt.Errorf("unexpected right paren")
 		default:
-			panic(fmt.Sprintf("strToSexpr: bad token type %d ", token.typ))
+			return nil, fmt.Errorf("unexpected token %v", token)
 		}
 	}
-	return ret
+	return ret, nil
 }
 
-func lexAndParse(s string) []sexpr {
+func lexAndParse(s string) ([]sexpr, error) {
 	return parse(lexItems(s))
 }
 

@@ -25,7 +25,12 @@ func main() {
 		s, err := readLine()
 		switch err {
 		case nil:
-			fmt.Println(eval(lexAndParse(s)[0], env{})) // fixme: handle multiple items
+			got, err := lexAndParse(s)
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				continue
+			}
+			fmt.Println(eval(got[0], env{})) // fixme: handle multiple items
 		case io.EOF:
 			fmt.Println()
 			return
