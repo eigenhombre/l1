@@ -6,8 +6,6 @@
 
 First attempt at a simple Lisp in Go.
 
-WIP toy Lisp for fun projects.
-
 # Implemented
 - Lexing
 - Parsing
