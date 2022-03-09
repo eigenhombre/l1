@@ -8,6 +8,7 @@ First attempt at a simple Lisp in Go.
 
 # Implemented
 - Lexing and parsing
+- Numbers as `big.Int`
 - Eval
   - `t` as True, `()` as `nil`
   - Atoms bind to values in an environment
