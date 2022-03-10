@@ -1,9 +1,8 @@
 package main
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestLex(t *testing.T) {
@@ -68,6 +67,10 @@ func TestLex(t *testing.T) {
 
 	for _, test := range tests {
 		items := lexItems(test.input)
-		assert.Equal(t, test.output, items)
+		if !reflect.DeepEqual(items, test.output) {
+			t.Errorf("%q: expected %v, got %v", test.input, test.output, items)
+		} else {
+			t.Logf("%q -> %v", test.input, items)
+		}
 	}
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -17,10 +16,10 @@ func TestNumberStrings(T *testing.T) {
 		{"12948712498129877", "12948712498129877"},
 	}
 	for _, test := range tests {
-		fmt.Printf("Checking that %T-valued %v -> %q\n",
-			test.input, test.input, test.output)
 		if Num(test.input).String() != test.output {
 			T.Errorf("Num(%q).String() != %q", test.input, test.output)
+		} else {
+			T.Logf("Num(%q).String() == %q", test.input, test.output)
 		}
 	}
 }
@@ -44,9 +43,11 @@ func TestSexprStrings(T *testing.T) {
 			Cons(Num(5), Cons(Num("6"), Nil))), "((3 1309875618907812098) 5 6)"},
 	}
 	for _, test := range tests {
-		fmt.Printf("Checking string representation: %v\n", test.input)
 		if test.input.String() != test.want {
 			T.Errorf("%T-valued %v.String() != %s",
+				test.input, test.input, test.want)
+		} else {
+			T.Logf("%T-valued %v.String() == %s",
 				test.input, test.input, test.want)
 		}
 	}
@@ -147,6 +148,8 @@ func TestStrToSexprs(T *testing.T) {
 		_, err := lexAndParse(test.input)
 		if err == nil {
 			T.Errorf("lexAndParse(%q) should have failed", test.input)
+		} else {
+			T.Logf("lexAndParse(%q) failed as desired: %v", test.input, err)
 		}
 	}
 }
