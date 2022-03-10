@@ -10,4 +10,4 @@ RUN go install honnef.co/go/tools/cmd/staticcheck@latest
 RUN go get -v golang.org/x/lint/golint
 COPY . .
 
-RUN make
+RUN make verbose

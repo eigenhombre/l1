@@ -1,4 +1,4 @@
-.PHONY: test clean deps lint
+.PHONY: test clean deps lint all verbose
 
 PROG=l1
 
@@ -11,7 +11,7 @@ ${PROG}: *.go
 	go build .
 
 test:
-	go test -v
+	go test
 
 lint:
 	golint -set_exit_status .
@@ -22,3 +22,7 @@ clean:
 
 install: ${PROG}
 	go install .
+
+verbose: all
+    # The tests are fast!  Just do it again, verbosely:
+	go test -v
