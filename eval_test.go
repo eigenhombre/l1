@@ -58,6 +58,8 @@ func TestEval(t *testing.T) {
 		{"(/ 1 2)", "0"},
 		// `a` is bound in the test environment:
 		{"a", "1"},
+		{"(* a a a (*) (*) (*))", "1"},
+		{"(+ a a a (+) (+) (+))", "3"},
 		{"(quote 3)", "3"},
 		{"(quote (1 2 3))", "(1 2 3)"},
 		{"(quote ())", "()"},
