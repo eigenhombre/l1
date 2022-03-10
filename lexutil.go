@@ -37,7 +37,7 @@ package main
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// license that can be found in the Go language LICENSE file.
 
 import (
 	"strings"

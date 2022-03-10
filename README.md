@@ -48,7 +48,7 @@ Check out this repo and `cd` to it. Then,
 
 A `Makefile` exists for convenience, and a `Dockerfile` for CI builds.
 
-# L1 features (planned)
+# Planned Features
 
 - [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace);
 - Sufficient power to [implement itself](http://www.paulgraham.com/rootsoflisp.html);

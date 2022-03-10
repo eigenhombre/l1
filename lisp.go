@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/big"
 )
 
 // sexpr is a general-purpose data structure for representing
@@ -36,31 +35,6 @@ func (j *ConsCell) String() string {
 		}
 	}
 	return ret + ")"
-}
-
-// Number is a big.Int, but narrower in its string representation.
-type Number struct {
-	big.Int
-}
-
-// String returns the string representation of the number.
-func (n Number) String() string {
-	return n.Text(10)
-}
-
-// Num is a `number` constructor, which can take a string or a
-// ("normal" number).
-func Num(ob interface{}) Number {
-	var n Number
-	switch s := ob.(type) {
-	case string:
-		n.SetString(s, 10)
-	case int:
-		n.SetInt64(int64(s))
-	default:
-		panic(fmt.Sprintf("Num: unknown type %T\n", ob))
-	}
-	return n
 }
 
 // Cons creates a cons cell.
@@ -141,14 +115,42 @@ func lexAndParse(s string) ([]sexpr, error) {
 	return parse(lexItems(s))
 }
 
+var builtins = map[string]func(env, *ConsCell) sexpr{
+	"+": func(e env, args *ConsCell) sexpr {
+		sum := Num(0)
+		thisCar := args.car
+		thisCarNum, ok := thisCar.(Number)
+		if !ok {
+			panic("Handle me!")
+		}
+		sum = sum.Add(thisCarNum)
+		for args = args.cdr.(*ConsCell); args != Nil; args = args.cdr.(*ConsCell) {
+			thisCar = args.car
+			thisCarNum, ok = thisCar.(Number)
+			if !ok {
+				panic("Handle me!")
+			}
+			sum = sum.Add(thisCarNum)
+		}
+		return sum
+	},
+}
+
 func evalCons(expr *ConsCell, e env) sexpr {
 	if expr == Nil {
 		return Nil
 	}
 	if carAtom, ok := expr.car.(Atom); ok {
-		if carAtom.s == "quote" {
+		switch {
+		case carAtom.s == "quote":
 			return expr.cdr.(*ConsCell).car
+		case builtins[carAtom.s] != nil:
+			return builtins[carAtom.s](e, expr.cdr.(*ConsCell))
+		default:
+			// TODO: implement unbound symbol error
+			return Nil
 		}
+
 	}
 	return Nil
 }
