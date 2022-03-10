@@ -10,7 +10,10 @@ func TestEval(t *testing.T) {
 		in  string
 		out string
 	}{
-		// Canonical examples for README:
+		// The first several tests are output in a format that is easy to copy
+		// into the README.  They should be some of the more "interesting" ones
+		// to illustrate the state of the language.  Tricky edge cases less
+		// interesting to the reader occur later in the list.
 		{"t", "t"},
 		{"()", "()"},
 		{"(quote foo)", "foo"},
