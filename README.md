@@ -18,31 +18,49 @@ First attempt at a simple Lisp in Go.
 
 # Examples
 
-        $ l1
-        > 1
-        1
-        > 31489071430987532109487513094875031984750983147
-        31489071430987532109487513094875031984750983147
-        > (quote (the (ten (laws (of (greenspun))))))
-        (the (ten (laws (of (greenspun)))))
-        > (car (quote (the (ten (laws (of (greenspun)))))))
-        the
-        > (cdr (quote (is not common lisp)))
-        (not common lisp)
-        > t
-        t
-        > ()
-        ()
-        > (* (+ 1 2 3) (/ 4000 1000) 2139872138907)
-        51356931333768
-        > (
-        unbalanced parens
-        > )
-        unexpected right paren
-        > ^D
-        $
+    $ l1
+    > t
+    t
+    > ()
+    ()
+    > (quote foo)
+    foo
+    > (quote (the (ten (laws (of (greenspun))))))
+    (the (ten (laws (of (greenspun)))))
+    > (cdr (quote (is not common lisp)))
+    (not common lisp)
+    > (car (quote (is not common lisp)))
+    is
+    > 1
+    1
+    > -5
+    -5
+    > (* 12349807213490872130987 12349807213490872130987)
+    152517738210391179737088822267441718485594169
+    > (+)
+    0
+    > (+ 1 1 2 3)
+    7
+    > (+ 1 1)
+    2
+    > (eq (quote foo) (quote foo))
+    t
+    > (eq (quote foo) (quote bar))
+    ()
+    > (eq (quote foo) (quote (foo bar)))
+    ()
+    > (atom (quote foo))
+    t
+    > (atom (quote (foo bar)))
+    ()
+    > (
+    unbalanced parens
+    > )
+    unexpected right paren
+    > ^D
+    $
 
-Take a look at the `eval_test.go` for a better sense of what's implemented so far.
+These were copied directly from the unit test output; `eval_test.go` has more examples.
 
 # Usage
 

@@ -182,6 +182,25 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return cdrCons.cdr
 	},
+	"atom": func(args []sexpr) sexpr {
+		if len(args) != 1 {
+			panic("Handle me!")
+		}
+		_, ok := args[0].(Atom)
+		if ok {
+			return Atom{"t"}
+		}
+		return Nil
+	},
+	"eq": func(args []sexpr) sexpr {
+		if len(args) != 2 {
+			panic("Handle me!")
+		}
+		if args[0] == args[1] {
+			return Atom{"t"}
+		}
+		return Nil
+	},
 }
 
 func evlist(expr *ConsCell, e env) []sexpr {
