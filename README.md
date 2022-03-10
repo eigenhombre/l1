@@ -38,7 +38,7 @@ First attempt at a simple Lisp in Go.
         > ^D
         $
 
-Take a look at the tests for a better sense of what's there so far.
+Take a look at the `eval_test.go` for a better sense of what's implemented so far.
 
 # Usage
 
