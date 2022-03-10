@@ -23,7 +23,7 @@ func TestNumConstruction(t *testing.T) {
 	}
 }
 
-func TestNumMath(t *testing.T) {
+func TestBinaryOps(t *testing.T) {
 	var tests = []struct {
 		a    Number
 		op   string
@@ -48,5 +48,25 @@ func TestNumMath(t *testing.T) {
 		} else {
 			t.Logf("%v %s %v = %v", test.a, test.op, test.b, got)
 		}
+	}
+}
+
+func TestUnaryOps(t *testing.T) {
+	if !Num(3).Neg().Equals(Num(-3)) {
+		t.Errorf("Num(3).Neg() != Num(-3)")
+	} else {
+		t.Logf("Num(3).Neg() == Num(-3)")
+	}
+
+	if !Num(-3).Neg().Equals(Num(3)) {
+		t.Errorf("Num(-3).Neg() != Num(3)")
+	} else {
+		t.Logf("Num(-3).Neg() == Num(3)")
+	}
+
+	if !Num("9999999999999").Neg().Equals(Num("-9999999999999")) {
+		t.Errorf("Num(9999999999999).Neg() != Num(-9999999999999)")
+	} else {
+		t.Logf("Num(9999999999999).Neg() == Num(-9999999999999)")
 	}
 }

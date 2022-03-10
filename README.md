@@ -13,7 +13,8 @@ First attempt at a simple Lisp in Go.
   - `t` as True, `()` as `nil`
   - Atoms bind to values in an environment
   - `quote`
-- Simple error handling
+  - Arithmetical operators `+-*/`
+- (Some) simple error handling
 
 # Examples
 
@@ -22,12 +23,14 @@ First attempt at a simple Lisp in Go.
         1
         > 31489071430987532109487513094875031984750983147
         31489071430987532109487513094875031984750983147
-        > (quote (lists exist but are not evaluated yet))
-        (lists exist but are not evaluated yet)
+        > (quote (the (ten (laws (of (greenspun))))))
+        (the (ten (laws (of (greenspun)))))
         > t
         t
         > ()
         ()
+        > (* (+ 1 2 3) (/ 4000 1000) 2139872138907)
+        51356931333768
         > (
         unbalanced parens
         > )

@@ -48,6 +48,13 @@ func (n Number) Equals(o Number) bool {
 	return n.bi.Cmp(&o.bi) == 0
 }
 
+// Neg returns the negative of the number.
+func (n Number) Neg() Number {
+	var ni big.Int = n.bi
+	result := ni.Neg(&ni)
+	return Number{*result}
+}
+
 // Num is a `num` constructor, which can take a string or a
 // ("normal") number.
 func Num(ob interface{}) Number {

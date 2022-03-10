@@ -115,25 +115,61 @@ func lexAndParse(s string) ([]sexpr, error) {
 	return parse(lexItems(s))
 }
 
-var builtins = map[string]func(env, *ConsCell) sexpr{
-	"+": func(e env, args *ConsCell) sexpr {
-		sum := Num(0)
-		thisCar := args.car
-		thisCarNum, ok := thisCar.(Number)
-		if !ok {
-			panic("Handle me!")
+var builtins = map[string]func([]sexpr) sexpr{
+	"+": func(args []sexpr) sexpr {
+		if len(args) == 0 {
+			return Num(0)
 		}
-		sum = sum.Add(thisCarNum)
-		for args = args.cdr.(*ConsCell); args != Nil; args = args.cdr.(*ConsCell) {
-			thisCar = args.car
-			thisCarNum, ok = thisCar.(Number)
-			if !ok {
-				panic("Handle me!")
-			}
-			sum = sum.Add(thisCarNum)
+		sum := Num(0)
+		for _, arg := range args {
+			sum = sum.Add(arg.(Number))
 		}
 		return sum
 	},
+	"-": func(args []sexpr) sexpr {
+		if len(args) == 0 {
+			panic("Handle me!")
+		}
+		if len(args) == 1 {
+			return args[0].(Number).Neg()
+		}
+		sum := args[0].(Number)
+		for _, arg := range args[1:] {
+			sum = sum.Sub(arg.(Number))
+		}
+		return sum
+	},
+	"*": func(args []sexpr) sexpr {
+		if len(args) == 0 {
+			return Num(1)
+		}
+		prod := Num(1)
+		for _, arg := range args {
+			prod = prod.Mul(arg.(Number))
+		}
+		return prod
+	},
+	"/": func(args []sexpr) sexpr {
+		if len(args) == 0 {
+			panic("Handle me!")
+		}
+		if len(args) == 1 {
+			return Num(1)
+		}
+		quot := args[0].(Number)
+		for _, arg := range args[1:] {
+			quot = quot.Div(arg.(Number))
+		}
+		return quot
+	},
+}
+
+func evlist(expr *ConsCell, e env) []sexpr {
+	ret := []sexpr{}
+	for ; expr != Nil; expr = expr.cdr.(*ConsCell) {
+		ret = append(ret, eval(expr.car, e))
+	}
+	return ret
 }
 
 func evalCons(expr *ConsCell, e env) sexpr {
@@ -145,7 +181,7 @@ func evalCons(expr *ConsCell, e env) sexpr {
 		case carAtom.s == "quote":
 			return expr.cdr.(*ConsCell).car
 		case builtins[carAtom.s] != nil:
-			return builtins[carAtom.s](e, expr.cdr.(*ConsCell))
+			return builtins[carAtom.s](evlist(expr.cdr.(*ConsCell), e))
 		default:
 			// TODO: implement unbound symbol error
 			return Nil
