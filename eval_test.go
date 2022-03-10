@@ -40,6 +40,8 @@ func TestEval(t *testing.T) {
 		// {"(/)", "ERROR"},
 		{"(/ 4 2)", "2"},
 		{"(/ 1 2)", "0"},
+		{"(car (quote (1 2 3)))", "1"},
+		{"(cdr (quote (1 2 3)))", "(2 3)"},
 	}
 	for _, test := range tests {
 		got, err := lexAndParse(test.in)

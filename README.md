@@ -25,6 +25,10 @@ First attempt at a simple Lisp in Go.
         31489071430987532109487513094875031984750983147
         > (quote (the (ten (laws (of (greenspun))))))
         (the (ten (laws (of (greenspun)))))
+        > (car (quote (the (ten (laws (of (greenspun)))))))
+        the
+        > (cdr (quote (is not common lisp)))
+        (not common lisp)
         > t
         t
         > ()
