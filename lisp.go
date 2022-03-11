@@ -4,28 +4,29 @@ import (
 	"fmt"
 )
 
-// sexpr is a general-purpose data structure for representing
+// Sexpr is a general-purpose data structure for representing
 // S-expressions; for now, it has String only, but it may have
 // evaluable or other methods added later.
-type sexpr interface {
+type Sexpr interface {
 	String() string
+	Eval(env env) Sexpr
 }
 
 // ConsCell is a cons cell.  Use Cons to create one.
 type ConsCell struct {
-	car sexpr
-	cdr sexpr
+	car Sexpr
+	cdr Sexpr
 }
 
-type env map[string]sexpr
+type env map[string]Sexpr
 
 // Nil is the empty list / cons cell.  Cons with Nil to create a list
 // of one item.
 var Nil *ConsCell = nil
 
-func (j *ConsCell) String() string {
+func (c *ConsCell) String() string {
 	ret := "("
-	for car := j; car != Nil; car = car.cdr.(*ConsCell) {
+	for car := c; car != Nil; car = car.cdr.(*ConsCell) {
 		if car.car == Nil {
 			return ret + ")"
 		}
@@ -38,8 +39,28 @@ func (j *ConsCell) String() string {
 }
 
 // Cons creates a cons cell.
-func Cons(i sexpr, cdr *ConsCell) *ConsCell {
+func Cons(i Sexpr, cdr *ConsCell) *ConsCell {
 	return &ConsCell{i, cdr}
+}
+
+// Eval a list expression
+func (c *ConsCell) Eval(e env) Sexpr {
+	if c == Nil {
+		return Nil
+	}
+	if carAtom, ok := c.car.(Atom); ok {
+		switch {
+		case carAtom.s == "quote":
+			return c.cdr.(*ConsCell).car
+		case builtins[carAtom.s] != nil:
+			return builtins[carAtom.s](evlist(c.cdr.(*ConsCell), e))
+		default:
+			// TODO: implement unbound symbol error
+			return Nil
+		}
+
+	}
+	return Nil
 }
 
 // Atom is the primitive symbolic type.
@@ -49,6 +70,15 @@ type Atom struct {
 
 func (a Atom) String() string {
 	return a.s
+}
+
+// Eval for atom returns the atom if it's the truth value; otherwise, it looks
+// up the value in the environment.
+func (a Atom) Eval(e env) Sexpr {
+	if a.s == "t" {
+		return a
+	}
+	return e[a.s]
 }
 
 func balancedParenPoints(tokens []item) (int, int, error) {
@@ -68,7 +98,7 @@ func balancedParenPoints(tokens []item) (int, int, error) {
 	return 0, 0, fmt.Errorf("unbalanced parens")
 }
 
-func mkList(xs []sexpr) *ConsCell {
+func mkList(xs []Sexpr) *ConsCell {
 	if len(xs) == 0 {
 		return Nil
 	}
@@ -76,8 +106,8 @@ func mkList(xs []sexpr) *ConsCell {
 }
 
 // parse returns a list of sexprs parsed from a list of tokens.
-func parse(tokens []item) ([]sexpr, error) {
-	ret := []sexpr{}
+func parse(tokens []item) ([]Sexpr, error) {
+	ret := []Sexpr{}
 	i := 0
 	for {
 		if i >= len(tokens) {
@@ -111,12 +141,12 @@ func parse(tokens []item) ([]sexpr, error) {
 	return ret, nil
 }
 
-func lexAndParse(s string) ([]sexpr, error) {
+func lexAndParse(s string) ([]Sexpr, error) {
 	return parse(lexItems(s))
 }
 
-var builtins = map[string]func([]sexpr) sexpr{
-	"+": func(args []sexpr) sexpr {
+var builtins = map[string]func([]Sexpr) Sexpr{
+	"+": func(args []Sexpr) Sexpr {
 		if len(args) == 0 {
 			return Num(0)
 		}
@@ -126,7 +156,7 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return sum
 	},
-	"-": func(args []sexpr) sexpr {
+	"-": func(args []Sexpr) Sexpr {
 		if len(args) == 0 {
 			panic("Handle me!")
 		}
@@ -139,7 +169,7 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return sum
 	},
-	"*": func(args []sexpr) sexpr {
+	"*": func(args []Sexpr) Sexpr {
 		if len(args) == 0 {
 			return Num(1)
 		}
@@ -149,7 +179,7 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return prod
 	},
-	"/": func(args []sexpr) sexpr {
+	"/": func(args []Sexpr) Sexpr {
 		if len(args) == 0 {
 			panic("Handle me!")
 		}
@@ -162,7 +192,7 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return quot
 	},
-	"car": func(args []sexpr) sexpr {
+	"car": func(args []Sexpr) Sexpr {
 		if len(args) != 1 {
 			panic("Handle me!")
 		}
@@ -172,7 +202,7 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return carCons.car
 	},
-	"cdr": func(args []sexpr) sexpr {
+	"cdr": func(args []Sexpr) Sexpr {
 		if len(args) != 1 {
 			panic("Handle me!")
 		}
@@ -182,7 +212,7 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return cdrCons.cdr
 	},
-	"atom": func(args []sexpr) sexpr {
+	"atom": func(args []Sexpr) Sexpr {
 		if len(args) != 1 {
 			panic("Handle me!")
 		}
@@ -192,7 +222,7 @@ var builtins = map[string]func([]sexpr) sexpr{
 		}
 		return Nil
 	},
-	"eq": func(args []sexpr) sexpr {
+	"eq": func(args []Sexpr) Sexpr {
 		if len(args) != 2 {
 			panic("Handle me!")
 		}
@@ -203,45 +233,10 @@ var builtins = map[string]func([]sexpr) sexpr{
 	},
 }
 
-func evlist(expr *ConsCell, e env) []sexpr {
-	ret := []sexpr{}
+func evlist(expr *ConsCell, e env) []Sexpr {
+	ret := []Sexpr{}
 	for ; expr != Nil; expr = expr.cdr.(*ConsCell) {
-		ret = append(ret, eval(expr.car, e))
+		ret = append(ret, expr.car.Eval(e))
 	}
 	return ret
-}
-
-func evalCons(expr *ConsCell, e env) sexpr {
-	if expr == Nil {
-		return Nil
-	}
-	if carAtom, ok := expr.car.(Atom); ok {
-		switch {
-		case carAtom.s == "quote":
-			return expr.cdr.(*ConsCell).car
-		case builtins[carAtom.s] != nil:
-			return builtins[carAtom.s](evlist(expr.cdr.(*ConsCell), e))
-		default:
-			// TODO: implement unbound symbol error
-			return Nil
-		}
-
-	}
-	return Nil
-}
-
-func eval(expr sexpr, e env) sexpr {
-	switch expr := expr.(type) {
-	case *ConsCell:
-		return evalCons(expr, e)
-	case Number:
-		return expr
-	case Atom:
-		if expr.s == "t" {
-			return expr
-		}
-		return e[expr.s]
-	default:
-		panic(fmt.Sprintf("eval: unknown type %T\n", expr))
-	}
 }

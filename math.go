@@ -10,6 +10,11 @@ type Number struct {
 	bi big.Int
 }
 
+// Eval of a number is just the number itself.
+func (n Number) Eval(e env) Sexpr {
+	return n
+}
+
 // String returns the string representation of the number.
 func (n Number) String() string {
 	return n.bi.Text(10)

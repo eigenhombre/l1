@@ -26,7 +26,7 @@ func TestNumberStrings(T *testing.T) {
 
 func TestSexprStrings(T *testing.T) {
 	var tests = []struct {
-		input sexpr
+		input Sexpr
 		want  string
 	}{
 		{Nil, "()"},
@@ -85,10 +85,10 @@ func TestFindMatchingParens(T *testing.T) {
 }
 
 func TestStrToSexprs(T *testing.T) {
-	S := func(xs ...sexpr) []sexpr {
+	S := func(xs ...Sexpr) []Sexpr {
 		return xs
 	}
-	L := func(xs ...sexpr) sexpr {
+	L := func(xs ...Sexpr) Sexpr {
 		cons := mkList(xs)
 		return cons
 	}
@@ -97,7 +97,7 @@ func TestStrToSexprs(T *testing.T) {
 	}
 	var happyPathTests = []struct {
 		input string
-		want  []sexpr
+		want  []Sexpr
 	}{
 		{"a", S(A("a"))},
 		{"b", S(A("b"))},

@@ -76,7 +76,7 @@ func TestEval(t *testing.T) {
 		if err != nil {
 			t.Errorf("lexAndParse(%q) failed: %v", test.in, err)
 		}
-		res := eval(got[0], env{"a": Num(1)})
+		res := got[0].Eval(env{"a": Num(1)})
 		if res.String() != test.out {
 			t.Errorf("eval(%q) = %q, want %q", test.in, res, test.out)
 		} else {

@@ -30,7 +30,7 @@ func main() {
 				fmt.Printf("%v\n", err)
 				continue
 			}
-			fmt.Println(eval(got[0], env{})) // fixme: handle multiple items
+			fmt.Println(got[0].Eval(env{})) // fixme: handle multiple items
 		case io.EOF:
 			fmt.Println()
 			return
