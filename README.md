@@ -16,7 +16,15 @@ First attempt at a simple Lisp in Go.
   - Arithmetical operators `+-*/`
 - (Some) simple error handling
 
-# Examples
+# Usage / Examples
+
+Check out this repo and `cd` to it. Then,
+
+    go test
+    go build
+    go install
+
+Then, from anywhere, `l1` will start your REPL:
 
     $ l1
     > t
@@ -62,16 +70,7 @@ First attempt at a simple Lisp in Go.
 
 These were copied directly from the unit test output; `eval_test.go` has more examples.
 
-# Usage
-
-Check out this repo and `cd` to it. Then,
-
-- `go test` and maybe 
-- `go build` followed by
-- `go install`; then
-- `l1`
-
-A `Makefile` exists for convenience, and a `Dockerfile` for CI builds.
+A `Makefile` exists for convenience, and a `Dockerfile` is used for a GitHub action CI build.
 
 # Planned Features
 
