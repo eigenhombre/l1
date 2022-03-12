@@ -214,6 +214,12 @@ var builtins = map[string]func([]Sexpr) Sexpr{
 		}
 		return cdrCons.cdr
 	},
+	"cons": func(args []Sexpr) Sexpr {
+		if len(args) != 2 {
+			panic("Handle me!")
+		}
+		return Cons(args[0], args[1].(*ConsCell))
+	},
 	"atom": func(args []Sexpr) Sexpr {
 		if len(args) != 1 {
 			panic("Handle me!")

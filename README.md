@@ -31,6 +31,10 @@ Then, from anywhere, `l1` will start your REPL:
     t
     > ()
     ()
+    > (cons t ())
+    (t)
+    > (cons (quote hello) (quote (world)))
+    (hello world)
     > (quote foo)
     foo
     > (quote (the (ten (laws (of (greenspun))))))
@@ -56,10 +60,6 @@ Then, from anywhere, `l1` will start your REPL:
     > (eq (quote foo) (quote bar))
     ()
     > (eq (quote foo) (quote (foo bar)))
-    ()
-    > (atom (quote foo))
-    t
-    > (atom (quote (foo bar)))
     ()
     > (
     unbalanced parens

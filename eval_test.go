@@ -16,6 +16,8 @@ func TestEval(t *testing.T) {
 		// interesting to the reader occur later in the list.
 		{"t", "t"},
 		{"()", "()"},
+		{"(cons t ())", "(t)"},
+		{"(cons (quote hello) (quote (world)))", "(hello world)"},
 		{"(quote foo)", "foo"},
 		{
 			"(quote (the (ten (laws (of (greenspun))))))",
@@ -69,6 +71,11 @@ func TestEval(t *testing.T) {
 		{"(quote (((1 2 3))))", "(((1 2 3)))"},
 		{"(car (quote (1 2 3)))", "1"},
 		{"(cdr (quote (1 2 3)))", "(2 3)"},
+		{"(cons 1 (quote (2 3 4)))", "(1 2 3 4)"},
+		{"(cons (cons 1 (cons 2 ())) (quote (3 4)))", "((1 2) 3 4)"},
+		// {"(quote (()))", "(())"},
+		// {"(cons () ())", "(())"},
+		// {"(cons)", "ERROR"},
 		{"(eq (quote (foo bar)) (quote (foo bar)))", "()"},
 	}
 	for i, test := range tests {
