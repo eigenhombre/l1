@@ -14,6 +14,7 @@ First attempt at a simple Lisp in Go.
   - Atoms bind to values in an environment
   - `quote`, `car`, `cdr`, `cons`, `cond`
   - Arithmetical operators `+-*/`
+  - Side effects, e.g. `(def a 1234)`
 - (Some) simple error handling
 
 # Usage / Examples
