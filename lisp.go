@@ -50,6 +50,17 @@ func evlist(expr *ConsCell, e env) []Sexpr {
 	return ret
 }
 
+func evCond(pairList *ConsCell, e env) Sexpr {
+	if pairList == Nil {
+		return Nil
+	}
+	pair := pairList.car.(*ConsCell)
+	if pair.car.Eval(e) == Nil {
+		return evCond(pairList.cdr.(*ConsCell), e)
+	}
+	return pair.cdr.(*ConsCell).car.Eval(e)
+}
+
 // Eval a list expression
 func (c *ConsCell) Eval(e env) Sexpr {
 	if c == Nil {
@@ -59,6 +70,8 @@ func (c *ConsCell) Eval(e env) Sexpr {
 		switch {
 		case carAtom.s == "quote":
 			return c.cdr.(*ConsCell).car
+		case carAtom.s == "cond":
+			return evCond(c.cdr.(*ConsCell), e)
 		case builtins[carAtom.s] != nil:
 			return builtins[carAtom.s](evlist(c.cdr.(*ConsCell), e))
 		default:

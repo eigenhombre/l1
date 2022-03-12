@@ -25,6 +25,7 @@ func TestEval(t *testing.T) {
 		},
 		{"(cdr (quote (is not common lisp)))", "(not common lisp)"},
 		{"(car (quote (is not common lisp)))", "is"},
+		{"(cond (() 1) (2 3))", "3"},
 		{"1", "1"},
 		{"-5", "-5"},
 		{"(* 12349807213490872130987 12349807213490872130987)",
@@ -79,6 +80,11 @@ func TestEval(t *testing.T) {
 		{"(cons () ())", "(())"},
 		// // {"(cons)", "ERROR"},
 		{"(eq (quote (foo bar)) (quote (foo bar)))", "()"},
+		{"(cond)", "()"},
+		{"(cond (() 3))", "()"},
+		{"(cond (3 3))", "3"},
+		{"(cond (() 3) (() 4))", "()"},
+		{"(cond (t 3) (t 4))", "3"},
 	}
 	for i, test := range tests {
 		got, err := lexAndParse(test.in)

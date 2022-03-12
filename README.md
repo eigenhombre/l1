@@ -12,7 +12,7 @@ First attempt at a simple Lisp in Go.
 - Eval
   - `t` as True, `()` as `nil`
   - Atoms bind to values in an environment
-  - `quote`
+  - `quote`, `car`, `cdr`, `cons`, `cond`
   - Arithmetical operators `+-*/`
 - (Some) simple error handling
 
@@ -43,6 +43,8 @@ Then, from anywhere, `l1` will start your REPL:
     (not common lisp)
     > (car (quote (is not common lisp)))
     is
+    > (cond (() 1) (2 3))
+    3
     > 1
     1
     > -5
@@ -58,8 +60,6 @@ Then, from anywhere, `l1` will start your REPL:
     > (eq (quote foo) (quote foo))
     t
     > (eq (quote foo) (quote bar))
-    ()
-    > (eq (quote foo) (quote (foo bar)))
     ()
     > (
     unbalanced parens
