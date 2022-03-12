@@ -3,6 +3,8 @@ package main
 import (
 	"reflect"
 	"testing"
+
+	"github.com/eigenhombre/lexutil"
 )
 
 func TestNumberStrings(T *testing.T) {
@@ -54,13 +56,13 @@ func TestSexprStrings(T *testing.T) {
 }
 
 func TestFindMatchingParens(T *testing.T) {
-	LP := item{itemLeftParen, "("}
-	RP := item{itemRightParen, ")"}
-	A := item{itemAtom, "A"}
-	N := item{itemNumber, "1"}
-	I := func(i ...item) []item { return i }
+	LP := lexutil.LexItem{Typ: itemLeftParen, Val: "("}
+	RP := lexutil.LexItem{Typ: itemRightParen, Val: ")"}
+	A := lexutil.LexItem{Typ: itemAtom, Val: "A"}
+	N := lexutil.LexItem{Typ: itemNumber, Val: "1"}
+	I := func(i ...lexutil.LexItem) []lexutil.LexItem { return i }
 	var tests = []struct {
-		input      []item
+		input      []lexutil.LexItem
 		begin, end int
 	}{
 		{I(LP, RP), 0, 1},

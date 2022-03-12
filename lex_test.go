@@ -3,27 +3,29 @@ package main
 import (
 	"reflect"
 	"testing"
+
+	"github.com/eigenhombre/lexutil"
 )
 
 func TestLex(t *testing.T) {
-	abbrev := func(typ itemType) func(string) item {
-		return func(input string) item {
-			return item{typ, input}
+	abbrev := func(typ lexutil.ItemType) func(string) lexutil.LexItem {
+		return func(input string) lexutil.LexItem {
+			return lexutil.LexItem{Typ: typ, Val: input}
 		}
 	}
 	N := abbrev(itemNumber)
 	LP := abbrev(itemLeftParen)
 	RP := abbrev(itemRightParen)
 	A := abbrev(itemAtom)
-	toks := func(items ...item) []item {
+	toks := func(items ...lexutil.LexItem) []lexutil.LexItem {
 		if len(items) == 0 {
-			return []item{}
+			return []lexutil.LexItem{}
 		}
 		return items
 	}
 	var tests = []struct {
 		input  string
-		output []item
+		output []lexutil.LexItem
 	}{
 		{"", toks()},
 		{" ", toks()},

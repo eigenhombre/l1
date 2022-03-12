@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/eigenhombre/lexutil"
 )
 
 // Sexpr is a general-purpose data structure for representing
@@ -81,11 +83,11 @@ func (a Atom) Eval(e env) Sexpr {
 	return e[a.s]
 }
 
-func balancedParenPoints(tokens []item) (int, int, error) {
+func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {
 	level := 0
 	start := 0
 	for i, token := range tokens[start:] {
-		switch token.typ {
+		switch token.Typ {
 		case itemLeftParen:
 			level++
 		case itemRightParen:
@@ -106,7 +108,7 @@ func mkList(xs []Sexpr) *ConsCell {
 }
 
 // parse returns a list of sexprs parsed from a list of tokens.
-func parse(tokens []item) ([]Sexpr, error) {
+func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 	ret := []Sexpr{}
 	i := 0
 	for {
@@ -114,12 +116,12 @@ func parse(tokens []item) ([]Sexpr, error) {
 			break
 		}
 		token := tokens[i]
-		switch token.typ {
+		switch token.Typ {
 		case itemNumber:
-			ret = append(ret, Num(token.val))
+			ret = append(ret, Num(token.Val))
 			i++
 		case itemAtom:
-			ret = append(ret, Atom{token.val})
+			ret = append(ret, Atom{token.Val})
 			i++
 		case itemLeftParen:
 			start, end, err := balancedParenPoints(tokens[i:])

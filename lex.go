@@ -3,13 +3,15 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"github.com/eigenhombre/lexutil"
 )
 
 // Use with lexutil.go (which should eventually be its own package).
 
 // Lexemes:
 const (
-	itemNumber itemType = iota
+	itemNumber lexutil.ItemType = iota
 	itemAtom
 	itemLeftParen
 	itemRightParen
@@ -17,19 +19,20 @@ const (
 )
 
 // Human-readable versions of above:
-var typeMap = map[itemType]string{
+var typeMap = map[lexutil.ItemType]string{
 	itemNumber:     "NUM",
 	itemAtom:       "ATOM",
 	itemLeftParen:  "LP",
 	itemRightParen: "RP",
 }
 
-func (i item) String() string {
-	switch i.typ {
+// LexRepr returns a string representation of a known lexeme.
+func LexRepr(i lexutil.LexItem) string {
+	switch i.Typ {
 	case itemNumber:
-		return fmt.Sprintf("%s(%s)", typeMap[i.typ], i.val)
+		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
 	case itemAtom:
-		return fmt.Sprintf("%s(%s)", typeMap[i.typ], i.val)
+		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
 	case itemLeftParen:
 		return "LP"
 	case itemRightParen:
@@ -47,52 +50,52 @@ func isSpace(r rune) bool {
 	return strings.ContainsRune(" \t\n\r", r)
 }
 
-func lexBetween(l *lexer) stateFn {
+func lexBetween(l *lexutil.Lexer) lexutil.StateFn {
 	for {
-		switch r := l.next(); {
+		switch r := l.Next(); {
 		case isSpace(r):
-			l.ignore()
-		case r == eof:
+			l.Ignore()
+		case r == lexutil.EOF:
 			return nil
 		case isDigit(r) || r == '-' || r == '+':
-			l.backup()
+			l.Backup()
 			return lexInt
 		case r == '(':
-			l.emit(itemLeftParen)
+			l.Emit(itemLeftParen)
 		case r == ')':
-			l.emit(itemRightParen)
+			l.Emit(itemRightParen)
 		default:
-			l.backup()
+			l.Backup()
 			return lexAtom
 		}
 	}
 }
 
-func lexAtom(l *lexer) stateFn {
+func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
 	var validAtomChars = ("0123456789abcdefghijklmnopqrstuvwxyz" +
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"+*/-_!=<>")
-	l.acceptRun(validAtomChars)
-	l.emit(itemAtom)
+	l.AcceptRun(validAtomChars)
+	l.Emit(itemAtom)
 	return lexBetween
 }
 
-func lexInt(l *lexer) stateFn {
-	l.accept("-+")
-	nextRune := l.peek()
+func lexInt(l *lexutil.Lexer) lexutil.StateFn {
+	l.Accept("-+")
+	nextRune := l.Peek()
 	if isDigit(nextRune) {
-		l.acceptRun("0123456789")
-		l.emit(itemNumber)
+		l.AcceptRun("0123456789")
+		l.Emit(itemNumber)
 		return lexBetween
 	}
 	return lexAtom
 }
 
-func lexItems(s string) []item {
-	_, ch := lex("main", s, lexBetween)
-	items := []item{}
-	for tok := range ch {
-		items = append(items, tok)
+func lexItems(s string) []lexutil.LexItem {
+	l := lexutil.Lex("main", s, lexBetween)
+	ret := []lexutil.LexItem{}
+	for tok := range l.Items {
+		ret = append(ret, tok)
 	}
-	return items
+	return ret
 }
