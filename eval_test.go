@@ -73,9 +73,11 @@ func TestEval(t *testing.T) {
 		{"(cdr (quote (1 2 3)))", "(2 3)"},
 		{"(cons 1 (quote (2 3 4)))", "(1 2 3 4)"},
 		{"(cons (cons 1 (cons 2 ())) (quote (3 4)))", "((1 2) 3 4)"},
-		// {"(quote (()))", "(())"},
-		// {"(cons () ())", "(())"},
-		// {"(cons)", "ERROR"},
+		{"(quote ((1)))", "((1))"},
+		{"(quote (()))", "(())"},
+		{"(quote (() ()))", "(() ())"},
+		{"(cons () ())", "(())"},
+		// // {"(cons)", "ERROR"},
 		{"(eq (quote (foo bar)) (quote (foo bar)))", "()"},
 	}
 	for i, test := range tests {

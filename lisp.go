@@ -29,9 +29,6 @@ var Nil *ConsCell = nil
 func (c *ConsCell) String() string {
 	ret := "("
 	for car := c; car != Nil; car = car.cdr.(*ConsCell) {
-		if car.car == Nil {
-			return ret + ")"
-		}
 		ret += car.car.String()
 		if car.cdr != Nil {
 			ret += " "
@@ -43,6 +40,14 @@ func (c *ConsCell) String() string {
 // Cons creates a cons cell.
 func Cons(i Sexpr, cdr *ConsCell) *ConsCell {
 	return &ConsCell{i, cdr}
+}
+
+func evlist(expr *ConsCell, e env) []Sexpr {
+	ret := []Sexpr{}
+	for ; expr != Nil; expr = expr.cdr.(*ConsCell) {
+		ret = append(ret, expr.car.Eval(e))
+	}
+	return ret
 }
 
 // Eval a list expression
@@ -57,10 +62,8 @@ func (c *ConsCell) Eval(e env) Sexpr {
 		case builtins[carAtom.s] != nil:
 			return builtins[carAtom.s](evlist(c.cdr.(*ConsCell), e))
 		default:
-			// TODO: implement unbound symbol error
-			return Nil
+			panic("unimplemented")
 		}
-
 	}
 	return Nil
 }
@@ -239,12 +242,4 @@ var builtins = map[string]func([]Sexpr) Sexpr{
 		}
 		return Nil
 	},
-}
-
-func evlist(expr *ConsCell, e env) []Sexpr {
-	ret := []Sexpr{}
-	for ; expr != Nil; expr = expr.cdr.(*ConsCell) {
-		ret = append(ret, expr.car.Eval(e))
-	}
-	return ret
 }
