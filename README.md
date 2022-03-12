@@ -61,6 +61,10 @@ Then, from anywhere, `l1` will start your REPL:
     t
     > (eq (quote foo) (quote bar))
     ()
+    > (def a 1234567890)
+    1234567890
+    > (* a a a a a)
+    2867971860299718107233761438093672048294900000
     > (
     unbalanced parens
     > )
