@@ -11,7 +11,7 @@ import (
 // evaluable or other methods added later.
 type Sexpr interface {
 	String() string
-	Eval(env env) Sexpr
+	Eval(env *env) Sexpr
 }
 
 // ConsCell is a cons cell.  Use Cons to create one.
@@ -42,7 +42,7 @@ func Cons(i Sexpr, cdr *ConsCell) *ConsCell {
 	return &ConsCell{i, cdr}
 }
 
-func evlist(expr *ConsCell, e env) []Sexpr {
+func evList(expr *ConsCell, e *env) []Sexpr {
 	ret := []Sexpr{}
 	for ; expr != Nil; expr = expr.cdr.(*ConsCell) {
 		ret = append(ret, expr.car.Eval(e))
@@ -50,7 +50,7 @@ func evlist(expr *ConsCell, e env) []Sexpr {
 	return ret
 }
 
-func evCond(pairList *ConsCell, e env) Sexpr {
+func evCond(pairList *ConsCell, e *env) Sexpr {
 	if pairList == Nil {
 		return Nil
 	}
@@ -61,8 +61,15 @@ func evCond(pairList *ConsCell, e env) Sexpr {
 	return pair.cdr.(*ConsCell).car.Eval(e)
 }
 
+func evDef(pair *ConsCell, e *env) Sexpr {
+	name := pair.car.(Atom).s
+	val := pair.cdr.(*ConsCell).car.Eval(e)
+	(*e)[name] = val
+	return val
+}
+
 // Eval a list expression
-func (c *ConsCell) Eval(e env) Sexpr {
+func (c *ConsCell) Eval(e *env) Sexpr {
 	if c == Nil {
 		return Nil
 	}
@@ -72,10 +79,12 @@ func (c *ConsCell) Eval(e env) Sexpr {
 			return c.cdr.(*ConsCell).car
 		case carAtom.s == "cond":
 			return evCond(c.cdr.(*ConsCell), e)
+		case carAtom.s == "def":
+			return evDef(c.cdr.(*ConsCell), e)
 		case builtins[carAtom.s] != nil:
-			return builtins[carAtom.s](evlist(c.cdr.(*ConsCell), e))
+			return builtins[carAtom.s](evList(c.cdr.(*ConsCell), e))
 		default:
-			panic("unimplemented")
+			fmt.Println("Unknown function:", carAtom.s)
 		}
 	}
 	return Nil
@@ -92,11 +101,11 @@ func (a Atom) String() string {
 
 // Eval for atom returns the atom if it's the truth value; otherwise, it looks
 // up the value in the environment.
-func (a Atom) Eval(e env) Sexpr {
+func (a Atom) Eval(e *env) Sexpr {
 	if a.s == "t" {
 		return a
 	}
-	return e[a.s]
+	return (*e)[a.s]
 }
 
 func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {

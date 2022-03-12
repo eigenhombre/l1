@@ -91,7 +91,8 @@ func TestEval(t *testing.T) {
 		if err != nil {
 			t.Errorf("lexAndParse(%q) failed: %v", test.in, err)
 		}
-		res := got[0].Eval(env{"a": Num(1)})
+		testEnv := env{"a": Num(1)}
+		res := got[0].Eval(&testEnv)
 		if res.String() != test.out {
 			t.Errorf("eval(%q) = %q, want %q", test.in, res, test.out)
 		} else {
@@ -101,6 +102,34 @@ func TestEval(t *testing.T) {
 				// Print first few formatted for README
 				fmt.Printf("    > %s\n    %s\n", test.in, res)
 			}
+		}
+	}
+}
+
+func TestDef(t *testing.T) {
+	var tests = []struct {
+		in  string
+		out string
+	}{
+		{"(def a 1)", "1"},
+		{"(def a (quote (1 2 3)))", "(1 2 3)"},
+		{"(def a t)", "t"},
+		{"(def a (+ 1 1))", "2"},
+		{"(def a ())", "()"},
+	}
+	for _, test := range tests {
+		got, err := lexAndParse(test.in)
+		if err != nil {
+			t.Errorf("lexAndParse(%q) failed: %v", test.in, err)
+		}
+		testEnv := env{}
+		res := got[0].Eval(&testEnv)
+		if res.String() != test.out {
+			t.Errorf("eval(%q) = %q, want %q", test.in, res, test.out)
+		}
+		fetched := testEnv["a"]
+		if fetched.String() != test.out {
+			t.Errorf("testEnv[\"a\"] = %q, want %q", fetched, test.out)
 		}
 	}
 }

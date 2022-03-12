@@ -20,6 +20,7 @@ func readLine() (string, error) {
 }
 
 func main() {
+	globals := env{}
 	for {
 		fmt.Print("> ")
 		s, err := readLine()
@@ -30,7 +31,7 @@ func main() {
 				fmt.Printf("%v\n", err)
 				continue
 			}
-			fmt.Println(got[0].Eval(env{})) // fixme: handle multiple items
+			fmt.Println(got[0].Eval(&globals)) // fixme: handle multiple items
 		case io.EOF:
 			fmt.Println()
 			return
