@@ -64,7 +64,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("((1)", "", "unbalanced parens"))},
 		{Cases(S("((1))(", "", "unbalanced parens"))},
 		{Cases(S(")", "", "unexpected right paren"))},
-		{Cases(S("xt", "", "unknown symbol"))},
+		{Cases(S("a", "", "unknown symbol"))},
 		{Cases(S("(/ 4 2)", "2", OK))},
 		{Cases(S("(/ 1 2)", "0", OK))},
 		{Cases(S("(-)", "", "missing argument"))},

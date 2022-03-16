@@ -31,6 +31,9 @@ func main() {
 				fmt.Printf("%v\n", err)
 				continue
 			}
+			if len(got) == 0 {
+				continue
+			}
 			ev, err := got[0].Eval(&globals)
 			if err != nil {
 				fmt.Printf("%v\n", err)
