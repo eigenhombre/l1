@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/eigenhombre/lexutil"
 )
@@ -286,6 +287,14 @@ var builtins = map[string]func([]Sexpr) (Sexpr, error){
 		if args[0] == args[1] {
 			return Atom{"t"}, nil
 		}
+		return Nil, nil
+	},
+	"print": func(args []Sexpr) (Sexpr, error) {
+		strArgs := []string{}
+		for _, arg := range args {
+			strArgs = append(strArgs, arg.String())
+		}
+		fmt.Println(strings.Join(strArgs, " "))
 		return Nil, nil
 	},
 }

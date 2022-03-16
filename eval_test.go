@@ -128,6 +128,10 @@ func TestEval(t *testing.T) {
 			S("(def a (+ 1 1))", "2", OK),
 			S("(def b (+ a a))", "4", OK),
 			S("b", "4", OK))},
+		// Print
+		{Cases(S("(print 1)", "()", OK))},
+		{Cases(S("(print 1 2)", "()", OK))},
+		{Cases(S("(print)", "()", OK))},
 	}
 	isError := func(err error, testCase evalCase) bool {
 		if err != nil {
