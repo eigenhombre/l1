@@ -31,7 +31,12 @@ func main() {
 				fmt.Printf("%v\n", err)
 				continue
 			}
-			fmt.Println(got[0].Eval(&globals)) // fixme: handle multiple items
+			ev, err := got[0].Eval(&globals)
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				continue
+			}
+			fmt.Println(ev) // fixme: handle multiple items
 		case io.EOF:
 			fmt.Println()
 			return

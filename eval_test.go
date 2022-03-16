@@ -58,13 +58,23 @@ func TestEval(t *testing.T) {
 		{Cases(S("(* 1 1)", "1", OK))},
 		{Cases(S("(* 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)", "2432902008176640000", OK))},
 		{Cases(S("(/ 1 1)", "1", OK))},
-		// Future test cases w/ errors:
-		// (/ 1 0)
-		// (/)
-		// (-)
-		// (cons)
+		{Cases(S("(", "", "unbalanced parens"))},
+		{Cases(S("(1", "", "unbalanced parens"))},
+		{Cases(S("((1", "", "unbalanced parens"))},
+		{Cases(S("((1)", "", "unbalanced parens"))},
+		{Cases(S("((1))(", "", "unbalanced parens"))},
+		{Cases(S(")", "", "unexpected right paren"))},
+		{Cases(S("xt", "", "unknown symbol"))},
 		{Cases(S("(/ 4 2)", "2", OK))},
 		{Cases(S("(/ 1 2)", "0", OK))},
+		{Cases(S("(-)", "", "missing argument"))},
+		{Cases(S("(cons)", "", "missing argument"))},
+		{Cases(S("(atom)", "", "missing argument"))},
+		{Cases(S("(eq)", "", "missing argument"))},
+		{Cases(S("(/)", "", "missing argument"))},
+		{Cases(S("(/ 1 0)", "", "division by zero"))},
+		{Cases(S("(car)", "", "missing argument"))},
+		{Cases(S("(cdr)", "", "missing argument"))},
 		{Cases(S("(* 1 1 1 (*) (*) (*))", "1", OK))},
 		{Cases(S("(+ 1 1 1 (+) (+) (+))", "3", OK))},
 		{Cases(S("(quote 3)", "3", OK))},
@@ -85,6 +95,11 @@ func TestEval(t *testing.T) {
 		{Cases(S("(cond (3 3))", "3", OK))},
 		{Cases(S("(cond (() 3) (() 4))", "()", OK))},
 		{Cases(S("(cond (t 3) (t 4))", "3", OK))},
+		{Cases(S("(cond ((-) t))", "", "missing argument"))},
+		{Cases(S("(cond (t (-)))", "", "missing argument"))},
+		{Cases(S("(cond (t t) ((-) t))", "t", OK))},
+		{Cases(S("(cond (() t) ((-) t))", "", "missing argument"))},
+		{Cases(S("(cond (() t) (t (-)))", "", "missing argument"))},
 		// Whitespace cases
 		{Cases(S(" t ", "t", OK))},
 		{Cases(S("t\n", "t", OK))},
@@ -114,19 +129,37 @@ func TestEval(t *testing.T) {
 			S("(def b (+ a a))", "4", OK),
 			S("b", "4", OK))},
 	}
+	isError := func(err error, testCase evalCase) bool {
+		if err != nil {
+			if strings.Contains(err.Error(), testCase.err) {
+				t.Logf("%s -> error %q (matches '%q')", testCase.in, err, testCase.err)
+			} else {
+				t.Errorf("%s: got error %q, want %q", testCase.in, err, testCase.err)
+			}
+			return true
+		}
+		return false
+	}
 	for _, test := range tests {
 		e := env{}
 		for _, testCase := range test.evalCases {
 			got, err := lexAndParse(testCase.in)
+			if isError(err, testCase) {
+				continue
+			}
 			if len(got) != 1 {
 				t.Errorf("%s: got %d results, want 1", testCase.in, len(got))
 				continue
 			}
-			if err != nil && !strings.Contains(err.Error(), testCase.err) {
-				t.Errorf("%s: got error %q, want %q", testCase.in, err, testCase.err)
+			ev, err := got[0].Eval(&e)
+			if isError(err, testCase) {
 				continue
 			}
-			result := got[0].Eval(&e).String()
+			result := ev.String()
+			if testCase.err != "" {
+				t.Errorf("%s: expected error %q, got none", testCase.in, testCase.err)
+				continue
+			}
 			if result != testCase.out {
 				t.Errorf("%s: got %q, want %q", testCase.in, result, testCase.out)
 				continue

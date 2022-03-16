@@ -11,8 +11,8 @@ type Number struct {
 }
 
 // Eval of a number is just the number itself.
-func (n Number) Eval(e *env) Sexpr {
-	return n
+func (n Number) Eval(e *env) (Sexpr, error) {
+	return n, nil
 }
 
 // String returns the string representation of the number.
