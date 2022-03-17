@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"reflect"
-	"strings"
 
 	"github.com/eigenhombre/lexutil"
 )
@@ -68,7 +66,6 @@ func evCond(pairList *ConsCell, e *env) (Sexpr, error) {
 		return evCond(pairList.cdr.(*ConsCell), e)
 	}
 	return pair.cdr.(*ConsCell).car.Eval(e)
-
 }
 
 func evDef(pair *ConsCell, e *env) Sexpr {
@@ -83,6 +80,7 @@ func (c *ConsCell) Eval(e *env) (Sexpr, error) {
 	if c == Nil {
 		return Nil, nil
 	}
+	// special forms:
 	if carAtom, ok := c.car.(Atom); ok {
 		switch {
 		case carAtom.s == "quote":
@@ -91,43 +89,22 @@ func (c *ConsCell) Eval(e *env) (Sexpr, error) {
 			return evCond(c.cdr.(*ConsCell), e)
 		case carAtom.s == "def":
 			return evDef(c.cdr.(*ConsCell), e), nil
-		case builtins[carAtom.s] != nil:
-			el, err := evList(c.cdr.(*ConsCell), e)
-			if err != nil {
-				return nil, err
-			}
-			biResult, err := builtins[carAtom.s](el)
-			if err != nil {
-				return nil, err
-			}
-			return biResult, nil
-		default:
-			fmt.Println("Unknown function:", carAtom.s)
 		}
 	}
-	return Nil, nil
-}
-
-// Atom is the primitive symbolic type.
-type Atom struct {
-	s string
-}
-
-func (a Atom) String() string {
-	return a.s
-}
-
-// Eval for atom returns the atom if it's the truth value; otherwise, it looks
-// up the value in the environment.
-func (a Atom) Eval(e *env) (Sexpr, error) {
-	if a.s == "t" {
-		return a, nil
+	// functions / normal order of evaluation:
+	evalCar, err := c.car.Eval(e)
+	if err != nil {
+		return nil, err
 	}
-	ret, ok := (*e)[a.s]
-	if !ok {
-		return nil, fmt.Errorf("unknown symbol: %s", a.s)
+	el, err := evList(c.cdr.(*ConsCell), e)
+	if err != nil {
+		return nil, err
 	}
-	return ret, nil
+	biResult, err := evalCar.(*Builtin).Fn(el)
+	if err != nil {
+		return nil, err
+	}
+	return biResult, nil
 }
 
 func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {
@@ -192,109 +169,4 @@ func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 
 func lexAndParse(s string) ([]Sexpr, error) {
 	return parse(lexItems(s))
-}
-
-var builtins = map[string]func([]Sexpr) (Sexpr, error){
-	"+": func(args []Sexpr) (Sexpr, error) {
-		if len(args) == 0 {
-			return Num(0), nil
-		}
-		sum := Num(0)
-		for _, arg := range args {
-			sum = sum.Add(arg.(Number))
-		}
-		return sum, nil
-	},
-	"-": func(args []Sexpr) (Sexpr, error) {
-		if len(args) == 0 {
-			return nil, fmt.Errorf("missing argument")
-		}
-		if len(args) == 1 {
-			return args[0].(Number).Neg(), nil
-		}
-		sum := args[0].(Number)
-		for _, arg := range args[1:] {
-			sum = sum.Sub(arg.(Number))
-		}
-		return sum, nil
-	},
-	"*": func(args []Sexpr) (Sexpr, error) {
-		if len(args) == 0 {
-			return Num(1), nil
-		}
-		prod := Num(1)
-		for _, arg := range args {
-			prod = prod.Mul(arg.(Number))
-		}
-		return prod, nil
-	},
-	"/": func(args []Sexpr) (Sexpr, error) {
-		if len(args) == 0 {
-			return nil, fmt.Errorf("missing argument")
-		}
-		if len(args) == 1 {
-			return Num(1), nil
-		}
-		quot := args[0].(Number)
-		for _, arg := range args[1:] {
-			if reflect.DeepEqual(arg, Num(0)) {
-				return nil, fmt.Errorf("division by zero")
-			}
-			quot = quot.Div(arg.(Number))
-		}
-		return quot, nil
-	},
-	"car": func(args []Sexpr) (Sexpr, error) {
-		if len(args) != 1 {
-			return nil, fmt.Errorf("missing argument")
-		}
-		carCons, ok := args[0].(*ConsCell)
-		if !ok {
-			panic("Handle me!")
-		}
-		return carCons.car, nil
-	},
-	"cdr": func(args []Sexpr) (Sexpr, error) {
-		if len(args) != 1 {
-			return nil, fmt.Errorf("missing argument")
-		}
-		cdrCons, ok := args[0].(*ConsCell)
-		if !ok {
-			panic("Handle me!")
-		}
-		return cdrCons.cdr, nil
-	},
-	"cons": func(args []Sexpr) (Sexpr, error) {
-		if len(args) != 2 {
-			return nil, fmt.Errorf("missing argument")
-		}
-		return Cons(args[0], args[1].(*ConsCell)), nil
-	},
-	"atom": func(args []Sexpr) (Sexpr, error) {
-		if len(args) != 1 {
-			return nil, fmt.Errorf("missing argument")
-		}
-		_, ok := args[0].(Atom)
-		if ok {
-			return Atom{"t"}, nil
-		}
-		return Nil, nil
-	},
-	"eq": func(args []Sexpr) (Sexpr, error) {
-		if len(args) != 2 {
-			return nil, fmt.Errorf("missing argument")
-		}
-		if args[0] == args[1] {
-			return Atom{"t"}, nil
-		}
-		return Nil, nil
-	},
-	"print": func(args []Sexpr) (Sexpr, error) {
-		strArgs := []string{}
-		for _, arg := range args {
-			strArgs = append(strArgs, arg.String())
-		}
-		fmt.Println(strings.Join(strArgs, " "))
-		return Nil, nil
-	},
 }

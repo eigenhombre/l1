@@ -33,6 +33,8 @@ func TestEval(t *testing.T) {
 		{Cases(S("1", "1", OK))},
 		{Cases(S("-5", "-5", OK))},
 		{Cases(S("(* 12349807213490872130987 12349807213490872130987)", "152517738210391179737088822267441718485594169", OK))},
+		{Cases(S("+", "<builtin: +>", OK))},
+		{Cases(S("(+ 1 2)", "3", OK))},
 		{Cases(S("(+)", "0", OK))},
 		{Cases(S("(+ 1 1 2 3)", "7", OK))},
 		{Cases(S("(+ 1 1)", "2", OK))},
@@ -41,6 +43,8 @@ func TestEval(t *testing.T) {
 		{Cases(S("(eq (quote foo) (quote (foo bar)))", "()", OK))},
 		{Cases(S("(atom (quote foo))", "t", OK))},
 		{Cases(S("(atom (quote (foo bar)))", "()", OK))},
+		{Cases(S("(atom (quote atom))", "t", OK))},
+		{Cases(S("(atom atom)", "()", OK))},
 		{Cases(S("(+ 1)", "1", OK))},
 		{Cases(S("(+ -1)", "-1", OK))},
 		{Cases(S("(+ 0)", "0", OK))},
@@ -100,6 +104,12 @@ func TestEval(t *testing.T) {
 		{Cases(S("(cond (t t) ((-) t))", "t", OK))},
 		{Cases(S("(cond (() t) ((-) t))", "", "missing argument"))},
 		{Cases(S("(cond (() t) (t (-)))", "", "missing argument"))},
+		// Higher order functions!
+		{Cases(S("((cond (t +)))", "0", OK))},
+		{Cases(S("((car (cons + ())) 1 2 3)", "6", OK))},
+		{Cases(
+			S("(def a +)", "<builtin: +>", OK),
+			S("(a 1 1)", "2", OK))},
 		// Whitespace cases
 		{Cases(S(" t ", "t", OK))},
 		{Cases(S("t\n", "t", OK))},
@@ -135,6 +145,9 @@ func TestEval(t *testing.T) {
 	}
 	isError := func(err error, testCase evalCase) bool {
 		if err != nil {
+			if testCase.out != "" {
+				t.Errorf("%s: expected real output %q, got error %q", testCase.in, testCase.out, err)
+			}
 			if strings.Contains(err.Error(), testCase.err) {
 				t.Logf("%s -> error %q (matches '%q')", testCase.in, err, testCase.err)
 			} else {

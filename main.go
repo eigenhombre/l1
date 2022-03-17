@@ -19,17 +19,20 @@ func readLine() (string, error) {
 	}
 }
 
-func lexParseEvalPrint(s string, e env) {
+func lexParseEval(s string, e env, doPrint bool) {
 	got, err := lexAndParse(s)
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		return
 	}
 	for _, g := range got {
-		_, err := g.Eval(&e)
+		res, err := g.Eval(&e)
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			continue
+		}
+		if doPrint {
+			fmt.Printf("%v\n", res)
 		}
 	}
 }
@@ -40,7 +43,7 @@ func repl(e env) {
 		s, err := readLine()
 		switch err {
 		case nil:
-			lexParseEvalPrint(s, e)
+			lexParseEval(s, e, true)
 		case io.EOF:
 			fmt.Println()
 			return
@@ -57,7 +60,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		lexParseEvalPrint(string(bytes), globals)
+		lexParseEval(string(bytes), globals, false)
 		return
 	}
 	repl(globals)
