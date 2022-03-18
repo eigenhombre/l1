@@ -10,7 +10,7 @@ import (
 // S-expressions.
 type Sexpr interface {
 	String() string
-	Eval(env *env) (Sexpr, error)
+	Eval(*env) (Sexpr, error)
 }
 
 // ConsCell is a cons cell.  Use Cons to create one.
@@ -18,8 +18,6 @@ type ConsCell struct {
 	car Sexpr
 	cdr Sexpr
 }
-
-type env map[string]Sexpr
 
 // Nil is the empty list / cons cell.  Cons with Nil to create a list
 // of one item.
@@ -70,8 +68,11 @@ func evCond(pairList *ConsCell, e *env) (Sexpr, error) {
 
 func evDef(pair *ConsCell, e *env) Sexpr {
 	name := pair.car.(Atom).s
-	val, _ := pair.cdr.(*ConsCell).car.Eval(e)
-	(*e)[name] = val
+	val, err := pair.cdr.(*ConsCell).car.Eval(e)
+	if err != nil {
+		panic(err)
+	}
+	e.Set(name, val)
 	return val
 }
 

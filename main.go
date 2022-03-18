@@ -54,7 +54,7 @@ func repl(e env) {
 }
 
 func main() {
-	globals := env{}
+	globals := mkEnv(nil)
 	if len(os.Args) > 1 {
 		bytes, err := os.ReadFile(os.Args[1])
 		if err != nil {

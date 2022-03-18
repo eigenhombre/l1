@@ -158,7 +158,7 @@ func TestEval(t *testing.T) {
 		return false
 	}
 	for _, test := range tests {
-		e := env{}
+		globals := mkEnv(nil)
 		for _, testCase := range test.evalCases {
 			got, err := lexAndParse(testCase.in)
 			if isError(err, testCase) {
@@ -168,7 +168,7 @@ func TestEval(t *testing.T) {
 				t.Errorf("%s: got %d results, want 1", testCase.in, len(got))
 				continue
 			}
-			ev, err := got[0].Eval(&e)
+			ev, err := got[0].Eval(&globals)
 			if isError(err, testCase) {
 				continue
 			}

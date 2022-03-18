@@ -17,7 +17,7 @@ func (a Atom) Eval(e *env) (Sexpr, error) {
 	if a.s == "t" {
 		return a, nil
 	}
-	ret, ok := (*e)[a.s]
+	ret, ok := e.Lookup(a.s)
 	if ok {
 		return ret, nil
 	}
