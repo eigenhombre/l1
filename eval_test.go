@@ -142,6 +142,13 @@ func TestEval(t *testing.T) {
 		{Cases(S("(print 1)", "()", OK))},
 		{Cases(S("(print 1 2)", "()", OK))},
 		{Cases(S("(print)", "()", OK))},
+		// Functions
+		{Cases(S("(lambda ())", "<lambda()>", OK))},
+		{Cases(S("(lambda (x))", "<lambda(x)>", OK))},
+		{Cases(S("(lambda (a b zz))", "<lambda(a b zz)>", OK))},
+		{Cases(S("((lambda ()))", "()", OK))},
+		// {Cases(S("((lambda () 333))", "333", OK))},
+		// {Cases(S("((lambda () 1))", "1", OK))},
 	}
 	isError := func(err error, testCase evalCase) bool {
 		if err != nil {
