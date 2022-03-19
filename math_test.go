@@ -43,7 +43,7 @@ func TestBinaryOps(t *testing.T) {
 			"*": func(a, b Number) Number { return a.Mul(b) },
 			"/": func(a, b Number) Number { return a.Div(b) },
 		}
-		if got := f[test.op](test.a, test.b); !got.Equals(test.want) {
+		if got := f[test.op](test.a, test.b); !got.Equal(test.want) {
 			t.Errorf("%v %s %v = %v, want %v", test.a, test.op, test.b, got, test.want)
 		} else {
 			t.Logf("%v %s %v = %v", test.a, test.op, test.b, got)
@@ -52,19 +52,19 @@ func TestBinaryOps(t *testing.T) {
 }
 
 func TestUnaryOps(t *testing.T) {
-	if !Num(3).Neg().Equals(Num(-3)) {
+	if !Num(3).Neg().Equal(Num(-3)) {
 		t.Errorf("Num(3).Neg() != Num(-3)")
 	} else {
 		t.Logf("Num(3).Neg() == Num(-3)")
 	}
 
-	if !Num(-3).Neg().Equals(Num(3)) {
+	if !Num(-3).Neg().Equal(Num(3)) {
 		t.Errorf("Num(-3).Neg() != Num(3)")
 	} else {
 		t.Logf("Num(-3).Neg() == Num(3)")
 	}
 
-	if !Num("9999999999999").Neg().Equals(Num("-9999999999999")) {
+	if !Num("9999999999999").Neg().Equal(Num("-9999999999999")) {
 		t.Errorf("Num(9999999999999).Neg() != Num(-9999999999999)")
 	} else {
 		t.Logf("Num(9999999999999).Neg() == Num(-9999999999999)")

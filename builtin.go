@@ -21,6 +21,15 @@ func (b Builtin) Eval(e *env) (Sexpr, error) {
 	return b, nil
 }
 
+// Equal returns true if the receiver and the arg are both builtins and have the
+// same name.
+func (b Builtin) Equal(o Sexpr) bool {
+	if o, ok := o.(Builtin); ok {
+		return b.Name == o.Name
+	}
+	return false
+}
+
 var builtins = map[string]*Builtin{
 	"+": {
 		Name: "+",
@@ -137,7 +146,7 @@ var builtins = map[string]*Builtin{
 			if len(args) != 2 {
 				return nil, fmt.Errorf("missing argument")
 			}
-			if args[0] == args[1] {
+			if args[0].Equal(args[1]) {
 				return Atom{"t"}, nil
 			}
 			return Nil, nil

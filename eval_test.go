@@ -38,9 +38,15 @@ func TestEval(t *testing.T) {
 		{Cases(S("(+)", "0", OK))},
 		{Cases(S("(+ 1 1 2 3)", "7", OK))},
 		{Cases(S("(+ 1 1)", "2", OK))},
+		{Cases(S("(eq 0 0)", "t", OK))},
 		{Cases(S("(eq (quote foo) (quote foo))", "t", OK))},
 		{Cases(S("(eq (quote foo) (quote bar))", "()", OK))},
 		{Cases(S("(eq (quote foo) (quote (foo bar)))", "()", OK))},
+		// P.G.'s interpretation of McCarthy says this is (), but
+		// it's simpler to have just one equality operator for now,
+		// which works for numbers, lists and atoms:
+		// {Cases(S("(eq (quote (foo bar)) (quote (foo bar)))", "t", OK))},
+		{Cases(S("(eq 2 (+ 1 1))", "t", OK))},
 		{Cases(S("(atom (quote foo))", "t", OK))},
 		{Cases(S("(atom (quote (foo bar)))", "()", OK))},
 		{Cases(S("(atom (quote atom))", "t", OK))},
@@ -93,7 +99,6 @@ func TestEval(t *testing.T) {
 		{Cases(S("(quote (()))", "(())", OK))},
 		{Cases(S("(quote (() ()))", "(() ())", OK))},
 		{Cases(S("(cons () ())", "(())", OK))},
-		{Cases(S("(eq (quote (foo bar)) (quote (foo bar)))", "()", OK))},
 		{Cases(S("(cond)", "()", OK))},
 		{Cases(S("(cond (() 3))", "()", OK))},
 		{Cases(S("(cond (3 3))", "3", OK))},
@@ -147,8 +152,47 @@ func TestEval(t *testing.T) {
 		{Cases(S("(lambda (x))", "<lambda(x)>", OK))},
 		{Cases(S("(lambda (a b zz))", "<lambda(a b zz)>", OK))},
 		{Cases(S("((lambda ()))", "()", OK))},
-		// {Cases(S("((lambda () 333))", "333", OK))},
-		// {Cases(S("((lambda () 1))", "1", OK))},
+		{Cases(S("((lambda (x) (+ 1 x)) 1)", "2", OK))},
+		{Cases(S("((lambda () 333))", "333", OK))},
+		{Cases(S("((lambda () 1))", "1", OK))},
+		{Cases(
+			S("(def x 0)", "0", OK),
+			S("(cond ((eq x 0) 0) (t x))", "0", OK),
+			S("(def x 1)", "1", OK),
+			S("(cond ((eq x 0) 0) (t x))", "1", OK))},
+		{Cases(
+			S("(def a 1)", "1", OK),
+			S("(def b 2)", "2", OK),
+			S("((lambda (x) (+ x a b)) 3)", "6", OK))},
+		{Cases(
+			S("(def f (lambda (x) (+ 1 x)))", "<lambda(x)>", OK),
+			S("(f 2)", "3", OK))},
+		{Cases(
+			S("(def x 0)", "0", OK),
+			S("(eq x 0)", "t", OK))},
+		{Cases(
+			S("(def f (lambda (x) (cond (x 3) (t 4))))", "<lambda(x)>", OK),
+			S("(f t)", "3", OK),
+			S("(f 1)", "3", OK),
+			S("(f (quote (1 2 3)))", "3", OK),
+			S("(f ())", "4", OK))},
+		{Cases(
+			S("(def f (lambda (x) (cond ((eq x 3) 3) (t 4))))", "<lambda(x)>", OK),
+			S("(f 3)", "3", OK),
+			S("(f (quote (1 2 3)))", "4", OK),
+			S("(f ())", "4", OK))},
+		// The following need the equivalent of `label` or `defun`:
+		// {Cases(
+		// 	S("(def f (lambda (x) (cond ((eq x 3) 1) (t (+ 1 (f 3))))))", "<lambda(x)>", OK),
+		// 	S("(f 3)", "1", OK),
+		// 	S("(f 4)", "2", OK))},
+		// {Cases(
+		// 	S("(def f (lambda (x) (cond ((eq x 0) 0) (t (+ x (f (- x 1)))))))", "<lambda(x)>", OK),
+		// 	S("(f 0)", "0", OK),
+		// 	S("(f 2)", "2", OK))},
+		// {Cases(
+		// 	S("(def fact (lambda (n) (cond ((eq 0 n) 1) (t (* n (fact (- n 1)))))))", "<lambda(n)>", OK),
+		// 	S("(fact 5)", "120", OK))},
 	}
 	isError := func(err error, testCase evalCase) bool {
 		if err != nil {
@@ -172,20 +216,20 @@ func TestEval(t *testing.T) {
 				continue
 			}
 			if len(got) != 1 {
-				t.Errorf("%s: got %d results, want 1", testCase.in, len(got))
+				t.Errorf("%s: got %d results, want 1!!!!!!!!", testCase.in, len(got))
 				continue
 			}
 			ev, err := got[0].Eval(&globals)
 			if isError(err, testCase) {
 				continue
 			}
-			result := ev.String()
 			if testCase.err != "" {
-				t.Errorf("%s: expected error %q, got none", testCase.in, testCase.err)
+				t.Errorf("%s: expected error %q, got none!!!!!!!!", testCase.in, testCase.err)
 				continue
 			}
+			result := ev.String()
 			if result != testCase.out {
-				t.Errorf("%s: got %q, want %q", testCase.in, result, testCase.out)
+				t.Errorf("%s: got %q, want %q!!!!!!!!", testCase.in, result, testCase.out)
 				continue
 			}
 			t.Logf("%s -> %q", testCase.in, result)

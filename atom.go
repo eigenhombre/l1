@@ -27,3 +27,12 @@ func (a Atom) Eval(e *env) (Sexpr, error) {
 	}
 	return nil, fmt.Errorf("unknown symbol: %s", a.s)
 }
+
+// Equal returns true if the receiver and the arg are both atoms and have the
+// same name
+func (a Atom) Equal(b Sexpr) bool {
+	if b, ok := b.(Atom); ok {
+		return a.s == b.s
+	}
+	return false
+}

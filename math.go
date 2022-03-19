@@ -48,9 +48,12 @@ func (n Number) Div(o Number) Number {
 	return Number{*result}
 }
 
-// Equals returns true if the two numbers are equal.
-func (n Number) Equals(o Number) bool {
-	return n.bi.Cmp(&o.bi) == 0
+// Equal returns true if the two numbers are equal.
+func (n Number) Equal(o Sexpr) bool {
+	if o, ok := o.(Number); ok {
+		return n.bi.Cmp(&o.bi) == 0
+	}
+	return false
 }
 
 // Neg returns the negative of the number.

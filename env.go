@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // env stores a local environment, possibly pointing to a caller's environment.
 type env struct {
 	syms   map[string]Sexpr
@@ -28,4 +30,12 @@ func (e *env) Lookup(s string) (Sexpr, bool) {
 // Set sets the value of a symbol in an environment.
 func (e *env) Set(s string, v Sexpr) {
 	e.syms[s] = v
+}
+
+func (e *env) String() string {
+	ret := ""
+	for k, v := range e.syms {
+		ret += fmt.Sprintf("%s=%s;", k, v)
+	}
+	return ret
 }
