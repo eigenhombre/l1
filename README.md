@@ -44,34 +44,52 @@ Then, from anywhere, `l1` will start your REPL:
     (not common lisp)
     > (car (quote (is not common lisp)))
     is
-    > (cond (() 1) (2 3))
-    3
-    > 1
-    1
-    > -5
-    -5
-    > (* 12349807213490872130987 12349807213490872130987)
-    152517738210391179737088822267441718485594169
-    > (+)
-    0
-    > (+ 1 1 2 3)
-    7
     > (+ 1 1)
     2
+    > (+ 1 2)
+    3
+    > (* 12349807213490872130987 12349807213490872130987)
+    152517738210391179737088822267441718485594169
     > (eq (quote foo) (quote foo))
     t
     > (eq (quote foo) (quote bar))
     ()
-    > (def a 1234567890)
-    1234567890
-    > (* a a a a a)
-    2867971860299718107233761438093672048294900000
-    > (
-    unbalanced parens
-    > )
-    unexpected right paren
+    > (eq (quote foo) (quote (foo bar)))
+    ()
+    > (atom (quote (foo bar)))
+    ()
+    > (atom (quote atom))
+    t
+    > (cond (() 1) (2 3))
+    3
+    > (car (quote (1 2 3)))
+    1
+    > (cdr (quote (1 2 3)))
+    (2 3)
+    > (cons 1 (quote (2 3 4)))
+    (1 2 3 4)
+    > ((cond (t +)))
+    0
+    > ((car (cons + ())) 1 2 3)
+    6
+    > (def a 6)
+    6
+    > (def b 7)
+    7
+    > (+ a b)
+    13
+    > ((lambda ()))
+    ()
+    > ((lambda (x) (+ 1 x)) 1)
+    2
+    > (def fact (lambda (n) (cond ((eq 0 n) 1) (t (* n (fact (- n 1)))))))
+    <lambda(n)>
+    > (fact 50)
+    30414093201713378043612608166064768844377641568960512000000000000
     > ^D
+
     $
+
 
 These were copied directly from the unit test output; `eval_test.go` has more examples.
 

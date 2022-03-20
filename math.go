@@ -23,28 +23,32 @@ func (n Number) String() string {
 // Add returns the sum of the two numbers.
 func (n Number) Add(o Number) Number {
 	var ni big.Int = n.bi
-	result := ni.Add(&ni, &o.bi)
+	result := big.NewInt(0)
+	result.Add(&ni, &o.bi)
 	return Number{*result}
 }
 
 // Sub returns the difference of the two numbers.
 func (n Number) Sub(o Number) Number {
 	var ni big.Int = n.bi
-	result := ni.Sub(&ni, &o.bi)
+	result := big.NewInt(0)
+	result.Sub(&ni, &o.bi)
 	return Number{*result}
 }
 
 // Mul returns the product of the two numbers.
 func (n Number) Mul(o Number) Number {
 	var ni big.Int = n.bi
-	result := ni.Mul(&ni, &o.bi)
+	result := big.NewInt(0)
+	result.Mul(&ni, &o.bi)
 	return Number{*result}
 }
 
 // Div returns the (integer) quotient of the two numbers.
 func (n Number) Div(o Number) Number {
 	var ni big.Int = n.bi
-	result := ni.Div(&ni, &o.bi)
+	result := big.NewInt(0)
+	result.Div(&ni, &o.bi)
 	return Number{*result}
 }
 
@@ -59,7 +63,8 @@ func (n Number) Equal(o Sexpr) bool {
 // Neg returns the negative of the number.
 func (n Number) Neg() Number {
 	var ni big.Int = n.bi
-	result := ni.Neg(&ni)
+	result := big.NewInt(0)
+	result.Neg(&ni)
 	return Number{*result}
 }
 

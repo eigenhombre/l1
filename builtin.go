@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"strings"
 )
 
@@ -39,7 +38,11 @@ var builtins = map[string]*Builtin{
 			}
 			sum := Num(0)
 			for _, arg := range args {
-				sum = sum.Add(arg.(Number))
+				n, ok := arg.(Number)
+				if !ok {
+					return nil, fmt.Errorf("expected number, got '%s'", arg)
+				}
+				sum = sum.Add(n)
 			}
 			return sum, nil
 		},
@@ -50,12 +53,19 @@ var builtins = map[string]*Builtin{
 			if len(args) == 0 {
 				return nil, fmt.Errorf("missing argument")
 			}
+			sum, ok := args[0].(Number)
+			if !ok {
+				return nil, fmt.Errorf("expected number, got '%s'", args[0])
+			}
 			if len(args) == 1 {
 				return args[0].(Number).Neg(), nil
 			}
-			sum := args[0].(Number)
 			for _, arg := range args[1:] {
-				sum = sum.Sub(arg.(Number))
+				n, ok := arg.(Number)
+				if !ok {
+					return nil, fmt.Errorf("expected number, got '%s'", arg)
+				}
+				sum = sum.Sub(n)
 			}
 			return sum, nil
 		},
@@ -68,7 +78,11 @@ var builtins = map[string]*Builtin{
 			}
 			prod := Num(1)
 			for _, arg := range args {
-				prod = prod.Mul(arg.(Number))
+				n, ok := arg.(Number)
+				if !ok {
+					return nil, fmt.Errorf("expected number, got '%s'", arg)
+				}
+				prod = prod.Mul(n)
 			}
 			return prod, nil
 		},
@@ -76,18 +90,22 @@ var builtins = map[string]*Builtin{
 	"/": {
 		Name: "/",
 		Fn: func(args []Sexpr) (Sexpr, error) {
-			if len(args) == 0 {
+			if len(args) < 2 {
 				return nil, fmt.Errorf("missing argument")
 			}
-			if len(args) == 1 {
-				return Num(1), nil
+			quot, ok := args[0].(Number)
+			if !ok {
+				return nil, fmt.Errorf("expected number, got '%s'", args[0])
 			}
-			quot := args[0].(Number)
 			for _, arg := range args[1:] {
-				if reflect.DeepEqual(arg, Num(0)) {
+				if arg.Equal(Num(0)) {
 					return nil, fmt.Errorf("division by zero")
 				}
-				quot = quot.Div(arg.(Number))
+				n, ok := arg.(Number)
+				if !ok {
+					return nil, fmt.Errorf("expected number, got '%s'", arg)
+				}
+				quot = quot.Div(n)
 			}
 			return quot, nil
 		},
@@ -100,7 +118,7 @@ var builtins = map[string]*Builtin{
 			}
 			carCons, ok := args[0].(*ConsCell)
 			if !ok {
-				panic("Handle me!")
+				return nil, fmt.Errorf("'%s' is not a list", args[0])
 			}
 			return carCons.car, nil
 		},
@@ -113,7 +131,7 @@ var builtins = map[string]*Builtin{
 			}
 			cdrCons, ok := args[0].(*ConsCell)
 			if !ok {
-				panic("Handle me!")
+				return nil, fmt.Errorf("'%s' is not a list", args[0])
 			}
 			return cdrCons.cdr, nil
 		},
