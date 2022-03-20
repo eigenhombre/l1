@@ -8,16 +8,24 @@ First attempt at a simple Lisp in Go.
 
 # Implemented
 - Lexing and parsing
-- Numbers as `big.Int`
+- Numbers as `big.Int`; integer math only.
 - Eval
   - `t` as True, `()` as `nil`
   - Atoms bind to values in an environment
-  - `quote`, `car`, `cdr`, `cons`, `cond`
   - Arithmetical operators `+-*/`
+  - `quote`, `car`, `cdr`, `cons`, `cond`
   - Side effects, e.g. `(def a 1234)`
-- (Some) simple error handling
+  - Local scope for functions; lexical scope still in progress
+  - `print` function
+- Simple error checking
 
 # Usage / Examples
+
+## Installation using the `go` tool
+
+    go get github.com/eigenhombre/l1@latest
+
+## Local installation
 
 Check out this repo and `cd` to it. Then,
 
@@ -25,7 +33,13 @@ Check out this repo and `cd` to it. Then,
     go build
     go install
 
-Then, from anywhere, `l1` will start your REPL:
+## Usage
+
+To execute a file:
+
+    l1 <file.l1>
+
+REPL session:
 
     $ l1
     > t
@@ -90,7 +104,6 @@ Then, from anywhere, `l1` will start your REPL:
 
     $
 
-
 These were copied directly from the unit test output; `eval_test.go` has more examples.
 
 A `Makefile` exists for convenience, and a `Dockerfile` is used for a GitHub action CI build.
@@ -107,6 +120,10 @@ A `Makefile` exists for convenience, and a `Dockerfile` is used for a GitHub act
 - Improve my Go skills;
 - Build a small, fast-loading Lisp that I can extend how I like;
 - Learn more about [Lisp as a model for computation](http://www.paulgraham.com/rootsoflisp.html).
+
+# Non-goals
+
+Backwards compatibility with any existing, popular Lisp.
 
 # License
 
