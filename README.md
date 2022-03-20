@@ -42,7 +42,10 @@ To execute a file:
 Example (using a file in this project):
 
     $ cat fact.l1
-    (def fact (lambda (n) (cond ((eq 0 n) 1) (t (* n (fact (- n 1)))))))
+    (def fact
+         (lambda (n) 
+           (cond ((eq 0 n) 1) 
+                 (t (* n (fact (- n 1)))))))
 
     (print (fact 100))
     $ l1 fact.l1 
