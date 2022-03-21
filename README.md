@@ -4,28 +4,26 @@
 
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
-`l1` is a small Lisp written in Go.
+`l1` is a small Lisp written in Go:
 
-# Implemented
 - [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace);
-- Numbers as `big.Int`; integer math only.
-- Eval
-  - `t` as True, `()` as `nil`
-  - Atoms bind to values in an environment
-  - Arithmetical operators `+-*/`
-  - `quote`, `car`, `cdr`, `cons`, `cond`
-  - Side effects, e.g. `(def a 1234)`
-  - Local scope for functions; lexical scope still in progress
-  - `print` function
+- Numbers are "big" (Go's `big.Int`); integer math only, so far.
+- Eval:
+  - `t` as True, `()` as `nil`;
+  - Arithmetical operators `+ - * /`;
+  - `quote`, `car`, `cdr`, `cons`, `cond` and a few other built-ins;
+  - Side effects: assignment, e.g. `(def a 1234)`, and a `print` function;
+  - Atoms bind to values in the local or global environment;
+  - Local scope for functions; lexical scope still in progress.
 - Simple error checking
 
 # Usage / Examples
 
-## Installation using the `go` tool
+## Installing Using the `go` Tool
 
     go get github.com/eigenhombre/l1@latest
 
-## Local installation
+## Building from Source
 
 Check out this repo and `cd` to it. Then,
 
@@ -50,7 +48,10 @@ Example (using a file in this project):
 
     (print (fact 100))
     $ l1 fact.l1 
-    93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
+    9332621544394415268169923885626670049071596826
+    4381621468592963895217599993229915608941463976
+    1565182862536979208272237582511852109168640000
+    00000000000000000000
 
 REPL session:
 
