@@ -14,7 +14,7 @@
   - `quote`, `car`, `cdr`, `cons`, `cond` and a few other built-ins;
   - Side effects: assignment, e.g. `(def a 1234)`, and a `print` function;
   - Atoms bind to values in the local or global environment;
-  - Local scope for functions; lexical scope still in progress.
+  - Lexical scope for functions.
 - Simple error checking
 
 # Usage / Examples
@@ -136,7 +136,29 @@ REPL session:
     <lambda(n)>
     > (fact 50)
     30414093201713378043612608166064768844377641568960512000000000000
-    > ^D
+    > (def incrementer (lambda (n) (lambda (x) (+ x n))))
+    <lambda(n)>
+    > (def inc (incrementer 1))
+    <lambda(x)>
+    > (inc 5)
+    6
+    > (def add2 (incrementer 2))
+    <lambda(x)>
+    > (add2 5)
+    7
+    > (def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))
+    <lambda(n)>
+    > (fib 0)
+    0
+    > (fib 1)
+    1
+    > (fib 7)
+    13
+    > (fib 10)
+    55
+    > (fib 20)
+    6765
+     > ^D
 
     $
 

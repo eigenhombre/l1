@@ -129,22 +129,22 @@ func TestEval(t *testing.T) {
 		{Cases(S("(cond (t t) ((-) t))", "t", OK))},
 		{Cases(S("(cond (() t) ((-) t))", "", "missing argument"))},
 		{Cases(S("(cond (() t) (t (-)))", "", "missing argument"))},
-		// Higher order functions!
+		// Higher order functions:
 		{ECases(S("((cond (t +)))", "0", OK))},
 		{ECases(S("((car (cons + ())) 1 2 3)", "6", OK))},
 		{Cases(
 			S("(def a +)", "<builtin: +>", OK),
 			S("(a 1 1)", "2", OK))},
-		// Whitespace cases
+		// Whitespace:
 		{Cases(S(" t ", "t", OK))},
 		{Cases(S("t\n", "t", OK))},
 		{Cases(S("\n\nt\n", "t", OK))},
-		// Multiple statements
+		// Multiple statements:
 		{Cases(
 			S("1", "1", OK),
 			S("2", "2", OK),
 			S("3", "3", OK))},
-		// Global scope
+		// Global scope:
 		{Cases(
 			S("(def a 3)", "3", OK),
 			S("a", "3", OK))},
@@ -163,11 +163,11 @@ func TestEval(t *testing.T) {
 			S("(def a (+ 1 1))", "2", OK),
 			S("(def b (+ a a))", "4", OK),
 			S("b", "4", OK))},
-		// Print
+		// Print:
 		{Cases(S("(print 1)", "()", OK))},
 		{Cases(S("(print 1 2)", "()", OK))},
 		{Cases(S("(print)", "()", OK))},
-		// Functions
+		// Simple Functions:
 		{Cases(S("(lambda ())", "<lambda()>", OK))},
 		{Cases(S("(lambda (x))", "<lambda(x)>", OK))},
 		{Cases(S("(lambda (a b zz))", "<lambda(a b zz)>", OK))},
@@ -175,6 +175,7 @@ func TestEval(t *testing.T) {
 		{ECases(S("((lambda (x) (+ 1 x)) 1)", "2", OK))},
 		{Cases(S("((lambda () 333))", "333", OK))},
 		{Cases(S("((lambda () 1))", "1", OK))},
+		// Environment & scope:
 		{Cases(
 			S("(def x 0)", "0", OK),
 			S("(cond ((eq x 0) 0) (t x))", "0", OK),
@@ -206,49 +207,55 @@ func TestEval(t *testing.T) {
 			S("(f 3)", "1", OK),
 			S("(f 4)", "2", OK))},
 		{Cases(
-			S("(def f (lambda (x) 0))", "<lambda(x)>", OK),
-			S("(def g (lambda (x) (+ 0 (f 0))))", "<lambda(x)>", OK),
-			S("(f 0)", "0", OK),
-			S("(f 1)", "0", OK),
-			S("(g 0)", "0", OK),
-			S("(g 1)", "0", OK))},
-		{Cases(
-			S("(def f (lambda (x) 1))", "<lambda(x)>", OK),
-			S("(def g (lambda (x) (+ 1 (f 1))))", "<lambda(x)>", OK),
-			S("(f 0)", "1", OK),
-			S("(f 1)", "1", OK),
-			S("(g 0)", "2", OK),
-			S("(g 1)", "2", OK))},
-		{Cases(
-			S("(def f (lambda (x) x))", "<lambda(x)>", OK),
-			S("(def g (lambda (x) (+ 1 (f x))))", "<lambda(x)>", OK),
-			S("(f 0)", "0", OK),
-			S("(f 1)", "1", OK),
-			S("(g 0)", "1", OK),
-			S("(g 1)", "2", OK))},
-		{Cases(
-			S("(def f (lambda (x) (- x)))", "<lambda(x)>", OK),
-			S("(def g (lambda (x) (- 1 (f x))))", "<lambda(x)>", OK),
-			S("(f 0)", "0", OK),
-			S("(f 1)", "-1", OK),
-			S("(g 0)", "1", OK),
-			S("(g 1)", "2", OK))},
-		{Cases(
-			S("(def x 1)", "1", OK),
-			S("(cond ((eq x 0) 0) (t (+ x (cond ((eq 0 0) 0 (t (+ x -1)))))))", "1", OK))},
-		{Cases(
 			S("(def f (lambda (x) (+ x (g (- x 1)))))", "<lambda(x)>", OK),
 			S("(def g (lambda (x) 0))", "<lambda(x)>", OK),
 			S("(f 1)", "1", OK),
 		)},
-
+		// This case helped me (JJ) find a subtle math/pointer bug:
 		{Cases(
-			S("(def f (lambda (x) (cond ((eq x 0) 0) (t (+ x (f (- x 1)))))))", "<lambda(x)>", OK),
+			S(`(def f (lambda (x)
+			            (cond ((eq x 0) 0)
+						      (t (+ x (f (- x 1)))))))`,
+				"<lambda(x)>", OK),
 			S("(f 0)", "0", OK),
 			S("(f 1)", "1", OK))},
+		// Factorial:
 		{ECases(
 			S("(def fact (lambda (n) (cond ((eq 0 n) 1) (t (* n (fact (- n 1)))))))", "<lambda(n)>", OK),
 			S("(fact 50)", "30414093201713378043612608166064768844377641568960512000000000000", OK))},
+		// Fibonacci (slow!):
+		{ECases(
+			S("(def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))", "<lambda(n)>", OK),
+			S("(fib 0)", "0", OK),
+			S("(fib 1)", "1", OK),
+			S("(fib 7)", "13", OK),
+			S("(fib 10)", "55", OK),
+			S("(fib 20)", "6765", OK),
+		)},
+		// Variable shadowing:
+		{Cases(
+			S("(def a 1)", "1", OK),
+			S("(def f (lambda (a) (+ a a)))", "<lambda(a)>", OK),
+			S("(f 1)", "2", OK),
+			S("(def a 999)", "999", OK),
+			S("(f 2)", "4", OK))},
+		// Lexical closures:
+		{Cases(
+			S(`(def ffer (lambda ()
+			               ((lambda (a)
+						      (lambda (x)
+							    (+ a x)))
+							3)))`,
+				"<lambda()>", OK),
+			S("((ffer) 4)", "7", OK),
+		)},
+		{ECases(
+			S("(def incrementer (lambda (n) (lambda (x) (+ x n))))", "<lambda(n)>", OK),
+			S("(def inc (incrementer 1))", "<lambda(x)>", OK),
+			S("(inc 5)", "6", OK),
+			S("(def add2 (incrementer 2))", "<lambda(x)>", OK),
+			S("(add2 5)", "7", OK),
+		)},
 	}
 
 	isError := func(err error, testCase evalCase) bool {

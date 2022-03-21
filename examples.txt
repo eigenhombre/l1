@@ -1,8 +1,6 @@
     $ l1
     > t
     t
-    > t ;
-    t
     > ()  ;; Nil by any other name, would still smell as sweet...
     ()
     > (cons t ())
@@ -59,6 +57,28 @@
     <lambda(n)>
     > (fact 50)
     30414093201713378043612608166064768844377641568960512000000000000
+    > (def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))
+    <lambda(n)>
+    > (fib 0)
+    0
+    > (fib 1)
+    1
+    > (fib 7)
+    13
+    > (fib 10)
+    55
+    > (fib 20)
+    6765
+    > (def incrementer (lambda (n) (lambda (x) (+ x n))))
+    <lambda(n)>
+    > (def inc (incrementer 1))
+    <lambda(x)>
+    > (inc 5)
+    6
+    > (def add2 (incrementer 2))
+    <lambda(x)>
+    > (add2 5)
+    7
     > ^D
 
     $
