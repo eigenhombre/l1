@@ -75,7 +75,9 @@ Compare with [Babashka](https://github.com/babashka/babashka):
     user	0m0.157s
     sys	0m0.034s    
 
-REPL session:
+## Example REPL Session
+
+These were copied directly from the unit test output; `eval_test.go` has more examples.
 
     $ l1
     > t
@@ -170,9 +172,9 @@ REPL session:
 
     $
 
-These were copied directly from the unit test output; `eval_test.go` has more examples.
+# CI/CD
 
-A `Makefile` exists for convenience, and a `Dockerfile` is used for a GitHub action CI build.
+A `Makefile` exists for convenience (combining testing, linting and build), and a `Dockerfile` is  used by a GitHub action for this project to email an alert if code is pushed which fails the build.
 
 # Goals
 
@@ -183,7 +185,8 @@ A `Makefile` exists for convenience, and a `Dockerfile` is used for a GitHub act
 
 # Non-goals
 
-Backwards compatibility with any existing, popular Lisp.
+- Backwards compatibility with any existing, popular Lisp.
+- Stability (for now) -- everything is subject to change.
 
 # License
 
