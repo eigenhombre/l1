@@ -11,3 +11,4 @@ RUN go get -v golang.org/x/lint/golint
 COPY . .
 
 RUN make verbose
+RUN cat examples.txt
