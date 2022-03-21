@@ -45,7 +45,7 @@ Example (using a file in this project):
     ;; Return the factorial of `n`:
     (def fact
         (lambda (n) 
-        (cond ((eq 0 n) 1) 
+          (cond ((eq 0 n) 1) 
                 (t (* n (fact (- n 1)))))))
 
     (print (fact 100))
