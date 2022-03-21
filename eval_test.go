@@ -239,6 +239,12 @@ func TestEval(t *testing.T) {
 			S("(f 1)", "2", OK),
 			S("(def a 999)", "999", OK),
 			S("(f 2)", "4", OK))},
+		{ECases(
+			S("(def a 1)", "1", OK),
+			S("(def f (lambda () (def a 2) a))", "<lambda()>", OK),
+			S("(f)", "2", OK),
+			S("a", "1", OK),
+		)},
 		// Lexical closures:
 		{Cases(
 			S(`(def ffer (lambda ()

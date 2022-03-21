@@ -136,6 +136,14 @@ REPL session:
     <lambda(n)>
     > (fact 50)
     30414093201713378043612608166064768844377641568960512000000000000
+    > (def a 1)
+    1
+    > (def f (lambda () (def a 2) a))
+    <lambda()>
+    > (f)
+    2
+    > a
+    1
     > (def incrementer (lambda (n) (lambda (x) (+ x n))))
     <lambda(n)>
     > (def inc (incrementer 1))
