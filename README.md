@@ -56,7 +56,7 @@ Example (using a file in this project):
     user	0m0.004s
     sys	0m0.004s
 
-Compare with Babashka:
+Compare with [Babashka](https://github.com/babashka/babashka):
 
     $ cat fact.clj
     ;; Return the factorial of `n`:
