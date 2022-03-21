@@ -109,3 +109,16 @@ func lexItems(s string) []lexutil.LexItem {
 	}
 	return ret
 }
+
+func isBalanced(tokens []lexutil.LexItem) bool {
+	level := 0
+	for _, token := range tokens {
+		switch token.Typ {
+		case itemLeftParen:
+			level++
+		case itemRightParen:
+			level--
+		}
+	}
+	return level == 0
+}

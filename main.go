@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/eigenhombre/lexutil"
 )
 
 func readLine() (string, error) {
@@ -19,13 +21,8 @@ func readLine() (string, error) {
 	}
 }
 
-func lexParseEval(s string, e env, doPrint bool) {
-	got, err := lexAndParse(s)
-	if err != nil {
-		fmt.Printf("%v\n", err)
-		return
-	}
-	for _, g := range got {
+func evalExprs(exprs []Sexpr, e env, doPrint bool) {
+	for _, g := range exprs {
 		res, err := g.Eval(&e)
 		if err != nil {
 			fmt.Printf("%v\n", err)
@@ -37,19 +34,42 @@ func lexParseEval(s string, e env, doPrint bool) {
 	}
 }
 
+func lexParseEval(s string, e env, doPrint bool) {
+	got, err := lexAndParse(s)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return
+	}
+	evalExprs(got, e, false)
+}
+
 func repl(e env) {
 	for {
 		fmt.Print("> ")
-		s, err := readLine()
-		switch err {
-		case nil:
-			lexParseEval(s, e, true)
-		case io.EOF:
-			fmt.Println()
-			return
-		default:
-			panic(err)
+		tokens := []lexutil.LexItem{}
+	Inner:
+		for {
+			s, err := readLine()
+			switch err {
+			case nil:
+				these := lexItems(s)
+				tokens = append(tokens, these...)
+				if isBalanced(tokens) {
+					break Inner
+				}
+			case io.EOF:
+				fmt.Println()
+				return
+			default:
+				panic(err)
+			}
 		}
+		exprs, err := parse(tokens)
+		if err != nil {
+			fmt.Printf("%v\n", err)
+			continue
+		}
+		evalExprs(exprs, e, true)
 	}
 }
 
