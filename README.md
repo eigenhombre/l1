@@ -4,10 +4,10 @@
 
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
-First attempt at a simple Lisp in Go.
+`l1` is a small Lisp written in Go.
 
 # Implemented
-- Lexing and parsing
+- [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace);
 - Numbers as `big.Int`; integer math only.
 - Eval
   - `t` as True, `()` as `nil`
@@ -42,10 +42,11 @@ To execute a file:
 Example (using a file in this project):
 
     $ cat fact.l1
+    ;; Return the factorial of `n`:
     (def fact
-         (lambda (n) 
-           (cond ((eq 0 n) 1) 
-                 (t (* n (fact (- n 1)))))))
+        (lambda (n) 
+        (cond ((eq 0 n) 1) 
+                (t (* n (fact (- n 1)))))))
 
     (print (fact 100))
     $ l1 fact.l1 
@@ -120,18 +121,12 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
 
 A `Makefile` exists for convenience, and a `Dockerfile` is used for a GitHub action CI build.
 
-# Planned Features
-
-- [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace);
-- Sufficient power to [implement itself](http://www.paulgraham.com/rootsoflisp.html);
-- Implement math as bignums from the get-go;
-- Curses-based terminal control for text games, command line utilities, ...;
-
 # Goals
 
+- Learn more about Lisp as a model for computation by building a Lisp with sufficient power to [implement itself](http://www.paulgraham.com/rootsoflisp.html);
 - Improve my Go skills;
 - Build a small, fast-loading Lisp that I can extend how I like;
-- Learn more about [Lisp as a model for computation](http://www.paulgraham.com/rootsoflisp.html).
+- Possibly implement Curses-based terminal control for text games, command line utilities, ...;
 
 # Non-goals
 

@@ -1,0 +1,9 @@
+
+;; This is an example of lexical scope, which doesn't work yet:
+(def ffer
+  (lambda ()
+    ((lambda (a)
+       (lambda (x) (+ a x)))
+     3)))
+
+(print ((ffer) 4))

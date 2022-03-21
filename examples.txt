@@ -1,7 +1,9 @@
     $ l1
     > t
     t
-    > ()
+    > t ;
+    t
+    > ()  ;; Nil by any other name, would still smell as sweet...
     ()
     > (cons t ())
     (t)

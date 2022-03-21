@@ -30,7 +30,8 @@ func TestEval(t *testing.T) {
 		evalCases []evalCase
 	}{
 		{ECases(S("t", "t", OK))},
-		{ECases(S("()", "()", OK))},
+		{Cases(S("t ;", "t", OK))},
+		{ECases(S("()  ;; Nil by any other name, would still smell as sweet...", "()", OK))},
 		{ECases(S("(cons t ())", "(t)", OK))},
 		{ECases(S("(cons (quote hello) (quote (world)))", "(hello world)", OK))},
 		{ECases(S("(quote foo)", "foo", OK))},

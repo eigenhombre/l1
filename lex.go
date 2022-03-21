@@ -50,11 +50,21 @@ func isSpace(r rune) bool {
 	return strings.ContainsRune(" \t\n\r", r)
 }
 
+func ignoreComment(l *lexutil.Lexer) {
+	for {
+		if r := l.Next(); r == '\n' || r == lexutil.EOF {
+			return
+		}
+	}
+}
+
 func lexBetween(l *lexutil.Lexer) lexutil.StateFn {
 	for {
 		switch r := l.Next(); {
 		case isSpace(r):
 			l.Ignore()
+		case r == ';':
+			ignoreComment(l)
 		case r == lexutil.EOF:
 			return nil
 		case isDigit(r) || r == '-' || r == '+':

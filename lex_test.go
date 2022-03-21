@@ -29,8 +29,12 @@ func TestLex(t *testing.T) {
 	}{
 		{"", toks()},
 		{" ", toks()},
+		{"\t", toks()},
 		{"\n\t\r   \r\n", toks()},
+		{";", toks()},
+		{";; Ignored until end of line", toks()},
 		{"1", toks(N("1"))},
+		{"1 ;; is such a lonely number", toks(N("1"))},
 		{"12", toks(N("12"))},
 		{"123 ", toks(N("123"))},
 		{" 312", toks(N("312"))},
