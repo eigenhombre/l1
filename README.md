@@ -47,10 +47,33 @@ Example (using a file in this project):
                  (t (* n (fact (- n 1)))))))
 
     (print (fact 100))
-    $ l1 fact.l1 
+    $ time l1 fact.l1 
     933262154439441526816992388562667004907159682643816214685929638
     952175999932299156089414639761565182862536979208272237582511852
     10916864000000000000000000000000
+
+    real	0m0.008s
+    user	0m0.004s
+    sys	0m0.004s
+
+Compare with Babashka:
+
+    $ cat fact.clj
+    ;; Return the factorial of `n`:
+    (def fact
+    (fn [n]
+        (cond (= 0 n) 1
+            :else (*' n (fact (- n 1))))))
+
+    (println (fact 100))    
+    $ time bb fact.clj
+    933262154439441526816992388562667004907159682643816214685929638
+    952175999932299156089414639761565182862536979208272237582511852
+    10916864000000000000000000000000N
+
+    real	0m0.200s
+    user	0m0.157s
+    sys	0m0.034s    
 
 REPL session:
 
