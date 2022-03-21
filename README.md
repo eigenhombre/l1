@@ -75,6 +75,17 @@ Compare with [Babashka](https://github.com/babashka/babashka):
     user	0m0.157s
     sys	0m0.034s    
 
+Or Clojure:
+
+    $ time clj -M fact.clj
+    933262154439441526816992388562667004907159682643816214685929638
+    952175999932299156089414639761565182862536979208272237582511852
+    10916864000000000000000000000000N
+
+    real	0m1.729s
+    user	0m2.210s
+    sys	0m0.421s
+
 ## Example REPL Session
 
 These were copied directly from the unit test output; `eval_test.go` has more examples.
