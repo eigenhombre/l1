@@ -107,6 +107,8 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     (not common lisp)
     > (car (quote (is not common lisp)))
     is
+    > (len (quote (1 2 3)))
+    3
     > (+ 1 1)
     2
     > (+ 1 2)

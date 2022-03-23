@@ -42,6 +42,9 @@ func TestEval(t *testing.T) {
 		{ECases(S("(quote (the (ten (laws (of (greenspun))))))", "(the (ten (laws (of (greenspun)))))", OK))},
 		{ECases(S("(cdr (quote (is not common lisp)))", "(not common lisp)", OK))},
 		{ECases(S("(car (quote (is not common lisp)))", "is", OK))},
+		{ECases(S("(len (quote (1 2 3)))", "3", OK))},
+		{Cases(S("(len ())", "0", OK))},
+		{Cases(S("(len 3)", "", "is not a list"))},
 		{Cases(S("+", "<builtin: +>", OK))},
 		{Cases(S("1", "1", OK))},
 		{Cases(S("-5", "-5", OK))},
@@ -269,10 +272,11 @@ func TestEval(t *testing.T) {
 			if testCase.out != "" {
 				t.Errorf("%s: expected real output %q, got error %q", testCase.in, testCase.out, err)
 			}
-			if strings.Contains(err.Error(), testCase.err) {
-				t.Logf("%s -> error %q (matches '%q')", testCase.in, err, testCase.err)
-			} else {
+			if !strings.Contains(err.Error(), testCase.err) {
 				t.Errorf("%s: got error %q, want %q", testCase.in, err, testCase.err)
+				// uncomment for more verbose output:
+				// } else {
+				// t.Logf("%s -> error %q (matches '%q')", testCase.in, err, testCase.err)
 			}
 			return true
 		}
@@ -303,7 +307,8 @@ func TestEval(t *testing.T) {
 				t.Errorf("\n\n%s: got %q, want %q!!!!!!!!\n\n", testCase.in, result, testCase.out)
 				continue
 			}
-			t.Logf("%s -> %q", testCase.in, result)
+			// uncomment for more verbose output:
+			// t.Logf("%s -> %q", testCase.in, result)
 			if testCase.exemplary {
 				examples = append(examples, "> "+testCase.in)
 				examples = append(examples, result)

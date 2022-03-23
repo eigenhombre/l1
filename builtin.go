@@ -181,4 +181,22 @@ var builtins = map[string]*Builtin{
 			return Nil, nil
 		},
 	},
+	"len": {
+		Name: "len",
+		Fn: func(args []Sexpr) (Sexpr, error) {
+			if len(args) != 1 {
+				return nil, fmt.Errorf("len expects a single argument")
+			}
+			list, ok := args[0].(*ConsCell)
+			if !ok {
+				return nil, fmt.Errorf("'%s' is not a list", args[0])
+			}
+			count := 0
+			for list != nil {
+				count++
+				list = list.cdr.(*ConsCell)
+			}
+			return Num(count), nil
+		},
+	},
 }
