@@ -199,4 +199,27 @@ var builtins = map[string]*Builtin{
 			return Num(count), nil
 		},
 	},
+	"split": {
+		Name: "split",
+		Fn: func(args []Sexpr) (Sexpr, error) {
+			if len(args) != 1 {
+				return nil, fmt.Errorf("split expects a single argument")
+			}
+			switch s := args[0].(type) {
+			case Atom:
+				return listOfChars(s.String()), nil
+			case Number:
+				return listOfChars(s.String()), nil
+			default:
+				return nil, fmt.Errorf("split expects an atom or a number")
+			}
+		},
+	},
+}
+
+func listOfChars(s string) *ConsCell {
+	if len(s) == 0 {
+		return nil
+	}
+	return Cons(Atom{s[0:1]}, listOfChars(s[1:]))
 }

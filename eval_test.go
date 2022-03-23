@@ -132,6 +132,14 @@ func TestEval(t *testing.T) {
 		{Cases(S("(cond (t t) ((-) t))", "t", OK))},
 		{Cases(S("(cond (() t) ((-) t))", "", "missing argument"))},
 		{Cases(S("(cond (() t) (t (-)))", "", "missing argument"))},
+		// Split function
+		{Cases(S("(split)", "", "expects a single argument"))},
+		{Cases(S("(split 1)", "(1)", OK))},
+		{Cases(S("(split (quote a))", "(a)", OK))},
+		{Cases(S("(split (quote (a b c)))", "", "expects an atom or a number"))},
+		{ECases(S("(split (quote greenspun))", "(g r e e n s p u n)", OK))},
+		{ECases(S("(split (* 12345 67890))", "(8 3 8 1 0 2 0 5 0)", OK))},
+		{ECases(S("(len (split (* 99999 99999 99999)))", "15", OK))},
 		// Higher order functions:
 		{ECases(S("((cond (t +)))", "0", OK))},
 		{ECases(S("((car (cons + ())) 1 2 3)", "6", OK))},
