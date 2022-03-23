@@ -93,7 +93,7 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     $ l1
     > t
     t
-    > ()
+    > ()  ;; Nil by any other name, would still smell as sweet...
     ()
     > (cons t ())
     (t)
@@ -157,6 +157,20 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     <lambda(n)>
     > (fact 50)
     30414093201713378043612608166064768844377641568960512000000000000
+    > (len (split (fact 1000)))
+    2568
+    > (def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))
+    <lambda(n)>
+    > (fib 0)
+    0
+    > (fib 1)
+    1
+    > (fib 7)
+    13
+    > (fib 10)
+    55
+    > (fib 20)
+    6765
     > (def a 1)
     1
     > (def f (lambda () (def a 2) a))
@@ -175,21 +189,10 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     <lambda(x)>
     > (add2 5)
     7
-    > (def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))
-    <lambda(n)>
-    > (fib 0)
-    0
-    > (fib 1)
-    1
-    > (fib 7)
-    13
-    > (fib 10)
-    55
-    > (fib 20)
-    6765
-     > ^D
+    > ^D
 
     $
+
 
 # CI/CD
 

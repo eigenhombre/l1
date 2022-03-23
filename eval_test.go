@@ -233,7 +233,8 @@ func TestEval(t *testing.T) {
 		// Factorial:
 		{ECases(
 			S("(def fact (lambda (n) (cond ((eq 0 n) 1) (t (* n (fact (- n 1)))))))", "<lambda(n)>", OK),
-			S("(fact 50)", "30414093201713378043612608166064768844377641568960512000000000000", OK))},
+			S("(fact 50)", "30414093201713378043612608166064768844377641568960512000000000000", OK),
+			S("(len (split (fact 1000)))", "2568", OK))},
 		// Fibonacci (slow!):
 		{ECases(
 			S("(def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))", "<lambda(n)>", OK),
