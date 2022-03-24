@@ -21,7 +21,7 @@
 
 ## Installing Using the `go` Tool
 
-    go get github.com/eigenhombre/l1@latest
+    go install github.com/eigenhombre/l1@latest
 
 ## Building from Source
 
