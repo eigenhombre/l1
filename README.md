@@ -93,26 +93,27 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     $ l1
     > (help)
     Builtins and Special Forms:
-    *
-    +
-    -
-    /
-    apply
-    atom
-    car
-    cdr
-    cond
-    cons
-    def
-    eq
-    fuse
-    help
-    lambda
-    len
-    print
-    quote
-    randigits
-    split
+          Name  Arity    Description
+             *    0+     Multiply 0 or more numbers
+             +    0+     Add 0 or more numbers
+             -    1+     Subtract 0 or more numbers from the first argument
+             /    2+     Divide the first argument by the rest
+         apply    2      Apply a function to a list of arguments
+          atom    1      Return true if the argument is an atom, false otherwise
+           car    1      Return the first element of a list
+           cdr    1      Return a list with the first element removed
+          cond    0+     SPECIAL FORM: Conditional branching
+          cons    2      Add an element to the front of a (possibly empty) list
+           def    2      SPECIAL FORM: Set a value
+            eq    1+     Return t if the arguments are equal, () otherwise
+          fuse    1      Fuse a list of numbers or atoms into a single atom
+          help    0      Print this message
+        lambda    1+     SPECIAL FORM: Create a function
+           len    1      Return the length of a list
+         print    0+     Print the arguments
+         quote    1      SPECIAL FORM: Quote an expression
+     randigits    1      Return a list of random digits of the given length
+         split    0      Split an atom or number into a list of single-digit numbers or single-character atoms
     ()
     > t
     t
