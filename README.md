@@ -138,6 +138,18 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     > (split (* 12345 67890))
     (8 3 8 1 0 2 0 5 0)
     > (len (split (* 99999 99999 99999)))
+    > (apply + (quote (1 2 3)))
+    6
+    > (apply * (split 123456789))
+    362880
+    > (apply / (split 1111))
+    1
+    > (apply eq (split (quote ooo)))
+    t
+    > (apply eq (split (quote foo)))
+    ()
+    > (apply (lambda (x y z) (eq x y z)) (split 121))
+    ()
     15
     > ((cond (t +)))
     0

@@ -92,6 +92,22 @@ func evDef(pair *ConsCell, e *env) Sexpr {
 	return val
 }
 
+// applyFn applies a function to an already-evaluated list of arguments.
+func applyFn(fnCar Sexpr, args []Sexpr) (Sexpr, error) {
+	// User-defined functions:
+	lambda, ok := fnCar.(*lambdaFn)
+	if ok {
+		return lambda.evLambda(args)
+	}
+	// Built-in functions:
+	biResult, err := fnCar.(*Builtin).Fn(args)
+	if err != nil {
+		return nil, err
+	}
+	return biResult, nil
+
+}
+
 // Eval a list expression
 func (c *ConsCell) Eval(e *env) (Sexpr, error) {
 	if c == Nil {
@@ -119,17 +135,7 @@ func (c *ConsCell) Eval(e *env) (Sexpr, error) {
 	if err != nil {
 		return nil, err
 	}
-	// User-defined functions:
-	lambda, ok := evalCar.(*lambdaFn)
-	if ok {
-		return lambda.evLambda(e, evaledList)
-	}
-	// Built-in functions:
-	biResult, err := evalCar.(*Builtin).Fn(evaledList)
-	if err != nil {
-		return nil, err
-	}
-	return biResult, nil
+	return applyFn(evalCar, evaledList)
 }
 
 func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {

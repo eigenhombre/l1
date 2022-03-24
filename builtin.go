@@ -161,13 +161,15 @@ var builtins = map[string]*Builtin{
 	"eq": {
 		Name: "eq",
 		Fn: func(args []Sexpr) (Sexpr, error) {
-			if len(args) != 2 {
+			if len(args) < 1 {
 				return nil, fmt.Errorf("missing argument")
 			}
-			if args[0].Equal(args[1]) {
-				return Atom{"t"}, nil
+			for _, arg := range args[1:] {
+				if !args[0].Equal(arg) {
+					return Nil, nil
+				}
 			}
-			return Nil, nil
+			return Atom{"t"}, nil
 		},
 	},
 	"print": {
@@ -209,17 +211,47 @@ var builtins = map[string]*Builtin{
 			case Atom:
 				return listOfChars(s.String()), nil
 			case Number:
-				return listOfChars(s.String()), nil
+				return listOfNums(s.String()), nil
 			default:
 				return nil, fmt.Errorf("split expects an atom or a number")
 			}
 		},
 	},
+	"apply": {
+		Name: "apply",
+		Fn: func(args []Sexpr) (Sexpr, error) {
+			if len(args) != 2 {
+				return nil, fmt.Errorf("apply expects exactly two arguments")
+			}
+			fnArgs := []Sexpr{}
+			start := args[1]
+			for start != Nil {
+				cons, ok := start.(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("'%s' is not a list", start)
+				}
+				fnArgs = append(fnArgs, cons.car)
+				start = cons.cdr
+			}
+			return applyFn(args[0], fnArgs)
+		},
+	},
 }
 
+// listOfChars returns a list of single-character atoms from another, presumably
+// longer atom; used by `split`
 func listOfChars(s string) *ConsCell {
 	if len(s) == 0 {
 		return nil
 	}
 	return Cons(Atom{s[0:1]}, listOfChars(s[1:]))
+}
+
+// listOfNums returns a list of single-digit numbers from another, presumably
+// longer number; used by `split`
+func listOfNums(s string) *ConsCell {
+	if len(s) == 0 {
+		return nil
+	}
+	return Cons(Num(s[0:1]), listOfNums(s[1:]))
 }
