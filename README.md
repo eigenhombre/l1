@@ -182,7 +182,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     ()
     > (apply (lambda (x y z) (eq x y z)) (split 121))
     ()
-    15
     > ((cond (t +)))
     0
     > ((car (cons + ())) 1 2 3)
