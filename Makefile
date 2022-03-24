@@ -15,7 +15,8 @@ test:
 
 lint:
 	golint -set_exit_status .
-	staticcheck .
+# Broken in Go 1.18: (l1 issue #24):
+#	staticcheck .
 
 clean:
 	rm ${PROG}
