@@ -133,7 +133,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(cond (t t) ((-) t))", "t", OK))},
 		{Cases(S("(cond (() t) ((-) t))", "", "missing argument"))},
 		{Cases(S("(cond (() t) (t (-)))", "", "missing argument"))},
-		// Split function
+		// `split` function
 		{Cases(S("(split)", "", "expects a single argument"))},
 		{Cases(S("(split 1)", "(1)", OK))},
 		{Cases(S("(split (quote a))", "(a)", OK))},
@@ -141,6 +141,19 @@ func TestEval(t *testing.T) {
 		{ECases(S("(split (quote greenspun))", "(g r e e n s p u n)", OK))},
 		{ECases(S("(split (* 12345 67890))", "(8 3 8 1 0 2 0 5 0)", OK))},
 		{ECases(S("(len (split (* 99999 99999 99999)))", "15", OK))},
+		// `fuse`
+		{Cases(S("(fuse)", "", "expects a single argument"))},
+		{Cases(S("(fuse ())", "()", OK))},
+		{Cases(S("(fuse (quote (a)))", "a", OK))},
+		{Cases(S("(fuse (quote (aa)))", "aa", OK))},
+		{ECases(S("(fuse (quote (a b)))", "ab", OK))},
+		{Cases(S("(fuse (quote (1)))", "1", OK))},
+		{Cases(S("(fuse (quote (1 2)))", "12", OK))},
+		{ECases(S("(+ 2 (fuse (quote (1 2 3))))", "125", OK))},
+		{ECases(S("(fuse (split 1295807125987))", "1295807125987", OK))},
+		// `randigits`
+		{Cases(S("(randigits)", "", "expects a single argument"))},
+		{ECases(S("(len (randigits 10))", "10", OK))},
 		// Apply
 		{ECases(S("(apply + (quote (1 2 3)))", "6", OK))},
 		{Cases(S("(apply)", "", "expects exactly two arguments"))},

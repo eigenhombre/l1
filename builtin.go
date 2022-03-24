@@ -2,8 +2,13 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"sort"
+	"strconv"
 	"strings"
+	"time"
+	"unicode"
+	"unicode/utf8"
 )
 
 // Builtin represents a function with a native (Go) implementation.
@@ -240,6 +245,60 @@ func init() {
 				default:
 					return nil, fmt.Errorf("split expects an atom or a number")
 				}
+			},
+		},
+		"fuse": {
+			Name: "fuse",
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("fuse expects a single argument")
+				}
+				if args[0] == Nil {
+					return Nil, nil
+				}
+				switch s := args[0].(type) {
+				case *ConsCell:
+					cons := s
+					var str string
+					for cons != nil {
+						this := cons.car.String()
+						str += this
+						if cons.cdr == nil {
+							break
+						}
+						cons = cons.cdr.(*ConsCell)
+					}
+					// if first rune is a digit, return a Number
+					firstRune, _ := utf8.DecodeRuneInString(str)
+					if unicode.IsDigit(firstRune) {
+						return Num(str), nil
+					}
+					return Atom{str}, nil
+				default:
+					return nil, fmt.Errorf("fuse expects a list")
+				}
+			},
+		},
+		"randigits": {
+			Name: "randigits",
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("randigits expects a single argument")
+				}
+				if _, ok := args[0].(Number); !ok {
+					return nil, fmt.Errorf("randigits expects a number")
+				}
+				bigint, ok := args[0].(Number)
+				if !ok {
+					return nil, fmt.Errorf("randigits expects a number")
+				}
+				n := bigint.bi.Uint64()
+				r := rand.New(rand.NewSource(time.Now().UnixNano()))
+				digits := ""
+				for i := uint64(0); i < n; i++ {
+					digits += strconv.Itoa(r.Intn(10))
+				}
+				return listOfNums(string(digits)), nil
 			},
 		},
 		"apply": {

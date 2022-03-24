@@ -91,6 +91,29 @@ Or Clojure:
 These were copied directly from the unit test output; `eval_test.go` has more examples.
 
     $ l1
+    > (help)
+    Builtins and Special Forms:
+    *
+    +
+    -
+    /
+    apply
+    atom
+    car
+    cdr
+    cond
+    cons
+    def
+    eq
+    fuse
+    help
+    lambda
+    len
+    print
+    quote
+    randigits
+    split
+    ()
     > t
     t
     > ()  ;; Nil by any other name, would still smell as sweet...
@@ -138,6 +161,15 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     > (split (* 12345 67890))
     (8 3 8 1 0 2 0 5 0)
     > (len (split (* 99999 99999 99999)))
+    15
+    > (fuse (quote (a b)))
+    ab
+    > (+ 2 (fuse (quote (1 2 3))))
+    125
+    > (fuse (split 1295807125987))
+    1295807125987
+    > (len (randigits 10))
+    10
     > (apply + (quote (1 2 3)))
     6
     > (apply * (split 123456789))
