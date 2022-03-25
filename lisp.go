@@ -46,11 +46,18 @@ func (c *ConsCell) Equal(o Sexpr) bool {
 	if !ok {
 		return false
 	}
+	// FIXME: This is messy!
 	if c == nil && o == nil {
 		return true
 	}
 	if c == nil || o == nil {
 		return false
+	}
+	if c == Nil {
+		return o == Nil
+	}
+	if o == Nil {
+		return c == Nil
 	}
 	return c.car.Equal(o.(*ConsCell).car) && c.cdr.Equal(o.(*ConsCell).cdr)
 }
