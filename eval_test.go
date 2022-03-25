@@ -64,6 +64,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(eq 2 (+ 1 1))", "t", OK))},
 		{Cases(S("(eq 2 (+ 1 1) (- 3 1))", "t", OK))},
 		{Cases(S("(eq (quote (1 2 3)) ())", "()", OK))},
+		{Cases(S("(eq () ())", "t", OK))},
 		{Cases(S("(atom (quote foo))", "t", OK))},
 		{ECases(S("(atom (quote (foo bar)))", "()", OK))},
 		{ECases(S("(atom (quote atom))", "t", OK))},
