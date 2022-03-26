@@ -13,6 +13,8 @@ func TestNumConstruction(t *testing.T) {
 		{"1", "1"},
 		{666, "666"},
 		{"12948712498129877", "12948712498129877"},
+		{-1, "-1"},
+		{"-1", "-1"},
 	}
 	for _, test := range tests {
 		if Num(test.input).String() != test.output {

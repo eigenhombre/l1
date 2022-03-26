@@ -143,6 +143,8 @@ func TestEval(t *testing.T) {
 		// `split` function
 		{Cases(S("(split)", "", "expects a single argument"))},
 		{Cases(S("(split 1)", "(1)", OK))},
+		{Cases(S("(split -1)", "(-1)", OK))},
+		{Cases(S("(split -321)", "(-3 2 1)", OK))},
 		{Cases(S("(split (quote a))", "(a)", OK))},
 		{Cases(S("(split (quote (a b c)))", "", "expects an atom or a number"))},
 		{ECases(S("(split (quote greenspun))", "(g r e e n s p u n)", OK))},

@@ -324,7 +324,7 @@ func init() {
 				case Atom:
 					return listOfChars(s.String()), nil
 				case Number:
-					return listOfNums(s.String()), nil
+					return listOfNums(s.String())
 				default:
 					return nil, fmt.Errorf("split expects an atom or a number")
 				}
@@ -387,7 +387,11 @@ func init() {
 				for i := uint64(0); i < n; i++ {
 					digits += strconv.Itoa(r.Intn(10))
 				}
-				return listOfNums(string(digits)), nil
+				lon, err := listOfNums(string(digits))
+				if err != nil {
+					return nil, err
+				}
+				return lon, nil
 			},
 		},
 		"apply": {
@@ -425,10 +429,25 @@ func listOfChars(s string) *ConsCell {
 }
 
 // listOfNums returns a list of single-digit numbers from another, presumably
-// longer number; used by `split`
-func listOfNums(s string) *ConsCell {
+// longer number; used by `split`; if the input represents a negative number,
+// the first digit is negative:
+func listOfNums(s string) (*ConsCell, error) {
 	if len(s) == 0 {
-		return nil
+		return nil, nil
 	}
-	return Cons(Num(s[0:1]), listOfNums(s[1:]))
+	if s[0] == '-' {
+		if len(s) < 2 {
+			return nil, fmt.Errorf("unexpected end of input")
+		}
+		lon, err := listOfNums(s[2:])
+		if err != nil {
+			return nil, err
+		}
+		return Cons(Num(s[0:2]), lon), nil
+	}
+	lon, err := listOfNums(s[1:])
+	if err != nil {
+		return nil, err
+	}
+	return Cons(Num(s[0:1]), lon), nil
 }
