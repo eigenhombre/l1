@@ -4,9 +4,8 @@
 
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
-`l1` is a small Lisp written in Go:
+`l1` is a small [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace) written in Go:
 
-- [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace);
 - Numbers are "big" (Go's `big.Int`); integer math only, so far.
 - `t` as True, `()` as `nil`;
 - Side effects: assignment, e.g. `(def a 1234)`, and a `print` function;
@@ -19,9 +18,9 @@
 | comments (;; ....)                        | maps         | syntax quote              | graphics                             |
 | atoms                                     | strings      | reader macros (`, ', ...) | subprocess / shells                  |
 | lists                                     | namespaces   | REPL / editor integration | big floats                           |
-| 4 special forms: cond, def, lambda, quote | exceptions   | let (as a macro)          | =error= equiv.                       |
+| 4 special forms: cond, def, lambda, quote | exceptions   | let (as a macro)          | rational numbers                     |
 | 16 built-in functions                     | loops        | defun/defn (as a macro)   | tail call optimization               |
-| recursion                                 |              |                           |                                      |
+| recursion                                 |              |                           | `error` equivalent                   |
 | closures                                  |              |                           | byte code compilation/interpretation |
 
 # Usage / Examples
