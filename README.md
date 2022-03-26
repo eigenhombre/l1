@@ -8,14 +8,21 @@
 
 - [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace);
 - Numbers are "big" (Go's `big.Int`); integer math only, so far.
-- Eval:
-  - `t` as True, `()` as `nil`;
-  - Arithmetical operators `+ - * /`;
-  - `quote`, `car`, `cdr`, `cons`, `cond` and a few other built-ins;
-  - Side effects: assignment, e.g. `(def a 1234)`, and a `print` function;
-  - Atoms bind to values in the local or global environment;
-  - Lexical scope for functions.
+- `t` as True, `()` as `nil`;
+- Side effects: assignment, e.g. `(def a 1234)`, and a `print` function;
+- Lexical scope for functions.
 - Simple error checking
+
+| l1 has                                    | doesn't have | will have                 | might get                            |
+| ----------------------------------------- |:------------:| :------------------------:|:-------------------------------------:
+| ints (large)                              | keywords     | macros                    | curses                               |
+| comments (;; ....)                        | maps         | syntax quote              | graphics                             |
+| atoms                                     | strings      | reader macros (`, ', ...) | subprocess / shells                  |
+| lists                                     | namespaces   | REPL / editor integration | big floats                           |
+| 4 special forms: cond, def, lambda, quote | exceptions   | let (as a macro)          | =error= equiv.                       |
+| 16 built-in functions                     | loops        | defun/defn (as a macro)   | tail call optimization               |
+| recursion                                 |              |                           |                                      |
+| closures                                  |              |                           | byte code compilation/interpretation |
 
 # Usage / Examples
 
@@ -253,6 +260,16 @@ A `Makefile` exists for convenience (combining testing, linting and build), and 
 
 - Backwards compatibility with any existing, popular Lisp.
 - Stability (for now) -- everything is subject to change.
+
+# Resources / Further Reading
+
+- [Structure and Interpretation of Computer Programs](https://mitpress.mit.edu/sites/default/files/sicp/index.html).  Classic MIT
+  text, presents several Lisp evaluation models, written in Scheme.
+- [Crafting Interpreters](https://craftinginterpreters.com/) book / website.  Stunning, thorough,
+  approachable and beautiful book on building a language in Java and
+  in C.
+- Donovan & Kernighan, [The Go Programming Language](https://www.amazon.com/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440). Great Go reference.
+- Rob Pike, [Lexical Scanning in Go](https://www.youtube.com/watch?v=HxaD_trXwRE) (YouTube).  I took the code described in this talk and spun it out into [its own package](https://github.com/eigenhombre/lexutil/) for reuse in `l1`.
 
 # License
 
