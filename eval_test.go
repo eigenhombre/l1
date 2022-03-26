@@ -32,6 +32,9 @@ func TestEval(t *testing.T) {
 		{ECases(S("t", "t", OK))},
 		{Cases(S("t ;", "t", OK))},
 		{ECases(S("()  ;; Nil by any other name, would still smell as sweet...", "()", OK))},
+		{Cases(S("(t)", "", "is not a function"))},
+		{Cases(S("(1)", "", "is not a function"))},
+		{Cases(S("(())", "", "is not a function"))},
 		{ECases(S("(cons t ())", "(t)", OK))},
 		{ECases(S("(cons (quote hello) (quote (world)))", "(hello world)", OK))},
 		{ECases(S("(quote foo)", "foo", OK))},
@@ -62,7 +65,7 @@ func TestEval(t *testing.T) {
 		// P.G.'s interpretation of McCarthy says this is (), but
 		// it's simpler to have just one equality operator for now,
 		// which works for numbers, lists and atoms:
-		// {Cases(S("(eq (quote (foo bar)) (quote (foo bar)))", "t", OK))},
+		{Cases(S("(eq (quote (foo bar)) (quote (foo bar)))", "t", OK))},
 		{Cases(S("(eq 2 (+ 1 1))", "t", OK))},
 		{Cases(S("(eq 2 (+ 1 1) (- 3 1))", "t", OK))},
 		{Cases(S("(eq (quote (1 2 3)) ())", "()", OK))},

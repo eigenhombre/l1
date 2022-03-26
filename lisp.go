@@ -100,7 +100,11 @@ func applyFn(fnCar Sexpr, args []Sexpr) (Sexpr, error) {
 		return lambda.evLambda(args)
 	}
 	// Built-in functions:
-	biResult, err := fnCar.(*Builtin).Fn(args)
+	builtin, ok := fnCar.(*Builtin)
+	if !ok {
+		return nil, fmt.Errorf("%s is not a function", fnCar)
+	}
+	biResult, err := builtin.Fn(args)
 	if err != nil {
 		return nil, err
 	}
