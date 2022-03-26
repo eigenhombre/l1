@@ -2,7 +2,7 @@
 
 PROG=l1
 
-all: test ${PROG} deps lint
+all: deps test ${PROG} lint
 
 deps:
 	go get .

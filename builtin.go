@@ -198,6 +198,9 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a list", args[0])
 				}
+				if carCons == Nil {
+					return Nil, nil
+				}
 				return carCons.car, nil
 			},
 		},
@@ -213,6 +216,9 @@ func init() {
 				cdrCons, ok := args[0].(*ConsCell)
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a list", args[0])
+				}
+				if cdrCons == Nil {
+					return Nil, nil
 				}
 				return cdrCons.cdr, nil
 			},

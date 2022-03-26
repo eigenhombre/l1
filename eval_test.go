@@ -40,6 +40,8 @@ func TestEval(t *testing.T) {
 		{Cases(S("(quote ())", "()", OK))},
 		{Cases(S("(quote (((1 2 3))))", "(((1 2 3)))", OK))},
 		{ECases(S("(quote (the (ten (laws (of (greenspun))))))", "(the (ten (laws (of (greenspun)))))", OK))},
+		{Cases(S("(car ())", "()", OK))},
+		{Cases(S("(cdr ())", "()", OK))},
 		{ECases(S("(cdr (quote (is not common lisp)))", "(not common lisp)", OK))},
 		{ECases(S("(car (quote (is not common lisp)))", "is", OK))},
 		{ECases(S("(len (quote (1 2 3)))", "3", OK))},
