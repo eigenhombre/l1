@@ -25,6 +25,9 @@
 
 # Usage / Examples
 
+You should have Go installed and configured.  At some later point, pre-built
+artifacts for various architectures may be available here.
+
 ## Installing Using the `go` Tool
 
     go install github.com/eigenhombre/l1@latest
