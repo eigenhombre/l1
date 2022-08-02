@@ -77,6 +77,7 @@ func TestEval(t *testing.T) {
 		// regression tests for Issue #25 (infinite loop):
 		{Cases(S("(quote questionable?)", "questionable?", OK))},
 		{Cases(S("(quote $moneybag$)", "$moneybag$", OK))},
+		{Cases(S("(quote (a . b))", "", "unexpected character '.' in input"))},
 		{Cases(S("(+ 1)", "1", OK))},
 		{Cases(S("(+ -1)", "-1", OK))},
 		{Cases(S("(+ 0)", "0", OK))},

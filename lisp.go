@@ -196,7 +196,7 @@ func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 		case itemRightParen:
 			return nil, fmt.Errorf("unexpected right paren")
 		default:
-			return nil, fmt.Errorf("unexpected token %v", token)
+			return nil, fmt.Errorf(token.Val)
 		}
 	}
 	return ret, nil

@@ -24,6 +24,7 @@ var typeMap = map[lexutil.ItemType]string{
 	itemAtom:       "ATOM",
 	itemLeftParen:  "LP",
 	itemRightParen: "RP",
+	itemError:      "ERR",
 }
 
 // LexRepr returns a string representation of a known lexeme.
@@ -37,6 +38,8 @@ func LexRepr(i lexutil.LexItem) string {
 		return "LP"
 	case itemRightParen:
 		return "RP"
+	case itemError:
+		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
 	default:
 		panic("bad item type")
 	}
@@ -58,7 +61,15 @@ func ignoreComment(l *lexutil.Lexer) {
 	}
 }
 
-func lexBetween(l *lexutil.Lexer) lexutil.StateFn {
+var validAtomChars = ("0123456789abcdefghijklmnopqrstuvwxyz" +
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+	"+*/-_!=<>?[]{}&$^")
+
+func isAtomChar(r rune) bool {
+	return strings.ContainsRune(validAtomChars, r)
+}
+
+func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 	for {
 		switch r := l.Next(); {
 		case isSpace(r):
@@ -74,20 +85,18 @@ func lexBetween(l *lexutil.Lexer) lexutil.StateFn {
 			l.Emit(itemLeftParen)
 		case r == ')':
 			l.Emit(itemRightParen)
-		default:
-			l.Backup()
+		case isAtomChar(r):
 			return lexAtom
+		default:
+			l.Errorf("unexpected character %q in input", itemError, r)
 		}
 	}
 }
 
 func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
-	var validAtomChars = ("0123456789abcdefghijklmnopqrstuvwxyz" +
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-		"+*/-_!=<>?$^[]{}&")
 	l.AcceptRun(validAtomChars)
 	l.Emit(itemAtom)
-	return lexBetween
+	return lexStart
 }
 
 func lexInt(l *lexutil.Lexer) lexutil.StateFn {
@@ -96,13 +105,13 @@ func lexInt(l *lexutil.Lexer) lexutil.StateFn {
 	if isDigit(nextRune) {
 		l.AcceptRun("0123456789")
 		l.Emit(itemNumber)
-		return lexBetween
+		return lexStart
 	}
 	return lexAtom
 }
 
 func lexItems(s string) []lexutil.LexItem {
-	l := lexutil.Lex("main", s, lexBetween)
+	l := lexutil.Lex("main", s, lexStart)
 	ret := []lexutil.LexItem{}
 	for tok := range l.Items {
 		ret = append(ret, tok)
