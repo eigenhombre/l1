@@ -272,6 +272,7 @@ A `Makefile` exists for convenience (combining testing, linting and build), and 
   in C.
 - Donovan & Kernighan, [The Go Programming Language](https://www.amazon.com/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440). Great Go reference.
 - Rob Pike, [Lexical Scanning in Go](https://www.youtube.com/watch?v=HxaD_trXwRE) (YouTube).  I took the code described in this talk and spun it out into [its own package](https://github.com/eigenhombre/lexutil/) for reuse in `l1`.
+- A [more detailed blog post](http://johnj.com/posts/l1/) on `l1`.
 
 # License
 
