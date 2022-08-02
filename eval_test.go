@@ -74,6 +74,9 @@ func TestEval(t *testing.T) {
 		{ECases(S("(atom (quote (foo bar)))", "()", OK))},
 		{ECases(S("(atom (quote atom))", "t", OK))},
 		{Cases(S("(atom atom)", "()", OK))},
+		// regression tests for Issue #25 (infinite loop):
+		{Cases(S("(quote questionable?)", "questionable?", OK))},
+		{Cases(S("(quote $moneybag$)", "$moneybag$", OK))},
 		{Cases(S("(+ 1)", "1", OK))},
 		{Cases(S("(+ -1)", "-1", OK))},
 		{Cases(S("(+ 0)", "0", OK))},

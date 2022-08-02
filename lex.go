@@ -84,7 +84,7 @@ func lexBetween(l *lexutil.Lexer) lexutil.StateFn {
 func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
 	var validAtomChars = ("0123456789abcdefghijklmnopqrstuvwxyz" +
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-		"+*/-_!=<>")
+		"+*/-_!=<>?$^[]{}&")
 	l.AcceptRun(validAtomChars)
 	l.Emit(itemAtom)
 	return lexBetween
