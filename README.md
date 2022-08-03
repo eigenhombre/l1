@@ -142,8 +142,6 @@ Example (using a file in this project):
 These were copied directly from the unit test output; `eval_test.go` has more examples.
 
 <!-- BEGIN EXAMPLES --->
-
-
     $ l1
     > t
     t
