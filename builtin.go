@@ -500,6 +500,25 @@ func init() {
 				return applyFn(args[0], fnArgs)
 			},
 		},
+		"zero?": {
+			Name:       "zero?",
+			Docstring:  "Return t if the argument is zero, () otherwise",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("zero? expects a single argument")
+				}
+				num, ok := args[0].(Number)
+				if !ok {
+					return Nil, nil
+				}
+				if num.Equal(Num("0")) {
+					return Atom{"t"}, nil
+				}
+				return Nil, nil
+			},
+		},
 	}
 }
 

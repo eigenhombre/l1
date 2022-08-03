@@ -27,6 +27,10 @@ is
 3
 > (* 12349807213490872130987 12349807213490872130987)
 152517738210391179737088822267441718485594169
+> (zero? 0)
+t
+> (zero? (quote zero))
+()
 > (< 1 2 3)
 t
 > (<= 1 2 3 3)
@@ -157,5 +161,6 @@ Builtins and Special Forms:
      quote    1      SPECIAL FORM: Quote an expression
  randigits    1      Return a list of random digits of the given length
      split    0      Split an atom or number into a list of single-digit numbers or single-character atoms
+     zero?    1      Return t if the argument is zero, () otherwise
 > ^D
 $

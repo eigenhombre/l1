@@ -66,6 +66,8 @@ func TestEval(t *testing.T) {
 		{Cases(S("(= 0 0)", "t", OK))},
 		{Cases(S("(= 0 0 0)", "t", OK))},
 		{Cases(S("(not (= 0 0 1))", "t", OK))},
+		{ECases(S("(zero? 0)", "t", OK))},
+		{ECases(S("(zero? (quote zero))", "()", OK))},
 		{Cases(S("(< t 1)", "", "is not a number"))},
 		{Cases(S("(< 1 t)", "", "is not a number"))},
 		{Cases(S("(< 1 2)", "t", OK))},
