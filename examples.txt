@@ -27,6 +27,10 @@ is
 3
 > (* 12349807213490872130987 12349807213490872130987)
 152517738210391179737088822267441718485594169
+> (< 1 2 3)
+t
+> (> 3 2 1 0)
+t
 > (= (quote foo) (quote foo))
 t
 > (= (quote foo) (quote bar))
@@ -128,7 +132,9 @@ Builtins and Special Forms:
          +    0+     Add 0 or more numbers
          -    1+     Subtract 0 or more numbers from the first argument
          /    2+     Divide the first argument by the rest
+         <    1+     Return t if the arguments are in increasing order, () otherwise
          =    1+     Return t if the arguments are equal, () otherwise
+         >    1+     Return t if the arguments are in decreasing order, () otherwise
      apply    2      Apply a function to a list of arguments
       atom    1      Return true if the argument is an atom, false otherwise
        car    1      Return the first element of a list

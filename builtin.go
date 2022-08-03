@@ -91,6 +91,28 @@ func doHelp(out io.Writer) {
 	}
 }
 
+func compareMultiple(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error) {
+	if len(args) < 1 {
+		return nil, fmt.Errorf("missing argument")
+	}
+	first, ok := args[0].(Number)
+	if !ok {
+		return nil, fmt.Errorf("'%s' is not a number", args[0])
+	}
+	last := first
+	for i := 1; i < len(args); i++ {
+		num, ok := args[i].(Number)
+		if !ok {
+			return nil, fmt.Errorf("'%s' is not a number", args[i])
+		}
+		if !cmp(num, last) {
+			return Nil, nil
+		}
+		last = num
+	}
+	return Atom{"t"}, nil
+}
+
 // moving `builtins` into `init` avoids initialization loop for doHelp:
 var builtins map[string]*Builtin
 
@@ -203,6 +225,28 @@ func init() {
 					}
 				}
 				return Atom{"t"}, nil
+			},
+		},
+		"<": {
+			Name:       "<",
+			Docstring:  "Return t if the arguments are in increasing order, () otherwise",
+			FixedArity: 1,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				return compareMultiple(func(a, b Number) bool {
+					return b.Less(a)
+				}, args)
+			},
+		},
+		">": {
+			Name:       ">",
+			Docstring:  "Return t if the arguments are in decreasing order, () otherwise",
+			FixedArity: 1,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				return compareMultiple(func(a, b Number) bool {
+					return b.Greater(a)
+				}, args)
 			},
 		},
 		"car": {

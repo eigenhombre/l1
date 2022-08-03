@@ -60,6 +60,16 @@ func (n Number) Equal(o Sexpr) bool {
 	return false
 }
 
+// Less returns true if the first number is less than the second.
+func (n Number) Less(o Number) bool {
+	return n.bi.Cmp(&o.bi) < 0
+}
+
+// Greater returns true if the first number is less than the second.
+func (n Number) Greater(o Number) bool {
+	return n.bi.Cmp(&o.bi) > 0
+}
+
 // Neg returns the negative of the number.
 func (n Number) Neg() Number {
 	var ni big.Int = n.bi
