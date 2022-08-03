@@ -23,7 +23,7 @@ lint:
 	staticcheck .
 
 clean:
-	rm ${PROG}
+	rm -f ${PROG}
 
 install: ${PROG}
 	go install .
