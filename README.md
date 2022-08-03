@@ -1,6 +1,6 @@
 # l1
 
-<img src="/l1.jpg" width="400">
+<img src="/l1-impression.jpg" width="400">
 
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
