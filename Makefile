@@ -27,5 +27,8 @@ verbose: all
     # The tests are fast!  Just do it again, verbosely:
 	go test -v
 
+docker:
+	docker build -t ${PROG} .
+
 doc:
 	python updatereadme.py
