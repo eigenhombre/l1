@@ -21,26 +21,27 @@ func readLine() (string, error) {
 	}
 }
 
-func evalExprs(exprs []Sexpr, e env, doPrint bool) {
+func evalExprs(exprs []Sexpr, e env, doPrint bool) bool {
 	for _, g := range exprs {
 		res, err := g.Eval(&e)
 		if err != nil {
 			fmt.Printf("%v\n", err)
-			continue
+			return false
 		}
 		if doPrint {
 			fmt.Printf("%v\n", res)
 		}
 	}
+	return true
 }
 
-func lexParseEval(s string, e env, doPrint bool) {
+func lexParseEval(s string, e env, doPrint bool) bool {
 	got, err := lexAndParse(s)
 	if err != nil {
 		fmt.Printf("%v\n", err)
-		return
+		return false
 	}
-	evalExprs(got, e, false)
+	return evalExprs(got, e, false)
 }
 
 func repl(e env) {
@@ -80,7 +81,9 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		lexParseEval(string(bytes), globals, false)
+		if !lexParseEval(string(bytes), globals, false) {
+			os.Exit(1)
+		}
 		return
 	}
 	repl(globals)

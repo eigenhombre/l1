@@ -1,8 +1,9 @@
-.PHONY: test clean deps lint all verbose doc
+.PHONY: test clean deps lint all
+.PHONY: verbose doc integration-test
 
 PROG=l1
 
-all: deps test ${PROG} lint doc
+all: deps test ${PROG} integration-test lint doc
 
 deps:
 	go get .
@@ -12,6 +13,10 @@ ${PROG}: *.go
 
 test:
 	go test
+
+integration-test: ${PROG}
+	./l1 fact.l1
+	./l1 fails.l1 && exit 1 || true
 
 lint:
 	golint -set_exit_status .

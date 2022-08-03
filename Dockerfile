@@ -10,5 +10,5 @@ RUN go install honnef.co/go/tools/cmd/staticcheck@latest
 RUN go install -v golang.org/x/lint/golint@latest
 COPY . .
 
-RUN make verbose
+RUN make clean verbose
 RUN cat examples.txt

@@ -1,0 +1,2 @@
+;; Used to integration-test nonzero exit status:
+(is ())
