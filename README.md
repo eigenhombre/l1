@@ -13,16 +13,16 @@
 - Simple error checking
 
 | l1 has                                    | doesn't have | will have                 | might get                            |
-| ----------------------------------------- |:------------:| :------------------------:|:-------------------------------------:
+|-------------------------------------------|:------------:|:-------------------------:|:------------------------------------:|
 | ints (large)                              | keywords     | macros                    | curses                               |
 | comments (;; ....)                        | maps         | syntax quote              | graphics                             |
-| atoms                                     | strings      | reader macros (`, ', ...) | subprocess / shells                  |
-| lists                                     | namespaces   | REPL / editor integration | big floats                           |
-| 4 special forms: cond, def, lambda, quote | exceptions   | let (as a macro)          | rational numbers                     |
-| 16 built-in functions                     | loops        | defun/defn (as a macro)   | tail call optimization               |
+| atoms                                     | strings      | REPL / editor integration | subprocess / shells                  |
+| lists                                     | namespaces   | let (as a macro)          | big floats                           |
+| 4 special forms: cond, def, lambda, quote | exceptions   | defun/defn (as a macro)   | rational numbers                     |
+| 16 built-in functions                     | loops        |                           | tail call optimization               |
 | recursion                                 |              |                           | `error` equivalent                   |
 | closures                                  |              |                           | byte code compilation/interpretation |
-
+|                                           |              |                           | reader macros (`, ', ...)            |
 # Usage / Examples
 
 You should have Go installed and configured.  At some later point, pre-built
