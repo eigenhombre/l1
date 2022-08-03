@@ -5,8 +5,8 @@ with open('README.md', 'r') as md, open('examples.txt', 'r') as ex:
         examples = ("\n    " +
                     "\n    ".join([l.rstrip() for l in ex.readlines()]) +
                     "\n")
-        ntext = re.sub(r'(.*BEGIN EXAMPLES.*?\n+)(.*)(\<\!\-\-\- END EXAMPLES)',r'\1' +
-                       r'\1' + examples + r'\3',
+        ntext = re.sub(r'(?<=BEGIN EXAMPLES \-\-\>\n)(.*)(?=\<\!\-\- END EXAMPLES)',
+                       examples,
                        readme,
                        flags=re.M|re.DOTALL)
 
