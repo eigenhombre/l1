@@ -91,7 +91,7 @@ func doHelp(out io.Writer) {
 	}
 }
 
-func compareMultiple(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error) {
+func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error) {
 	if len(args) < 1 {
 		return nil, fmt.Errorf("missing argument")
 	}
@@ -229,23 +229,45 @@ func init() {
 		},
 		"<": {
 			Name:       "<",
-			Docstring:  "Return t if the arguments are in increasing order, () otherwise",
+			Docstring:  "Return t if the arguments are in strictly increasing order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
 			Fn: func(args []Sexpr) (Sexpr, error) {
-				return compareMultiple(func(a, b Number) bool {
+				return compareMultipleNums(func(a, b Number) bool {
 					return b.Less(a)
+				}, args)
+			},
+		},
+		"<=": {
+			Name:       "<=",
+			Docstring:  "Return t if the arguments are in increasing (or qual) order, () otherwise",
+			FixedArity: 1,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				return compareMultipleNums(func(a, b Number) bool {
+					return b.LessEqual(a)
 				}, args)
 			},
 		},
 		">": {
 			Name:       ">",
-			Docstring:  "Return t if the arguments are in decreasing order, () otherwise",
+			Docstring:  "Return t if the arguments are in strictly decreasing order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
 			Fn: func(args []Sexpr) (Sexpr, error) {
-				return compareMultiple(func(a, b Number) bool {
+				return compareMultipleNums(func(a, b Number) bool {
 					return b.Greater(a)
+				}, args)
+			},
+		},
+		">=": {
+			Name:       ">=",
+			Docstring:  "Return t if the arguments are in decreasing (or equal) order, () otherwise",
+			FixedArity: 1,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				return compareMultipleNums(func(a, b Number) bool {
+					return b.GreaterEqual(a)
 				}, args)
 			},
 		},

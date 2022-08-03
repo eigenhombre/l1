@@ -65,9 +65,19 @@ func (n Number) Less(o Number) bool {
 	return n.bi.Cmp(&o.bi) < 0
 }
 
-// Greater returns true if the first number is less than the second.
+// LessEqual returns true if the first number is <= the second.
+func (n Number) LessEqual(o Number) bool {
+	return n.bi.Cmp(&o.bi) <= 0
+}
+
+// Greater returns true if the first number is greater than the second.
 func (n Number) Greater(o Number) bool {
 	return n.bi.Cmp(&o.bi) > 0
+}
+
+// Greater returns true if the first number is >= the second.
+func (n Number) GreaterEqual(o Number) bool {
+	return n.bi.Cmp(&o.bi) >= 0
 }
 
 // Neg returns the negative of the number.
