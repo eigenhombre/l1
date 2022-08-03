@@ -75,7 +75,7 @@ func (n Number) Greater(o Number) bool {
 	return n.bi.Cmp(&o.bi) > 0
 }
 
-// Greater returns true if the first number is >= the second.
+// GreaterEqual returns true if the first number is >= the second.
 func (n Number) GreaterEqual(o Number) bool {
 	return n.bi.Cmp(&o.bi) >= 0
 }
