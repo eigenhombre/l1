@@ -5,7 +5,7 @@
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
 `l1` is a small interpreted [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace) written in Go.  Emphasizing simplicity
-of data types (atoms, arbitrarily large integers, and lists) and speed of execution,
+of data types (atoms, arbitrarily large integers, and lists) and start-up speed,
 it aims to be a playground for future language experiments.
 
 | l1 has                                    | doesn't have | will have                 | might get                            |
