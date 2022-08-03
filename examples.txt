@@ -31,6 +31,10 @@ is
 t
 > (zero? (quote zero))
 ()
+> (pos? 1)
+t
+> (neg? -1)
+t
 > (< 1 2 3)
 t
 > (<= 1 2 3 3)
@@ -156,7 +160,9 @@ Builtins and Special Forms:
       help    0      Print this message
     lambda    1+     SPECIAL FORM: Create a function
        len    1      Return the length of a list
+      neg?    1      Return true if the (numeric) argument is negative, else ()
        not    1      Return t if the argument is nil, () otherwise
+      pos?    1      Return true if the (numeric) argument is positive, else ()
      print    0+     Print the arguments
      quote    1      SPECIAL FORM: Quote an expression
  randigits    1      Return a list of random digits of the given length
