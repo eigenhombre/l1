@@ -1,8 +1,8 @@
-.PHONY: test clean deps lint all verbose
+.PHONY: test clean deps lint all verbose doc
 
 PROG=l1
 
-all: deps test ${PROG} lint
+all: deps test ${PROG} lint doc
 
 deps:
 	go get .
@@ -26,3 +26,6 @@ install: ${PROG}
 verbose: all
     # The tests are fast!  Just do it again, verbosely:
 	go test -v
+
+doc:
+	python updatereadme.py
