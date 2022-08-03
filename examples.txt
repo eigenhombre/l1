@@ -164,6 +164,7 @@ Builtins and Special Forms:
        def    2      SPECIAL FORM: Set a value
       fuse    1      Fuse a list of numbers or atoms into a single atom
       help    0      Print this message
+        is    1      Assert that the argument is truthy (not ())
     lambda    1+     SPECIAL FORM: Create a function
        len    1      Return the length of a list
       neg?    1      Return true if the (numeric) argument is negative, else ()

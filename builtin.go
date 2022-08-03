@@ -361,6 +361,21 @@ func init() {
 				return Nil, nil
 			},
 		},
+		"is": {
+			Name:       "is",
+			Docstring:  "Assert that the argument is truthy (not ())",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				if args[0] == Nil {
+					return nil, fmt.Errorf("'is' requires a truthy argument")
+				}
+				return args[0], nil
+			},
+		},
 		"len": {
 			Name:       "len",
 			Docstring:  "Return the length of a list",
