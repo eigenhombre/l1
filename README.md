@@ -86,6 +86,12 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     (hello world)
     > (quote foo)
     foo
+    > 'foo
+    foo
+    > '123
+    123
+    > '(1 2 3)
+    (1 2 3)
     > (quote (the (ten (laws (of (greenspun))))))
     (the (ten (laws (of (greenspun)))))
     > (cdr (quote (is not common lisp)))
@@ -128,13 +134,13 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     t
     > (cond (() 1) (2 3))
     3
-    > (car (quote (1 2 3)))
+    > (car '(1 2 3))
     1
-    > (cdr (quote (1 2 3)))
+    > (cdr '(1 2 3))
     (2 3)
-    > (cons 1 (quote (2 3 4)))
+    > (cons 1 '(2 3 4))
     (1 2 3 4)
-    > (split (quote greenspun))
+    > (split 'greenspun)
     (g r e e n s p u n)
     > (split (* 12345 67890))
     (8 3 8 1 0 2 0 5 0)

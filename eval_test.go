@@ -42,8 +42,12 @@ func TestEval(t *testing.T) {
 		{ECases(S("(cons t ())", "(t)", OK))},
 		{ECases(S("(cons (quote hello) (quote (world)))", "(hello world)", OK))},
 		{ECases(S("(quote foo)", "foo", OK))},
+		{ECases(S("'foo", "foo", OK))},
+		{ECases(S("'123", "123", OK))},
+		{Cases(S("'bar", "bar", OK))},
 		{Cases(S("(quote 3)", "3", OK))},
 		{Cases(S("(quote (1 2 3))", "(1 2 3)", OK))},
+		{ECases(S("'(1 2 3)", "(1 2 3)", OK))},
 		{Cases(S("(quote ())", "()", OK))},
 		{Cases(S("(quote (((1 2 3))))", "(((1 2 3)))", OK))},
 		{ECases(S("(quote (the (ten (laws (of (greenspun))))))", "(the (ten (laws (of (greenspun)))))", OK))},
@@ -156,10 +160,11 @@ func TestEval(t *testing.T) {
 		{Cases(S("(cdr t)", "", "not a list"))},
 		{Cases(S("(* 1 1 1 (*) (*) (*))", "1", OK))},
 		{Cases(S("(+ 1 1 1 (+) (+) (+))", "3", OK))},
-		{ECases(S("(car (quote (1 2 3)))", "1", OK))},
-		{ECases(S("(cdr (quote (1 2 3)))", "(2 3)", OK))},
-		{ECases(S("(cons 1 (quote (2 3 4)))", "(1 2 3 4)", OK))},
-		{Cases(S("(cons (cons 1 (cons 2 ())) (quote (3 4)))", "((1 2) 3 4)", OK))},
+		{Cases(S("(car (quote (1 2 3)))", "1", OK))},
+		{ECases(S("(car '(1 2 3))", "1", OK))},
+		{ECases(S("(cdr '(1 2 3))", "(2 3)", OK))},
+		{ECases(S("(cons 1 '(2 3 4))", "(1 2 3 4)", OK))},
+		{Cases(S("(cons (cons 1 (cons 2 ())) '(3 4))", "((1 2) 3 4)", OK))},
 		{Cases(S("(quote ((1)))", "((1))", OK))},
 		{Cases(S("(quote (()))", "(())", OK))},
 		{Cases(S("(quote (() ()))", "(() ())", OK))},
@@ -181,7 +186,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(split -321)", "(-3 2 1)", OK))},
 		{Cases(S("(split (quote a))", "(a)", OK))},
 		{Cases(S("(split (quote (a b c)))", "", "expects an atom or a number"))},
-		{ECases(S("(split (quote greenspun))", "(g r e e n s p u n)", OK))},
+		{ECases(S("(split 'greenspun)", "(g r e e n s p u n)", OK))},
 		{ECases(S("(split (* 12345 67890))", "(8 3 8 1 0 2 0 5 0)", OK))},
 		{ECases(S("(len (split (* 99999 99999 99999)))", "15", OK))},
 		// `fuse`
@@ -372,7 +377,8 @@ func TestEval(t *testing.T) {
 				continue
 			}
 			if len(got) != 1 {
-				t.Errorf("\n\n%s: got %d results, want 1!!!!!!!!\n\n", testCase.in, len(got))
+				t.Errorf("\n\n%s: got %d results ('%q'), want 1!!!!!!!!\n\n",
+					testCase.in, len(got), got)
 				continue
 			}
 			ev, err := got[0].Eval(&globals)

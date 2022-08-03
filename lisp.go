@@ -182,6 +182,38 @@ func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 		case itemAtom:
 			ret = append(ret, Atom{token.Val})
 			i++
+		case itemForwardQuote:
+			i++ // skip ' token
+			if i >= len(tokens) {
+				return nil, fmt.Errorf("unexpected end of input")
+			}
+			var quoted Sexpr
+			var delta int
+			// quoted and delta depend on whether the quoted expression is
+			// a list or an atom/num:
+			if tokens[i].Typ != itemLeftParen {
+				inner, err := parse(tokens[i : i+1])
+				if err != nil {
+					return nil, err
+				}
+				quoted = inner[0]
+				delta = 1
+			} else {
+				start, end, err := balancedParenPoints(tokens[i:])
+				if err != nil {
+					return nil, err
+				}
+				inner, err := parse(tokens[i+start+1 : i+end])
+				if err != nil {
+					return nil, err
+				}
+				quoted = mkList(inner)
+				delta = end - start + 1
+			}
+			i += delta
+			quoteList := []Sexpr{Atom{"quote"}}
+			quoteList = append(quoteList, quoted)
+			ret = append(ret, mkList(quoteList))
 		case itemLeftParen:
 			start, end, err := balancedParenPoints(tokens[i:])
 			if err != nil {

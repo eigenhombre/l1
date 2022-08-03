@@ -108,8 +108,11 @@ func TestStrToSexprs(T *testing.T) {
 		{"foo", S(A("foo"))},
 		{"foo-", S(A("foo-"))},
 		{"-foo", S(A("-foo"))},
-		// Regression for Issue #25:
+		// Regression test for Issue #25:
 		{"foo?", S(A("foo?"))},
+		{"'foo", S(L(A("quote"), A("foo")))},
+		{"'123", S(L(A("quote"), Num(123)))},
+		{"'(1 2 3)", S(L(A("quote"), L(Num(1), Num(2), Num(3))))},
 		{"1", S(Num(1))},
 		{"a 3", S(A("a"), Num(3))},
 		{"()", S(L())},

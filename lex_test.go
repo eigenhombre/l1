@@ -17,6 +17,7 @@ func TestLex(t *testing.T) {
 	LP := abbrev(itemLeftParen)
 	RP := abbrev(itemRightParen)
 	A := abbrev(itemAtom)
+	QUOTE := abbrev(itemForwardQuote)
 	Err := abbrev(itemError)
 	toks := func(items ...lexutil.LexItem) []lexutil.LexItem {
 		if len(items) == 0 {
@@ -77,6 +78,7 @@ func TestLex(t *testing.T) {
 			Err("unexpected character '.' in input"),
 			A("atom2"),
 			RP(")"))},
+		{"'quoted-atom", toks(QUOTE("'"), A("quoted-atom"))},
 	}
 
 	for _, test := range tests {

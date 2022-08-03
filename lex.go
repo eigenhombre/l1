@@ -15,16 +15,18 @@ const (
 	itemAtom
 	itemLeftParen
 	itemRightParen
+	itemForwardQuote
 	itemError
 )
 
 // Human-readable versions of above:
 var typeMap = map[lexutil.ItemType]string{
-	itemNumber:     "NUM",
-	itemAtom:       "ATOM",
-	itemLeftParen:  "LP",
-	itemRightParen: "RP",
-	itemError:      "ERR",
+	itemNumber:       "NUM",
+	itemAtom:         "ATOM",
+	itemLeftParen:    "LP",
+	itemRightParen:   "RP",
+	itemForwardQuote: "QUOTE",
+	itemError:        "ERR",
 }
 
 // LexRepr returns a string representation of a known lexeme.
@@ -40,6 +42,8 @@ func LexRepr(i lexutil.LexItem) string {
 		return "RP"
 	case itemError:
 		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
+	case itemForwardQuote:
+		return "QUOTE"
 	default:
 		panic("bad item type")
 	}
@@ -87,6 +91,8 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 			l.Emit(itemRightParen)
 		case isAtomChar(r):
 			return lexAtom
+		case r == '\'':
+			l.Emit(itemForwardQuote)
 		default:
 			l.Errorf("unexpected character %q in input", itemError, r)
 		}
