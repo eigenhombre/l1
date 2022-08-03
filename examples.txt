@@ -1,122 +1,149 @@
-    $ l1
-    > t
-    t
-    > ()  ;; Nil by any other name, would still smell as sweet...
-    ()
-    > (cons t ())
-    (t)
-    > (cons (quote hello) (quote (world)))
-    (hello world)
-    > (quote foo)
-    foo
-    > (quote (the (ten (laws (of (greenspun))))))
-    (the (ten (laws (of (greenspun)))))
-    > (cdr (quote (is not common lisp)))
-    (not common lisp)
-    > (car (quote (is not common lisp)))
-    is
-    > (len (quote (1 2 3)))
-    3
-    > (+ 1 1)
-    2
-    > (+ 1 2)
-    3
-    > (* 12349807213490872130987 12349807213490872130987)
-    152517738210391179737088822267441718485594169
-    > (eq (quote foo) (quote foo))
-    t
-    > (eq (quote foo) (quote bar))
-    ()
-    > (eq (quote foo) (quote (foo bar)))
-    ()
-    > (atom (quote (foo bar)))
-    ()
-    > (atom (quote atom))
-    t
-    > (cond (() 1) (2 3))
-    3
-    > (car (quote (1 2 3)))
-    1
-    > (cdr (quote (1 2 3)))
-    (2 3)
-    > (cons 1 (quote (2 3 4)))
-    (1 2 3 4)
-    > (split (quote greenspun))
-    (g r e e n s p u n)
-    > (split (* 12345 67890))
-    (8 3 8 1 0 2 0 5 0)
-    > (len (split (* 99999 99999 99999)))
-    15
-    > (fuse (quote (a b)))
-    ab
-    > (+ 2 (fuse (quote (1 2 3))))
-    125
-    > (fuse (split 1295807125987))
-    1295807125987
-    > (len (randigits 10))
-    10
-    > (apply + (quote (1 2 3)))
-    6
-    > (apply * (split 123456789))
-    362880
-    > (apply / (split 1111))
-    1
-    > (apply eq (split (quote ooo)))
-    t
-    > (apply eq (split (quote foo)))
-    ()
-    > (apply (lambda (x y z) (eq x y z)) (split 121))
-    ()
-    > ((cond (t +)))
-    0
-    > ((car (cons + ())) 1 2 3)
-    6
-    > (def a 6)
-    6
-    > (def b 7)
-    7
-    > (+ a b)
-    13
-    > ((lambda ()))
-    ()
-    > ((lambda (x) (+ 1 x)) 1)
-    2
-    > (def fact (lambda (n) (cond ((eq 0 n) 1) (t (* n (fact (- n 1)))))))
-    <lambda(n)>
-    > (fact 50)
-    30414093201713378043612608166064768844377641568960512000000000000
-    > (len (split (fact 1000)))
-    2568
-    > (def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))
-    <lambda(n)>
-    > (fib 0)
-    0
-    > (fib 1)
-    1
-    > (fib 7)
-    13
-    > (fib 10)
-    55
-    > (fib 20)
-    6765
-    > (def a 1)
-    1
-    > (def f (lambda () (def a 2) a))
-    <lambda()>
-    > (f)
-    2
-    > a
-    1
-    > (def incrementer (lambda (n) (lambda (x) (+ x n))))
-    <lambda(n)>
-    > (def inc (incrementer 1))
-    <lambda(x)>
-    > (inc 5)
-    6
-    > (def add2 (incrementer 2))
-    <lambda(x)>
-    > (add2 5)
-    7
-    > ^D
-
-    $
+$ l1
+> t
+t
+> (not t)
+()
+> (not ())
+t
+> ()  ;; Nil by any other name, would still smell as sweet...
+()
+> (cons t ())
+(t)
+> (cons (quote hello) (quote (world)))
+(hello world)
+> (quote foo)
+foo
+> (quote (the (ten (laws (of (greenspun))))))
+(the (ten (laws (of (greenspun)))))
+> (cdr (quote (is not common lisp)))
+(not common lisp)
+> (car (quote (is not common lisp)))
+is
+> (len (quote (1 2 3)))
+3
+> (+ 1 1)
+2
+> (+ 1 2)
+3
+> (* 12349807213490872130987 12349807213490872130987)
+152517738210391179737088822267441718485594169
+> (= (quote foo) (quote foo))
+t
+> (= (quote foo) (quote bar))
+()
+> (= (quote foo) (quote (foo bar)))
+()
+> (atom (quote (foo bar)))
+()
+> (atom (quote atom))
+t
+> (cond (() 1) (2 3))
+3
+> (car (quote (1 2 3)))
+1
+> (cdr (quote (1 2 3)))
+(2 3)
+> (cons 1 (quote (2 3 4)))
+(1 2 3 4)
+> (split (quote greenspun))
+(g r e e n s p u n)
+> (split (* 12345 67890))
+(8 3 8 1 0 2 0 5 0)
+> (len (split (* 99999 99999 99999)))
+15
+> (fuse (quote (a b)))
+ab
+> (+ 2 (fuse (quote (1 2 3))))
+125
+> (fuse (split 1295807125987))
+1295807125987
+> (len (randigits 10))
+10
+> (apply + (quote (1 2 3)))
+6
+> (apply * (split 123456789))
+362880
+> (apply / (split 1111))
+1
+> (apply = (split (quote ooo)))
+t
+> (apply = (split (quote foo)))
+()
+> (apply (lambda (x y z) (= x y z)) (split 121))
+()
+> ((cond (t +)))
+0
+> ((car (cons + ())) 1 2 3)
+6
+> (def a 6)
+6
+> (def b 7)
+7
+> (+ a b)
+13
+> ((lambda ()))
+()
+> ((lambda (x) (+ 1 x)) 1)
+2
+> (def fact (lambda (n) (cond ((= 0 n) 1) (t (* n (fact (- n 1)))))))
+<lambda(n)>
+> (fact 50)
+30414093201713378043612608166064768844377641568960512000000000000
+> (len (split (fact 1000)))
+2568
+> (def fib (lambda (n) (cond ((= 0 n) 0) ((= 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))
+<lambda(n)>
+> (fib 0)
+0
+> (fib 1)
+1
+> (fib 7)
+13
+> (fib 10)
+55
+> (fib 20)
+6765
+> (def a 1)
+1
+> (def f (lambda () (def a 2) a))
+<lambda()>
+> (f)
+2
+> a
+1
+> (def incrementer (lambda (n) (lambda (x) (+ x n))))
+<lambda(n)>
+> (def inc (incrementer 1))
+<lambda(x)>
+> (inc 5)
+6
+> (def add2 (incrementer 2))
+<lambda(x)>
+> (add2 5)
+7
+> (help)
+Builtins and Special Forms:
+      Name  Arity    Description
+         *    0+     Multiply 0 or more numbers
+         +    0+     Add 0 or more numbers
+         -    1+     Subtract 0 or more numbers from the first argument
+         /    2+     Divide the first argument by the rest
+         =    1+     Return t if the arguments are equal, () otherwise
+     apply    2      Apply a function to a list of arguments
+      atom    1      Return true if the argument is an atom, false otherwise
+       car    1      Return the first element of a list
+       cdr    1      Return a list with the first element removed
+      cond    0+     SPECIAL FORM: Conditional branching
+      cons    2      Add an element to the front of a (possibly empty) list
+       def    2      SPECIAL FORM: Set a value
+      fuse    1      Fuse a list of numbers or atoms into a single atom
+      help    0      Print this message
+    lambda    1+     SPECIAL FORM: Create a function
+       len    1      Return the length of a list
+       not    1      Return t if the argument is nil, () otherwise
+     print    0+     Print the arguments
+     quote    1      SPECIAL FORM: Quote an expression
+ randigits    1      Return a list of random digits of the given length
+     split    0      Split an atom or number into a list of single-digit numbers or single-character atoms
+> ^D
+$

@@ -51,12 +51,12 @@ Example (using a file in this project):
     $ cat fact.l1
     ;; Return the factorial of `n`:
     (def fact
-         (lambda (n) 
-           (cond ((eq 0 n) 1) 
+         (lambda (n)
+           (cond ((= 0 n) 1)
                  (t (* n (fact (- n 1)))))))
 
     (print (fact 100))
-    $ time l1 fact.l1 
+    $ time l1 fact.l1
     933262154439441526816992388562667004907159682643816214685929638
     952175999932299156089414639761565182862536979208272237582511852
     10916864000000000000000000000000
@@ -65,40 +65,11 @@ Example (using a file in this project):
     user	0m0.004s
     sys	0m0.004s
 
-Compare with [Babashka](https://github.com/babashka/babashka):
-
-    $ cat fact.clj
-    ;; Return the factorial of `n`:
-    (def fact
-      (fn [n]
-        (cond (= 0 n) 1
-              :else (*' n (fact (- n 1))))))
-
-    (println (fact 100))    
-    $ time bb fact.clj
-    933262154439441526816992388562667004907159682643816214685929638
-    952175999932299156089414639761565182862536979208272237582511852
-    10916864000000000000000000000000N
-
-    real	0m0.200s
-    user	0m0.157s
-    sys	0m0.034s    
-
-Or Clojure:
-
-    $ time clj -M fact.clj
-    933262154439441526816992388562667004907159682643816214685929638
-    952175999932299156089414639761565182862536979208272237582511852
-    10916864000000000000000000000000N
-
-    real	0m1.729s
-    user	0m2.210s
-    sys	0m0.421s
-
 ## Example REPL Session
 
 These were copied directly from the unit test output; `eval_test.go` has more examples.
 
+<!--- BEGIN EXAMPLES -->
     $ l1
     > (help)
     Builtins and Special Forms:
@@ -107,6 +78,7 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
              +    0+     Add 0 or more numbers
              -    1+     Subtract 0 or more numbers from the first argument
              /    2+     Divide the first argument by the rest
+             =    1+     Return t if the arguments are equal, () otherwise
          apply    2      Apply a function to a list of arguments
           atom    1      Return true if the argument is an atom, false otherwise
            car    1      Return the first element of a list
@@ -114,7 +86,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
           cond    0+     SPECIAL FORM: Conditional branching
           cons    2      Add an element to the front of a (possibly empty) list
            def    2      SPECIAL FORM: Set a value
-            eq    1+     Return t if the arguments are equal, () otherwise
           fuse    1      Fuse a list of numbers or atoms into a single atom
           help    0      Print this message
         lambda    1+     SPECIAL FORM: Create a function
@@ -245,7 +216,7 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     > ^D
 
     $
-
+<!--- END EXAMPLES -->
 
 # CI/CD
 

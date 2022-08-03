@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"os"
 	"strings"
 	"testing"
@@ -30,8 +31,11 @@ func TestEval(t *testing.T) {
 		evalCases []evalCase
 	}{
 		{ECases(S("t", "t", OK))},
+		{ECases(S("(not t)", "()", OK))},
+		{ECases(S("(not ())", "t", OK))},
 		{Cases(S("t ;", "t", OK))},
 		{ECases(S("()  ;; Nil by any other name, would still smell as sweet...", "()", OK))},
+		{Cases(S("3 ;; colons (:) are OK too (regression for #25)", "3", OK))},
 		{Cases(S("(t)", "", "is not a function"))},
 		{Cases(S("(1)", "", "is not a function"))},
 		{Cases(S("(())", "", "is not a function"))},
@@ -58,18 +62,21 @@ func TestEval(t *testing.T) {
 		{Cases(S("(+ 1 1 2 3)", "7", OK))},
 		{Cases(S("(+)", "0", OK))},
 		{ECases(S("(* 12349807213490872130987 12349807213490872130987)", "152517738210391179737088822267441718485594169", OK))},
-		{Cases(S("(eq 0 0)", "t", OK))},
-		{ECases(S("(eq (quote foo) (quote foo))", "t", OK))},
-		{ECases(S("(eq (quote foo) (quote bar))", "()", OK))},
-		{ECases(S("(eq (quote foo) (quote (foo bar)))", "()", OK))},
+		{Cases(S("(= 0)", "t", OK))},
+		{Cases(S("(= 0 0)", "t", OK))},
+		{Cases(S("(= 0 0 0)", "t", OK))},
+		{Cases(S("(not (= 0 0 1))", "t", OK))},
+		{ECases(S("(= (quote foo) (quote foo))", "t", OK))},
+		{ECases(S("(= (quote foo) (quote bar))", "()", OK))},
+		{ECases(S("(= (quote foo) (quote (foo bar)))", "()", OK))},
 		// P.G.'s interpretation of McCarthy says this is (), but
 		// it's simpler to have just one equality operator for now,
 		// which works for numbers, lists and atoms:
-		{Cases(S("(eq (quote (foo bar)) (quote (foo bar)))", "t", OK))},
-		{Cases(S("(eq 2 (+ 1 1))", "t", OK))},
-		{Cases(S("(eq 2 (+ 1 1) (- 3 1))", "t", OK))},
-		{Cases(S("(eq (quote (1 2 3)) ())", "()", OK))},
-		{Cases(S("(eq () ())", "t", OK))},
+		{Cases(S("(= (quote (foo bar)) (quote (foo bar)))", "t", OK))},
+		{Cases(S("(= 2 (+ 1 1))", "t", OK))},
+		{Cases(S("(= 2 (+ 1 1) (- 3 1))", "t", OK))},
+		{Cases(S("(= (quote (1 2 3)) ())", "()", OK))},
+		{Cases(S("(= () ())", "t", OK))},
 		{Cases(S("(atom (quote foo))", "t", OK))},
 		{ECases(S("(atom (quote (foo bar)))", "()", OK))},
 		{ECases(S("(atom (quote atom))", "t", OK))},
@@ -108,7 +115,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(-)", "", "missing argument"))},
 		{Cases(S("(cons)", "", "missing argument"))},
 		{Cases(S("(atom)", "", "missing argument"))},
-		{Cases(S("(eq)", "", "missing argument"))},
+		{Cases(S("(=)", "", "missing argument"))},
 		{Cases(S("(/)", "", "missing argument"))},
 		{Cases(S("(/ 1 0)", "", "division by zero"))},
 		{Cases(S("(+ 0 (cond))", "", "expected number"))},
@@ -177,11 +184,11 @@ func TestEval(t *testing.T) {
 		{Cases(S("(apply * (split 123))", "6", OK))},
 		{ECases(S("(apply * (split 123456789))", "362880", OK))},
 		{ECases(S("(apply / (split 1111))", "1", OK))},
-		{ECases(S("(apply eq (split (quote ooo)))", "t", OK))},
-		{ECases(S("(apply eq (split (quote foo)))", "()", OK))},
-		{Cases(S("(apply (lambda (x y) (eq x y)) (split 11))", "t", OK))},
-		{Cases(S("(apply (lambda (x y) (eq x y)) (split 123))", "", "wrong number of args"))},
-		{ECases(S("(apply (lambda (x y z) (eq x y z)) (split 121))", "()", OK))},
+		{ECases(S("(apply = (split (quote ooo)))", "t", OK))},
+		{ECases(S("(apply = (split (quote foo)))", "()", OK))},
+		{Cases(S("(apply (lambda (x y) (= x y)) (split 11))", "t", OK))},
+		{Cases(S("(apply (lambda (x y) (= x y)) (split 123))", "", "wrong number of args"))},
+		{ECases(S("(apply (lambda (x y z) (= x y z)) (split 121))", "()", OK))},
 		// Higher order functions:
 		{ECases(S("((cond (t +)))", "0", OK))},
 		{ECases(S("((car (cons + ())) 1 2 3)", "6", OK))},
@@ -231,9 +238,9 @@ func TestEval(t *testing.T) {
 		// Environment & scope:
 		{Cases(
 			S("(def x 0)", "0", OK),
-			S("(cond ((eq x 0) 0) (t x))", "0", OK),
+			S("(cond ((= x 0) 0) (t x))", "0", OK),
 			S("(def x 1)", "1", OK),
-			S("(cond ((eq x 0) 0) (t x))", "1", OK))},
+			S("(cond ((= x 0) 0) (t x))", "1", OK))},
 		{Cases(
 			S("(def a 1)", "1", OK),
 			S("(def b 2)", "2", OK),
@@ -243,7 +250,7 @@ func TestEval(t *testing.T) {
 			S("(f 2)", "3", OK))},
 		{Cases(
 			S("(def x 0)", "0", OK),
-			S("(eq x 0)", "t", OK))},
+			S("(= x 0)", "t", OK))},
 		{Cases(
 			S("(def f (lambda (x) (cond (x 3) (t 4))))", "<lambda(x)>", OK),
 			S("(f t)", "3", OK),
@@ -251,12 +258,12 @@ func TestEval(t *testing.T) {
 			S("(f (quote (1 2 3)))", "3", OK),
 			S("(f ())", "4", OK))},
 		{Cases(
-			S("(def f (lambda (x) (cond ((eq x 3) 3) (t 4))))", "<lambda(x)>", OK),
+			S("(def f (lambda (x) (cond ((= x 3) 3) (t 4))))", "<lambda(x)>", OK),
 			S("(f 3)", "3", OK),
 			S("(f (quote (1 2 3)))", "4", OK),
 			S("(f ())", "4", OK))},
 		{Cases(
-			S("(def f (lambda (x) (cond ((eq x 3) 1) (t (+ 1 (f 3))))))", "<lambda(x)>", OK),
+			S("(def f (lambda (x) (cond ((= x 3) 1) (t (+ 1 (f 3))))))", "<lambda(x)>", OK),
 			S("(f 3)", "1", OK),
 			S("(f 4)", "2", OK))},
 		{Cases(
@@ -267,19 +274,19 @@ func TestEval(t *testing.T) {
 		// This case helped me (JJ) find a subtle math/pointer bug:
 		{Cases(
 			S(`(def f (lambda (x)
-			            (cond ((eq x 0) 0)
+			            (cond ((= x 0) 0)
 						      (t (+ x (f (- x 1)))))))`,
 				"<lambda(x)>", OK),
 			S("(f 0)", "0", OK),
 			S("(f 1)", "1", OK))},
 		// Factorial:
 		{ECases(
-			S("(def fact (lambda (n) (cond ((eq 0 n) 1) (t (* n (fact (- n 1)))))))", "<lambda(n)>", OK),
+			S("(def fact (lambda (n) (cond ((= 0 n) 1) (t (* n (fact (- n 1)))))))", "<lambda(n)>", OK),
 			S("(fact 50)", "30414093201713378043612608166064768844377641568960512000000000000", OK),
 			S("(len (split (fact 1000)))", "2568", OK))},
 		// Fibonacci (slow!):
 		{ECases(
-			S("(def fib (lambda (n) (cond ((eq 0 n) 0) ((eq 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))", "<lambda(n)>", OK),
+			S("(def fib (lambda (n) (cond ((= 0 n) 0) ((= 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))", "<lambda(n)>", OK),
 			S("(fib 0)", "0", OK),
 			S("(fib 1)", "1", OK),
 			S("(fib 7)", "13", OK),
@@ -333,7 +340,7 @@ func TestEval(t *testing.T) {
 		}
 		return false
 	}
-	examples := []string{"    $ l1"}
+	examples := []string{"$ l1"}
 	for _, test := range tests {
 		globals := mkEnv(nil)
 		for _, testCase := range test.evalCases {
@@ -366,9 +373,14 @@ func TestEval(t *testing.T) {
 			}
 		}
 	}
-	examples = append(examples, "> ^D\n", "$\n")
-	outstr := strings.Join(examples, "\n    ")
+	examples = append(examples, "> (help)\n")
+	outstr := strings.Join(examples, "\n")
 	bs := []byte(outstr)
+
+	helpBuf := bytes.NewBufferString("")
+	doHelp(helpBuf)
+	bs = append(bs, helpBuf.Bytes()...)
+	bs = append(bs, "> ^D\n$\n"...)
 	err := os.WriteFile("examples.txt", bs, 0644)
 	if err != nil {
 		t.Errorf("write file: %v", err)

@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -40,9 +42,9 @@ func (b Builtin) Equal(o Sexpr) bool {
 	return false
 }
 
-func doHelp() {
-	fmt.Println("Builtins and Special Forms:")
-	fmt.Println("      Name  Arity    Description")
+func doHelp(out io.Writer) {
+	fmt.Fprintln(out, "Builtins and Special Forms:")
+	fmt.Fprintln(out, "      Name  Arity    Description")
 	type fnDoc struct {
 		name      string
 		farity    int
@@ -79,7 +81,8 @@ func doHelp() {
 			isMultiArity = "+"
 		}
 		argstr := fmt.Sprintf("%d%s", form.farity, isMultiArity)
-		fmt.Printf(
+		fmt.Fprintf(
+			out,
 			"%10s %5s     %s%s\n",
 			form.name,
 			argstr,
@@ -185,6 +188,23 @@ func init() {
 				return quot, nil
 			},
 		},
+		"=": {
+			Name:       "=",
+			Docstring:  "Return t if the arguments are equal, () otherwise",
+			FixedArity: 1,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) < 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				for _, arg := range args[1:] {
+					if !args[0].Equal(arg) {
+						return Nil, nil
+					}
+				}
+				return Atom{"t"}, nil
+			},
+		},
 		"car": {
 			Name:       "car",
 			Docstring:  "Return the first element of a list",
@@ -251,23 +271,6 @@ func init() {
 				return Nil, nil
 			},
 		},
-		"eq": {
-			Name:       "eq",
-			Docstring:  "Return t if the arguments are equal, () otherwise",
-			FixedArity: 1,
-			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
-				if len(args) < 1 {
-					return nil, fmt.Errorf("missing argument")
-				}
-				for _, arg := range args[1:] {
-					if !args[0].Equal(arg) {
-						return Nil, nil
-					}
-				}
-				return Atom{"t"}, nil
-			},
-		},
 		"print": {
 			Name:       "print",
 			Docstring:  "Print the arguments",
@@ -288,7 +291,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			Fn: func(args []Sexpr) (Sexpr, error) {
-				doHelp()
+				doHelp(os.Stdout)
 				return Nil, nil
 			},
 		},
@@ -311,6 +314,21 @@ func init() {
 					list = list.cdr.(*ConsCell)
 				}
 				return Num(count), nil
+			},
+		},
+		"not": {
+			Name:       "not",
+			Docstring:  "Return t if the argument is nil, () otherwise",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("not expects a single argument")
+				}
+				if args[0] == Nil {
+					return Atom{"t"}, nil
+				}
+				return Nil, nil
 			},
 		},
 		"split": {
