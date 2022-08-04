@@ -1,6 +1,6 @@
 # l1
 
-<img src="/l1-impression.jpg" width="400">
+<img src="/l1.jpg" width="400">
 
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
@@ -215,6 +215,10 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     <lambda(x)>
     > (add2 5)
     7
+    > (errors '(assertion failed) (is ()))
+    ()
+    > (errors '(division by zero) (/ 1 0))
+    ()
     > (help)
     Builtins and Special Forms:
           Name  Arity    Description
@@ -234,6 +238,7 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
           cond    0+     SPECIAL FORM: Conditional branching
           cons    2      Add an element to the front of a (possibly empty) list
            def    2      SPECIAL FORM: Set a value
+        errors    1+     SPECIAL FORM: Error checking (for tests)
           fuse    1      Fuse a list of numbers or atoms into a single atom
           help    0      Print this message
             is    1      Assert that the argument is truthy (not ())

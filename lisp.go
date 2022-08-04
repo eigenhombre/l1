@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/eigenhombre/lexutil"
 )
@@ -92,6 +93,49 @@ func evDef(pair *ConsCell, e *env) Sexpr {
 	return val
 }
 
+func stringFromList(l *ConsCell) string {
+	ret := []string{}
+	for ; l != Nil; l = l.cdr.(*ConsCell) {
+		ret = append(ret, l.car.String())
+	}
+	return strings.Join(ret, " ")
+}
+
+func evErrors(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("no error spec given")
+	}
+	sigExpr, ok := args.car.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("error signature must be a list")
+	}
+	sigEvaled, err := sigExpr.Eval(e)
+	if err != nil {
+		return nil, err
+	}
+	sigList, ok := sigEvaled.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("error signature must be a list")
+	}
+	errorStr := stringFromList(sigList)
+	bodyArgs := args.cdr.(*ConsCell)
+	for {
+		if bodyArgs == Nil {
+			return nil, fmt.Errorf("error not found")
+		}
+		toEval := bodyArgs.car
+		_, err := toEval.Eval(e)
+		if err != nil {
+			if strings.Contains(err.Error(), errorStr) {
+				return Nil, nil
+			}
+			return nil, fmt.Errorf("error '%s' not found in '%s'",
+				errorStr, err.Error())
+		}
+		bodyArgs = bodyArgs.cdr.(*ConsCell)
+	}
+}
+
 // applyFn applies a function to an already-evaluated list of arguments.
 func applyFn(fnCar Sexpr, args []Sexpr) (Sexpr, error) {
 	// User-defined functions:
@@ -126,6 +170,8 @@ func (c *ConsCell) Eval(e *env) (Sexpr, error) {
 			return evCond(c.cdr.(*ConsCell), e)
 		case carAtom.s == "def":
 			return evDef(c.cdr.(*ConsCell), e), nil
+		case carAtom.s == "errors":
+			return evErrors(c.cdr.(*ConsCell), e)
 		case carAtom.s == "lambda":
 			return mkLambda(c.cdr.(*ConsCell), e), nil
 		}

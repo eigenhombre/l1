@@ -56,6 +56,7 @@ func doHelp(out io.Writer) {
 		{"def", 2, false, "Set a value", true},
 		{"lambda", 1, true, "Create a function", true},
 		{"cond", 0, true, "Conditional branching", true},
+		{"errors", 1, true, "Error checking (for tests)", true},
 		{"quote", 1, false, "Quote an expression", true}}
 	for _, builtin := range builtins {
 		forms = append(
@@ -371,7 +372,7 @@ func init() {
 					return nil, fmt.Errorf("missing argument")
 				}
 				if args[0] == Nil {
-					return nil, fmt.Errorf("'is' requires a truthy argument")
+					return nil, fmt.Errorf("'is' assertion failed")
 				}
 				return args[0], nil
 			},

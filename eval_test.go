@@ -351,6 +351,16 @@ func TestEval(t *testing.T) {
 			S("(def add2 (incrementer 2))", "<lambda(x)>", OK),
 			S("(add2 5)", "7", OK),
 		)},
+		{Cases(S("(errors)", "", "no error spec"))},
+		{Cases(S("(errors '(no error) t)", "", "error not found"))},
+		{Cases(S("(errors t t)", "", "error signature must be a list"))},
+		{Cases(S("(errors (+ 1 1) t)", "", "error signature must be a list"))},
+		{Cases(S("(errors '(no error) 1 2 3)", "", "error not found"))},
+		{ECases(S("(errors '(assertion failed) (is ()))", "()", OK))},
+		{ECases(S("(errors '(division by zero) (/ 1 0))", "()", OK))},
+		{Cases(S("(errors (cons 'division '(by zero)) (/ 1 0))", "()", OK))},
+		{Cases(S("(errors '(one) (/ 1 0))", "", "division by zero"))},
+		{Cases(S("(errors '(zero) (/ 1 1))", "", "error not found"))},
 	}
 
 	isError := func(err error, testCase evalCase) bool {
