@@ -255,6 +255,29 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
 
 A `Makefile` exists for convenience (combining testing, linting and build), and a `Dockerfile` is  used by a GitHub action for this project to email an alert if code is pushed which fails the build.
 
+# Emacs Integration
+
+If you are using Emacs, you can set it up to work with `l1` as an "inferior
+lisp" process as desribed in the Emacs
+[manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/External-Lisp.html).
+I currently derive a new major mode from the base `lisp-mode` and bind a few
+keys for convenience as follows:
+
+    (define-derived-mode l1-mode
+      lisp-mode "L1 Mode"
+      "Major mode for L1 Lisp code"
+      (setq inferior-lisp-program (executable-find "l1")
+      (paredit-mode 1)
+      (define-key l1-mode-map (kbd "s-i") 'lisp-eval-last-sexp)
+      (define-key l1-mode-map (kbd "s-I") 'lisp-eval-form-and-next)
+      (define-key l1-mode-map (kbd "C-o j") 'run-lisp))
+
+    (add-to-list 'auto-mode-alist '("\\.l1" . l1-mode))
+
+If `l1` has been installed on your path, `M-x run-lisp` or using the appropriate
+keybinding should be enough to start a REPL within Emacs and start sending
+expressions to it.
+
 # Goals
 
 - Learn more about Lisp as a model for computation by building a Lisp with sufficient power to [implement itself](http://www.paulgraham.com/rootsoflisp.html);
