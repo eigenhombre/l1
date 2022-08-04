@@ -258,8 +258,7 @@ A `Makefile` exists for convenience (combining testing, linting and build), and 
 # Emacs Integration
 
 If you are using Emacs, you can set it up to work with `l1` as an "inferior
-lisp" process as desribed in the Emacs
-[manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/External-Lisp.html).
+lisp" process as described in [the Emacs manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/External-Lisp.html).
 I currently derive a new major mode from the base `lisp-mode` and bind a few
 keys for convenience as follows:
 
