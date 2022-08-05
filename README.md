@@ -71,44 +71,16 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
 <!-- BEGIN EXAMPLES -->
 
     $ l1
-    > t
-    t
-    > (not t)
-    ()
-    > (not ())
-    t
     > ()  ;; Nil by any other name, would still smell as sweet...
     ()
-    > (cons t ())
-    (t)
-    > (cons (quote hello) (quote (world)))
-    (hello world)
     > (quote foo)
     foo
     > 'foo
     foo
     > '123
     123
-    > '(1 2 3)
-    (1 2 3)
     > (quote (the (ten (laws (of (greenspun))))))
     (the (ten (laws (of (greenspun)))))
-    > (cdr (quote (is not common lisp)))
-    (not common lisp)
-    > (car (quote (is not common lisp)))
-    is
-    > (len (quote (1 2 3)))
-    3
-    > (+ 1 1)
-    2
-    > (+ 1 2)
-    3
-    > (* 12349807213490872130987 12349807213490872130987)
-    152517738210391179737088822267441718485594169
-    > (zero? 0)
-    t
-    > (zero? (quote zero))
-    ()
     > (pos? 1)
     t
     > (neg? -1)
@@ -219,6 +191,8 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     ()
     > (errors '(division by zero) (/ 1 0))
     ()
+    > (test '(divide by zero) (errors '(zero) (/ 1 0)))
+    ()
     > (help)
     Builtins and Special Forms:
           Name  Arity    Description
@@ -251,6 +225,7 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
          quote    1      SPECIAL FORM: Quote an expression
      randigits    1      Return a list of random digits of the given length
          split    0      Split an atom or number into a list of single-digit numbers or single-character atoms
+          test    0+     Establish a testing block (return last expression)
          zero?    1      Return t if the argument is zero, () otherwise
     > ^D
     $

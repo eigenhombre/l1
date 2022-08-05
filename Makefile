@@ -1,9 +1,9 @@
 .PHONY: test clean deps lint all
-.PHONY: verbose doc integration-test
+.PHONY: verbose doc l1-tests
 
 PROG=l1
 
-all: deps test ${PROG} integration-test lint doc
+all: deps test ${PROG} l1-tests lint doc
 
 deps:
 	go get .
@@ -14,7 +14,8 @@ ${PROG}: *.go
 test:
 	go test
 
-integration-test: ${PROG}
+l1-tests: ${PROG}
+	./l1 tests.l1
 	./l1 fact.l1
 	./l1 fails.l1 && exit 1 || true
 

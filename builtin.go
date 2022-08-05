@@ -377,6 +377,18 @@ func init() {
 				return args[0], nil
 			},
 		},
+		"test": {
+			Name:       "test",
+			Docstring:  "Establish a testing block (return last expression)",
+			FixedArity: 0,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) == 0 {
+					return Nil, nil
+				}
+				return args[len(args)-1], nil
+			},
+		},
 		"len": {
 			Name:       "len",
 			Docstring:  "Return the length of a list",
