@@ -55,6 +55,7 @@ func doHelp(out io.Writer) {
 	forms := []fnDoc{
 		{"cond", 0, true, "Conditional branching", true},
 		{"def", 2, false, "Set a value", true},
+		{"defn", 2, true, "Create and name a function", true},
 		{"errors", 1, true, "Error checking (for tests)", true},
 		{"lambda", 1, true, "Create a function", true},
 		{"let", 1, true, "Create a local scope", true},

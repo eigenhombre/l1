@@ -26,6 +26,7 @@ Builtins and Special Forms:
       cond    0+     SPECIAL FORM: Conditional branching
       cons    2      Add an element to the front of a (possibly empty) list
        def    2      SPECIAL FORM: Set a value
+      defn    2+     SPECIAL FORM: Create and name a function
     errors    1+     SPECIAL FORM: Error checking (for tests)
       fuse    1      Fuse a list of numbers or atoms into a single atom
       help    0      Print this message
