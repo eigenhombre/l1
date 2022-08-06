@@ -153,6 +153,32 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     $
 <!-- END EXAMPLES -->
 
+Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1) are written in `l1` itself.  Here are a few examples:
+
+```
+(test '(fuse)
+  (is (= '() (fuse ())))
+  (is (= 'a (fuse (quote (a)))))
+  (is (= 'aa (fuse (quote (aa)))))
+  (is (= 'ab (fuse (quote (a b)))))
+  (is (= 1 (fuse (quote (1)))))
+  (is (= 12 (fuse (quote (1 2)))))
+  (is (= 125 (+ 2 (fuse (quote (1 2 3))))))
+  (is (= 1295807125987 (fuse (split 1295807125987))))
+  (errors '(expects a single argument)
+    (fuse)))
+
+
+(test '(factorial)
+  (def fact
+       (lambda (n)
+         (cond ((zero? n) 1)
+               (t (* n (fact (- n 1)))))))
+  (is (= 30414093201713378043612608166064768844377641568960512000000000000
+         (fact 50)))
+  (is (= 2568 (len (split (fact 1000))))))
+```
+
 # CI/CD
 
 A `Makefile` exists for convenience (combining testing, linting and build), and a `Dockerfile` is  used by a GitHub action for this project to email an alert if code is pushed which fails the build.
