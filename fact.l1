@@ -1,7 +1,6 @@
 ;; Return the factorial of `n`:
-(def fact
-     (lambda (n)
-       (cond ((= 0 n) 1)
-             (t (* n (fact (- n 1)))))))
+(defn fact (n)
+  (cond ((= 0 n) 1)
+        (t (* n (fact (- n 1))))))
 
 (print (fact 100))

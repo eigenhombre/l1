@@ -27,10 +27,9 @@ Example (using a file in this project):
 
     $ cat fact.l1
     ;; Return the factorial of `n`:
-    (def fact
-         (lambda (n)
-           (cond ((= 0 n) 1)
-                 (t (* n (fact (- n 1)))))))
+    (defn fact (n)
+      (cond ((= 0 n) 1)
+            (t (* n (fact (- n 1)))))))
 
     (print (fact 100))
     $ time l1 fact.l1
@@ -136,10 +135,9 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
     (fuse)))
 
 (test '(factorial)
-  (def fact
-       (lambda (n)
-         (cond ((zero? n) 1)
-               (t (* n (fact (- n 1)))))))
+  (defn fact (n)
+    (cond ((zero? n) 1)
+          (t (* n (fact (- n 1))))))
   (is (= 30414093201713378043612608166064768844377641568960512000000000000
          (fact 50)))
   (is (= 2568 (len (split (fact 1000))))))
