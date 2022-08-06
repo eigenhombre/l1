@@ -8,36 +8,14 @@
 of data types (atoms, arbitrarily large integers, and lists) and start-up speed,
 it aims to be a playground for future language experiments.
 
-| l1 has                                    | doesn't have | will have                 | might get                            |
-|-------------------------------------------|:------------:|:-------------------------:|:------------------------------------:|
-| ints (large)                              | keywords     | macros                    | curses                               |
-| comments (;; ....)                        | maps         | syntax quote              | graphics                             |
-| atoms                                     | strings      | REPL / editor integration | subprocess / shells                  |
-| lists                                     | namespaces   | let (as a macro)          | big floats                           |
-| 4 special forms: cond, def, lambda, quote | exceptions   | defun/defn (as a macro)   | rational numbers                     |
-| 16 built-in functions                     | loops        |                           | tail call optimization               |
-| recursion                                 |              |                           | `error` equivalent                   |
-| closures                                  |              |                           | byte code compilation/interpretation |
-|                                           |              |                           | reader macros (`, ', ...)            |
-
 # Usage / Examples
 
 You should have Go installed and configured.  At some later point, pre-built
 artifacts for various architectures may be available here.
 
-## Installing Using the `go` Tool
+## Installing
 
     go install github.com/eigenhombre/l1@latest
-
-## Building from Source
-
-Check out this repo and `cd` to it. Then,
-
-    go test
-    go build
-    go install
-
-Extra testing and build infrastructure for this project relies on GitHub Actions, Docker, and Make.  Please look at the `Dockerfile` and `Makefile` for more information.
 
 ## Usage
 
@@ -167,9 +145,15 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
   (is (= 2568 (len (split (fact 1000))))))
 ```
 
-# CI/CD
+# Local Development
 
-A `Makefile` exists for convenience (combining testing, linting and build), and a `Dockerfile` is  used by a GitHub action for this project to email an alert if code is pushed which fails the build.
+Check out this repo and `cd` to it. Then,
+
+    go test
+    go build
+    go install
+
+Extra testing and build infrastructure for this project relies on GitHub Actions, Docker, and Make.  Please look at the `Dockerfile` and `Makefile` for more information.
 
 # Emacs Integration
 
