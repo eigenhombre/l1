@@ -153,6 +153,45 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     $
 <!-- END EXAMPLES -->
 
+Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1) are written in `l1` itself.  Here are a few examples:
+
+```
+(test '(split and fuse)
+  (is (= '(1) (split 1)))
+  (is (= '(-1) (split -1)))
+  (is (= '(-3 2 1) (split -321)))
+  (is (= '(a) (split (quote a))))
+  (is (= '(g r e e n s p u n) (split 'greenspun)))
+  (is (= '(8 3 8 1 0 2 0 5 0) (split (* 12345 67890))))
+  (is (= 15 (len (split (* 99999 99999 99999)))))
+  (errors '(expects a single argument)
+    (split))
+  (errors '(expects a single argument)
+    (split 1 1))
+  (errors '(expects an atom or a number)
+    (split '(a b c)))
+
+  (is (= '() (fuse ())))
+  (is (= 'a (fuse (quote (a)))))
+  (is (= 'aa (fuse (quote (aa)))))
+  (is (= 'ab (fuse (quote (a b)))))
+  (is (= 1 (fuse (quote (1)))))
+  (is (= 12 (fuse (quote (1 2)))))
+  (is (= 125 (+ 2 (fuse (quote (1 2 3))))))
+  (is (= 1295807125987 (fuse (split 1295807125987))))
+  (errors '(expects a single argument)
+    (fuse)))
+
+(test '(factorial)
+  (def fact
+       (lambda (n)
+         (cond ((zero? n) 1)
+               (t (* n (fact (- n 1)))))))
+  (is (= 30414093201713378043612608166064768844377641568960512000000000000
+         (fact 50)))
+  (is (= 2568 (len (split (fact 1000))))))
+```
+
 # CI/CD
 
 A `Makefile` exists for convenience (combining testing, linting and build), and a `Dockerfile` is  used by a GitHub action for this project to email an alert if code is pushed which fails the build.
