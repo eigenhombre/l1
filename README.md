@@ -156,7 +156,21 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
 Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1) are written in `l1` itself.  Here are a few examples:
 
 ```
-(test '(fuse)
+(test '(split and fuse)
+  (is (= '(1) (split 1)))
+  (is (= '(-1) (split -1)))
+  (is (= '(-3 2 1) (split -321)))
+  (is (= '(a) (split (quote a))))
+  (is (= '(g r e e n s p u n) (split 'greenspun)))
+  (is (= '(8 3 8 1 0 2 0 5 0) (split (* 12345 67890))))
+  (is (= 15 (len (split (* 99999 99999 99999)))))
+  (errors '(expects a single argument)
+    (split))
+  (errors '(expects a single argument)
+    (split 1 1))
+  (errors '(expects an atom or a number)
+    (split '(a b c)))
+
   (is (= '() (fuse ())))
   (is (= 'a (fuse (quote (a)))))
   (is (= 'aa (fuse (quote (aa)))))
@@ -167,7 +181,6 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
   (is (= 1295807125987 (fuse (split 1295807125987))))
   (errors '(expects a single argument)
     (fuse)))
-
 
 (test '(factorial)
   (def fact
