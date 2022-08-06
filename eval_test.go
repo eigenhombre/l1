@@ -62,7 +62,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(quote questionable?)", "questionable?", OK))},
 		{Cases(S("(quote $moneybag$)", "$moneybag$", OK))},
 		{Cases(S("(quote (a . b))", "", "unexpected character '.' in input"))},
-		{ECases(S("(cond (() 1) (2 3))", "3", OK))},
+		{Cases(S("(cond (() 1) (2 3))", "3", OK))},
 		{Cases(S("(", "", "unbalanced parens"))},
 		{Cases(S("(1", "", "unbalanced parens"))},
 		{Cases(S("((1", "", "unbalanced parens"))},
@@ -94,9 +94,9 @@ func TestEval(t *testing.T) {
 		{Cases(S("(* 1 1 1 (*) (*) (*))", "1", OK))},
 		{Cases(S("(+ 1 1 1 (+) (+) (+))", "3", OK))},
 		{Cases(S("(car (quote (1 2 3)))", "1", OK))},
-		{ECases(S("(car '(1 2 3))", "1", OK))},
-		{ECases(S("(cdr '(1 2 3))", "(2 3)", OK))},
-		{ECases(S("(cons 1 '(2 3 4))", "(1 2 3 4)", OK))},
+		{Cases(S("(car '(1 2 3))", "1", OK))},
+		{Cases(S("(cdr '(1 2 3))", "(2 3)", OK))},
+		{Cases(S("(cons 1 '(2 3 4))", "(1 2 3 4)", OK))},
 		{Cases(S("(cons (cons 1 (cons 2 ())) '(3 4))", "((1 2) 3 4)", OK))},
 		{Cases(S("(quote ((1)))", "((1))", OK))},
 		{Cases(S("(quote (()))", "(())", OK))},
@@ -135,43 +135,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(lambda ())", "<lambda()>", OK))},
 		{Cases(S("(lambda (x))", "<lambda(x)>", OK))},
 		{Cases(S("(lambda (a b zz))", "<lambda(a b zz)>", OK))},
-		// Environment & scope:
-		{Cases(
-			S("(def x 0)", "0", OK),
-			S("(cond ((= x 0) 0) (t x))", "0", OK),
-			S("(def x 1)", "1", OK),
-			S("(cond ((= x 0) 0) (t x))", "1", OK))},
-		{Cases(
-			S("(def a 1)", "1", OK),
-			S("(def b 2)", "2", OK),
-			S("((lambda (x) (+ x a b)) 3)", "6", OK))},
-		{Cases(
-			S("(def f (lambda (x) (+ 1 x)))", "<lambda(x)>", OK),
-			S("(f 2)", "3", OK))},
-		{Cases(
-			S("(def x 0)", "0", OK),
-			S("(= x 0)", "t", OK))},
-		{Cases(
-			S("(def f (lambda (x) (cond (x 3) (t 4))))", "<lambda(x)>", OK),
-			S("(f t)", "3", OK),
-			S("(f 1)", "3", OK),
-			S("(f (quote (1 2 3)))", "3", OK),
-			S("(f ())", "4", OK))},
-		{Cases(
-			S("(def f (lambda (x) (cond ((= x 3) 3) (t 4))))", "<lambda(x)>", OK),
-			S("(f 3)", "3", OK),
-			S("(f (quote (1 2 3)))", "4", OK),
-			S("(f ())", "4", OK))},
-		{Cases(
-			S("(def f (lambda (x) (cond ((= x 3) 1) (t (+ 1 (f 3))))))", "<lambda(x)>", OK),
-			S("(f 3)", "1", OK),
-			S("(f 4)", "2", OK))},
-		{Cases(
-			S("(def f (lambda (x) (+ x (g (- x 1)))))", "<lambda(x)>", OK),
-			S("(def g (lambda (x) 0))", "<lambda(x)>", OK),
-			S("(f 1)", "1", OK),
-		)},
-
+		// Handling error cases, and `test` blocks:
 		{Cases(S("(errors)", "", "no error spec"))},
 		{Cases(S("(errors '(no error) t)", "", "error not found"))},
 		{Cases(S("(errors t t)", "", "error signature must be a list"))},

@@ -71,8 +71,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
 <!-- BEGIN EXAMPLES -->
 
     $ l1
-    > ()  ;; Nil by any other name, would still smell as sweet...
-    ()
     > (quote foo)
     foo
     > 'foo
@@ -91,30 +89,12 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     ()
     > (atom (quote atom))
     t
-    > (cond (() 1) (2 3))
-    3
-    > (car '(1 2 3))
-    1
-    > (cdr '(1 2 3))
-    (2 3)
-    > (cons 1 '(2 3 4))
-    (1 2 3 4)
     > (def a 6)
     6
     > (def b 7)
     7
     > (+ a b)
     13
-    > ((lambda ()))
-    ()
-    > ((lambda (x) (+ 1 x)) 1)
-    2
-    > (errors '(assertion failed) (is ()))
-    ()
-    > (errors '(division by zero) (/ 1 0))
-    ()
-    > (test '(divide by zero) (errors '(zero) (/ 1 0)))
-    ()
     > (help)
     Builtins and Special Forms:
           Name  Arity    Description

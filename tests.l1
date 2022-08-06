@@ -189,6 +189,40 @@
   (def add2 (incrementer 2))
   (is (= 7 (add2 5)))
 
+  (is (= 0 (def x 0)))
+  (zero? x)
+  (is (zero? (cond ((= x 0) 0)
+                   (t x))))
+  (is (= 1 (def x 1)))
+  (is (= 1 (cond ((= x 0) 0)
+                 (t x))))
+
+  (def a 1)
+  (def b 2)
+  (is (= 6 ((lambda (x) (+ x a b)) 3)))
+
+  (def f (lambda (x) (+ 1 x)))
+  (is (= 3 (f 2)))
+
+  (def f (lambda (x) (cond (x 3) (t 4))))
+  (is (= 3
+         (f t)
+         (f 1)
+         (f '(1 2 3))
+         (f f)))
+  (is (= 4 (f ())))
+
+  (def f (lambda (x)
+           (cond ((= x 3) 1)
+                 (t (+ 1 (f 3))))))
+  (is (= 1 (f 3)))
+  (is (= 2 (f 4)))
+
+  ;; This one found a tricky bug while figuring out envs / scope:
+  (def f (lambda (x) (+ x (g (- x 1)))))
+  (def g (lambda (x) 0))
+  (is (= 1 (f 1)))
+
   (test '(shadowing)
     (def a 1)
     (def f (lambda (a) (+ a a)))
