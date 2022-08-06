@@ -53,11 +53,13 @@ func doHelp(out io.Writer) {
 		isSpecial bool
 	}
 	forms := []fnDoc{
-		{"def", 2, false, "Set a value", true},
-		{"lambda", 1, true, "Create a function", true},
 		{"cond", 0, true, "Conditional branching", true},
+		{"def", 2, false, "Set a value", true},
 		{"errors", 1, true, "Error checking (for tests)", true},
-		{"quote", 1, false, "Quote an expression", true}}
+		{"lambda", 1, true, "Create a function", true},
+		{"let", 1, true, "Create a local scope", true},
+		{"quote", 1, false, "Quote an expression", true},
+	}
 	for _, builtin := range builtins {
 		forms = append(
 			forms,

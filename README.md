@@ -114,6 +114,7 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
             is    1      Assert that the argument is truthy (not ())
         lambda    1+     SPECIAL FORM: Create a function
            len    1      Return the length of a list
+           let    1+     SPECIAL FORM: Create a local scope
           neg?    1      Return true if the (numeric) argument is negative, else ()
            not    1      Return t if the argument is nil, () otherwise
           pos?    1      Return true if the (numeric) argument is positive, else ()

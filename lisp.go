@@ -101,6 +101,38 @@ func stringFromList(l *ConsCell) string {
 	return strings.Join(ret, " ")
 }
 
+func evLet(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("let requires a binding list")
+	}
+	bindings, ok := args.car.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("let bindings must be a list")
+	}
+	body := args.cdr.(*ConsCell)
+	newEnv := mkEnv(e)
+	for ; bindings != Nil; bindings = bindings.cdr.(*ConsCell) {
+		binding, ok := bindings.car.(*ConsCell)
+		if !ok {
+			return nil, fmt.Errorf("a let binding must be a list")
+		}
+		name := binding.car.(Atom).s
+		val, err := binding.cdr.(*ConsCell).car.Eval(e)
+		if err != nil {
+			return nil, err
+		}
+		newEnv.Set(name, val)
+	}
+	exprs, err := evList(body, &newEnv)
+	if err != nil {
+		return nil, err
+	}
+	if len(exprs) == 0 {
+		return Nil, nil
+	}
+	return exprs[len(exprs)-1], nil
+}
+
 func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	if args == Nil {
 		return nil, fmt.Errorf("no error spec given")
@@ -172,6 +204,8 @@ func (c *ConsCell) Eval(e *env) (Sexpr, error) {
 			return evDef(c.cdr.(*ConsCell), e), nil
 		case carAtom.s == "errors":
 			return evErrors(c.cdr.(*ConsCell), e)
+		case carAtom.s == "let":
+			return evLet(c.cdr.(*ConsCell), e)
 		case carAtom.s == "lambda":
 			return mkLambda(c.cdr.(*ConsCell), e), nil
 		}

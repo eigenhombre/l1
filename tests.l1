@@ -1,6 +1,10 @@
 ;; Unit tests in l1-proper
 
-(test '(basic stuff cons car cdr len)
+(test '(basic stuff
+              quote
+              cons
+              car cdr
+              len)
   (is (= t t))
   (is (= (not t) ()))
   (is (= (not ()) t))
@@ -286,3 +290,24 @@
 	       (t (+ x (f (- x 1)))))))
   (is (zero? (f 0)))
   (is (= 1 (f 1))))
+
+(test '(let)
+  (is (not (let ())))
+  (is (= 2 (let ((_ 1))
+             2)))
+  (is (zero? (let ((_ 1))
+               1
+               2
+               3
+               0)))
+  (is (zero? (let ((a 0))
+               a)))
+  (errors '(let bindings must be a list) (let 3))
+  (errors '(a let binding must be a list)
+    (let ((a 0)
+          3)))
+  (test '(shadowing inside let)
+    (is (= 4
+           (let ((a 1))
+             (+ a (let ((a 2))
+                    (+ a 1))))))))
