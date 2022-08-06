@@ -1,6 +1,4 @@
 $ l1
-> ()  ;; Nil by any other name, would still smell as sweet...
-()
 > (quote foo)
 foo
 > 'foo
@@ -33,16 +31,6 @@ t
 7
 > (+ a b)
 13
-> ((lambda ()))
-()
-> ((lambda (x) (+ 1 x)) 1)
-2
-> (errors '(assertion failed) (is ()))
-()
-> (errors '(division by zero) (/ 1 0))
-()
-> (test '(divide by zero) (errors '(zero) (/ 1 0)))
-()
 > (help)
 Builtins and Special Forms:
       Name  Arity    Description

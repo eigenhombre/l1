@@ -32,7 +32,7 @@ func TestEval(t *testing.T) {
 		evalCases []evalCase
 	}{
 		{Cases(S("t ;", "t", OK))},
-		{ECases(S("()  ;; Nil by any other name, would still smell as sweet...", "()", OK))},
+		{Cases(S("()  ;; Nil by any other name, would still smell as sweet...", "()", OK))},
 		{Cases(S("3 ;; colons (:) are OK too (regression for #25)", "3", OK))},
 		{ECases(S("(quote foo)", "foo", OK))},
 		{ECases(S("'foo", "foo", OK))},
@@ -107,11 +107,7 @@ func TestEval(t *testing.T) {
 		{Cases(S(" t ", "t", OK))},
 		{Cases(S("t\n", "t", OK))},
 		{Cases(S("\n\nt\n", "t", OK))},
-		// Multiple statements:
-		{Cases(
-			S("1", "1", OK),
-			S("2", "2", OK),
-			S("3", "3", OK))},
+
 		// Global scope:
 		{Cases(
 			S("(def a 3)", "3", OK),
@@ -135,14 +131,10 @@ func TestEval(t *testing.T) {
 		{Cases(S("(print 1)", "()", OK))},
 		{Cases(S("(print 1 2)", "()", OK))},
 		{Cases(S("(print)", "()", OK))},
-		// Simple Functions:
+		// Function representation:
 		{Cases(S("(lambda ())", "<lambda()>", OK))},
 		{Cases(S("(lambda (x))", "<lambda(x)>", OK))},
 		{Cases(S("(lambda (a b zz))", "<lambda(a b zz)>", OK))},
-		{ECases(S("((lambda ()))", "()", OK))},
-		{ECases(S("((lambda (x) (+ 1 x)) 1)", "2", OK))},
-		{Cases(S("((lambda () 333))", "333", OK))},
-		{Cases(S("((lambda () 1))", "1", OK))},
 		// Environment & scope:
 		{Cases(
 			S("(def x 0)", "0", OK),
@@ -185,15 +177,15 @@ func TestEval(t *testing.T) {
 		{Cases(S("(errors t t)", "", "error signature must be a list"))},
 		{Cases(S("(errors (+ 1 1) t)", "", "error signature must be a list"))},
 		{Cases(S("(errors '(no error) 1 2 3)", "", "error not found"))},
-		{ECases(S("(errors '(assertion failed) (is ()))", "()", OK))},
-		{ECases(S("(errors '(division by zero) (/ 1 0))", "()", OK))},
+		{Cases(S("(errors '(assertion failed) (is ()))", "()", OK))},
+		{Cases(S("(errors '(division by zero) (/ 1 0))", "()", OK))},
 		{Cases(S("(errors (cons 'division '(by zero)) (/ 1 0))", "()", OK))},
 		{Cases(S("(errors '(one) (/ 1 0))", "", "division by zero"))},
 		{Cases(S("(errors '(zero) (/ 1 1))", "", "error not found"))},
 		{Cases(S("(test)", "()", OK))},
 		{Cases(S("(test 1)", "1", OK))},
 		{Cases(S("(test 1 2)", "2", OK))},
-		{ECases(S("(test '(divide by zero) (errors '(zero) (/ 1 0)))", "()", OK))},
+		{Cases(S("(test '(divide by zero) (errors '(zero) (/ 1 0)))", "()", OK))},
 	}
 
 	isError := func(err error, testCase evalCase) bool {

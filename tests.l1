@@ -63,7 +63,13 @@
   (errors '(missing argument)
     (cond (() t) (t (-)))))
 
-(test '(split)
+(test '(lambdas)
+  (is (= () ((lambda ()))))
+  (is (= 333 ((lambda () 333))))
+  (is (= 1 ((lambda (_) 1) '(stop ignoring me))))
+  (is (= 2 ((lambda (x) (+ 1 x)) 1))))
+
+(test '(split and fuse)
   (is (= '(1) (split 1)))
   (is (= '(-1) (split -1)))
   (is (= '(-3 2 1) (split -321)))
@@ -76,9 +82,8 @@
   (errors '(expects a single argument)
     (split 1 1))
   (errors '(expects an atom or a number)
-    (split '(a b c))))
+    (split '(a b c)))
 
-(test '(fuse)
   (is (= '() (fuse ())))
   (is (= 'a (fuse (quote (a)))))
   (is (= 'aa (fuse (quote (aa)))))
