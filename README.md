@@ -89,12 +89,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     ()
     > (atom (quote atom))
     t
-    > (def a 6)
-    6
-    > (def b 7)
-    7
-    > (+ a b)
-    13
     > (help)
     Builtins and Special Forms:
           Name  Arity    Description
