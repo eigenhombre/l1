@@ -179,58 +179,7 @@ func TestEval(t *testing.T) {
 			S("(def g (lambda (x) 0))", "<lambda(x)>", OK),
 			S("(f 1)", "1", OK),
 		)},
-		// This case helped me (JJ) find a subtle math/pointer bug:
-		{Cases(
-			S(`(def f (lambda (x)
-			            (cond ((= x 0) 0)
-						      (t (+ x (f (- x 1)))))))`,
-				"<lambda(x)>", OK),
-			S("(f 0)", "0", OK),
-			S("(f 1)", "1", OK))},
-		// Factorial:
-		{ECases(
-			S("(def fact (lambda (n) (cond ((= 0 n) 1) (t (* n (fact (- n 1)))))))", "<lambda(n)>", OK),
-			S("(fact 50)", "30414093201713378043612608166064768844377641568960512000000000000", OK),
-			S("(len (split (fact 1000)))", "2568", OK))},
-		// Fibonacci (slow!):
-		{ECases(
-			S("(def fib (lambda (n) (cond ((= 0 n) 0) ((= 1 n) 1) (t (+ (fib (- n 1)) (fib (- n 2)))))))", "<lambda(n)>", OK),
-			S("(fib 0)", "0", OK),
-			S("(fib 1)", "1", OK),
-			S("(fib 7)", "13", OK),
-			S("(fib 10)", "55", OK),
-			S("(fib 20)", "6765", OK),
-		)},
-		// Variable shadowing:
-		{Cases(
-			S("(def a 1)", "1", OK),
-			S("(def f (lambda (a) (+ a a)))", "<lambda(a)>", OK),
-			S("(f 1)", "2", OK),
-			S("(def a 999)", "999", OK),
-			S("(f 2)", "4", OK))},
-		{ECases(
-			S("(def a 1)", "1", OK),
-			S("(def f (lambda () (def a 2) a))", "<lambda()>", OK),
-			S("(f)", "2", OK),
-			S("a", "1", OK),
-		)},
-		// Lexical closures:
-		{Cases(
-			S(`(def ffer (lambda ()
-			               ((lambda (a)
-						      (lambda (x)
-							    (+ a x)))
-							3)))`,
-				"<lambda()>", OK),
-			S("((ffer) 4)", "7", OK),
-		)},
-		{ECases(
-			S("(def incrementer (lambda (n) (lambda (x) (+ x n))))", "<lambda(n)>", OK),
-			S("(def inc (incrementer 1))", "<lambda(x)>", OK),
-			S("(inc 5)", "6", OK),
-			S("(def add2 (incrementer 2))", "<lambda(x)>", OK),
-			S("(add2 5)", "7", OK),
-		)},
+
 		{Cases(S("(errors)", "", "no error spec"))},
 		{Cases(S("(errors '(no error) t)", "", "error not found"))},
 		{Cases(S("(errors t t)", "", "error signature must be a list"))},

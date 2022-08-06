@@ -166,3 +166,58 @@
   (is (= 2432902008176640000
          (* 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)))
   (is (= 1 (/ 1 1))))
+
+(test '(closures scope and shadowing)
+  (def plus3-maker
+       (lambda ()
+         ((lambda (a)
+            (lambda (x)
+              (+ a x)))
+          3)))
+  (is (= 7 ((plus3-maker) 4)))
+  (def incrementer
+       (lambda (n)
+         (lambda (x)
+           (+ x n))))
+  (def inc (incrementer 1))
+  (is (= 6 (inc 5)))
+  (def add2 (incrementer 2))
+  (is (= 7 (add2 5)))
+
+  (test '(shadowing)
+    (def a 1)
+    (def f (lambda (a) (+ a a)))
+    (is (= 6 (f 3)))
+    (def a 999)
+    (is (= 4 (f 2)))))
+
+(test '(slow fibonacci)
+  (def fib
+       (lambda (n)
+         (cond ((zero? n) 0)
+               ((= 1 n) 1)
+               (t (+ (fib (- n 1))
+                     (fib (- n 2)))))))
+  (is (= 0 (fib 0)))
+  (is (= 1 (fib 1)))
+  (is (= 13 (fib 7)))
+  (is (= 55 (fib 10)))
+  (is (= 6765 (fib 20))))
+
+(test '(factorial)
+  (def fact
+       (lambda (n)
+         (cond ((zero? n) 1)
+               (t (* n (fact (- n 1)))))))
+  (is (= 30414093201713378043612608166064768844377641568960512000000000000
+         (fact 50)))
+  (is (= 2568 (len (split (fact 1000))))))
+
+;; This case helped me (JJ) find a subtle math/pointer bug:
+(test '(oddcase)
+  (def f
+       (lambda (x)
+	 (cond ((= x 0) 0)
+	       (t (+ x (f (- x 1)))))))
+  (is (zero? (f 0)))
+  (is (= 1 (f 1))))
