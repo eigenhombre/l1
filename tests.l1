@@ -36,6 +36,12 @@
   (is (= '((1 2) 3 4) (cons (cons 1 (cons 2 ())) '(3 4))))
   (is (= '(()) (cons () ()))))
 
+(test '(atom)
+  (is (atom (quote foo)))
+  (is (not (atom (quote (foo bar)))))
+  (is (atom (quote atom)))
+  (is (not (atom atom))))
+
 (test '(equality)
   (is (= t t))
   (is (= (not t) ()))

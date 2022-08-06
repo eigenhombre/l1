@@ -56,10 +56,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     123
     > (quote (the (ten (laws (of (greenspun))))))
     (the (ten (laws (of (greenspun)))))
-    > (atom (quote (foo bar)))
-    ()
-    > (atom (quote atom))
-    t
     > (help)
     Builtins and Special Forms:
           Name  Arity    Description
