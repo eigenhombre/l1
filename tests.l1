@@ -67,6 +67,17 @@
   (is (= 1 ((lambda (_) 1) '(stop ignoring me))))
   (is (= 2 ((lambda (x) (+ 1 x)) 1))))
 
+(test '(defn)
+  (defn foo ())
+  (is (= () (foo)))
+  (defn foo (a))
+  (is (= () (foo 1)))
+  (defn foo (a) a)
+  (is (= 1 (foo 1)))
+  (errors '(name must be an atom) (defn (bazzy)))
+  (errors '(requires a function name) (defn))
+  (errors '(requires an argument list) (defn foo)))
+
 (test '(split and fuse)
   (is (= '(1) (split 1)))
   (is (= '(-1) (split -1)))
@@ -210,10 +221,9 @@
               (+ a x)))
           3)))
   (is (= 7 ((plus3-maker) 4)))
-  (def incrementer
-       (lambda (n)
-         (lambda (x)
-           (+ x n))))
+  (defn incrementer (n)
+    (lambda (x)
+      (+ x n)))
   (def inc (incrementer 1))
   (is (= 6 (inc 5)))
   (def add2 (incrementer 2))
@@ -231,10 +241,10 @@
   (def b 2)
   (is (= 6 ((lambda (x) (+ x a b)) 3)))
 
-  (def f (lambda (x) (+ 1 x)))
+  (defn f (x) (+ 1 x))
   (is (= 3 (f 2)))
 
-  (def f (lambda (x) (cond (x 3) (t 4))))
+  (defn f (x) (cond (x 3) (t 4)))
   (is (= 3
          (f t)
          (f 1)
@@ -242,9 +252,9 @@
          (f f)))
   (is (= 4 (f ())))
 
-  (def f (lambda (x)
-           (cond ((= x 3) 1)
-                 (t (+ 1 (f 3))))))
+  (defn f (x)
+    (cond ((= x 3) 1)
+          (t (+ 1 (f 3)))))
   (is (= 1 (f 3)))
   (is (= 2 (f 4)))
 

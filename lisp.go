@@ -93,6 +93,23 @@ func evDef(pair *ConsCell, e *env) Sexpr {
 	return val
 }
 
+func evDefn(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires a function name")
+	}
+	name, ok := args.car.(Atom)
+	if !ok {
+		return nil, fmt.Errorf("defn name must be an atom")
+	}
+	args = args.cdr.(*ConsCell)
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires an argument list")
+	}
+	fn := mkLambda(args, e)
+	e.Set(name.s, fn)
+	return Nil, nil
+}
+
 func stringFromList(l *ConsCell) string {
 	ret := []string{}
 	for ; l != Nil; l = l.cdr.(*ConsCell) {
@@ -202,6 +219,8 @@ func (c *ConsCell) Eval(e *env) (Sexpr, error) {
 			return evCond(c.cdr.(*ConsCell), e)
 		case carAtom.s == "def":
 			return evDef(c.cdr.(*ConsCell), e), nil
+		case carAtom.s == "defn":
+			return evDefn(c.cdr.(*ConsCell), e)
 		case carAtom.s == "errors":
 			return evErrors(c.cdr.(*ConsCell), e)
 		case carAtom.s == "let":
