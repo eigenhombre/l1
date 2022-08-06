@@ -81,18 +81,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     123
     > (quote (the (ten (laws (of (greenspun))))))
     (the (ten (laws (of (greenspun)))))
-    > (pos? 1)
-    t
-    > (neg? -1)
-    t
-    > (< 1 2 3)
-    t
-    > (<= 1 2 3 3)
-    t
-    > (> 3 2 1 0)
-    t
-    > (>= 3 2 1 1)
-    t
     > (= (quote foo) (quote foo))
     t
     > (= (quote foo) (quote bar))
@@ -111,36 +99,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     (2 3)
     > (cons 1 '(2 3 4))
     (1 2 3 4)
-    > (split 'greenspun)
-    (g r e e n s p u n)
-    > (split (* 12345 67890))
-    (8 3 8 1 0 2 0 5 0)
-    > (len (split (* 99999 99999 99999)))
-    15
-    > (fuse (quote (a b)))
-    ab
-    > (+ 2 (fuse (quote (1 2 3))))
-    125
-    > (fuse (split 1295807125987))
-    1295807125987
-    > (len (randigits 10))
-    10
-    > (apply + (quote (1 2 3)))
-    6
-    > (apply * (split 123456789))
-    362880
-    > (apply / (split 1111))
-    1
-    > (apply = (split (quote ooo)))
-    t
-    > (apply = (split (quote foo)))
-    ()
-    > (apply (lambda (x y z) (= x y z)) (split 121))
-    ()
-    > ((cond (t +)))
-    0
-    > ((car (cons + ())) 1 2 3)
-    6
     > (def a 6)
     6
     > (def b 7)
