@@ -56,12 +56,6 @@ These were copied directly from the unit test output; `eval_test.go` has more ex
     123
     > (quote (the (ten (laws (of (greenspun))))))
     (the (ten (laws (of (greenspun)))))
-    > (= (quote foo) (quote foo))
-    t
-    > (= (quote foo) (quote bar))
-    ()
-    > (= (quote foo) (quote (foo bar)))
-    ()
     > (atom (quote (foo bar)))
     ()
     > (atom (quote atom))

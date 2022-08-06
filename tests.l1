@@ -1,28 +1,15 @@
 ;; Unit tests in l1-proper
 
 (test '(basic stuff
-              quote
               cons
               car cdr
               len)
-  (is (= t t))
-  (is (= (not t) ()))
-  (is (= (not ()) t))
   (errors '(is not a function)
     (t))
   (errors '(is not a function)
     (1))
   (errors '(is not a function)
     (()))
-  (is (= (cons t ()) '(t)))
-  (is (= (cons (quote hello) (quote (world)))
-         '(hello world)))
-  (is (= (quote foo) 'foo))
-  (is (= (quote 3) 3))
-  (is (= (quote (1 2 3)) '(1 2 3)))
-  (is (= '(1 2 3) '(1 2 3)))
-  (is (= (quote ()) ()))
-
   (test '(car and cdr)
     (is (= (car ()) ()))
     (is (= (cdr ()) ()))
@@ -37,7 +24,42 @@
   (test '(len)
     (is (= 3 (len '(1 2 3))))
     (is (= 0 (len ())))
-    (errors '(is not a list) (len 3))))
+    (errors '(is not a list) (len 3)))
+
+  (errors '(missing argument) (cons))
+  (errors '(missing argument) (atom))
+  (errors '(missing argument) (car))
+  (errors '(not a list) (car t))
+  (errors '(missing argument) (cdr))
+  (errors '(not a list) (cdr t))
+  (is (= '(1 2 3 4) (cons 1 '(2 3 4))))
+  (is (= '((1 2) 3 4) (cons (cons 1 (cons 2 ())) '(3 4))))
+  (is (= '(()) (cons () ()))))
+
+(test '(equality)
+  (is (= t t))
+  (is (= (not t) ()))
+  (is (= (not ()) t))
+  (is (= (cons t ()) '(t)))
+  (is (= (cons (quote hello) (quote (world)))
+         '(hello world)))
+  (is (= (quote foo) 'foo))
+  (is (= (quote 3) 3))
+  (is (= (quote (1 2 3)) '(1 2 3)))
+  (is (= '(1 2 3) '(1 2 3)))
+  (is (= (quote ()) ()))
+
+  (is (= (quote foo) (quote foo)))
+  (is (= () ()))
+  (is (not (= (quote foo) (quote bar))))
+  ;; P.G.'s interpretation of McCarthy says this is (), but
+  ;; it's simpler to have just one equality operator for now,
+  ;; which works for numbers, lists and atoms:
+  (is (not (= (quote foo) (quote (foo bar)))))
+  (is (= (quote (foo bar)) (quote (foo bar))))
+  (is (= 2 (+ 1 1)))
+  (is (= 2 (+ 1 1) (- 3 1)))
+  (is (not (= (quote (1 2 3)) ()))))
 
 (test '(cond)
   (is (not (cond)))
