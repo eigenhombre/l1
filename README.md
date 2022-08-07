@@ -4,9 +4,16 @@
 
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
-`l1` is a small interpreted [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace) written in Go.  Emphasizing simplicity
-of data types (atoms, arbitrarily large integers, and lists) and start-up speed,
-it aims to be a playground for future language experiments.
+`l1` is a small interpreted [Lisp
+1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace)
+written in Go.  Emphasizing simplicity of data types (atoms,
+arbitrarily large integers, and lists) and start-up speed, it aims to
+be a playground for future language experiments.
+
+`l1` eschews strings in favor of using atoms and lists in the style of
+[some classic AI programs](https://github.com/norvig/paip-lisp).  It
+features tail-call optimization and a few unique functions for
+converting atoms and numbers to lists, and vice-versa.
 
 # Usage / Examples
 
