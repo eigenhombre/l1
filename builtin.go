@@ -231,6 +231,29 @@ func init() {
 				return Atom{"t"}, nil
 			},
 		},
+		"rem": {
+			Name:       "rem",
+			Docstring:  "Return remainder when second arg divides first",
+			FixedArity: 2,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 2 {
+					return nil, fmt.Errorf("rem requires two arguments")
+				}
+				n1, ok := args[0].(Number)
+				if !ok {
+					return nil, fmt.Errorf("expected number, got '%s'", args[0])
+				}
+				n2, ok := args[1].(Number)
+				if !ok {
+					return nil, fmt.Errorf("expected number, got '%s'", args[1])
+				}
+				if n2.Equal(Num(0)) {
+					return nil, fmt.Errorf("division by zero")
+				}
+				return n1.Rem(n2), nil
+			},
+		},
 		"<": {
 			Name:       "<",
 			Docstring:  "Return t if the arguments are in strictly increasing order, () otherwise",

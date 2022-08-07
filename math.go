@@ -52,6 +52,14 @@ func (n Number) Div(o Number) Number {
 	return Number{*result}
 }
 
+// Rem returns the remainder of the division of two numbers.
+func (n Number) Rem(o Number) Number {
+	var ni big.Int = n.bi
+	result := big.NewInt(0)
+	result.Rem(&ni, &o.bi)
+	return Number{*result}
+}
+
 // Equal returns true if the two numbers are equal.
 func (n Number) Equal(o Sexpr) bool {
 	if o, ok := o.(Number); ok {

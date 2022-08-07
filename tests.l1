@@ -78,22 +78,27 @@
   (is (= (cond (t 3)
                (t 4))
          3))
-  (errors '(missing argument)
-    (cond ((-) t)))
-  (errors '(missing argument)
-    (cond (t (-))))
+
   (is (= t (cond (t t) ((-) t))))
-  (errors '(missing argument)
-    (cond (() t)
-          ((-) t)))
-  (errors '(missing argument)
-    (cond (() t) (t (-)))))
+
+  (errors '(missing argument) (cond ((-) t)))
+  (errors '(missing argument) (cond (t (-))))
+  (errors '(missing argument) (cond (() t) ((-) t)))
+  (errors '(missing argument) (cond (() t) (t (-)))))
 
 (test '(lambdas)
   (is (= () ((lambda ()))))
   (is (= 333 ((lambda () 333))))
   (is (= 1 ((lambda (_) 1) '(stop ignoring me))))
-  (is (= 2 ((lambda (x) (+ 1 x)) 1))))
+  (is (= 2 ((lambda (x) (+ 1 x)) 1)))
+  (is (= 1 ((lambda () 1 2 1))))
+  (is (= 3 ((lambda () 1 2 3))))
+  (errors '(division by zero) ((lambda ()
+                                 (/ 1 0))))
+
+  (errors '(division by zero) ((lambda ()
+                                 1
+                                 (/ 1 0)))))
 
 (test '(defn)
   (defn foo ())
@@ -227,6 +232,15 @@
   (is (= 1 (* 1 1 1 (*) (*) (*))))
   (is (= 3 (+ 1 1 1 (+) (+) (+))))
 
+  (is (zero? (rem 1 1)))
+  (is (zero? (rem 10 10)))
+  (is (= 1 (rem 5 2)))
+
+  (errors '(division by zero) (rem 1 0))
+  (errors '(requires two arguments) (rem))
+  (errors '(expected number) (rem t t))
+  (errors '(expected number) (rem t 1))
+  (errors '(expected number) (rem 1 t))
   (errors '(missing argument) (=))
   (errors '(missing argument) (-))
   (errors '(missing argument) (/))

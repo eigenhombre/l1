@@ -45,6 +45,18 @@ func (f *lambdaFn) evLambda(args []Sexpr) (Sexpr, error) {
 	if f.body == Nil {
 		return Nil, nil
 	}
-	// For the moment, only evaluate the first expression:
-	return f.body.car.Eval(&newEnv)
+	ret, err := f.body.car.Eval(&newEnv)
+	if err != nil {
+		return nil, err
+	}
+	for {
+		if f.body.cdr == Nil {
+			return ret, nil
+		}
+		f.body = f.body.cdr.(*ConsCell)
+		ret, err = f.body.car.Eval(&newEnv)
+		if err != nil {
+			return nil, err
+		}
+	}
 }
