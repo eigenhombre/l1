@@ -1,0 +1,8 @@
+(defn sum-to-acc (n acc)
+  (cond ((zero? n) acc)
+        (t (sum-to-acc (- n 1) (+ n acc)))))
+
+(defn sum-to (n) (sum-to-acc n 0))
+
+(sum-to 100000)
+;;(sum-to (* 1000 1000))  Blows stack. Need TCO.
