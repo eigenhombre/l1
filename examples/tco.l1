@@ -4,5 +4,6 @@
 
 (defn sum-to (n) (sum-to-acc n 0))
 
-(sum-to 100000)
-;;(sum-to (* 1000 1000))  Blows stack. Need TCO.
+(print (sum-to 10))
+;; This used to blow the stack:
+(print (sum-to (* 1000 1000)))
