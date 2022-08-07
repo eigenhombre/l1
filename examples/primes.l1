@@ -1,0 +1,47 @@
+;; Adapted from SICP Chapter 1.2
+
+(defn divides? (d x)
+  (zero? (rem x d)))
+
+(defn square (n) (* n n))
+
+(defn find-divisor (n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (t (find-divisor n (+ test-divisor 1)))))
+
+(defn smallest-divisor (n)
+  (find-divisor n 2))
+
+(defn prime? (n)
+  (= n (smallest-divisor n)))
+
+(prime? 28657)
+(prime? 514229)
+(prime? 433494437)
+;; (prime? 1329871359087)  too large to handle without loops or TCO
+
+(prime? (fuse (randigits 100)))
+
+(defn concat (a b)
+  (cond ((not a) b)
+        (t (cons (car a)
+                 (concat (cdr a) b)))))
+
+(defn reverse (l)
+  (cond ((not l) ())
+        (t (concat (reverse (cdr l))
+                   (cons (car l) ())))))
+
+(defn helper (ret count n)
+  (cond
+   ((zero? count) (reverse ret))
+   ((prime? n) (helper (cons n ret)
+                       (- count 1)
+                       (+ 1 n)))
+   (t (helper ret count (+ 1 n)))))
+
+(defn n-primes (num)
+  (helper () num 1))
+
+(print (n-primes 300))

@@ -25,14 +25,14 @@ To execute a file:
 
 Example (using a file in this project):
 
-    $ cat fact.l1
+    $ cat examples/fact.l1
     ;; Return the factorial of `n`:
     (defn fact (n)
       (cond ((= 0 n) 1)
             (t (* n (fact (- n 1)))))))
 
     (print (fact 100))
-    $ time l1 fact.l1
+    $ time l1 examples/fact.l1
     933262154439441526816992388562667004907159682643816214685929638
     952175999932299156089414639761565182862536979208272237582511852
     10916864000000000000000000000000
