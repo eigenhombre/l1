@@ -55,18 +55,6 @@ func (c *ConsCell) Equal(o Sexpr) bool {
 	return c.car.Equal(o.(*ConsCell).car) && c.cdr.Equal(o.(*ConsCell).cdr)
 }
 
-func evList(expr *ConsCell, e *env) ([]Sexpr, error) {
-	ret := []Sexpr{}
-	for ; expr != Nil; expr = expr.cdr.(*ConsCell) {
-		ee, err := eval(expr.car, e)
-		if err != nil {
-			return nil, err
-		}
-		ret = append(ret, ee)
-	}
-	return ret, nil
-}
-
 func stringFromList(l *ConsCell) string {
 	ret := []string{}
 	for ; l != Nil; l = l.cdr.(*ConsCell) {
@@ -154,22 +142,36 @@ func applyFn(evalCar Sexpr, evaledList []Sexpr) (Sexpr, error) {
 
 }
 
+func evAtom(a Atom, e *env) (Sexpr, error) {
+	if a.s == "t" {
+		return a, nil
+	}
+	ret, ok := e.Lookup(a.s)
+	if ok {
+		return ret, nil
+	}
+	ret, ok = builtins[a.s]
+	if ok {
+		return ret, nil
+	}
+	return nil, fmt.Errorf("unknown symbol: %s", a.s)
+}
+
+func evDef(args *ConsCell, e *env) (Sexpr, error) {
+	name := args.car.(Atom).s
+	val, err := eval(args.cdr.(*ConsCell).car, e)
+	if err != nil {
+		panic(err)
+	}
+	e.Set(name, val)
+	return val, nil
+}
+
 func eval(expr Sexpr, e *env) (Sexpr, error) {
 top:
 	switch t := expr.(type) {
 	case Atom:
-		if t.s == "t" {
-			return expr, nil
-		}
-		ret, ok := e.Lookup(t.s)
-		if ok {
-			return ret, nil
-		}
-		ret, ok = builtins[t.s]
-		if ok {
-			return ret, nil
-		}
-		return nil, fmt.Errorf("unknown symbol: %s", t.s)
+		return evAtom(t, e)
 	case Number:
 		return expr, nil
 	case *ConsCell:
@@ -204,30 +206,9 @@ top:
 					goto top
 				}
 			case carAtom.s == "def":
-				pair := t.cdr.(*ConsCell)
-				name := pair.car.(Atom).s
-				val, err := eval(pair.cdr.(*ConsCell).car, e)
-				if err != nil {
-					panic(err)
-				}
-				e.Set(name, val)
-				return val, nil
+				return evDef(t.cdr.(*ConsCell), e)
 			case carAtom.s == "defn":
-				args := t.cdr.(*ConsCell)
-				if args == Nil {
-					return nil, fmt.Errorf("defn requires a function name")
-				}
-				name, ok := args.car.(Atom)
-				if !ok {
-					return nil, fmt.Errorf("defn name must be an atom")
-				}
-				args = args.cdr.(*ConsCell)
-				if args == Nil {
-					return nil, fmt.Errorf("defn requires an argument list")
-				}
-				fn := mkLambda(args, e)
-				e.Set(name.s, fn)
-				return Nil, nil
+				return evDefn(t.cdr.(*ConsCell), e)
 			case carAtom.s == "errors":
 				return evErrors(t.cdr.(*ConsCell), e)
 			case carAtom.s == "let":
@@ -253,26 +234,48 @@ top:
 					}
 					newEnv.Set(name, val)
 				}
-				exprs, err := evList(body, &newEnv)
-				if err != nil {
-					return nil, err
+
+				var ret Sexpr = Nil
+				for {
+					var err error
+					if body == Nil {
+						return ret, nil
+					}
+					// Implement TCO for `let`:
+					if body.cdr == Nil {
+						expr = body.car
+						e = &newEnv
+						goto top
+					}
+					ret, err = eval(body.car, &newEnv)
+					if err != nil {
+						return nil, err
+					}
+					body = body.cdr.(*ConsCell)
 				}
-				if len(exprs) == 0 {
-					return Nil, nil
-				}
-				return exprs[len(exprs)-1], nil
 			case carAtom.s == "lambda":
 				return mkLambda(t.cdr.(*ConsCell), e), nil
 			}
 		}
-		// functions / normal order of evaluation:
+		// Functions / normal order of evaluation.  Get function to use first:
 		evalCar, err := eval(t.car, e)
 		if err != nil {
 			return nil, err
 		}
-		evaledList, err := evList(t.cdr.(*ConsCell), e)
-		if err != nil {
-			return nil, err
+		// In normal function application, evaluate the arguments executing the
+		// function:
+		evaledList := []Sexpr{}
+		start := t.cdr.(*ConsCell)
+		for {
+			if start == Nil {
+				break
+			}
+			ee, err := eval(start.car, e)
+			if err != nil {
+				return nil, err
+			}
+			evaledList = append(evaledList, ee)
+			start = start.cdr.(*ConsCell)
 		}
 		// User-defined functions:
 		lambda, ok := evalCar.(*lambdaFn)
@@ -290,6 +293,7 @@ top:
 				if lambda.body == Nil {
 					return ret, nil
 				}
+				// TCO:
 				if lambda.body.cdr == Nil {
 					expr = lambda.body.car
 					e = &newEnv
@@ -315,6 +319,23 @@ top:
 	default:
 		panic(fmt.Sprintf("unknown type to eval: %T", t))
 	}
+}
+
+func evDefn(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires a function name")
+	}
+	name, ok := args.car.(Atom)
+	if !ok {
+		return nil, fmt.Errorf("defn name must be an atom")
+	}
+	args = args.cdr.(*ConsCell)
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires an argument list")
+	}
+	fn := mkLambda(args, e)
+	e.Set(name.s, fn)
+	return Nil, nil
 }
 
 func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {

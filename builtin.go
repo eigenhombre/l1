@@ -412,6 +412,7 @@ func init() {
 				if len(args) == 0 {
 					return Nil, nil
 				}
+				fmt.Println("TEST", args[0])
 				return args[len(args)-1], nil
 			},
 		},
