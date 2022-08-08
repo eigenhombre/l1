@@ -142,6 +142,12 @@
   (errors '(expects a single argument)
     (randigits)))
 
+(test '(list function)
+  (is (= '(1 2 3)
+         (list 1 2 3)))
+  (is (= '(1 2 3) (list 1 (+ 1 1) (+ 4 -1))))
+  (is (= () (list))))
+
 (test '(apply)
   (is (= 6 (apply + '(1 2 3))))
   (is (= 0 (apply + ())))
@@ -154,6 +160,11 @@
   (is (= () (apply = (split 'foo))))
   (is (= t (apply (lambda (x y) (= x y)) (split 11))))
   (is (= () (apply (lambda (x y z) (= x y z)) (split 121))))
+
+  (is (= 12
+         (apply (lambda (x y z) (+ x y z))
+                (list (+ 1 1) (+ 2 2) (+ 3 3)))))
+
   (errors '(expects exactly two arguments)
     (apply))
   (errors '(expects exactly two arguments)

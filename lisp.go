@@ -98,50 +98,6 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	}
 }
 
-// FIXME: This is only used by `(apply f ...)`.  DRY it out with
-// respect to `eval`.
-// applyFn applies a function to an already-evaluated list of arguments.
-func applyFn(evalCar Sexpr, evaledList []Sexpr) (Sexpr, error) {
-	// User-defined functions:
-	lambda, ok := evalCar.(*lambdaFn)
-	if ok {
-		newEnv := mkEnv(lambda.env)
-		if len(lambda.args) != len(evaledList) {
-			return nil, fmt.Errorf("wrong number of args: %d != %d",
-				len(lambda.args), len(evaledList))
-		}
-		for i, arg := range lambda.args {
-			newEnv.Set(arg, evaledList[i])
-		}
-		if lambda.body == Nil {
-			return Nil, nil
-		}
-
-		for {
-			ret, err := eval(lambda.body.car, &newEnv)
-			if err != nil {
-				return nil, err
-			}
-			// Tail call, in sheep's clothing...
-			if lambda.body.cdr == Nil {
-				return ret, nil
-			}
-			lambda.body = lambda.body.cdr.(*ConsCell)
-		}
-	}
-	// Built-in functions:
-	builtin, ok := evalCar.(*Builtin)
-	if !ok {
-		return nil, fmt.Errorf("%s is not a function", evalCar)
-	}
-	biResult, err := builtin.Fn(evaledList)
-	if err != nil {
-		return nil, err
-	}
-	return biResult, nil
-
-}
-
 func evAtom(a Atom, e *env) (Sexpr, error) {
 	if a.s == "t" {
 		return a, nil
