@@ -412,6 +412,7 @@ func init() {
 				if len(args) == 0 {
 					return Nil, nil
 				}
+				fmt.Println("TEST", args[0])
 				return args[len(args)-1], nil
 			},
 		},
@@ -579,17 +580,58 @@ func init() {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("apply expects exactly two arguments")
 				}
-				fnArgs := []Sexpr{}
-				start := args[1]
-				for start != Nil {
-					cons, ok := start.(*ConsCell)
-					if !ok {
-						return nil, fmt.Errorf("'%s' is not a list", start)
-					}
-					fnArgs = append(fnArgs, cons.car)
-					start = cons.cdr
+				fnArgs, err := consToExprs(args[1])
+				if err != nil {
+					return nil, err
 				}
-				return applyFn(args[0], fnArgs)
+
+				// Note: what follows is very similar to the function evaluation
+				// logic in eval(), but TCO (goto) there makes it hard to DRY out with
+				// respect to what follows.
+
+				evalCar := args[0]
+				// User-defined functions:
+				lambda, ok := evalCar.(*lambdaFn)
+				if ok {
+					newEnv := mkEnv(lambda.env)
+					if len(lambda.args) != len(fnArgs) {
+						return nil, fmt.Errorf("wrong number of args: %d != %d",
+							len(lambda.args), len(fnArgs))
+					}
+					for i, arg := range lambda.args {
+						newEnv.Set(arg, fnArgs[i])
+					}
+					var ret Sexpr = Nil
+					for {
+						if lambda.body == Nil {
+							return ret, nil
+						}
+						ret, err = eval(lambda.body.car, &newEnv)
+						if err != nil {
+							return nil, err
+						}
+						lambda.body = lambda.body.cdr.(*ConsCell)
+					}
+				}
+				// Built-in functions:
+				builtin, ok := evalCar.(*Builtin)
+				if !ok {
+					return nil, fmt.Errorf("%s is not a function", evalCar)
+				}
+				biResult, err := builtin.Fn(fnArgs)
+				if err != nil {
+					return nil, err
+				}
+				return biResult, nil
+			},
+		},
+		"list": {
+			Name:       "list",
+			Docstring:  "Return a list of the given arguments",
+			FixedArity: 0,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				return exprsToCons(args), nil
 			},
 		},
 		"zero?": {
@@ -612,6 +654,30 @@ func init() {
 			},
 		},
 	}
+}
+
+func exprsToCons(args []Sexpr) Sexpr {
+	if len(args) == 0 {
+		return Nil
+	}
+	lastCdr := Nil
+	for i := len(args) - 1; i >= 0; i-- {
+		lastCdr = &ConsCell{car: args[i], cdr: lastCdr}
+	}
+	return lastCdr
+}
+
+func consToExprs(argList Sexpr) ([]Sexpr, error) {
+	args := []Sexpr{}
+	for argList != Nil {
+		cons, ok := argList.(*ConsCell)
+		if !ok {
+			return nil, fmt.Errorf("'%s' is not a list", argList)
+		}
+		args = append(args, cons.car)
+		argList = cons.cdr
+	}
+	return args, nil
 }
 
 // listOfChars returns a list of single-character atoms from another, presumably

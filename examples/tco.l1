@@ -1,0 +1,18 @@
+;; Highly-recursive examples which showed the need for tail-call
+;; optimization.  Before TCO was implemented, these examples would
+;; blow the stack.
+
+(defn sum-to-acc (n acc)
+  (cond ((zero? n) acc)
+        (t (sum-to-acc (- n 1) (+ n acc)))))
+
+(defn sum-to-acc-with-let (n acc)
+  (let ((a 1))
+    (cond ((zero? n) acc)
+          (t (sum-to-acc-with-let (- n 1) (+ n acc))))))
+
+(defn sum-to (n) (sum-to-acc n 0))
+(defn sum-to-with-let (n) (sum-to-acc-with-let n 0))
+
+(is (= 500000500000 (sum-to (* 1000 1000))))
+(is (= 500000500000 (sum-to-with-let (* 1000 1000))))

@@ -4,9 +4,16 @@
 
 ![build](https://github.com/eigenhombre/l1/actions/workflows/build.yml/badge.svg)
 
-`l1` is a small interpreted [Lisp 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace) written in Go.  Emphasizing simplicity
-of data types (atoms, arbitrarily large integers, and lists) and start-up speed,
-it aims to be a playground for future language experiments.
+`l1` is a small interpreted [Lisp
+1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace)
+written in Go.  Emphasizing simplicity of data types (atoms,
+arbitrarily large integers, and lists) and start-up speed, it aims to
+be a playground for future language experiments.
+
+`l1` eschews strings in favor of using atoms and lists in the style of
+[some classic AI programs](https://github.com/norvig/paip-lisp).  It
+features tail-call optimization and a few unique functions for
+converting atoms and numbers to lists, and vice-versa.
 
 # Usage / Examples
 
@@ -82,6 +89,7 @@ Example (using a file in this project):
         lambda    1+     SPECIAL FORM: Create a function
            len    1      Return the length of a list
            let    1+     SPECIAL FORM: Create a local scope
+          list    0+     Return a list of the given arguments
           neg?    1      Return true if the (numeric) argument is negative, else ()
            not    1      Return t if the argument is nil, () otherwise
           pos?    1      Return true if the (numeric) argument is positive, else ()

@@ -19,7 +19,7 @@
 (prime? 28657)
 (prime? 514229)
 (prime? 433494437)
-;; (prime? 1329871359087)  too large to handle without loops or TCO
+(prime? 1329871359087)
 
 (prime? (fuse (randigits 100)))
 

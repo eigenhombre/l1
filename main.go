@@ -23,7 +23,7 @@ func readLine() (string, error) {
 
 func evalExprs(exprs []Sexpr, e env, doPrint bool) bool {
 	for _, g := range exprs {
-		res, err := g.Eval(&e)
+		res, err := eval(g, &e)
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			return false

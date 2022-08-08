@@ -116,7 +116,7 @@ func TestEval(t *testing.T) {
 					testCase.in, len(got), got)
 				continue
 			}
-			ev, err := got[0].Eval(&globals)
+			ev, err := eval(got[0], &globals)
 			if isError(err, testCase) {
 				continue
 			}
