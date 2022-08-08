@@ -294,19 +294,10 @@ top:
 					expr = lambda.body.car
 					e = &newEnv
 					goto top
-					// ret, err = eval(lambda.body.car, &newEnv)
-					// if err != nil {
-					// 	return nil, err
-					// }
-					// return ret, nil
 				}
 				ret, err = eval(lambda.body.car, &newEnv)
 				if err != nil {
 					return nil, err
-				}
-				// Tail call, in sheep's clothing...
-				if lambda.body.cdr == Nil {
-					return ret, nil
 				}
 				lambda.body = lambda.body.cdr.(*ConsCell)
 			}
