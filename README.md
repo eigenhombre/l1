@@ -24,6 +24,12 @@ artifacts for various architectures may be available here.
 
     go install github.com/eigenhombre/l1@latest
 
+Specific versions are tagged and available as well.  See [the tags
+page](https://github.com/eigenhombre/l1/tags) for available versions
+and then, for example,
+
+    go install github.com/eigenhombre/l1@v0.0.7
+
 ## Usage
 
 To execute a file:
@@ -151,7 +157,12 @@ Check out this repo and `cd` to it. Then,
     go build
     go install
 
-Extra testing and build infrastructure for this project relies on GitHub Actions, Docker, and Make.  Please look at the `Dockerfile` and `Makefile` for more information.
+Extra testing and build infrastructure for this project relies on
+GitHub Actions, Docker, and Make.  Please look at the `Dockerfile` and
+`Makefile` for more information.
+
+New releases are made using `make release`.  You must commit all
+outstanding changes first.
 
 # Emacs Integration
 
