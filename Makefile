@@ -46,4 +46,5 @@ doc:
 
 release:
 	./bumpver
+	make clean
 	make
