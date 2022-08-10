@@ -725,7 +725,7 @@ func listOfNums(s string) (*ConsCell, error) {
 }
 
 func semverAsExprs(semver string) []Sexpr {
-	reg := regexp.MustCompile(`(?:^v)?(\d+)(?:\.(\d+))?(?:\.(\d+))?`) //(?:\.(\d+))(?:[^\.](.*))?$`)
+	reg := regexp.MustCompile(`(?:^v)?(\d+)(?:\.(\d+))?(?:\.(\d+))?(?:-(dirty))?`)
 	matches := reg.FindStringSubmatch(semver)
 	if len(matches) == 0 {
 		return nil
@@ -735,7 +735,11 @@ func semverAsExprs(semver string) []Sexpr {
 		if len(m) == 0 {
 			continue
 		}
-		list = append(list, Num(m))
+		if m == "dirty" {
+			list = append(list, Atom{"dirty"})
+		} else {
+			list = append(list, Num(m))
+		}
 	}
 	return list
 }

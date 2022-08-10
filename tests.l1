@@ -375,4 +375,4 @@
                     (+ a 1))))))))
 
 (test '(version)
-  (is (= 3 (len (version)))))
+  (is (< 2 (len (version)))))

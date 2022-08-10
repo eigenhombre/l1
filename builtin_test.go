@@ -55,6 +55,7 @@ func TestListFromSemver(t *testing.T) {
 		{"v11.22.33", []Sexpr{Num(11), Num(22), Num(33)}},
 		{"v0.0.0", []Sexpr{Num(0), Num(0), Num(0)}},
 		{"v01.02.03", []Sexpr{Num(1), Num(2), Num(3)}},
+		{"v1.2.3-dirty", []Sexpr{Num(1), Num(2), Num(3), Atom{"dirty"}}},
 	}
 	for _, test := range tests {
 		got := semverAsExprs(test.input)
