@@ -32,7 +32,7 @@ clean:
 	rm -f ${PROG}
 
 install: ${PROG}
-	go install .
+	go install ${LDFLAGS} .
 
 verbose: all
     # The tests are fast!  Just do it again, verbosely:
