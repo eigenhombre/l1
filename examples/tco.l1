@@ -7,7 +7,7 @@
         (t (sum-to-acc (- n 1) (+ n acc)))))
 
 (defn sum-to-acc-with-let (n acc)
-  (let ((a 1))
+  (let ((_ 1))
     (cond ((zero? n) acc)
           (t (sum-to-acc-with-let (- n 1) (+ n acc))))))
 

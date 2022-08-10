@@ -21,7 +21,9 @@
 (prime? 433494437)
 (prime? 1329871359087)
 
-(prime? (fuse (randigits 100)))
+;; Don't do this with every build -- some numbers take a LONG time to
+;; test:
+;; (prime? (fuse (randigits 100)))
 
 (defn concat (a b)
   (cond ((not a) b)
