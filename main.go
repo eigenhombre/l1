@@ -2,12 +2,15 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
 
 	"github.com/eigenhombre/lexutil"
 )
+
+var version string
 
 func readLine() (string, error) {
 	bio := bufio.NewReader(os.Stdin)
@@ -75,6 +78,16 @@ func repl(e env) {
 }
 
 func main() {
+	var versionFlag bool
+
+	flag.BoolVar(&versionFlag, "v", false, "Get l1 version")
+	flag.Parse()
+
+	if versionFlag {
+		fmt.Println(version)
+		os.Exit(0)
+	}
+
 	globals := mkEnv(nil)
 	if len(os.Args) > 1 {
 		bytes, err := os.ReadFile(os.Args[1])
