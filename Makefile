@@ -1,5 +1,5 @@
 .PHONY: test clean deps lint all
-.PHONY: verbose doc l1-tests
+.PHONY: verbose doc l1-tests release
 
 PROG=l1
 VERSION=`git describe --tags --abbrev=0`
@@ -43,3 +43,7 @@ docker:
 
 doc:
 	python updatereadme.py
+
+release:
+	./bumpver
+	make
