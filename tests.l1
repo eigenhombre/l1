@@ -373,3 +373,6 @@
            (let ((a 1))
              (+ a (let ((a 2))
                     (+ a 1))))))))
+
+(test '(version)
+  (is (= 3 (len (version)))))

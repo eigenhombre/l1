@@ -99,6 +99,7 @@ Example (using a file in this project):
            rem    2      Return remainder when second arg divides first
          split    0      Split an atom or number into a list of single-digit numbers or single-character atoms
           test    0+     Establish a testing block (return last expression)
+       version    0      Return the version of the interpreter
          zero?    1      Return t if the argument is zero, () otherwise
     > ^D
     $

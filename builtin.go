@@ -5,6 +5,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -653,6 +654,16 @@ func init() {
 				return Nil, nil
 			},
 		},
+		"version": {
+			Name:       "version",
+			Docstring:  "Return the version of the interpreter",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				versionSexprs := semverAsExprs(version)
+				return exprsToCons(versionSexprs), nil
+			},
+		},
 	}
 }
 
@@ -711,4 +722,20 @@ func listOfNums(s string) (*ConsCell, error) {
 		return nil, err
 	}
 	return Cons(Num(s[0:1]), lon), nil
+}
+
+func semverAsExprs(semver string) []Sexpr {
+	reg := regexp.MustCompile(`(?:^v)?(\d+)(?:\.(\d+))?(?:\.(\d+))?`) //(?:\.(\d+))(?:[^\.](.*))?$`)
+	matches := reg.FindStringSubmatch(semver)
+	if len(matches) == 0 {
+		return nil
+	}
+	list := []Sexpr{}
+	for _, m := range matches[1:] {
+		if len(m) == 0 {
+			continue
+		}
+		list = append(list, Num(m))
+	}
+	return list
 }
