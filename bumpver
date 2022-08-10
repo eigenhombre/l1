@@ -28,10 +28,15 @@ NEW_TAG="$VNUM1.$VNUM2.$VNUM3"
 
 echo "Updating $VERSION to $NEW_TAG"
 
-rm -f version.go
-echo "package main" > version.go
-echo >> version.go
-echo "var version string = \"$NEW_TAG\"" >> version.go
+function update_version_file() {
+    NEWVER="$1"
+    rm -f version.go
+    echo "package main" > version.go
+    echo >> version.go
+    echo "var version string = \"$NEWVER\"" >> version.go
+}
+
+update_version_file $NEW_TAG
 
 # get current hash and see if it already has a tag
 GIT_COMMIT=`git rev-parse HEAD`
@@ -45,3 +50,8 @@ if [ -z "$NEEDS_TAG" ]; then
 else
     echo "Already a tag on this commit"
 fi
+
+update_version_file "$NEW_TAG-dirty"
+git add version.go
+git commit -m "Taint $NEW_TAG"
+git push
