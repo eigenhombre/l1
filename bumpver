@@ -28,7 +28,12 @@ NEW_TAG="$VNUM1.$VNUM2.$VNUM3"
 
 echo "Updating $VERSION to $NEW_TAG"
 
-#get current hash and see if it already has a tag
+rm -f version.go
+echo "package main" > version.go
+echo >> version.go
+echo "var version string = \"$NEW_TAG\"" >> version.go
+
+# get current hash and see if it already has a tag
 GIT_COMMIT=`git rev-parse HEAD`
 NEEDS_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
 

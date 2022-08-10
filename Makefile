@@ -2,8 +2,6 @@
 .PHONY: verbose doc l1-tests release
 
 PROG=l1
-VERSION=`git describe --tags --abbrev=0`
-LDFLAGS=-ldflags "-X main.version=${VERSION}"
 
 all: deps test ${PROG} l1-tests lint doc
 
@@ -11,8 +9,7 @@ deps:
 	go get .
 
 ${PROG}: *.go
-	echo ${LDFLAGS}
-	go build ${LDFLAGS} .
+	go build .
 
 test:
 	go test
@@ -32,7 +29,7 @@ clean:
 	rm -f ${PROG}
 
 install: ${PROG}
-	go install ${LDFLAGS} .
+	go install .
 
 verbose: all
     # The tests are fast!  Just do it again, verbosely:

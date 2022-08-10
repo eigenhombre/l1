@@ -10,8 +10,6 @@ import (
 	"github.com/eigenhombre/lexutil"
 )
 
-var version string
-
 func readLine() (string, error) {
 	bio := bufio.NewReader(os.Stdin)
 	// FIXME: don't discard hasMoreInLine
