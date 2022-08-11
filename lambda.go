@@ -6,10 +6,13 @@ import (
 )
 
 type lambdaFn struct {
-	args []string
-	body *ConsCell
-	env  *env
+	args    []string
+	restArg string
+	body    *ConsCell
+	env     *env
 }
+
+var noRestArg string = ""
 
 func mkLambda(cdr *ConsCell, e *env) *lambdaFn {
 	args := []string{}
@@ -17,11 +20,18 @@ func mkLambda(cdr *ConsCell, e *env) *lambdaFn {
 	for ; argList != Nil; argList = argList.cdr.(*ConsCell) {
 		args = append(args, argList.car.(Atom).s)
 	}
-	return &lambdaFn{args, cdr.cdr.(*ConsCell), e}
+	return &lambdaFn{args, noRestArg, cdr.cdr.(*ConsCell), e}
 }
 
 func (f *lambdaFn) String() string {
-	return fmt.Sprintf("<lambda(%s)>", strings.Join(f.args, " "))
+	//restArgsRepr := ""
+	// if f.restArg != noRestArgs {
+	// 	restArgsRepr = "BOO" // fmt.Sprintf(" & %s", f.restArg)
+	// }
+	return fmt.Sprintf("<lambda(%s)>",
+		strings.Join(f.args, " "),
+	//	restArgsRepr
+	)
 }
 
 func (f *lambdaFn) Equal(o Sexpr) bool {

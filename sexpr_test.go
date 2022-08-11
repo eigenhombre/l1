@@ -91,7 +91,7 @@ func TestStrToSexprs(T *testing.T) {
 		return xs
 	}
 	L := func(xs ...Sexpr) Sexpr {
-		cons := mkList(xs)
+		cons := mkListAsCons(xs)
 		return cons
 	}
 	A := func(s string) Atom {

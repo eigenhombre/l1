@@ -36,7 +36,7 @@ func (c *ConsCell) String() string {
 }
 
 // Cons creates a cons cell.
-func Cons(i Sexpr, cdr *ConsCell) *ConsCell {
+func Cons(i Sexpr, cdr Sexpr) *ConsCell {
 	return &ConsCell{i, cdr}
 }
 
@@ -309,83 +309,4 @@ func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {
 		}
 	}
 	return 0, 0, fmt.Errorf("unbalanced parens")
-}
-
-func mkList(xs []Sexpr) *ConsCell {
-	if len(xs) == 0 {
-		return Nil
-	}
-	return Cons(xs[0], mkList(xs[1:]))
-}
-
-// parse returns a list of sexprs parsed from a list of tokens.
-func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
-	ret := []Sexpr{}
-	i := 0
-	for {
-		if i >= len(tokens) {
-			break
-		}
-		token := tokens[i]
-		switch token.Typ {
-		case itemNumber:
-			ret = append(ret, Num(token.Val))
-			i++
-		case itemAtom:
-			ret = append(ret, Atom{token.Val})
-			i++
-		case itemForwardQuote:
-			i++ // skip ' token
-			if i >= len(tokens) {
-				return nil, fmt.Errorf("unexpected end of input")
-			}
-			var quoted Sexpr
-			var delta int
-			// quoted and delta depend on whether the quoted expression is
-			// a list or an atom/num:
-			if tokens[i].Typ != itemLeftParen {
-				inner, err := parse(tokens[i : i+1])
-				if err != nil {
-					return nil, err
-				}
-				quoted = inner[0]
-				delta = 1
-			} else {
-				start, end, err := balancedParenPoints(tokens[i:])
-				if err != nil {
-					return nil, err
-				}
-				inner, err := parse(tokens[i+start+1 : i+end])
-				if err != nil {
-					return nil, err
-				}
-				quoted = mkList(inner)
-				delta = end - start + 1
-			}
-			i += delta
-			quoteList := []Sexpr{Atom{"quote"}}
-			quoteList = append(quoteList, quoted)
-			ret = append(ret, mkList(quoteList))
-		case itemLeftParen:
-			start, end, err := balancedParenPoints(tokens[i:])
-			if err != nil {
-				return nil, err
-			}
-			inner, err := parse(tokens[i+start+1 : i+end])
-			if err != nil {
-				return nil, err
-			}
-			ret = append(ret, mkList(inner))
-			i = i + end + 1
-		case itemRightParen:
-			return nil, fmt.Errorf("unexpected right paren")
-		default:
-			return nil, fmt.Errorf(token.Val)
-		}
-	}
-	return ret, nil
-}
-
-func lexAndParse(s string) ([]Sexpr, error) {
-	return parse(lexItems(s))
 }
