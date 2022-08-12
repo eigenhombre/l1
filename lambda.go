@@ -6,22 +6,57 @@ import (
 )
 
 type lambdaFn struct {
-	args []string
-	body *ConsCell
-	env  *env
+	args    []string
+	restArg string
+	body    *ConsCell
+	env     *env
 }
 
-func mkLambda(cdr *ConsCell, e *env) *lambdaFn {
+var noRestArg string = ""
+
+func mkLambda(cdr *ConsCell, e *env) (*lambdaFn, error) {
 	args := []string{}
-	argList := cdr.car.(*ConsCell)
-	for ; argList != Nil; argList = argList.cdr.(*ConsCell) {
-		args = append(args, argList.car.(Atom).s)
+	restArg := noRestArg
+	argList, ok := cdr.car.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("lambda requires an argument list")
 	}
-	return &lambdaFn{args, cdr.cdr.(*ConsCell), e}
+	emptyArgList := false
+top:
+	for argList != Nil && !emptyArgList {
+		if argList.car == Nil {
+			emptyArgList = true
+		} else {
+			arg, ok := argList.car.(Atom)
+			if !ok {
+				return nil, fmt.Errorf("argument list item is not an atom")
+			}
+			args = append(args, arg.s)
+		}
+		switch t := argList.cdr.(type) {
+		case Atom:
+			restArg = t.s
+			break top
+		case *ConsCell:
+			argList = t
+		default:
+			// I was unable to reach this with a test:
+			panic("unknown type in lambda arg list")
+		}
+	}
+	if emptyArgList && restArg == noRestArg {
+		return nil, fmt.Errorf("lambda with () argument requires a rest argument")
+	}
+	return &lambdaFn{args, restArg, cdr.cdr.(*ConsCell), e}, nil
 }
 
 func (f *lambdaFn) String() string {
-	return fmt.Sprintf("<lambda(%s)>", strings.Join(f.args, " "))
+	restArgsRepr := ""
+	if f.restArg != noRestArg {
+		restArgsRepr = fmt.Sprintf(" . %s", f.restArg)
+	}
+	return fmt.Sprintf("<lambda(%s%s)>",
+		strings.Join(f.args, " "), restArgsRepr)
 }
 
 func (f *lambdaFn) Equal(o Sexpr) bool {

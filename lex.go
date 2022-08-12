@@ -16,6 +16,7 @@ const (
 	itemLeftParen
 	itemRightParen
 	itemForwardQuote
+	itemDot
 	itemError
 )
 
@@ -26,6 +27,7 @@ var typeMap = map[lexutil.ItemType]string{
 	itemLeftParen:    "LP",
 	itemRightParen:   "RP",
 	itemForwardQuote: "QUOTE",
+	itemDot:          "DOT",
 	itemError:        "ERR",
 }
 
@@ -44,6 +46,8 @@ func LexRepr(i lexutil.LexItem) string {
 		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
 	case itemForwardQuote:
 		return "QUOTE"
+	case itemDot:
+		return "DOT"
 	default:
 		panic("bad item type")
 	}
@@ -67,7 +71,7 @@ func ignoreComment(l *lexutil.Lexer) {
 
 var validAtomChars = ("0123456789abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-	"+*/-_!=<>?[]{}&$^")
+	"+*/-_!=<>?[]{}$^")
 
 func isAtomChar(r rune) bool {
 	return strings.ContainsRune(validAtomChars, r)
@@ -93,6 +97,8 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 			return lexAtom
 		case r == '\'':
 			l.Emit(itemForwardQuote)
+		case r == '.':
+			l.Emit(itemDot)
 		default:
 			l.Errorf("unexpected character %q in input", itemError, r)
 		}

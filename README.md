@@ -68,6 +68,8 @@ Example (using a file in this project):
     123
     > (quote (the (ten (laws (of (greenspun))))))
     (the (ten (laws (of (greenspun)))))
+    > ((lambda (x . xs) (list x xs)) 1 2 3 4)
+    (1 (2 3 4))
     > (help)
     Builtins and Special Forms:
           Name  Arity    Description

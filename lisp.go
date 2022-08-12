@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"strings"
-
-	"github.com/eigenhombre/lexutil"
 )
 
 // Sexpr is a general-purpose data structure for representing
@@ -12,47 +10,6 @@ import (
 type Sexpr interface {
 	String() string
 	Equal(Sexpr) bool
-}
-
-// ConsCell is a cons cell.  Use Cons to create one.
-type ConsCell struct {
-	car Sexpr
-	cdr Sexpr
-}
-
-// Nil is the empty list / cons cell.  Cons with Nil to create a list
-// of one item.
-var Nil *ConsCell = nil
-
-func (c *ConsCell) String() string {
-	ret := "("
-	for car := c; car != Nil; car = car.cdr.(*ConsCell) {
-		ret += car.car.String()
-		if car.cdr != Nil {
-			ret += " "
-		}
-	}
-	return ret + ")"
-}
-
-// Cons creates a cons cell.
-func Cons(i Sexpr, cdr *ConsCell) *ConsCell {
-	return &ConsCell{i, cdr}
-}
-
-// Equal returns true iff the two S-expressions are equal cons-wise
-func (c *ConsCell) Equal(o Sexpr) bool {
-	_, ok := o.(*ConsCell)
-	if !ok {
-		return false
-	}
-	if c == Nil {
-		return o == Nil
-	}
-	if o == Nil {
-		return c == Nil
-	}
-	return c.car.Equal(o.(*ConsCell).car) && c.cdr.Equal(o.(*ConsCell).cdr)
 }
 
 func stringFromList(l *ConsCell) string {
@@ -83,7 +40,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	bodyArgs := args.cdr.(*ConsCell)
 	for {
 		if bodyArgs == Nil {
-			return nil, fmt.Errorf("error not found")
+			return nil, fmt.Errorf("error not found in %s", args)
 		}
 		toEval := bodyArgs.car
 		_, err := eval(toEval, e)
@@ -119,8 +76,34 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	if err != nil {
 		panic(err)
 	}
-	e.Set(name, val)
+	err = e.Set(name, val)
+	if err != nil {
+		return nil, err
+	}
 	return val, nil
+}
+
+func evDefn(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires a function name")
+	}
+	name, ok := args.car.(Atom)
+	if !ok {
+		return nil, fmt.Errorf("defn name must be an atom")
+	}
+	args = args.cdr.(*ConsCell)
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires an argument list")
+	}
+	fn, err := mkLambda(args, e)
+	if err != nil {
+		return nil, err
+	}
+	err = e.Set(name.s, fn)
+	if err != nil {
+		return nil, err
+	}
+	return Nil, nil
 }
 
 func eval(expr Sexpr, e *env) (Sexpr, error) {
@@ -188,7 +171,10 @@ top:
 					if err != nil {
 						return nil, err
 					}
-					newEnv.Set(name, val)
+					err = newEnv.Set(name, val)
+					if err != nil {
+						return nil, err
+					}
 				}
 
 				var ret Sexpr = Nil
@@ -210,7 +196,7 @@ top:
 					body = body.cdr.(*ConsCell)
 				}
 			case carAtom.s == "lambda":
-				return mkLambda(t.cdr.(*ConsCell), e), nil
+				return mkLambda(t.cdr.(*ConsCell), e)
 			}
 		}
 		// Functions / normal order of evaluation.  Get function to use first:
@@ -237,12 +223,28 @@ top:
 		lambda, ok := evalCar.(*lambdaFn)
 		if ok {
 			newEnv := mkEnv(lambda.env)
-			if len(lambda.args) != len(evaledList) {
-				return nil, fmt.Errorf("wrong number of args: %d != %d",
-					len(lambda.args), len(evaledList))
+			if lambda.restArg != noRestArg {
+				if len(lambda.args) > len(evaledList) {
+					return nil, fmt.Errorf("not enough arguments for function")
+				}
+				err = newEnv.Set(lambda.restArg,
+					mkListAsConsWithCdr(evaledList[len(lambda.args):],
+						Nil))
+				if err != nil {
+					return nil, err
+				}
+			} else {
+				if len(lambda.args) < len(evaledList) {
+					return nil, fmt.Errorf("too many arguments for function")
+				} else if len(lambda.args) > len(evaledList) {
+					return nil, fmt.Errorf("not enough arguments for function")
+				}
 			}
 			for i, arg := range lambda.args {
-				newEnv.Set(arg, evaledList[i])
+				err := newEnv.Set(arg, evaledList[i])
+				if err != nil {
+					return nil, err
+				}
 			}
 			var ret Sexpr = Nil
 			for {
@@ -275,117 +277,4 @@ top:
 	default:
 		panic(fmt.Sprintf("unknown type to eval: %T", t))
 	}
-}
-
-func evDefn(args *ConsCell, e *env) (Sexpr, error) {
-	if args == Nil {
-		return nil, fmt.Errorf("defn requires a function name")
-	}
-	name, ok := args.car.(Atom)
-	if !ok {
-		return nil, fmt.Errorf("defn name must be an atom")
-	}
-	args = args.cdr.(*ConsCell)
-	if args == Nil {
-		return nil, fmt.Errorf("defn requires an argument list")
-	}
-	fn := mkLambda(args, e)
-	e.Set(name.s, fn)
-	return Nil, nil
-}
-
-func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {
-	level := 0
-	start := 0
-	for i, token := range tokens[start:] {
-		switch token.Typ {
-		case itemLeftParen:
-			level++
-		case itemRightParen:
-			level--
-			if level == 0 {
-				return 0, i, nil
-			}
-		}
-	}
-	return 0, 0, fmt.Errorf("unbalanced parens")
-}
-
-func mkList(xs []Sexpr) *ConsCell {
-	if len(xs) == 0 {
-		return Nil
-	}
-	return Cons(xs[0], mkList(xs[1:]))
-}
-
-// parse returns a list of sexprs parsed from a list of tokens.
-func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
-	ret := []Sexpr{}
-	i := 0
-	for {
-		if i >= len(tokens) {
-			break
-		}
-		token := tokens[i]
-		switch token.Typ {
-		case itemNumber:
-			ret = append(ret, Num(token.Val))
-			i++
-		case itemAtom:
-			ret = append(ret, Atom{token.Val})
-			i++
-		case itemForwardQuote:
-			i++ // skip ' token
-			if i >= len(tokens) {
-				return nil, fmt.Errorf("unexpected end of input")
-			}
-			var quoted Sexpr
-			var delta int
-			// quoted and delta depend on whether the quoted expression is
-			// a list or an atom/num:
-			if tokens[i].Typ != itemLeftParen {
-				inner, err := parse(tokens[i : i+1])
-				if err != nil {
-					return nil, err
-				}
-				quoted = inner[0]
-				delta = 1
-			} else {
-				start, end, err := balancedParenPoints(tokens[i:])
-				if err != nil {
-					return nil, err
-				}
-				inner, err := parse(tokens[i+start+1 : i+end])
-				if err != nil {
-					return nil, err
-				}
-				quoted = mkList(inner)
-				delta = end - start + 1
-			}
-			i += delta
-			quoteList := []Sexpr{Atom{"quote"}}
-			quoteList = append(quoteList, quoted)
-			ret = append(ret, mkList(quoteList))
-		case itemLeftParen:
-			start, end, err := balancedParenPoints(tokens[i:])
-			if err != nil {
-				return nil, err
-			}
-			inner, err := parse(tokens[i+start+1 : i+end])
-			if err != nil {
-				return nil, err
-			}
-			ret = append(ret, mkList(inner))
-			i = i + end + 1
-		case itemRightParen:
-			return nil, fmt.Errorf("unexpected right paren")
-		default:
-			return nil, fmt.Errorf(token.Val)
-		}
-	}
-	return ret, nil
-}
-
-func lexAndParse(s string) ([]Sexpr, error) {
-	return parse(lexItems(s))
 }

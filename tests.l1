@@ -34,7 +34,13 @@
   (errors '(not a list) (cdr t))
   (is (= '(1 2 3 4) (cons 1 '(2 3 4))))
   (is (= '((1 2) 3 4) (cons (cons 1 (cons 2 ())) '(3 4))))
-  (is (= '(()) (cons () ()))))
+  (is (= '(()) (cons () ())))
+  (is (= '(1 . 2) (cons 1 2)))
+  (is (= '(1 2) (cons 1 '(2))))
+  (is (= '((1 . 2)) (cons (cons 1 2) ())))
+  (is (= 1 (car '(1 . 2))))
+  (is (= 2 (cdr '(1 . 2))))
+  (is (= '((1) . 2) (cons '(1) 2))))
 
 (test '(atom)
   (is (atom (quote foo)))
@@ -98,7 +104,27 @@
 
   (errors '(division by zero) ((lambda ()
                                  1
-                                 (/ 1 0)))))
+                                 (/ 1 0))))
+  (is (= 1 ((lambda (a b c d) d)
+            4 3 2 1)))
+  ;; rest args / n-ary lambdas:
+  (is (= (list 2 3 4) ((lambda (a . d) d)
+                       1 2 3 4)))
+  (errors '(not enough arguments) ((lambda (a . d) d)))
+  (errors '(not enough arguments) ((lambda (a b . d) d) 1))
+  (errors '(not enough arguments) ((lambda (a b) d) 1))
+  (errors '(too many arguments) ((lambda (a b) b) 1 2 3))
+
+  (errors '(requires an argument list) (lambda 3))
+  (errors '(argument list item is not an atom) (lambda (3)))
+  (errors '(requires a rest argument) ((lambda (()))))
+  (errors '(cannot bind or set t) ((lambda (t)) 2))
+
+  ;; rest-only lambdas:
+  (= 3 ((lambda (a . l) (len l)) 0 1 2 3))
+  (= 0 ((lambda (a . l) (len l)) 'hi))
+  (= 3 ((lambda (() . l) (len l)) 1 2 3))
+  (= 0 ((lambda (() . l) (len l)))))
 
 (test '(defn)
   (defn foo ())
@@ -109,7 +135,18 @@
   (is (= 1 (foo 1)))
   (errors '(name must be an atom) (defn (bazzy)))
   (errors '(requires a function name) (defn))
-  (errors '(requires an argument list) (defn foo)))
+  (errors '(requires an argument list) (defn foo))
+
+  ;; rest params:
+  (defn wierd-len (() . l)
+    (len l))
+  (is (= 0 (wierd-len)))
+  (is (= 5 (wierd-len 1 1 1 1 1)))
+  (defn wierder-len (a . l) (len l))
+  (errors '(not enough arguments) (wierder-len))
+  (is (= 0 (wierder-len 1)))
+  (is (= 1 (wierder-len 1 2)))
+  (is (= 10 (wierder-len 1 1 2 3 4 5 6 7 8 9 10))))
 
 (test '(split and fuse)
   (is (= '(1) (split 1)))

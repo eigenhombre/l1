@@ -346,7 +346,7 @@ func init() {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("missing argument")
 				}
-				return Cons(args[0], args[1].(*ConsCell)), nil
+				return Cons(args[0], args[1]), nil
 			},
 		},
 		"atom": {
@@ -600,7 +600,10 @@ func init() {
 							len(lambda.args), len(fnArgs))
 					}
 					for i, arg := range lambda.args {
-						newEnv.Set(arg, fnArgs[i])
+						err := newEnv.Set(arg, fnArgs[i])
+						if err != nil {
+							return nil, err
+						}
 					}
 					var ret Sexpr = Nil
 					for {
@@ -632,7 +635,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			Fn: func(args []Sexpr) (Sexpr, error) {
-				return exprsToCons(args), nil
+				return mkListAsConsWithCdr(args, Nil), nil
 			},
 		},
 		"zero?": {
@@ -661,34 +664,10 @@ func init() {
 			NAry:       false,
 			Fn: func(args []Sexpr) (Sexpr, error) {
 				versionSexprs := semverAsExprs(version)
-				return exprsToCons(versionSexprs), nil
+				return mkListAsConsWithCdr(versionSexprs, Nil), nil
 			},
 		},
 	}
-}
-
-func exprsToCons(args []Sexpr) Sexpr {
-	if len(args) == 0 {
-		return Nil
-	}
-	lastCdr := Nil
-	for i := len(args) - 1; i >= 0; i-- {
-		lastCdr = &ConsCell{car: args[i], cdr: lastCdr}
-	}
-	return lastCdr
-}
-
-func consToExprs(argList Sexpr) ([]Sexpr, error) {
-	args := []Sexpr{}
-	for argList != Nil {
-		cons, ok := argList.(*ConsCell)
-		if !ok {
-			return nil, fmt.Errorf("'%s' is not a list", argList)
-		}
-		args = append(args, cons.car)
-		argList = cons.cdr
-	}
-	return args, nil
 }
 
 // listOfChars returns a list of single-character atoms from another, presumably
