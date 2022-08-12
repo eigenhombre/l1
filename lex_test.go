@@ -95,7 +95,7 @@ func TestLex(t *testing.T) {
 	for _, test := range tests {
 		items := lexItems(test.input)
 		if !reflect.DeepEqual(items, test.output) {
-			t.Errorf("!!! %q: expected %v, got %v", test.input, test.output, items)
+			t.Errorf("%q: expected %v, got %v", test.input, test.output, items)
 		} else {
 			t.Logf("%q -> %v", test.input, items)
 		}
