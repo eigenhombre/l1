@@ -1,7 +1,5 @@
 package main
 
-import "strings"
-
 // ConsCell is a cons cell.  Use Cons to create one.
 type ConsCell struct {
 	car Sexpr
@@ -50,12 +48,4 @@ func (c *ConsCell) Equal(o Sexpr) bool {
 		return c == Nil
 	}
 	return c.car.Equal(o.(*ConsCell).car) && c.cdr.Equal(o.(*ConsCell).cdr)
-}
-
-func stringFromList(l *ConsCell) string {
-	ret := []string{}
-	for ; l != Nil; l = l.cdr.(*ConsCell) {
-		ret = append(ret, l.car.String())
-	}
-	return strings.Join(ret, " ")
 }

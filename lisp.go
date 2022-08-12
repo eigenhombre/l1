@@ -12,6 +12,14 @@ type Sexpr interface {
 	Equal(Sexpr) bool
 }
 
+func stringFromList(l *ConsCell) string {
+	ret := []string{}
+	for ; l != Nil; l = l.cdr.(*ConsCell) {
+		ret = append(ret, l.car.String())
+	}
+	return strings.Join(ret, " ")
+}
+
 func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	if args == Nil {
 		return nil, fmt.Errorf("no error spec given")
