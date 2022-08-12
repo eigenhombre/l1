@@ -14,13 +14,32 @@ type lambdaFn struct {
 
 var noRestArg string = ""
 
-func mkLambda(cdr *ConsCell, e *env) *lambdaFn {
+func mkLambda(cdr *ConsCell, e *env) (*lambdaFn, error) {
 	args := []string{}
-	argList := cdr.car.(*ConsCell)
-	for ; argList != Nil; argList = argList.cdr.(*ConsCell) {
-		args = append(args, argList.car.(Atom).s)
+	restArg := noRestArg
+	argList, ok := cdr.car.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("lambda requires an argument list")
 	}
-	return &lambdaFn{args, noRestArg, cdr.cdr.(*ConsCell), e}
+top:
+	for argList != Nil {
+		arg, ok := argList.car.(Atom)
+		if !ok {
+			return nil, fmt.Errorf("argument list item is not an atom")
+		}
+		args = append(args, arg.s)
+		switch t := argList.cdr.(type) {
+		case Atom:
+			restArg = t.s
+			break top
+		case *ConsCell:
+			argList = t
+		default:
+			// I was unable to reach this with a test:
+			panic("unknown type in lambda arg list")
+		}
+	}
+	return &lambdaFn{args, restArg, cdr.cdr.(*ConsCell), e}, nil
 }
 
 func (f *lambdaFn) String() string {

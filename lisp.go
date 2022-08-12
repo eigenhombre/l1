@@ -159,7 +159,7 @@ top:
 					body = body.cdr.(*ConsCell)
 				}
 			case carAtom.s == "lambda":
-				return mkLambda(t.cdr.(*ConsCell), e), nil
+				return mkLambda(t.cdr.(*ConsCell), e)
 			}
 		}
 		// Functions / normal order of evaluation.  Get function to use first:
@@ -238,7 +238,10 @@ func evDefn(args *ConsCell, e *env) (Sexpr, error) {
 	if args == Nil {
 		return nil, fmt.Errorf("defn requires an argument list")
 	}
-	fn := mkLambda(args, e)
+	fn, err := mkLambda(args, e)
+	if err != nil {
+		return nil, err
+	}
 	e.Set(name.s, fn)
 	return Nil, nil
 }

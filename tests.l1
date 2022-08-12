@@ -104,7 +104,19 @@
 
   (errors '(division by zero) ((lambda ()
                                  1
-                                 (/ 1 0)))))
+                                 (/ 1 0))))
+  (is (= 1 ((lambda (a b c d) d)
+            4 3 2 1)))
+  ;; rest args / n-ary lambdas
+  ;; (is (= (list 2 3 4) ((lambda (a . d) d)
+  ;;                      1 2 3 4)))
+
+
+  (errors '(requires an argument list) (lambda 3))
+  (errors '(argument list item is not an atom) (lambda (3)))
+  (errors '(argument list item is not an atom) (lambda (())))
+  ;; FIXME: add a check to eliminate `t` as an argument name
+  )
 
 (test '(defn)
   (defn foo ())
