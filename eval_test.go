@@ -72,8 +72,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(lambda (x))", "<lambda(x)>", OK))},
 		{Cases(S("&", "", "unexpected character '&'"))},
 		{ECases(S("((lambda (x . xs) (list x xs)) 1 2 3 4)", "(1 (2 3 4))", OK))},
-		// YAH failing case
-		// {Cases(S("(lambda (x . y))", "<lambda(x . y)>", OK))},
+		{Cases(S("(lambda (x . y))", "<lambda(x . y)>", OK))},
 		{Cases(S("(lambda (a b zz))", "<lambda(a b zz)>", OK))},
 		// Handling error cases, and `test` blocks:
 		{Cases(S("(errors)", "", "no error spec"))},

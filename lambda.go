@@ -51,14 +51,12 @@ top:
 }
 
 func (f *lambdaFn) String() string {
-	//restArgsRepr := ""
-	// if f.restArg != noRestArgs {
-	// 	restArgsRepr = "BOO" // fmt.Sprintf(" & %s", f.restArg)
-	// }
-	return fmt.Sprintf("<lambda(%s)>",
-		strings.Join(f.args, " "),
-	//	restArgsRepr
-	)
+	restArgsRepr := ""
+	if f.restArg != noRestArg {
+		restArgsRepr = fmt.Sprintf(" . %s", f.restArg)
+	}
+	return fmt.Sprintf("<lambda(%s%s)>",
+		strings.Join(f.args, " "), restArgsRepr)
 }
 
 func (f *lambdaFn) Equal(o Sexpr) bool {
