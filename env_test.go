@@ -22,4 +22,9 @@ func TestEnv(t *testing.T) {
 	assertVal(&child, "a", Num(1))
 	child.Set("b", Num(2))
 	assertVal(&child, "b", Num(2))
+
+	err := child.Set("t", Num(3))
+	if err == nil {
+		t.Errorf("expected error setting t")
+	}
 }

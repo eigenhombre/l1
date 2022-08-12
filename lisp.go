@@ -68,7 +68,10 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	if err != nil {
 		panic(err)
 	}
-	e.Set(name, val)
+	err = e.Set(name, val)
+	if err != nil {
+		return nil, err
+	}
 	return val, nil
 }
 
@@ -137,7 +140,10 @@ top:
 					if err != nil {
 						return nil, err
 					}
-					newEnv.Set(name, val)
+					err = newEnv.Set(name, val)
+					if err != nil {
+						return nil, err
+					}
 				}
 
 				var ret Sexpr = Nil
@@ -186,12 +192,28 @@ top:
 		lambda, ok := evalCar.(*lambdaFn)
 		if ok {
 			newEnv := mkEnv(lambda.env)
-			if len(lambda.args) != len(evaledList) {
+			if len(lambda.args) > len(evaledList) {
 				return nil, fmt.Errorf("wrong number of args: %d != %d",
 					len(lambda.args), len(evaledList))
 			}
 			for i, arg := range lambda.args {
-				newEnv.Set(arg, evaledList[i])
+				err = newEnv.Set(arg, evaledList[i])
+				if err != nil {
+					return nil, err
+				}
+
+			}
+			if len(lambda.args) < len(evaledList) {
+				if lambda.restArg == "" {
+					return nil, fmt.Errorf("wrong number of args: %d != %d",
+						len(lambda.args), len(evaledList))
+				}
+				err = newEnv.Set(lambda.restArg,
+					mkListAsConsWithCdr(evaledList[len(lambda.args):],
+						Nil))
+				if err != nil {
+					return nil, err
+				}
 			}
 			var ret Sexpr = Nil
 			for {
@@ -242,6 +264,9 @@ func evDefn(args *ConsCell, e *env) (Sexpr, error) {
 	if err != nil {
 		return nil, err
 	}
-	e.Set(name.s, fn)
+	err = e.Set(name.s, fn)
+	if err != nil {
+		return nil, err
+	}
 	return Nil, nil
 }

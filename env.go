@@ -42,8 +42,12 @@ func (e *env) Lookup(s string) (Sexpr, bool) {
 }
 
 // Set sets the value of a symbol in an environment.
-func (e *env) Set(s string, v Sexpr) {
+func (e *env) Set(s string, v Sexpr) error {
+	if s == "t" {
+		return fmt.Errorf("cannot bind or set t")
+	}
 	e.syms[s] = v
+	return nil
 }
 
 func (e *env) String() string {

@@ -600,7 +600,10 @@ func init() {
 							len(lambda.args), len(fnArgs))
 					}
 					for i, arg := range lambda.args {
-						newEnv.Set(arg, fnArgs[i])
+						err := newEnv.Set(arg, fnArgs[i])
+						if err != nil {
+							return nil, err
+						}
 					}
 					var ret Sexpr = Nil
 					for {
