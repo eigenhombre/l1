@@ -32,7 +32,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	bodyArgs := args.cdr.(*ConsCell)
 	for {
 		if bodyArgs == Nil {
-			return nil, fmt.Errorf("error not found")
+			return nil, fmt.Errorf("error not found in %s", args)
 		}
 		toEval := bodyArgs.car
 		_, err := eval(toEval, e)
@@ -201,10 +201,9 @@ top:
 				if err != nil {
 					return nil, err
 				}
-
 			}
-			if len(lambda.args) < len(evaledList) {
-				if lambda.restArg == "" {
+			if len(lambda.args) < len(evaledList) || (len(lambda.args) == 0 && len(evaledList) == 0) {
+				if lambda.restArg == "" && len(lambda.args) > 0 {
 					return nil, fmt.Errorf("wrong number of args: %d != %d",
 						len(lambda.args), len(evaledList))
 				}

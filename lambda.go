@@ -21,13 +21,18 @@ func mkLambda(cdr *ConsCell, e *env) (*lambdaFn, error) {
 	if !ok {
 		return nil, fmt.Errorf("lambda requires an argument list")
 	}
+	emptyArgList := false
 top:
-	for argList != Nil {
-		arg, ok := argList.car.(Atom)
-		if !ok {
-			return nil, fmt.Errorf("argument list item is not an atom")
+	for argList != Nil && !emptyArgList {
+		if argList.car == Nil {
+			emptyArgList = true
+		} else {
+			arg, ok := argList.car.(Atom)
+			if !ok {
+				return nil, fmt.Errorf("argument list item is not an atom")
+			}
+			args = append(args, arg.s)
 		}
-		args = append(args, arg.s)
 		switch t := argList.cdr.(type) {
 		case Atom:
 			restArg = t.s
@@ -38,6 +43,9 @@ top:
 			// I was unable to reach this with a test:
 			panic("unknown type in lambda arg list")
 		}
+	}
+	if emptyArgList && restArg == noRestArg {
+		return nil, fmt.Errorf("lambda with () argument requires a rest argument")
 	}
 	return &lambdaFn{args, restArg, cdr.cdr.(*ConsCell), e}, nil
 }
