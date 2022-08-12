@@ -75,6 +75,29 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	return val, nil
 }
 
+func evDefn(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires a function name")
+	}
+	name, ok := args.car.(Atom)
+	if !ok {
+		return nil, fmt.Errorf("defn name must be an atom")
+	}
+	args = args.cdr.(*ConsCell)
+	if args == Nil {
+		return nil, fmt.Errorf("defn requires an argument list")
+	}
+	fn, err := mkLambda(args, e)
+	if err != nil {
+		return nil, err
+	}
+	err = e.Set(name.s, fn)
+	if err != nil {
+		return nil, err
+	}
+	return Nil, nil
+}
+
 func eval(expr Sexpr, e *env) (Sexpr, error) {
 top:
 	switch t := expr.(type) {
@@ -192,24 +215,25 @@ top:
 		lambda, ok := evalCar.(*lambdaFn)
 		if ok {
 			newEnv := mkEnv(lambda.env)
-			if len(lambda.args) > len(evaledList) {
-				return nil, fmt.Errorf("wrong number of args: %d != %d",
-					len(lambda.args), len(evaledList))
-			}
-			for i, arg := range lambda.args {
-				err = newEnv.Set(arg, evaledList[i])
-				if err != nil {
-					return nil, err
-				}
-			}
-			if len(lambda.args) < len(evaledList) || (len(lambda.args) == 0 && len(evaledList) == 0) {
-				if lambda.restArg == "" && len(lambda.args) > 0 {
-					return nil, fmt.Errorf("wrong number of args: %d != %d",
-						len(lambda.args), len(evaledList))
+			if lambda.restArg != noRestArg {
+				if len(lambda.args) > len(evaledList) {
+					return nil, fmt.Errorf("not enough arguments for function")
 				}
 				err = newEnv.Set(lambda.restArg,
 					mkListAsConsWithCdr(evaledList[len(lambda.args):],
 						Nil))
+				if err != nil {
+					return nil, err
+				}
+			} else {
+				if len(lambda.args) < len(evaledList) {
+					return nil, fmt.Errorf("too many arguments for function")
+				} else if len(lambda.args) > len(evaledList) {
+					return nil, fmt.Errorf("not enough arguments for function")
+				}
+			}
+			for i, arg := range lambda.args {
+				err := newEnv.Set(arg, evaledList[i])
 				if err != nil {
 					return nil, err
 				}
@@ -245,27 +269,4 @@ top:
 	default:
 		panic(fmt.Sprintf("unknown type to eval: %T", t))
 	}
-}
-
-func evDefn(args *ConsCell, e *env) (Sexpr, error) {
-	if args == Nil {
-		return nil, fmt.Errorf("defn requires a function name")
-	}
-	name, ok := args.car.(Atom)
-	if !ok {
-		return nil, fmt.Errorf("defn name must be an atom")
-	}
-	args = args.cdr.(*ConsCell)
-	if args == Nil {
-		return nil, fmt.Errorf("defn requires an argument list")
-	}
-	fn, err := mkLambda(args, e)
-	if err != nil {
-		return nil, err
-	}
-	err = e.Set(name.s, fn)
-	if err != nil {
-		return nil, err
-	}
-	return Nil, nil
 }
