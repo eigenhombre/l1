@@ -3,8 +3,6 @@ package main
 import (
 	"reflect"
 	"testing"
-
-	"github.com/eigenhombre/lexutil"
 )
 
 func TestNumberStrings(T *testing.T) {
@@ -36,6 +34,7 @@ func TestSexprStrings(T *testing.T) {
 		{Num("2"), "2"},
 		{Cons(Num(1), Cons(Num("2"), Nil)), "(1 2)"},
 		{Cons(Num(1), Cons(Num("2"), Cons(Num(3), Nil))), "(1 2 3)"},
+		{Cons(Num(1), Num(2)), "(1 . 2)"},
 		{Cons(
 			Cons(
 				Num(3),
@@ -55,43 +54,12 @@ func TestSexprStrings(T *testing.T) {
 	}
 }
 
-func TestFindMatchingParens(T *testing.T) {
-	LP := lexutil.LexItem{Typ: itemLeftParen, Val: "("}
-	RP := lexutil.LexItem{Typ: itemRightParen, Val: ")"}
-	A := lexutil.LexItem{Typ: itemAtom, Val: "A"}
-	N := lexutil.LexItem{Typ: itemNumber, Val: "1"}
-	I := func(i ...lexutil.LexItem) []lexutil.LexItem { return i }
-	var tests = []struct {
-		input      []lexutil.LexItem
-		begin, end int
-	}{
-		{I(LP, RP), 0, 1},
-		{I(LP, LP, RP, RP), 0, 3},
-		{I(LP, RP, LP, RP), 0, 1},
-		{I(LP, A, RP), 0, 2},
-		{I(LP, N, RP), 0, 2},
-		{I(LP, LP, A, RP, RP), 0, 4},
-		{I(LP, LP, A, RP, A, RP), 0, 5},
-		{I(LP, A, LP, A, RP, RP), 0, 5},
-	}
-	for _, test := range tests {
-		begin, end, err := balancedParenPoints(test.input)
-		if err != nil {
-			T.Errorf("%v: %v", test.input, err)
-		}
-		if begin != test.begin || end != test.end {
-			T.Errorf("balancedParenPoints(%v) = %d, %d, want %d, %d",
-				test.input, begin, end, test.begin, test.end)
-		}
-	}
-}
-
 func TestStrToSexprs(T *testing.T) {
 	S := func(xs ...Sexpr) []Sexpr {
 		return xs
 	}
 	L := func(xs ...Sexpr) Sexpr {
-		cons := mkListAsCons(xs)
+		cons := mkListAsConsWithCdr(xs, Nil)
 		return cons
 	}
 	A := func(s string) Atom {

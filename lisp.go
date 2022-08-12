@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"strings"
-
-	"github.com/eigenhombre/lexutil"
 )
 
 // Sexpr is a general-purpose data structure for representing
@@ -12,55 +10,6 @@ import (
 type Sexpr interface {
 	String() string
 	Equal(Sexpr) bool
-}
-
-// ConsCell is a cons cell.  Use Cons to create one.
-type ConsCell struct {
-	car Sexpr
-	cdr Sexpr
-}
-
-// Nil is the empty list / cons cell.  Cons with Nil to create a list
-// of one item.
-var Nil *ConsCell = nil
-
-func (c *ConsCell) String() string {
-	ret := "("
-	for car := c; car != Nil; car = car.cdr.(*ConsCell) {
-		ret += car.car.String()
-		if car.cdr != Nil {
-			ret += " "
-		}
-	}
-	return ret + ")"
-}
-
-// Cons creates a cons cell.
-func Cons(i Sexpr, cdr Sexpr) *ConsCell {
-	return &ConsCell{i, cdr}
-}
-
-// Equal returns true iff the two S-expressions are equal cons-wise
-func (c *ConsCell) Equal(o Sexpr) bool {
-	_, ok := o.(*ConsCell)
-	if !ok {
-		return false
-	}
-	if c == Nil {
-		return o == Nil
-	}
-	if o == Nil {
-		return c == Nil
-	}
-	return c.car.Equal(o.(*ConsCell).car) && c.cdr.Equal(o.(*ConsCell).cdr)
-}
-
-func stringFromList(l *ConsCell) string {
-	ret := []string{}
-	for ; l != Nil; l = l.cdr.(*ConsCell) {
-		ret = append(ret, l.car.String())
-	}
-	return strings.Join(ret, " ")
 }
 
 func evErrors(args *ConsCell, e *env) (Sexpr, error) {
@@ -292,21 +241,4 @@ func evDefn(args *ConsCell, e *env) (Sexpr, error) {
 	fn := mkLambda(args, e)
 	e.Set(name.s, fn)
 	return Nil, nil
-}
-
-func balancedParenPoints(tokens []lexutil.LexItem) (int, int, error) {
-	level := 0
-	start := 0
-	for i, token := range tokens[start:] {
-		switch token.Typ {
-		case itemLeftParen:
-			level++
-		case itemRightParen:
-			level--
-			if level == 0 {
-				return 0, i, nil
-			}
-		}
-	}
-	return 0, 0, fmt.Errorf("unbalanced parens")
 }

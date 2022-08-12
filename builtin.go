@@ -346,7 +346,7 @@ func init() {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("missing argument")
 				}
-				return Cons(args[0], args[1].(*ConsCell)), nil
+				return Cons(args[0], args[1]), nil
 			},
 		},
 		"atom": {
@@ -632,7 +632,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			Fn: func(args []Sexpr) (Sexpr, error) {
-				return mkListAsCons(args), nil
+				return mkListAsConsWithCdr(args, Nil), nil
 			},
 		},
 		"zero?": {
@@ -661,7 +661,7 @@ func init() {
 			NAry:       false,
 			Fn: func(args []Sexpr) (Sexpr, error) {
 				versionSexprs := semverAsExprs(version)
-				return mkListAsCons(versionSexprs), nil
+				return mkListAsConsWithCdr(versionSexprs, Nil), nil
 			},
 		},
 	}

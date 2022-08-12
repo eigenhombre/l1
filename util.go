@@ -2,11 +2,11 @@ package main
 
 import "fmt"
 
-func mkListAsCons(xs []Sexpr) *ConsCell {
+func mkListAsConsWithCdr(xs []Sexpr, cdr Sexpr) Sexpr {
 	if len(xs) == 0 {
-		return Nil
+		return cdr
 	}
-	return Cons(xs[0], mkListAsCons(xs[1:]))
+	return Cons(xs[0], mkListAsConsWithCdr(xs[1:], cdr))
 }
 
 func consToExprs(argList Sexpr) ([]Sexpr, error) {

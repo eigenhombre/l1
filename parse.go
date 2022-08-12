@@ -27,54 +27,28 @@ func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 			if i >= len(tokens) {
 				return nil, fmt.Errorf("unexpected end of input")
 			}
-			var quoted Sexpr
-			var delta int
-			// quoted and delta depend on whether the quoted expression is
-			// a list or an atom/num:
 			if tokens[i].Typ != itemLeftParen {
 				inner, err := parse(tokens[i : i+1])
 				if err != nil {
 					return nil, err
 				}
-				quoted = inner[0]
-				delta = 1
+				ret = append(ret, Cons(Atom{"quote"}, Cons(inner[0], Nil)))
+				i++
 			} else {
-				start, end, err := balancedParenPoints(tokens[i:])
+				inner, incr, err := parseList(tokens[i:])
 				if err != nil {
 					return nil, err
 				}
-				inner, err := parse(tokens[i+start+1 : i+end])
-				if err != nil {
-					return nil, err
-				}
-				quoted = mkListAsCons(inner)
-				delta = end - start + 1
+				ret = append(ret, Cons(Atom{"quote"}, Cons(inner, Nil)))
+				i += incr
 			}
-			i += delta
-			quoteList := []Sexpr{Atom{"quote"}}
-			quoteList = append(quoteList, quoted)
-			ret = append(ret, mkListAsCons(quoteList))
 		case itemLeftParen:
-			start, end, err := balancedParenPoints(tokens[i:])
+			item, incr, err := parseList(tokens[i:])
 			if err != nil {
 				return nil, err
 			}
-
-			// find '&' lexeme if it exists; ignore it
-			for j := start; j < end; j++ {
-				if tokens[i+j].Typ == itemDot {
-					fmt.Println("found rest sep")
-					end = j
-					break
-				}
-			}
-			// YAH / WIP
-			inner, err := parse(tokens[i+start+1 : i+end])
-			if err != nil {
-				return nil, err
-			}
-			ret = append(ret, mkListAsCons(inner))
-			i = i + end + 1
+			ret = append(ret, item)
+			i += incr
 		case itemRightParen:
 			return nil, fmt.Errorf("unexpected right paren")
 		default:
@@ -84,6 +58,70 @@ func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 	return ret, nil
 }
 
+// parseList is used when a list has been detected in a slice of tokens.
+func parseList(tokens []lexutil.LexItem) (Sexpr, int, error) {
+	chunkEnd, endTok, err := listChunk(tokens)
+	if err != nil {
+		return nil, 0, err
+	}
+	if endTok.Typ == itemDot {
+		carList, err := parse(tokens[1:chunkEnd])
+		if err != nil {
+			return nil, 0, err
+		}
+		chunk2End, err := dotChunk(tokens[chunkEnd:])
+		if err != nil {
+			return nil, 0, err
+		}
+		cdrList, err := parse(tokens[chunkEnd+1 : chunkEnd+chunk2End])
+		if err != nil {
+			return nil, 0, err
+		}
+		return mkListAsConsWithCdr(carList, cdrList[0]), chunkEnd + chunk2End + 1, nil
+	}
+	contents, err := parse(tokens[1:chunkEnd])
+	if err != nil {
+		return nil, 0, err
+	}
+	return mkListAsConsWithCdr(contents, Nil), chunkEnd + 1, nil
+}
+
 func lexAndParse(s string) ([]Sexpr, error) {
 	return parse(lexItems(s))
+}
+
+func listChunk(tokens []lexutil.LexItem) (int, lexutil.LexItem, error) {
+	level := 0
+	for i, token := range tokens {
+		switch token.Typ {
+		case itemLeftParen:
+			level++
+		case itemRightParen:
+			level--
+			if level == 0 {
+				return i, token, nil
+			}
+		case itemDot:
+			if level == 1 {
+				return i, token, nil
+			}
+		}
+	}
+	return 0, lexutil.LexItem{}, fmt.Errorf("unbalanced parens")
+}
+
+func dotChunk(tokens []lexutil.LexItem) (int, error) {
+	level := 1
+	for i, token := range tokens {
+		switch token.Typ {
+		case itemLeftParen:
+			level++
+		case itemRightParen:
+			level--
+			if level == 0 {
+				return i, nil
+			}
+		}
+	}
+	return 0, fmt.Errorf("unbalanced parens")
 }
