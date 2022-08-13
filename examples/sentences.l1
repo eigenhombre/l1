@@ -23,7 +23,9 @@
   (let ((s (sentence)))
     (let ((first (capitalize (car s)))
           (last (period (car (reverse s)))))
-      (cons first (reverse (cons last (cdr (reverse (cdr s)))))))))
+      (cons first
+            (reverse (cons last
+                           (cdr (reverse (cdr s)))))))))
 
 (defn dotimes (n f)
   (cond ((zero? n) ())
