@@ -33,3 +33,14 @@
 
 (dotimes 10 (lambda ()
               (printl (proper-sentence))))
+;;=>
+;; A ball saw a ball.
+;; The ball took a table.
+;; The woman took the man.
+;; A table hit the table.
+;; A woman liked a man.
+;; The woman saw a woman.
+;; A table took a woman.
+;; The ball saw the woman.
+;; The man hit the man.
+;; A man liked the table.
