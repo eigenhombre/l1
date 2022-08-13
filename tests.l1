@@ -174,10 +174,12 @@
   (errors '(expects a single argument)
     (fuse)))
 
-(test '(randigits)
+(test '(randomness)
   (is (= 1000 (len (randigits 1000))))
   (errors '(expects a single argument)
-    (randigits)))
+    (randigits))
+
+  (is (= 1 (randchoice (list 1 1 1 1 1)))))
 
 (test '(list function)
   (is (= '(1 2 3)
@@ -413,3 +415,13 @@
 
 (test '(version)
   (is (< 2 (len (version)))))
+
+(test '(alpha / word stuff)
+  (is (= 10 (len (randalpha 10))))
+  (is (= 1000 (len (split (fuse (randalpha 1000))))))
+  (is (= 'Capoeira (capitalize 'capoeira)))
+  (is (= 'KARATE (upcase 'kaRatE)))
+  (is (= 'break-dancing (downcase 'BREAK-dancing)))
+  (is (= 'Nope. (period (capitalize 'nope))))
+  (is (= 'Well, (comma (capitalize 'well))))
+  (is (= 'bang! (bang 'bang))))

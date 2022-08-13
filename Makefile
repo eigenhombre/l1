@@ -19,6 +19,7 @@ l1-tests: ${PROG}
 	./l1 examples/fact.l1
 	./l1 examples/fails.l1 && exit 1 || true
 	./l1 examples/primes.l1
+	./l1 examples/sentences.l1
 	./l1 examples/tco.l1
 
 lint:

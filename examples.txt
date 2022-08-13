@@ -23,12 +23,16 @@ Builtins and Special Forms:
         >=    1+     Return t if the arguments are in decreasing (or equal) order, () otherwise
      apply    2      Apply a function to a list of arguments
       atom    1      Return true if the argument is an atom, false otherwise
+      bang    1      Return a new atom with exclamation point added
+capitalize    1      Return a new atom with the first character capitalized
        car    1      Return the first element of a list
        cdr    1      Return a list with the first element removed
+     comma    1      Return a new atom with a comma at the end
       cond    0+     SPECIAL FORM: Conditional branching
       cons    2      Add an element to the front of a (possibly empty) list
        def    2      SPECIAL FORM: Set a value
       defn    2+     SPECIAL FORM: Create and name a function
+  downcase    1      Return a new atom with all characters in lower case
     errors    1+     SPECIAL FORM: Error checking (for tests)
       fuse    1      Fuse a list of numbers or atoms into a single atom
       help    0      Print this message
@@ -39,13 +43,18 @@ Builtins and Special Forms:
       list    0+     Return a list of the given arguments
       neg?    1      Return true if the (numeric) argument is negative, else ()
        not    1      Return t if the argument is nil, () otherwise
+    period    1      Return a new atom with a period added to the end
       pos?    1      Return true if the (numeric) argument is positive, else ()
      print    0+     Print the arguments
+    printl    1      Print a list argument, without parentheses
      quote    1      SPECIAL FORM: Quote an expression
+ randalpha    1      Return a list of random (English/Latin) alphabetic characters
+randchoice    1      Return a random element from a list
  randigits    1      Return a list of random digits of the given length
        rem    2      Return remainder when second arg divides first
      split    0      Split an atom or number into a list of single-digit numbers or single-character atoms
       test    0+     Establish a testing block (return last expression)
+    upcase    1      Return the uppercase version of the given atom
    version    0      Return the version of the interpreter
      zero?    1      Return t if the argument is zero, () otherwise
 > ^D

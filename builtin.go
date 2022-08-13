@@ -299,6 +299,114 @@ func init() {
 				}, args)
 			},
 		},
+		"apply": {
+			Name:       "apply",
+			Docstring:  "Apply a function to a list of arguments",
+			FixedArity: 2,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 2 {
+					return nil, fmt.Errorf("apply expects exactly two arguments")
+				}
+				fnArgs, err := consToExprs(args[1])
+				if err != nil {
+					return nil, err
+				}
+
+				// Note: what follows is very similar to the function evaluation
+				// logic in eval(), but TCO (goto) there makes it hard to DRY out with
+				// respect to what follows.
+
+				evalCar := args[0]
+				// User-defined functions:
+				lambda, ok := evalCar.(*lambdaFn)
+				if ok {
+					newEnv := mkEnv(lambda.env)
+					if len(lambda.args) != len(fnArgs) {
+						return nil, fmt.Errorf("wrong number of args: %d != %d",
+							len(lambda.args), len(fnArgs))
+					}
+					for i, arg := range lambda.args {
+						err := newEnv.Set(arg, fnArgs[i])
+						if err != nil {
+							return nil, err
+						}
+					}
+					var ret Sexpr = Nil
+					for {
+						if lambda.body == Nil {
+							return ret, nil
+						}
+						ret, err = eval(lambda.body.car, &newEnv)
+						if err != nil {
+							return nil, err
+						}
+						lambda.body = lambda.body.cdr.(*ConsCell)
+					}
+				}
+				// Built-in functions:
+				builtin, ok := evalCar.(*Builtin)
+				if !ok {
+					return nil, fmt.Errorf("%s is not a function", evalCar)
+				}
+				biResult, err := builtin.Fn(fnArgs)
+				if err != nil {
+					return nil, err
+				}
+				return biResult, nil
+			},
+		},
+		"atom": {
+			Name:       "atom",
+			Docstring:  "Return true if the argument is an atom, false otherwise",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				_, ok := args[0].(Atom)
+				if ok {
+					return Atom{"t"}, nil
+				}
+				return Nil, nil
+			},
+		},
+		"bang": {
+			Name:       "bang",
+			Docstring:  "Return a new atom with exclamation point added",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				a, ok := args[0].(Atom)
+				if !ok {
+					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
+				}
+				return Atom{a.s + "!"}, nil
+			},
+		},
+		"capitalize": {
+			Name:       "capitalize",
+			Docstring:  "Return a new atom with the first character capitalized",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("capitalize requires one argument")
+				}
+				a, ok := args[0].(Atom)
+				if !ok {
+					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
+				}
+				if len(a.s) == 0 {
+					return a, nil
+				}
+				return Atom{strings.ToUpper(a.s[:1]) + a.s[1:]}, nil
+			},
+		},
 		"car": {
 			Name:       "car",
 			Docstring:  "Return the first element of a list",
@@ -337,6 +445,22 @@ func init() {
 				return cdrCons.cdr, nil
 			},
 		},
+		"comma": {
+			Name:       "comma",
+			Docstring:  "Return a new atom with a comma at the end",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("comma requires one argument")
+				}
+				a, ok := args[0].(Atom)
+				if !ok {
+					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
+				}
+				return Atom{a.s + ","}, nil
+			},
+		},
 		"cons": {
 			Name:       "cons",
 			Docstring:  "Add an element to the front of a (possibly empty) list",
@@ -349,34 +473,20 @@ func init() {
 				return Cons(args[0], args[1]), nil
 			},
 		},
-		"atom": {
-			Name:       "atom",
-			Docstring:  "Return true if the argument is an atom, false otherwise",
+		"downcase": {
+			Name:       "downcase",
+			Docstring:  "Return a new atom with all characters in lower case",
 			FixedArity: 1,
 			NAry:       false,
 			Fn: func(args []Sexpr) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, fmt.Errorf("downcase requires one argument")
 				}
-				_, ok := args[0].(Atom)
-				if ok {
-					return Atom{"t"}, nil
+				a, ok := args[0].(Atom)
+				if !ok {
+					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
 				}
-				return Nil, nil
-			},
-		},
-		"print": {
-			Name:       "print",
-			Docstring:  "Print the arguments",
-			FixedArity: 0,
-			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
-				strArgs := []string{}
-				for _, arg := range args {
-					strArgs = append(strArgs, arg.String())
-				}
-				fmt.Println(strings.Join(strArgs, " "))
-				return Nil, nil
+				return Atom{strings.ToLower(a.s)}, nil
 			},
 		},
 		"help": {
@@ -404,19 +514,6 @@ func init() {
 				return args[0], nil
 			},
 		},
-		"test": {
-			Name:       "test",
-			Docstring:  "Establish a testing block (return last expression)",
-			FixedArity: 0,
-			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
-				if len(args) == 0 {
-					return Nil, nil
-				}
-				fmt.Println("TEST", args[0])
-				return args[len(args)-1], nil
-			},
-		},
 		"len": {
 			Name:       "len",
 			Docstring:  "Return the length of a list",
@@ -436,6 +533,85 @@ func init() {
 					list = list.cdr.(*ConsCell)
 				}
 				return Num(count), nil
+			},
+		},
+		"list": {
+			Name:       "list",
+			Docstring:  "Return a list of the given arguments",
+			FixedArity: 0,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				return mkListAsConsWithCdr(args, Nil), nil
+			},
+		},
+		"period": {
+			Name:       "period",
+			Docstring:  "Return a new atom with a period added to the end",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("period requires one argument")
+				}
+				a, ok := args[0].(Atom)
+				if !ok {
+					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
+				}
+				return Atom{a.s + "."}, nil
+			},
+		},
+		"print": {
+			Name:       "print",
+			Docstring:  "Print the arguments",
+			FixedArity: 0,
+			NAry:       true,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				strArgs := []string{}
+				for _, arg := range args {
+					strArgs = append(strArgs, arg.String())
+				}
+				fmt.Println(strings.Join(strArgs, " "))
+				return Nil, nil
+			},
+		},
+		"printl": {
+			Name:       "printl",
+			Docstring:  "Print a list argument, without parentheses",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				fmt.Println(args[0].String()[1 : len(args[0].String())-1])
+				return Nil, nil
+			},
+		},
+		"randalpha": {
+			Name:       "randalpha",
+			Docstring:  "Return a list of random (English/Latin) alphabetic characters",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+
+				if len(args) != 1 {
+					return nil, fmt.Errorf("randalpha expects a single argument")
+				}
+				if _, ok := args[0].(Number); !ok {
+					return nil, fmt.Errorf("randalpha expects an integer")
+				}
+				bigint, ok := args[0].(Number)
+				if !ok {
+					return nil, fmt.Errorf("randalpha expects an integer")
+				}
+				n := bigint.bi.Uint64()
+				r := rand.New(rand.NewSource(time.Now().UnixNano()))
+				chars := []rune("abcdefghijklmnopqrstuvwxyz")
+				ret := []Sexpr{}
+				for i := 0; i < int(n); i++ {
+					ret = append(ret, Atom{string(chars[r.Intn(len(chars))])})
+				}
+				return mkListAsConsWithCdr(ret, Nil), nil
 			},
 		},
 		"not": {
@@ -572,70 +748,53 @@ func init() {
 				return lon, nil
 			},
 		},
-		"apply": {
-			Name:       "apply",
-			Docstring:  "Apply a function to a list of arguments",
-			FixedArity: 2,
+		"randchoice": {
+			Name:       "randchoice",
+			Docstring:  "Return a random element from a list",
+			FixedArity: 1,
 			NAry:       false,
 			Fn: func(args []Sexpr) (Sexpr, error) {
-				if len(args) != 2 {
-					return nil, fmt.Errorf("apply expects exactly two arguments")
+				if len(args) != 1 {
+					return nil, fmt.Errorf("randchoice expects a single argument")
 				}
-				fnArgs, err := consToExprs(args[1])
+				exprs, err := consToExprs(args[0])
 				if err != nil {
 					return nil, err
 				}
-
-				// Note: what follows is very similar to the function evaluation
-				// logic in eval(), but TCO (goto) there makes it hard to DRY out with
-				// respect to what follows.
-
-				evalCar := args[0]
-				// User-defined functions:
-				lambda, ok := evalCar.(*lambdaFn)
-				if ok {
-					newEnv := mkEnv(lambda.env)
-					if len(lambda.args) != len(fnArgs) {
-						return nil, fmt.Errorf("wrong number of args: %d != %d",
-							len(lambda.args), len(fnArgs))
-					}
-					for i, arg := range lambda.args {
-						err := newEnv.Set(arg, fnArgs[i])
-						if err != nil {
-							return nil, err
-						}
-					}
-					var ret Sexpr = Nil
-					for {
-						if lambda.body == Nil {
-							return ret, nil
-						}
-						ret, err = eval(lambda.body.car, &newEnv)
-						if err != nil {
-							return nil, err
-						}
-						lambda.body = lambda.body.cdr.(*ConsCell)
-					}
+				if len(exprs) == 0 {
+					return nil, fmt.Errorf("randchoice expects a list")
 				}
-				// Built-in functions:
-				builtin, ok := evalCar.(*Builtin)
-				if !ok {
-					return nil, fmt.Errorf("%s is not a function", evalCar)
-				}
-				biResult, err := builtin.Fn(fnArgs)
-				if err != nil {
-					return nil, err
-				}
-				return biResult, nil
+				r := rand.New(rand.NewSource(time.Now().UnixNano()))
+				return exprs[r.Intn(len(exprs))], nil
 			},
 		},
-		"list": {
-			Name:       "list",
-			Docstring:  "Return a list of the given arguments",
+		"test": {
+			Name:       "test",
+			Docstring:  "Establish a testing block (return last expression)",
 			FixedArity: 0,
 			NAry:       true,
 			Fn: func(args []Sexpr) (Sexpr, error) {
-				return mkListAsConsWithCdr(args, Nil), nil
+				if len(args) == 0 {
+					return Nil, nil
+				}
+				fmt.Println("TEST", args[0])
+				return args[len(args)-1], nil
+			},
+		},
+		"upcase": {
+			Name:       "upcase",
+			Docstring:  "Return the uppercase version of the given atom",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("upcase expects a single argument")
+				}
+				a, ok := args[0].(Atom)
+				if !ok {
+					return nil, fmt.Errorf("upcase expects an atom")
+				}
+				return Atom{strings.ToUpper(a.s)}, nil
 			},
 		},
 		"zero?": {

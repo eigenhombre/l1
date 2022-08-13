@@ -69,14 +69,6 @@ func ignoreComment(l *lexutil.Lexer) {
 	}
 }
 
-var validAtomChars = ("0123456789abcdefghijklmnopqrstuvwxyz" +
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-	"+*/-_!=<>?[]{}$^")
-
-func isAtomChar(r rune) bool {
-	return strings.ContainsRune(validAtomChars, r)
-}
-
 func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 	for {
 		switch r := l.Next(); {
@@ -93,7 +85,7 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 			l.Emit(itemLeftParen)
 		case r == ')':
 			l.Emit(itemRightParen)
-		case isAtomChar(r):
+		case isAtomStart(r):
 			return lexAtom
 		case r == '\'':
 			l.Emit(itemForwardQuote)
@@ -105,8 +97,15 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 	}
 }
 
+var initialAtomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+*/-=_<>"
+var laterAtomChars = (initialAtomChars + "0123456789" + "!?$^.,")
+
+func isAtomStart(r rune) bool {
+	return strings.ContainsRune(initialAtomChars, r)
+}
 func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
-	l.AcceptRun(validAtomChars)
+	l.Accept(initialAtomChars)
+	l.AcceptRun(laterAtomChars)
 	l.Emit(itemAtom)
 	return lexStart
 }
