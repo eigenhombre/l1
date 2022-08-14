@@ -196,7 +196,7 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
 
 Several core library functions are also implemented in `l1`.  The file
 [`l1.l1`](https://github.com/eigenhombre/l1/blob/master/l1.l1) contains these, and is evaluated when the interpreter starts.
-This currently runs quite quickly (eight milliseconds).
+This currently runs quite quickly (eight milliseconds on my Mac M1 Air).
 
 # Local Development
 
