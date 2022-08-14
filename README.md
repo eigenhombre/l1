@@ -193,6 +193,10 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
   (is (= 2568 (len (split (fact 1000))))))
 ```
 
+Several core library functions are also implemented in `l1`.  The file
+[`l1.l1`](https://github.com/eigenhombre/l1/blob/master/l1.l1) contains these, and is evaluated when the interpreter starts.
+This currently runs quite quickly (eight milliseconds).
+
 # Local Development
 
 Check out this repo and `cd` to it. Then,
