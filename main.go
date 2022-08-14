@@ -87,6 +87,10 @@ func main() {
 	}
 
 	globals := mkEnv(nil)
+	if !lexParseEval(rawCore, globals, false) {
+		fmt.Println("Failed to load l1 core library!")
+		os.Exit(1)
+	}
 	if len(os.Args) > 1 {
 		bytes, err := os.ReadFile(os.Args[1])
 		if err != nil {

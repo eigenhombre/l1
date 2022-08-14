@@ -25,16 +25,6 @@
 ;; test:
 ;; (prime? (fuse (randigits 100)))
 
-(defn concat (a b)
-  (cond ((not a) b)
-        (t (cons (car a)
-                 (concat (cdr a) b)))))
-
-(defn reverse (l)
-  (cond ((not l) ())
-        (t (concat (reverse (cdr l))
-                   (cons (car l) ())))))
-
 (defn helper (ret count n)
   (cond
    ((zero? count) (reverse ret))

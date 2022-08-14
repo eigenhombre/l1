@@ -8,7 +8,7 @@ all: deps test ${PROG} l1-tests lint doc
 deps:
 	go get .
 
-${PROG}: *.go
+${PROG}: *.go l1.l1
 	go build .
 
 test:

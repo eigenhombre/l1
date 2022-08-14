@@ -1,15 +1,5 @@
 ;; Adapted from Norvig, Paradigms of Artificial Intelligence
 ;; Programming, p. 36 (MIT License):
-(defn append (a b)
-  (cond ((not a) b)
-        (t (cons (car a)
-                 (append (cdr a) b)))))
-
-(defn reverse (l)
-  (cond ((not l) ())
-        (t (append (reverse (cdr l))
-                   (cons (car l) ())))))
-
 (defn one-of (l) (list (randchoice l)))
 
 (defn Noun () (one-of '(man ball woman table)))
@@ -26,10 +16,6 @@
       (cons first
             (reverse (cons last
                            (cdr (reverse (cdr s)))))))))
-
-(defn dotimes (n f)
-  (cond ((zero? n) ())
-        (t (let () (f) (dotimes (- n 1) f)))))
 
 (dotimes 10 (lambda ()
               (printl (proper-sentence))))

@@ -1,0 +1,52 @@
+;; pi x 10**100:
+(def pi100 (fuse '(31415926535897932384626433832795028
+                   84197169399375105820974944592307816
+                   406286208998628034825342117067)))
+
+(defn append (a b)
+  (cond ((not a) b)
+        (t (cons (car a)
+                 (append (cdr a) b)))))
+
+(defn reverse (l)
+  (cond ((not l) ())
+        (t (append (reverse (cdr l))
+                   (cons (car l) ())))))
+
+(defn dotimes (n f)
+  (cond ((zero? n) ())
+        (t (let () (f) (dotimes (- n 1) f)))))
+
+(defn inc (n) (+ n 1))
+
+(defn dec (n) (- n 1))
+
+(defn range-inner (n)
+  (cond ((= 1 n) (cons (dec n) ()))
+        (t (cons (dec n) (range-inner (dec n))))))
+
+(defn range (n)
+  (reverse (range-inner n)))
+
+(defn count (l)
+  (cond ((not l) 0)
+        (t (inc (len (cdr l))))))
+
+(defn nth (n l)
+  (cond ((zero? n) (car l))
+        (t (nth (dec n) (cdr l)))))
+
+(defn last (l)
+  (let ((len_ (len l)))
+    (nth (dec len_) l)))
+
+(defn take (n l)
+  (cond ((zero? n) ())
+        ((not l) ())
+        (t (cons (car l) (take (dec n) (cdr l))))))
+
+(defn drop (n l)
+  (cond ((zero? n) l)
+        ((not l) ())
+        (t (drop (dec n)
+                 (cdr l)))))
