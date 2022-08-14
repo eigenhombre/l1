@@ -4,11 +4,15 @@
                    406286208998628034825342117067)))
 
 (defn append (a b)
+  (doc (append two lists)
+       (example (= '(1 2 3 4) (append '(1 2) '(3 4)))))
   (cond ((not a) b)
         (t (cons (car a)
                  (append (cdr a) b)))))
 
 (defn reverse (l)
+  (doc (reverse a list)
+       (example (= '(c b a) (reverse '(a b c)))))
   (cond ((not l) ())
         (t (append (reverse (cdr l))
                    (cons (car l) ())))))

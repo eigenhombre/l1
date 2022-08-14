@@ -95,6 +95,7 @@ See the `examples` directory for more sample `l1` files.
           cons    2      Add an element to the front of a (possibly empty) list
            def    2      SPECIAL FORM: Set a value
           defn    2+     SPECIAL FORM: Create and name a function
+           doc    1      Return the doclist for a function
       downcase    1      Return a new atom with all characters in lower case
         errors    1+     SPECIAL FORM: Error checking (for tests)
           fuse    1      Fuse a list of numbers or atoms into a single atom

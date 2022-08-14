@@ -9,6 +9,7 @@ type lambdaFn struct {
 	args    []string
 	restArg string
 	body    *ConsCell
+	doc     *ConsCell
 	env     *env
 }
 
@@ -47,7 +48,21 @@ top:
 	if emptyArgList && restArg == noRestArg {
 		return nil, fmt.Errorf("lambda with () argument requires a rest argument")
 	}
-	return &lambdaFn{args, restArg, cdr.cdr.(*ConsCell), e}, nil
+	body := cdr.cdr.(*ConsCell)
+	// Find `doc` form and save it if found:
+	doc := Nil
+	if body != Nil {
+		doc2, ok := body.car.(*ConsCell)
+		if ok && doc2.car.Equal(Atom{"doc"}) {
+			doc = doc2.cdr.(*ConsCell)
+			body = body.cdr.(*ConsCell) // Skip `doc` part.
+		}
+	}
+	return &lambdaFn{args,
+		restArg,
+		body,
+		doc,
+		e}, nil
 }
 
 func (f *lambdaFn) String() string {

@@ -480,6 +480,22 @@ func init() {
 				return Cons(args[0], args[1]), nil
 			},
 		},
+		"doc": {
+			Name:       "doc",
+			Docstring:  "Return the doclist for a function",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				lambda, ok := args[0].(*lambdaFn)
+				if !ok {
+					return nil, fmt.Errorf("expected function, got '%s'", args[0])
+				}
+				return lambda.doc, nil
+			},
+		},
 		"downcase": {
 			Name:       "downcase",
 			Docstring:  "Return a new atom with all characters in lower case",
@@ -494,6 +510,41 @@ func init() {
 					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
 				}
 				return Atom{strings.ToLower(a.s)}, nil
+			},
+		},
+		"fuse": {
+			Name:       "fuse",
+			Docstring:  "Fuse a list of numbers or atoms into a single atom",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("fuse expects a single argument")
+				}
+				if args[0] == Nil {
+					return Nil, nil
+				}
+				switch s := args[0].(type) {
+				case *ConsCell:
+					cons := s
+					var str string
+					for cons != nil {
+						this := cons.car.String()
+						str += this
+						if cons.cdr == nil {
+							break
+						}
+						cons = cons.cdr.(*ConsCell)
+					}
+					// if first rune is a digit, return a Number
+					firstRune, _ := utf8.DecodeRuneInString(str)
+					if unicode.IsDigit(firstRune) {
+						return Num(str), nil
+					}
+					return Atom{str}, nil
+				default:
+					return nil, fmt.Errorf("fuse expects a list")
+				}
 			},
 		},
 		"help": {
@@ -549,6 +600,36 @@ func init() {
 			NAry:       true,
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return mkListAsConsWithCdr(args, Nil), nil
+			},
+		},
+		"list?": {
+			Name:       "list?",
+			Docstring:  "Return t if the argument is a list, () otherwise",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("list? expects a single argument")
+				}
+				if _, ok := args[0].(*ConsCell); ok {
+					return Atom{"t"}, nil
+				}
+				return Nil, nil
+			},
+		},
+		"not": {
+			Name:       "not",
+			Docstring:  "Return t if the argument is nil, () otherwise",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("not expects a single argument")
+				}
+				if args[0] == Nil {
+					return Atom{"t"}, nil
+				}
+				return Nil, nil
 			},
 		},
 		"period": {
@@ -621,21 +702,6 @@ func init() {
 				return mkListAsConsWithCdr(ret, Nil), nil
 			},
 		},
-		"not": {
-			Name:       "not",
-			Docstring:  "Return t if the argument is nil, () otherwise",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("not expects a single argument")
-				}
-				if args[0] == Nil {
-					return Atom{"t"}, nil
-				}
-				return Nil, nil
-			},
-		},
 		"split": {
 			Name:      "split",
 			Docstring: "Split an atom or number into a list of single-digit numbers or single-character atoms",
@@ -651,56 +717,6 @@ func init() {
 				default:
 					return nil, fmt.Errorf("split expects an atom or a number")
 				}
-			},
-		},
-		"fuse": {
-			Name:       "fuse",
-			Docstring:  "Fuse a list of numbers or atoms into a single atom",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("fuse expects a single argument")
-				}
-				if args[0] == Nil {
-					return Nil, nil
-				}
-				switch s := args[0].(type) {
-				case *ConsCell:
-					cons := s
-					var str string
-					for cons != nil {
-						this := cons.car.String()
-						str += this
-						if cons.cdr == nil {
-							break
-						}
-						cons = cons.cdr.(*ConsCell)
-					}
-					// if first rune is a digit, return a Number
-					firstRune, _ := utf8.DecodeRuneInString(str)
-					if unicode.IsDigit(firstRune) {
-						return Num(str), nil
-					}
-					return Atom{str}, nil
-				default:
-					return nil, fmt.Errorf("fuse expects a list")
-				}
-			},
-		},
-		"list?": {
-			Name:       "list?",
-			Docstring:  "Return t if the argument is a list, () otherwise",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("list? expects a single argument")
-				}
-				if _, ok := args[0].(*ConsCell); ok {
-					return Atom{"t"}, nil
-				}
-				return Nil, nil
 			},
 		},
 		"number?": {
@@ -796,7 +812,11 @@ func init() {
 				if len(args) == 0 {
 					return Nil, nil
 				}
-				fmt.Println("TEST", args[0])
+				fmt.Printf("TEST %s ", args[0].String())
+				for range args[1:] {
+					fmt.Print(".")
+				}
+				fmt.Println("✓")
 				return args[len(args)-1], nil
 			},
 		},
