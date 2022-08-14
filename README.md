@@ -85,7 +85,7 @@ See the `examples` directory for more sample `l1` files.
              >    1+     Return t if the arguments are in strictly decreasing order, () otherwise
             >=    1+     Return t if the arguments are in decreasing (or equal) order, () otherwise
          apply    2      Apply a function to a list of arguments
-          atom    1      Return true if the argument is an atom, false otherwise
+         atom?    1      Return t if the argument is an atom, () otherwise
           bang    1      Return a new atom with exclamation point added
     capitalize    1      Return a new atom with the first character capitalized
            car    1      Return the first element of a list
@@ -104,8 +104,9 @@ See the `examples` directory for more sample `l1` files.
            len    1      Return the length of a list
            let    1+     SPECIAL FORM: Create a local scope
           list    0+     Return a list of the given arguments
-          neg?    1      Return true if the (numeric) argument is negative, else ()
+         list?    1      Return t if the argument is a list, () otherwise
            not    1      Return t if the argument is nil, () otherwise
+       number?    1      Return true if the argument is a number, else ()
         period    1      Return a new atom with a period added to the end
           pos?    1      Return true if the (numeric) argument is positive, else ()
          print    0+     Print the arguments
@@ -119,7 +120,37 @@ See the `examples` directory for more sample `l1` files.
           test    0+     Establish a testing block (return last expression)
         upcase    1      Return the uppercase version of the given atom
        version    0      Return the version of the interpreter
-         zero?    1      Return t if the argument is zero, () otherwise
+    
+    
+    Other available functions:
+    
+        **
+        append
+        caar
+        complement
+        constantly
+        count
+        dec
+        dotimes
+        drop
+        even?
+        filter
+        flatten
+        inc
+        last
+        map
+        neg?
+        nth
+        odd?
+        pi100
+        pos?
+        range
+        range-inner
+        remove
+        repeat
+        reverse
+        take
+        zero?
     > ^D
     $
 <!-- END EXAMPLES -->

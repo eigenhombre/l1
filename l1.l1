@@ -13,6 +13,10 @@
         (t (append (reverse (cdr l))
                    (cons (car l) ())))))
 
+(defn zero? (n) (= n 0))
+(defn neg? (n) (< n 0))
+(defn pos? (n) (< 0 n))
+
 (defn dotimes (n f)
   (cond ((zero? n) ())
         (t (let () (f) (dotimes (- n 1) f)))))
@@ -50,3 +54,43 @@
         ((not l) ())
         (t (drop (dec n)
                  (cdr l)))))
+
+(defn caar (l) (car (car l)))
+
+(defn complement (f)
+  ;; FIXME: n-ary? Need to fix `apply` to work w/ rest arguments.
+  (lambda (x)
+    (not (f x))))
+
+(defn even? (n) (zero? (rem n 2)))
+(def odd? (complement even?))
+
+(defn flatten (l)
+  (cond ((not l) ())
+        ((list? l)
+         (append (flatten (car l))
+                 (flatten (cdr l))))
+        (t (list l))))
+
+(defn constantly (x)
+  (lambda (() . _)
+    x))
+
+(defn repeat (n x)
+  (cond ((zero? n) ())
+        (t (cons x (repeat (dec n) x)))))
+
+(defn map (f l)
+  (cond ((not l) ())
+        (t (cons (f (car l))
+                 (map f (cdr l))))))
+
+(defn filter (f l)
+  (cond ((not l) ())
+        ((f (car l)) (cons (car l)
+                           (filter f (cdr l))))
+        (t (filter f (cdr l)))))
+
+(defn remove (f l) (filter (complement f) l))
+
+(defn ** (n m) (apply * (repeat m n)))

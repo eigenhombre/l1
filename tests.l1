@@ -27,7 +27,7 @@
     (errors '(is not a list) (len 3)))
 
   (errors '(missing argument) (cons))
-  (errors '(missing argument) (atom))
+  (errors '(expects a single argument) (atom?))
   (errors '(missing argument) (car))
   (errors '(not a list) (car t))
   (errors '(missing argument) (cdr))
@@ -42,11 +42,18 @@
   (is (= 2 (cdr '(1 . 2))))
   (is (= '((1) . 2) (cons '(1) 2))))
 
-(test '(atom)
-  (is (atom (quote foo)))
-  (is (not (atom (quote (foo bar)))))
-  (is (atom (quote atom)))
-  (is (not (atom atom))))
+(test '(types)
+  (is (atom? (quote foo)))
+  (is (not (atom? (quote (foo bar)))))
+  (is (atom? (quote atom?)))
+  (is (not (atom? atom?)))
+  (is (not (number? 'a)))
+  (is (number? 3))
+  (is (not (list? 'a)))
+  (is (list? ()))
+  (is (list (range 3)))
+  (is (not (atom? '(jack))))
+  (is (atom? 'a)))
 
 (test '(equality)
   (is (= t t))
@@ -221,8 +228,8 @@
   (is (not (pos? 0)))
   (is (pos? 1))
   (is (neg? -1))
-  (errors '(expects a single argument) (pos?))
-  (errors '(expects a single argument) (pos? 1 1))
+  (errors '(not enough arguments) (pos?))
+  (errors '(too many arguments) (pos? 1 1))
   (errors '(is not a number) (pos? 'one)))
 
 (test '(inequalities <= < > >=)
@@ -434,9 +441,36 @@
   (is (= 1000 (len (range 1000))))
   (is (zero? (car (range 5))))
   (is (= 4 (last (range 5))))
+
   (is (= 'abc (fuse (take 3 (split 'abcdefg)))))
   (is (= (range 10) (take 10 (range 100))))
   (is (= (range 3) (take 10 (range 3))))
   (is (= (range 10) (drop 0 (range 10))))
   (is (= '(5 6 7 8 9) (drop 5 (range 10))))
-  (is (= () (drop 1000 (range 10)))))
+  (is (= () (drop 1000 (range 10))))
+
+  (is (= 1 (caar '((1 2) (3 4)))))
+
+  (is (even? 2))
+  (is (even? 2000))
+  (is (odd? 3))
+  (is (odd? 2001))
+  (is ((complement odd?) 2))
+
+  (is (= () (flatten '(()))))
+  (is (= (split 'abcdefgh) (flatten '(a b (c d (e f) g h)))))
+
+  (is (= 3 ((constantly 3))))
+  (is (= 3 ((constantly 3) '(ignore me))))
+
+  (is (= '(t t t t t))) (repeat 5 t)
+
+  (is (= '(1 2 3 4 5)
+         (map inc (range 5))))
+
+  (is (= 1024 (** 2 10)))
+  (is (= 10000000000 (** 10 10)))
+  (is (= 18446744073709551616 (** 2 64)))
+
+  (is (= '(0 2 4) (filter even? (range 5))))
+  (is (= '(1 3))) (remove even? (range 5)))

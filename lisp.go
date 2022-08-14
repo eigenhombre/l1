@@ -269,7 +269,7 @@ top:
 		if !ok {
 			return nil, fmt.Errorf("%s is not a function", evalCar)
 		}
-		biResult, err := builtin.Fn(evaledList)
+		biResult, err := builtin.Fn(evaledList, e)
 		if err != nil {
 			return nil, err
 		}

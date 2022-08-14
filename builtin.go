@@ -17,7 +17,7 @@ import (
 // Builtin represents a function with a native (Go) implementation.
 type Builtin struct {
 	Name string
-	Fn   func([]Sexpr) (Sexpr, error)
+	Fn   func([]Sexpr, *env) (Sexpr, error)
 	// Function must take at least this many arguments
 	FixedArity int
 	// Function can take more arguments
@@ -43,7 +43,7 @@ func (b Builtin) Equal(o Sexpr) bool {
 	return false
 }
 
-func doHelp(out io.Writer) {
+func doHelp(out io.Writer, e *env) {
 	fmt.Fprintln(out, "Builtins and Special Forms:")
 	fmt.Fprintln(out, "      Name  Arity    Description")
 	type fnDoc struct {
@@ -94,6 +94,14 @@ func doHelp(out io.Writer) {
 			special,
 			form.doc)
 	}
+	lambdas := EnvKeys(e)
+	sort.Slice(lambdas, func(i, j int) bool {
+		return lambdas[i] < lambdas[j]
+	})
+	fmt.Fprint(out, "\n\nOther available functions:\n\n")
+	for _, lambda := range lambdas {
+		fmt.Fprintf(out, "    %s\n", lambda)
+	}
 }
 
 func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error) {
@@ -128,7 +136,7 @@ func init() {
 			Docstring:  "Add 0 or more numbers",
 			FixedArity: 0,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Num(0), nil
 				}
@@ -148,7 +156,7 @@ func init() {
 			Docstring:  "Subtract 0 or more numbers from the first argument",
 			FixedArity: 1,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -174,7 +182,7 @@ func init() {
 			Docstring:  "Multiply 0 or more numbers",
 			FixedArity: 0,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Num(1), nil
 				}
@@ -194,7 +202,7 @@ func init() {
 			Docstring:  "Divide the first argument by the rest",
 			FixedArity: 2,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) < 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -220,7 +228,7 @@ func init() {
 			Docstring:  "Return t if the arguments are equal, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) < 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -237,7 +245,7 @@ func init() {
 			Docstring:  "Return remainder when second arg divides first",
 			FixedArity: 2,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("rem requires two arguments")
 				}
@@ -260,7 +268,7 @@ func init() {
 			Docstring:  "Return t if the arguments are in strictly increasing order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.Less(a)
 				}, args)
@@ -271,7 +279,7 @@ func init() {
 			Docstring:  "Return t if the arguments are in increasing (or qual) order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.LessEqual(a)
 				}, args)
@@ -282,7 +290,7 @@ func init() {
 			Docstring:  "Return t if the arguments are in strictly decreasing order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.Greater(a)
 				}, args)
@@ -293,7 +301,7 @@ func init() {
 			Docstring:  "Return t if the arguments are in decreasing (or equal) order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.GreaterEqual(a)
 				}, args)
@@ -304,7 +312,7 @@ func init() {
 			Docstring:  "Apply a function to a list of arguments",
 			FixedArity: 2,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, env *env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("apply expects exactly two arguments")
 				}
@@ -349,24 +357,23 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("%s is not a function", evalCar)
 				}
-				biResult, err := builtin.Fn(fnArgs)
+				biResult, err := builtin.Fn(fnArgs, env)
 				if err != nil {
 					return nil, err
 				}
 				return biResult, nil
 			},
 		},
-		"atom": {
-			Name:       "atom",
-			Docstring:  "Return true if the argument is an atom, false otherwise",
+		"atom?": {
+			Name:       "atom?",
+			Docstring:  "Return t if the argument is an atom, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, fmt.Errorf("atom? expects a single argument")
 				}
-				_, ok := args[0].(Atom)
-				if ok {
+				if _, ok := args[0].(Atom); ok {
 					return Atom{"t"}, nil
 				}
 				return Nil, nil
@@ -377,7 +384,7 @@ func init() {
 			Docstring:  "Return a new atom with exclamation point added",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -393,7 +400,7 @@ func init() {
 			Docstring:  "Return a new atom with the first character capitalized",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("capitalize requires one argument")
 				}
@@ -412,7 +419,7 @@ func init() {
 			Docstring:  "Return the first element of a list",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -431,7 +438,7 @@ func init() {
 			Docstring:  "Return a list with the first element removed",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -450,7 +457,7 @@ func init() {
 			Docstring:  "Return a new atom with a comma at the end",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("comma requires one argument")
 				}
@@ -466,7 +473,7 @@ func init() {
 			Docstring:  "Add an element to the front of a (possibly empty) list",
 			FixedArity: 2,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -478,7 +485,7 @@ func init() {
 			Docstring:  "Return a new atom with all characters in lower case",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("downcase requires one argument")
 				}
@@ -494,8 +501,8 @@ func init() {
 			Docstring:  "Print this message",
 			FixedArity: 0,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
-				doHelp(os.Stdout)
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				doHelp(os.Stdout, e)
 				return Nil, nil
 			},
 		},
@@ -504,7 +511,7 @@ func init() {
 			Docstring:  "Assert that the argument is truthy (not ())",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -519,7 +526,7 @@ func init() {
 			Docstring:  "Return the length of a list",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("len expects a single argument")
 				}
@@ -540,7 +547,7 @@ func init() {
 			Docstring:  "Return a list of the given arguments",
 			FixedArity: 0,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return mkListAsConsWithCdr(args, Nil), nil
 			},
 		},
@@ -549,7 +556,7 @@ func init() {
 			Docstring:  "Return a new atom with a period added to the end",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("period requires one argument")
 				}
@@ -565,7 +572,7 @@ func init() {
 			Docstring:  "Print the arguments",
 			FixedArity: 0,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				strArgs := []string{}
 				for _, arg := range args {
 					strArgs = append(strArgs, arg.String())
@@ -579,7 +586,7 @@ func init() {
 			Docstring:  "Print a list argument, without parentheses",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
@@ -592,7 +599,7 @@ func init() {
 			Docstring:  "Return a list of random (English/Latin) alphabetic characters",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 
 				if len(args) != 1 {
 					return nil, fmt.Errorf("randalpha expects a single argument")
@@ -619,7 +626,7 @@ func init() {
 			Docstring:  "Return t if the argument is nil, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("not expects a single argument")
 				}
@@ -632,7 +639,7 @@ func init() {
 		"split": {
 			Name:      "split",
 			Docstring: "Split an atom or number into a list of single-digit numbers or single-character atoms",
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("split expects a single argument")
 				}
@@ -651,7 +658,7 @@ func init() {
 			Docstring:  "Fuse a list of numbers or atoms into a single atom",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("fuse expects a single argument")
 				}
@@ -681,20 +688,32 @@ func init() {
 				}
 			},
 		},
-		"neg?": {
-			Name:       "neg?",
-			Docstring:  "Return true if the (numeric) argument is negative, else ()",
+		"list?": {
+			Name:       "list?",
+			Docstring:  "Return t if the argument is a list, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("neg? expects a single argument")
+					return nil, fmt.Errorf("list? expects a single argument")
 				}
-				num, ok := args[0].(Number)
-				if !ok {
-					return nil, fmt.Errorf("'%s' is not a number", args[0])
+				if _, ok := args[0].(*ConsCell); ok {
+					return Atom{"t"}, nil
 				}
-				if num.Less(Num(0)) {
+				return Nil, nil
+			},
+		},
+		"number?": {
+			Name:       "number?",
+			Docstring:  "Return true if the argument is a number, else ()",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("number? expects a single argument")
+				}
+				_, ok := args[0].(Number)
+				if ok {
 					return Atom{"t"}, nil
 				}
 				return Nil, nil
@@ -705,7 +724,7 @@ func init() {
 			Docstring:  "Return true if the (numeric) argument is positive, else ()",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("pos? expects a single argument")
 				}
@@ -724,7 +743,7 @@ func init() {
 			Docstring:  "Return a list of random digits of the given length",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("randigits expects a single argument")
 				}
@@ -753,7 +772,7 @@ func init() {
 			Docstring:  "Return a random element from a list",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("randchoice expects a single argument")
 				}
@@ -773,7 +792,7 @@ func init() {
 			Docstring:  "Establish a testing block (return last expression)",
 			FixedArity: 0,
 			NAry:       true,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Nil, nil
 				}
@@ -786,7 +805,7 @@ func init() {
 			Docstring:  "Return the uppercase version of the given atom",
 			FixedArity: 1,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("upcase expects a single argument")
 				}
@@ -797,31 +816,12 @@ func init() {
 				return Atom{strings.ToUpper(a.s)}, nil
 			},
 		},
-		"zero?": {
-			Name:       "zero?",
-			Docstring:  "Return t if the argument is zero, () otherwise",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("zero? expects a single argument")
-				}
-				num, ok := args[0].(Number)
-				if !ok {
-					return Nil, nil
-				}
-				if num.Equal(Num("0")) {
-					return Atom{"t"}, nil
-				}
-				return Nil, nil
-			},
-		},
 		"version": {
 			Name:       "version",
 			Docstring:  "Return the version of the interpreter",
 			FixedArity: 0,
 			NAry:       false,
-			Fn: func(args []Sexpr) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				versionSexprs := semverAsExprs(version)
 				return mkListAsConsWithCdr(versionSexprs, Nil), nil
 			},
