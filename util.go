@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unicode"
+	"unicode/utf8"
+)
 
 func mkListAsConsWithCdr(xs []Sexpr, cdr Sexpr) Sexpr {
 	if len(xs) == 0 {
@@ -20,4 +24,9 @@ func consToExprs(argList Sexpr) ([]Sexpr, error) {
 		argList = cons.cdr
 	}
 	return args, nil
+}
+
+func capitalize(s string) string {
+	r, n := utf8.DecodeRuneInString(s)
+	return string(unicode.ToUpper(r)) + s[n:]
 }

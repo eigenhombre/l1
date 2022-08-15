@@ -43,6 +43,32 @@ func (b Builtin) Equal(o Sexpr) bool {
 	return false
 }
 
+func lambdaDescription(l lambdaFn) string {
+	if l.doc == Nil {
+		return "UNDOCUMENTED"
+	}
+	carDoc := l.doc.car.String()
+	shortDoc := carDoc[1 : len(carDoc)-1]
+	return shortDoc
+}
+
+func lambdaDocString(name string, e *env) string {
+	expr, _ := e.Lookup(name)
+	l, ok := expr.(*lambdaFn)
+	if !ok {
+		panic("should have gotten a lambda here")
+	}
+	isMultiArity := " "
+	if l.restArg != "" {
+		isMultiArity = "+"
+	}
+	argstr := fmt.Sprintf("%d%s", len(l.args), isMultiArity)
+	return fmt.Sprintf("%10s %5s     %s\n",
+		name,
+		argstr,
+		capitalize(lambdaDescription(*l)))
+}
+
 func doHelp(out io.Writer, e *env) {
 	fmt.Fprintln(out, "Builtins and Special Forms:")
 	fmt.Fprintln(out, "      Name  Arity    Description")
@@ -94,13 +120,20 @@ func doHelp(out io.Writer, e *env) {
 			special,
 			form.doc)
 	}
-	lambdas := EnvKeys(e)
-	sort.Slice(lambdas, func(i, j int) bool {
-		return lambdas[i] < lambdas[j]
+	lambdaNames := []string{}
+	for _, name := range EnvKeys(e) {
+		expr, _ := e.Lookup(name)
+		if _, ok := expr.(*lambdaFn); ok {
+			lambdaNames = append(lambdaNames, name)
+		}
+	}
+	sort.Slice(lambdaNames, func(i, j int) bool {
+		return lambdaNames[i] < lambdaNames[j]
 	})
+
 	fmt.Fprint(out, "\n\nOther available functions:\n\n")
-	for _, lambda := range lambdas {
-		fmt.Fprintf(out, "    %s\n", lambda)
+	for _, lambdaName := range lambdaNames {
+		fmt.Fprint(out, lambdaDocString(lambdaName, e))
 	}
 }
 
@@ -703,8 +736,10 @@ func init() {
 			},
 		},
 		"split": {
-			Name:      "split",
-			Docstring: "Split an atom or number into a list of single-digit numbers or single-character atoms",
+			Name:       "split",
+			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
+			FixedArity: 1,
+			NAry:       false,
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("split expects a single argument")

@@ -5,9 +5,9 @@
 (defn Noun () (one-of '(man ball woman table)))
 (defn Verb () (one-of '(hit took saw liked)))
 (defn Article () (one-of '(the a)))
-(defn noun-phrase () (append (Article) (Noun)))
-(defn verb-phrase () (append (Verb) (noun-phrase)))
-(defn sentence () (append (noun-phrase) (verb-phrase)))
+(defn noun-phrase () (concat (Article) (Noun)))
+(defn verb-phrase () (concat (Verb) (noun-phrase)))
+(defn sentence () (concat (noun-phrase) (verb-phrase)))
 
 (defn proper-sentence ()
   (let ((s (sentence)))
