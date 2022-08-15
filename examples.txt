@@ -24,7 +24,6 @@ Builtins and Special Forms:
      apply    2      Apply a function to a list of arguments
      atom?    1      Return t if the argument is an atom, () otherwise
       bang    1      Return a new atom with exclamation point added
-capitalize    1      Return a new atom with the first character capitalized
        car    1      Return the first element of a list
        cdr    1      Return a list with the first element removed
      comma    1      Return a new atom with a comma at the end
@@ -50,9 +49,7 @@ capitalize    1      Return a new atom with the first character capitalized
      print    0+     Print the arguments
     printl    1      Print a list argument, without parentheses
      quote    1      SPECIAL FORM: Quote an expression
- randalpha    1      Return a list of random (English/Latin) alphabetic characters
-randchoice    1      Return a random element from a list
- randigits    1      Return a list of random digits of the given length
+   randint    1      Return a random integer between 0 and the argument minus 1
        rem    2      Return remainder when second arg divides first
      split    1      Split an atom or number into a list of single-digit numbers or single-character atoms
       test    0+     Establish a testing block (return last expression)
@@ -64,7 +61,9 @@ Other available functions:
 
         **    2      Exponentiation operator
    __range    1      Deprecated, used internally
+   butlast    1      Return everything but the last element
       caar    1      First element of the first element of a list of lists
+capitalize    1      Return the atom argument, capitalized
 complement    1      Return the logical complement of the supplied function
     concat    2      Concatenate two lists
 constantly    1      Given a value, return a function which always returns that value
@@ -72,6 +71,7 @@ constantly    1      Given a value, return a function which always returns that 
    dotimes    2      Run the supplied function n times
       drop    2      Drop n items from a list, then return the rest
      even?    1      Return true if the supplied integer argument is even
+ exclaimed    1      Return l as a sentence... emphasized!
     filter    2      Keep only values for which function f is true
    flatten    1      Return a (possibly nested) list, flattened
        inc    1      Return the supplied integer argument, plus one
@@ -81,11 +81,17 @@ constantly    1      Given a value, return a function which always returns that 
        nth    2      Find the nth value of a list, starting from zero
       odd?    1      Return true if the supplied integer argument is odd
       pos?    1      Return true iff the supplied integer argument is greater than zero
+ punctuate    2      Return l capitalized, with punctuation determined by the supplied function
+ randalpha    1      Return a list of random (English/Latin/unaccented) alphabetic characters
+randchoice    1      Return an element at random from the supplied list
+ randigits    1      Return a random integer between 0 and the argument minus 1
      range    1      List of integers from 0 to n
     remove    2      Keep only values for which function f is false / the empty list
     repeat    2      Return a list of length n whose elements are all x
+repeatedly    2      Return a list of length n whose elements are made from calling f repeatedly
    reverse    1      Reverse a list
       take    2      Take up to n items from the supplied list
+tosentence    1      Return l as a sentence... capitalized, with a period at the end
      zero?    1      Return true iff the supplied argument is zero
 > ^D
 $

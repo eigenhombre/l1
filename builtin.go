@@ -7,7 +7,6 @@ import (
 	"os"
 	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -428,25 +427,6 @@ func init() {
 				return Atom{a.s + "!"}, nil
 			},
 		},
-		"capitalize": {
-			Name:       "capitalize",
-			Docstring:  "Return a new atom with the first character capitalized",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("capitalize requires one argument")
-				}
-				a, ok := args[0].(Atom)
-				if !ok {
-					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
-				}
-				if len(a.s) == 0 {
-					return a, nil
-				}
-				return Atom{strings.ToUpper(a.s[:1]) + a.s[1:]}, nil
-			},
-		},
 		"car": {
 			Name:       "car",
 			Docstring:  "Return the first element of a list",
@@ -708,33 +688,6 @@ func init() {
 				return Nil, nil
 			},
 		},
-		"randalpha": {
-			Name:       "randalpha",
-			Docstring:  "Return a list of random (English/Latin) alphabetic characters",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-
-				if len(args) != 1 {
-					return nil, fmt.Errorf("randalpha expects a single argument")
-				}
-				if _, ok := args[0].(Number); !ok {
-					return nil, fmt.Errorf("randalpha expects an integer")
-				}
-				bigint, ok := args[0].(Number)
-				if !ok {
-					return nil, fmt.Errorf("randalpha expects an integer")
-				}
-				n := bigint.bi.Uint64()
-				r := rand.New(rand.NewSource(time.Now().UnixNano()))
-				chars := []rune("abcdefghijklmnopqrstuvwxyz")
-				ret := []Sexpr{}
-				for i := 0; i < int(n); i++ {
-					ret = append(ret, Atom{string(chars[r.Intn(len(chars))])})
-				}
-				return mkListAsConsWithCdr(ret, Nil), nil
-			},
-		},
 		"split": {
 			Name:       "split",
 			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
@@ -789,53 +742,21 @@ func init() {
 				return Nil, nil
 			},
 		},
-		"randigits": {
-			Name:       "randigits",
-			Docstring:  "Return a list of random digits of the given length",
+		"randint": {
+			Name:       "randint",
+			Docstring:  "Return a random integer between 0 and the argument minus 1",
 			FixedArity: 1,
 			NAry:       false,
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("randigits expects a single argument")
+					return nil, fmt.Errorf("randint expects a single argument")
 				}
-				if _, ok := args[0].(Number); !ok {
-					return nil, fmt.Errorf("randigits expects a number")
-				}
-				bigint, ok := args[0].(Number)
+				num, ok := args[0].(Number)
 				if !ok {
-					return nil, fmt.Errorf("randigits expects a number")
-				}
-				n := bigint.bi.Uint64()
-				r := rand.New(rand.NewSource(time.Now().UnixNano()))
-				digits := ""
-				for i := uint64(0); i < n; i++ {
-					digits += strconv.Itoa(r.Intn(10))
-				}
-				lon, err := listOfNums(string(digits))
-				if err != nil {
-					return nil, err
-				}
-				return lon, nil
-			},
-		},
-		"randchoice": {
-			Name:       "randchoice",
-			Docstring:  "Return a random element from a list",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("randchoice expects a single argument")
-				}
-				exprs, err := consToExprs(args[0])
-				if err != nil {
-					return nil, err
-				}
-				if len(exprs) == 0 {
-					return nil, fmt.Errorf("randchoice expects a list")
+					return nil, fmt.Errorf("'%s' is not a number", args[0])
 				}
 				r := rand.New(rand.NewSource(time.Now().UnixNano()))
-				return exprs[r.Intn(len(exprs))], nil
+				return Num(r.Intn(int(num.bi.Uint64()))), nil
 			},
 		},
 		"test": {

@@ -206,7 +206,7 @@
 
 (test '(randomness)
   (is (= 1000 (len (randigits 1000))))
-  (errors '(expects a single argument)
+  (errors '(not enough arguments)
     (randigits))
 
   (is (= 1 (randchoice (list 1 1 1 1 1)))))
@@ -454,13 +454,19 @@
   (is (= 'break-dancing (downcase 'BREAK-dancing)))
   (is (= 'Nope. (period (capitalize 'nope))))
   (is (= 'Well, (comma (capitalize 'well))))
-  (is (= 'bang! (bang 'bang))))
+  (is (= 'bang! (bang 'bang)))
+  (is (= '(You.) (tosentence '(you))))
+  (is (= '(You hoo.) (tosentence '(you hoo))))
+  (is (= '(Boo hoo hoo.) (tosentence '(boo hoo hoo))))
+  (is (= '(Go away!) (exclaimed '(go away)))))
 
 (test '(core / l1 functions)
   (is (= () (reverse ())))
   (is (= 'apogee (fuse (reverse (split 'eegopa)))))
   (is (= '(1 2 3) (concat '(1 2 3) ())))
   (is (= '(1 2 3 4 5 6) (concat '(1 2 3) '(4 5 6))))
+  ;; FIXME: Make n-ary concat:
+  ;; (is (= '(1 2 3 4 5 6) (concat '(1 2) '(3 4) '(5 6))))
   (is (= 1000 (len (range 1000))))
   (is (zero? (car (range 5))))
   (is (= 4 (last (range 5))))

@@ -112,6 +112,11 @@
   (cond ((zero? n) ())
         (t (cons x (repeat (dec n) x)))))
 
+(defn repeatedly (n f)
+  (doc (return a list of length n whose elements are made from calling f repeatedly))
+  (cond ((zero? n) ())
+        (t (cons (f) (repeatedly (dec n) f)))))
+
 (defn map (f l)
   (doc (apply the supplied function to every element in the supplied list))
   (cond ((not l) ())
@@ -132,3 +137,44 @@
 (defn ** (n m)
   (doc (exponentiation operator))
   (apply * (repeat m n)))
+
+(defn capitalize (a)
+  (doc (return the atom argument, capitalized))
+  (let ((s (split a)))
+    (fuse (concat (map upcase (take 1 s))
+                  (drop 1 s)))))
+
+(defn randigits (n)
+  (doc (return a random integer between 0 and the argument minus 1))
+  (repeatedly n
+              (lambda () (randint 10))))
+
+(defn randchoice (l)
+  (doc (return an element at random from the supplied list))
+  (nth (randint (len l)) l))
+
+(defn randalpha (n)
+  (doc (return a list of random (English/Latin/unaccented) alphabetic characters))
+  (repeatedly n
+              (lambda ()
+                (randchoice (split 'abcdefghijklmnopqrstuvwxyz)))))
+
+(defn butlast (l)
+  (doc (return everything but the last element))
+  (take (dec (len l)) l))
+
+(defn punctuate (f l)
+  (doc (return l capitalized, with punctuation determined by the supplied function))
+  (cond ((not l) l)
+        ((= (len l) 1) (list (capitalize (f (car l)))))
+        (t (cons (capitalize (car l))
+                 (concat (cdr (butlast l))
+                         (list (f (last l))))))))
+
+(defn tosentence (l)
+  (doc (return l as a sentence... capitalized, with a period at the end))
+  (punctuate period l))
+
+(defn exclaimed (l)
+  (doc (return l as a sentence... emphasized!))
+  (punctuate bang l))
