@@ -133,7 +133,14 @@
   (= 3 ((lambda (a . l) (len l)) 0 1 2 3))
   (= 0 ((lambda (a . l) (len l)) 'hi))
   (= 3 ((lambda (() . l) (len l)) 1 2 3))
-  (= 0 ((lambda (() . l) (len l)))))
+  (= 0 ((lambda (() . l) (len l))))
+
+  ;; named lambdas:
+  (is (not ((lambda foo ()))))
+  (is (= 3 ((lambda count (l)
+              (cond (l (inc (count (cdr l))))
+                    (t 0)))
+            (range 3)))))
 
 (test '(defn)
   (defn foo ())
@@ -238,9 +245,10 @@
   (is (= 0 (apply + ())))
   (is (= 0 (apply + 0 ())))
   (is (= 10 (apply + 1 2 '(3 4))))
+  (is (= 362880 (apply * (cdr (range 10)))))
   (errors '(not enough arguments) (apply))
   (errors '(not enough arguments) (apply +))
-  (errors '(wrong number of args)
+  (errors '(too many arguments)
     (apply (lambda (x y) (= x y)) (split 123))))
 
 (test '(higher order functions)

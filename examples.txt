@@ -74,6 +74,7 @@ constantly    1      Given a value, return a function which always returns that 
  exclaimed    1      Return l as a sentence... emphasized!
     filter    2      Keep only values for which function f is true
    flatten    1      Return a (possibly nested) list, flattened
+  identity    1      Return the argument
        inc    1      Return the supplied integer argument, plus one
       last    1      Return the last item in a list
        map    2      Apply the supplied function to every element in the supplied list

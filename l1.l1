@@ -3,6 +3,10 @@
                    84197169399375105820974944592307816
                    406286208998628034825342117067)))
 
+(defn identity (x)
+  (doc (return the argument))
+  x)
+
 (defn concat (a b)
   (doc (concatenate two lists)
        (example (= '(1 2 3 4) (concat '(1 2) '(3 4)))))

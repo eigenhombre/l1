@@ -367,12 +367,21 @@ func init() {
 				lambda, ok := evalCar.(*lambdaFn)
 				if ok {
 					newEnv := mkEnv(lambda.env)
-					if len(lambda.args) != len(fnArgs) {
-						return nil, fmt.Errorf("wrong number of args: %d != %d",
-							len(lambda.args), len(fnArgs))
+					if len(lambda.args) > len(fnArgs) {
+						return nil, fmt.Errorf("not enough arguments")
 					}
 					for i, arg := range lambda.args {
 						err := newEnv.Set(arg, fnArgs[i])
+						if err != nil {
+							return nil, err
+						}
+					}
+					if len(lambda.args) < len(fnArgs) {
+						if lambda.restArg == "" {
+							return nil, fmt.Errorf("too many arguments")
+						}
+						err := newEnv.Set(lambda.restArg,
+							mkListAsConsWithCdr(fnArgs[len(lambda.args):], Nil))
 						if err != nil {
 							return nil, err
 						}
