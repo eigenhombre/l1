@@ -30,6 +30,14 @@ and then, for example,
 
     go install github.com/eigenhombre/l1@v0.0.9
 
+At this point you should be able to run `l1`:
+
+    $ l1 -h
+
+to print a help message, or, to start a REPL:
+
+    $ l1
+
 ## Usage
 
 To execute a file:
