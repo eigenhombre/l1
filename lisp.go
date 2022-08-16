@@ -131,7 +131,10 @@ top:
 					if pairList == Nil {
 						return Nil, nil
 					}
-					pair := pairList.car.(*ConsCell)
+					pair, ok := pairList.car.(*ConsCell)
+					if !ok || pair == Nil {
+						return nil, fmt.Errorf("cond requires a list of pairs")
+					}
 					ev, err := eval(pair.car, e)
 					if err != nil {
 						return nil, err
@@ -141,7 +144,11 @@ top:
 						continue
 					}
 					// TAIL CALL!!!
-					expr = pair.cdr.(*ConsCell).car
+					cdrCons, ok := pair.cdr.(*ConsCell)
+					if !ok || cdrCons == Nil {
+						return nil, fmt.Errorf("cond requires a list of pairs")
+					}
+					expr = cdrCons.car
 					goto top
 				}
 			case carAtom.s == "def":

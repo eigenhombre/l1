@@ -94,6 +94,8 @@
 
   (is (= t (cond (t t) ((-) t))))
 
+  (errors '(requires a list of pairs) (cond ()))
+  (errors '(requires a list of pairs) (cond (t)))
   (errors '(missing argument) (cond ((-) t)))
   (errors '(missing argument) (cond (t (-))))
   (errors '(missing argument) (cond (() t) ((-) t)))
@@ -230,14 +232,14 @@
   (is (= t (apply (lambda (x y) (= x y)) (split 11))))
   (is (= () (apply (lambda (x y z) (= x y z)) (split 121))))
 
-  (is (= 12
-         (apply (lambda (x y z) (+ x y z))
-                (list (+ 1 1) (+ 2 2) (+ 3 3)))))
+  (is (= 12 (apply (lambda (x y z) (+ x y z))
+                   (list (+ 1 1) (+ 2 2) (+ 3 3)))))
 
-  (errors '(expects exactly two arguments)
-    (apply))
-  (errors '(expects exactly two arguments)
-    (apply +))
+  (is (= 0 (apply + ())))
+  (is (= 0 (apply + 0 ())))
+  (is (= 10 (apply + 1 2 '(3 4))))
+  (errors '(not enough arguments) (apply))
+  (errors '(not enough arguments) (apply +))
   (errors '(wrong number of args)
     (apply (lambda (x y) (= x y)) (split 123))))
 
