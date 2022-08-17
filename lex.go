@@ -97,8 +97,8 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 	}
 }
 
-var initialAtomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+*/-=_<>"
-var laterAtomChars = (initialAtomChars + "0123456789" + "!?$^.,")
+var initialAtomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+*/-=_<>?"
+var laterAtomChars = (initialAtomChars + "0123456789" + "!$^.,")
 
 func isAtomStart(r rune) bool {
 	return strings.ContainsRune(initialAtomChars, r)

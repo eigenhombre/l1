@@ -8,15 +8,29 @@
   (cond ((list? x) x)
         (t (list x))))
 
+(defn variable? (a)
+  (and (atom? a)
+       (= (car (split a))
+          '?)))
+
+(is (variable? (quote ?x)))
+(is (not (variable? 'foo)))
+
 (defn cadr (l) (car (cdr l)))
 
-(assoc 'i
-       '((i . you)
-         (you . i)
-         (me . you)
-         (am . are)))
-(assoc 'am
-       '((i . you)
-         (you . i)
-         (me . you)
-         (am . are)))
+(is (= '(i . you)
+       (assoc 'i
+              '((i . you)
+                (you . i)
+                (me . you)
+                (am . are)))))
+
+(is (= '(am . are)
+       (assoc 'am
+              '((i . you)
+                (you . i)
+                (me . you)
+                (am . are)))))
+
+;; to do next: sublis
+
