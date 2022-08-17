@@ -9,39 +9,6 @@
         (t (list x))))
 
 (defn cadr (l) (car (cdr l)))
-;; WIP...
-(defn mconcat (() . ls)
-  (cond ((not ls) ())
-        ((= 1 (len ls)) (car ls))
-        ((= 2 (len ls))
-         (let ((x (car ls))
-               (y (cadr ls)))
-           (cond (x (cons (car x) (mconcat (cdr x) y)))
-                 (t y))))
-        (t (let ((x (car ls))
-                 (y (cadr ls))
-                 (zs (cdr (cdr ls)))
-                 (cat (lambda cat (xys zs)
-                        (cond (xys (cons (car xys)
-                                         (cat (cdr xys)
-                                              zs)))
-                              (t (cond (zs (cat (car zs)
-                                                (cdr zs)))))))))
-             (cat (mconcat x y) zs)))))
-
-(mconcat)
-(mconcat '(1 2))
-(mconcat '(1 2) '(3 4))
-(mconcat '(1 2) '(3 4) '(5 6))
-
-(apply concat '((1 2) (3 4)))
-(apply mconcat '((1 2) (3 4)))
-;; (apply mconcat '((1 2) (3 4) (5 6)))
-
-(defn mapcat (f l)
-  (apply mconcat (map f l)))
-
-(mapcat list (range 10))
 
 (assoc 'i
        '((i . you)
