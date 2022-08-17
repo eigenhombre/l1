@@ -21,6 +21,7 @@ Builtins and Special Forms:
          =    1+     Return t if the arguments are equal, () otherwise
          >    1+     Return t if the arguments are in strictly decreasing order, () otherwise
         >=    1+     Return t if the arguments are in decreasing (or equal) order, () otherwise
+       and    0+     SPECIAL FORM: Boolean and
      apply    2      Apply a function to a list of arguments
      atom?    1      Return t if the argument is an atom, () otherwise
       bang    1      Return a new atom with exclamation point added
@@ -45,6 +46,7 @@ Builtins and Special Forms:
      list?    1      Return t if the argument is a list, () otherwise
        not    1      Return t if the argument is nil, () otherwise
    number?    1      Return true if the argument is a number, else ()
+        or    0+     SPECIAL FORM: Boolean or
     period    1      Return a new atom with a period added to the end
       pos?    1      Return true if the (numeric) argument is positive, else ()
      print    0+     Print the arguments

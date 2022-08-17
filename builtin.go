@@ -86,6 +86,8 @@ func doHelp(out io.Writer, e *env) {
 		{"lambda", 1, true, "Create a function", true},
 		{"let", 1, true, "Create a local scope", true},
 		{"quote", 1, false, "Quote an expression", true},
+		{"and", 0, true, "Boolean and", true},
+		{"or", 0, true, "Boolean or", true},
 	}
 	for _, builtin := range builtins {
 		forms = append(
