@@ -1,3 +1,7 @@
+;; Adapted from P. Norvig, PAIP Chapter 5, which itself was adapted
+;; from Eliza, by Joseph Weizenbaum
+;; (https://en.wikipedia.org/wiki/ELIZA)
+
 (defn assoc (x pairs)
   (cond ((not pairs) ())
         ((= x (caar pairs))
@@ -30,6 +34,71 @@
   (tree-sub (lambda (x) (assoc-sub pairs x))
             l))
 
+(def fail ())
+(def no-bindings '((t . t)))
+
+(defn get-binding (var bindings)
+  (doc (Find a (variable . value) pair in a binding list))
+  (assoc var bindings))
+
+(defn binding-val (binding)
+  (doc (Get the value part of a single binding))
+  (cdr binding))
+
+(defn lookup (var bindings)
+  (doc (Get the value part (for var) from a binding list))
+  (binding-val (get-binding var bindings)))
+
+(defn extend-bindings (var val bindings)
+  (doc (Add a (var . value) pair to a binding list))
+  (cons (cons var val)
+        ;; Once we add a "real" binding,
+        ;; we can get rid of the dummy no-bindings:
+        (cond ((= bindings no-bindings) ())
+              (t bindings))))
+
+(defn match-variable (var input bindings)
+  (doc (Does VAR match input? Uses (or updates) and returns bindings))
+  (let ((binding (get-binding var bindings)))
+    (cond ((not binding) (extend-bindings var input bindings))
+          ((= input (binding-val binding)) bindings)
+          (t fail))))
+
+(defn pat-match (pattern input bindings)
+  (doc (Match pattern against input in the context of the bindings))
+  (cond ((= bindings fail) fail)
+        ((variable? pattern)
+         (match-variable pattern input bindings))
+        ((= pattern input) bindings)
+        ((and (list? pattern) (list? input))
+         (pat-match (cdr pattern)
+                    (cdr input)
+                    (pat-match (car pattern)
+                               (car input)
+                               bindings)))
+        (t fail)))
+
+(def *eliza-rules*
+     '((((?* ?x) hello (?* ?y))
+        (How do you do. Please state your problem.))
+       (((?* ?x) I want (?* ?y))
+        (What would it mean if you got ?y)
+        (Why do you want ?y) (Suppose you got ?y soon))
+       (((?* ?x) if (?* ?y))
+        (Do you really think its likely that ?y) (Do you wish that ?y)
+        (What do you think about ?y) (Really-- if ?y))
+       (((?* ?x) no (?* ?y))
+        (Why not?) (You are being a bit negative)
+        (Are you saying NO just to be negative?))
+       (((?* ?x) I was (?* ?y))
+        (Were you really?) (Perhaps I already knew you were ?y)
+        (Why do you tell me you were ?y now?))
+       (((?* ?x) I feel (?* ?y))
+        (Do you often feel ?y ?))
+       (((?* ?x) I felt (?* ?y))
+        (What other feelings do you have?))))
+
+;; TESTS -----------------------------------------------
 (test '(variable)
   (is (variable? (quote ?x)))
   (is (not (variable? 'foo))))
@@ -67,3 +136,29 @@
                  '(what would it mean to you
                         if you got a ?X
                         (or something better than a ?X) ?)))))
+
+(test '(pat-match)
+  (is (= '((?X . vacation))
+         (pat-match '(i need a ?X) '(i need a vacation)
+                    no-bindings)))
+  (is (not (pat-match '(i need a ?X)
+                      '(i really need a vacation)
+                      no-bindings)))
+  (is (= no-bindings
+         (pat-match '(this is easy) '(this is easy) no-bindings)))
+  (is (not (pat-match '(?X is ?X) '((2 + 2) is 4)
+                      no-bindings)))
+  (is (= '(what would it mean to you if you got a vacation ?)
+
+         (sublis (pat-match '(i need a ?X)
+                            '(i need a vacation)
+                            no-bindings)
+                 '(what would it mean to you if you got a ?X ?))))
+  (is (= '((?X 2 + 2))
+         (pat-match '(?X is ?X)
+                    '((2 + 2) is (2 + 2))
+                    no-bindings)))
+  (is (= '((?X a long vacation) (?P . i))
+         (pat-match '(?P need . ?X)
+                    '(i need a long vacation)
+                    no-bindings))))

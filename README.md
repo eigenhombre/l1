@@ -281,6 +281,10 @@ expressions to it.
 
 Copyright © 2022, John Jacobsen. MIT License.
 
+Some example code in `examples/` was adapted from P. Norvig,
+[Paradigms of Artificial Intelligence Programming: Case Studies in
+Common Lisp](https://github.com/norvig/paip-lisp). MIT License.
+
 # Disclaimer
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
