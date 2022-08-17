@@ -74,7 +74,7 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	name := args.car.(Atom).s
 	val, err := eval(args.cdr.(*ConsCell).car, e)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	err = e.Set(name, val)
 	if err != nil {

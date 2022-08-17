@@ -13,24 +13,57 @@
        (= (car (split a))
           '?)))
 
-(is (variable? (quote ?x)))
-(is (not (variable? 'foo)))
-
 (defn cadr (l) (car (cdr l)))
 
-(is (= '(i . you)
-       (assoc 'i
-              '((i . you)
-                (you . i)
-                (me . you)
-                (am . are)))))
+(defn assoc-sub (alist item)
+  (let ((match (assoc item alist)))
+    (cond (match (cdr match))
+          (t item))))
 
-(is (= '(am . are)
-       (assoc 'am
-              '((i . you)
-                (you . i)
-                (me . you)
-                (am . are)))))
+(defn tree-sub (f x)
+  (cond ((not x) ())
+        ((not (list? x)) (f x))
+        (t (cons (tree-sub f (car x))
+                 (tree-sub f (cdr x))))))
 
-;; to do next: sublis
+(defn sublis (pairs l)
+  (tree-sub (lambda (x) (assoc-sub pairs x))
+            l))
 
+(test '(variable)
+  (is (variable? (quote ?x)))
+  (is (not (variable? 'foo))))
+
+(test '(assoc)
+  (is (= '(i . you)
+         (assoc 'i
+                '((i . you)
+                  (you . i)
+                  (me . you)
+                  (am . are)))))
+  (is (= '(am . are)
+         (assoc 'am
+                '((i . you)
+                  (you . i)
+                  (me . you)
+                  (am . are))))))
+
+(test '(tree-sub and assoc-sub)
+  (is (= '(2 3 4 (5 6 (7) (8 9) 10 11 12))
+         (tree-sub inc
+                   '(1 2 3 (4 5 (6) (7 8) 9 10 11)))))
+
+  (is (= 'are (assoc-sub '((i . you)
+                           (you . i)
+                           (me . you)
+                           (am . are))
+                         'am))))
+
+(test '(sublis)
+  (is (= '(a b c) (sublis () '(a b c))))
+  (is (= '(what would it mean to you if you
+                got a tree (or something better than a tree) ?)
+         (sublis '((?X . tree))
+                 '(what would it mean to you
+                        if you got a ?X
+                        (or something better than a ?X) ?)))))

@@ -397,6 +397,12 @@
   (is (= 1 (/ 1)))
   (errors '(expected number) (/ 1 t)))
 
+(test '(basic def)
+  (def x 3)
+  (is (= 3 x))
+  (errors '(unknown symbol)
+    (def do-not-die unknown-symbol)))
+
 (test '(closures scope and shadowing)
   (def plus3-maker
        (lambda ()
