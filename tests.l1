@@ -275,6 +275,13 @@
   ;; (apply concat (map list (range 10)))
   )
 
+(test '(mapcat)
+  (is (= '(0 10 40 90 160 250 360 490 640 810)
+         ;; FIXME: use comp and partial when available:
+         (mapcat (lambda (x)
+                   (list (* x x 10)))
+                 (range 10)))))
+
 (test '(higher order functions)
   (is (zero? ((cond (t +)))))
   (is (= 6 ((car (cons + ())) 1 2 3)))

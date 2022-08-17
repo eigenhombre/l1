@@ -141,6 +141,7 @@ See the `examples` directory for more sample `l1` files.
            inc    1      Return the supplied integer argument, plus one
           last    1      Return the last item in a list
            map    2      Apply the supplied function to every element in the supplied list
+        mapcat    2      Map a function onto a list and concatenate results
           neg?    1      Return true iff the supplied integer argument is less than zero
            nth    2      Find the nth value of a list, starting from zero
           odd?    1      Return true if the supplied integer argument is odd

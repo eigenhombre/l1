@@ -150,6 +150,10 @@
         (t (cons (f (car l))
                  (map f (cdr l))))))
 
+(defn mapcat (f l)
+  (doc (map a function onto a list and concatenate results))
+  (reduce concat (map f l)))
+
 (defn filter (f l)
   (doc (keep only values for which function f is true))
   (cond ((not l) ())
