@@ -17,3 +17,7 @@ func (a Atom) Equal(b Sexpr) bool {
 	}
 	return false
 }
+
+// True is the generic truthy item.  Everything but Nil is true.  See also Nil
+// in cons.go.
+var True Atom = Atom{"t"}

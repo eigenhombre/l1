@@ -181,6 +181,50 @@ top:
 					expr = cdrCons.car
 					goto top
 				}
+			// FIXME: Do as a macro:
+			case carAtom.s == "and":
+				pairList, ok := t.cdr.(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("and requires a list of expressions")
+				}
+				for {
+					if pairList == Nil {
+						return True, nil
+					}
+					ev, err := eval(pairList.car, e)
+					if err != nil {
+						return nil, err
+					}
+					if ev == Nil {
+						return Nil, nil
+					}
+					pairList, ok = pairList.cdr.(*ConsCell)
+					if !ok {
+						return nil, fmt.Errorf("and requires a list of expressions")
+					}
+				}
+			// FIXME: Do as a macro:
+			case carAtom.s == "or":
+				pairList, ok := t.cdr.(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("or requires a list of expressions")
+				}
+				for {
+					if pairList == Nil {
+						return Nil, nil
+					}
+					ev, err := eval(pairList.car, e)
+					if err != nil {
+						return nil, err
+					}
+					if ev != Nil {
+						return ev, nil
+					}
+					pairList, ok = pairList.cdr.(*ConsCell)
+					if !ok {
+						return nil, fmt.Errorf("or requires a list of expressions")
+					}
+				}
 			case carAtom.s == "def":
 				return evDef(t.cdr.(*ConsCell), e)
 			case carAtom.s == "defn":

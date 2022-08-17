@@ -155,7 +155,7 @@ func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error
 		}
 		last = num
 	}
-	return Atom{"t"}, nil
+	return True, nil
 }
 
 // moving `builtins` into `init` avoids initialization loop for doHelp:
@@ -269,7 +269,7 @@ func init() {
 						return Nil, nil
 					}
 				}
-				return Atom{"t"}, nil
+				return True, nil
 			},
 		},
 		"rem": {
@@ -406,7 +406,7 @@ func init() {
 					return nil, fmt.Errorf("atom? expects a single argument")
 				}
 				if _, ok := args[0].(Atom); ok {
-					return Atom{"t"}, nil
+					return True, nil
 				}
 				return Nil, nil
 			},
@@ -641,7 +641,7 @@ func init() {
 					return nil, fmt.Errorf("list? expects a single argument")
 				}
 				if _, ok := args[0].(*ConsCell); ok {
-					return Atom{"t"}, nil
+					return True, nil
 				}
 				return Nil, nil
 			},
@@ -656,7 +656,7 @@ func init() {
 					return nil, fmt.Errorf("not expects a single argument")
 				}
 				if args[0] == Nil {
-					return Atom{"t"}, nil
+					return True, nil
 				}
 				return Nil, nil
 			},
@@ -734,7 +734,7 @@ func init() {
 				}
 				_, ok := args[0].(Number)
 				if ok {
-					return Atom{"t"}, nil
+					return True, nil
 				}
 				return Nil, nil
 			},
@@ -753,7 +753,7 @@ func init() {
 					return nil, fmt.Errorf("'%s' is not a number", args[0])
 				}
 				if num.Greater(Num(0)) {
-					return Atom{"t"}, nil
+					return True, nil
 				}
 				return Nil, nil
 			},
