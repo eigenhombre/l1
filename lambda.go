@@ -18,6 +18,13 @@ var noRestArg string = ""
 func mkLambda(cdr *ConsCell, e *env) (*lambdaFn, error) {
 	args := []string{}
 	restArg := noRestArg
+	// look for fn name
+	fnNameAtom, ok := cdr.car.(Atom)
+	var fnName string
+	if ok {
+		fnName = fnNameAtom.s
+		cdr = cdr.cdr.(*ConsCell)
+	}
 	argList, ok := cdr.car.(*ConsCell)
 	if !ok {
 		return nil, fmt.Errorf("lambda requires an argument list")
@@ -58,11 +65,17 @@ top:
 			body = body.cdr.(*ConsCell) // Skip `doc` part.
 		}
 	}
-	return &lambdaFn{args,
+	f := lambdaFn{args,
 		restArg,
 		body,
 		doc,
-		e}, nil
+		e}
+	if fnName != "" {
+		// Monkey-patch the environment the lambda is created in, so the
+		// lambda can invoke itself if the name is available:
+		e.Set(fnName, &f)
+	}
+	return &f, nil
 }
 
 func (f *lambdaFn) String() string {

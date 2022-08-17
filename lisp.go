@@ -106,6 +106,36 @@ func evDefn(args *ConsCell, e *env) (Sexpr, error) {
 	return Nil, nil
 }
 
+// Both eval and apply use this to bind lambda arguments in the
+// supplied environment:
+func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error {
+	var err error
+	if lambda.restArg != noRestArg {
+		if len(lambda.args) > len(evaledList) {
+			return fmt.Errorf("not enough arguments for function")
+		}
+		err = newEnv.Set(lambda.restArg,
+			mkListAsConsWithCdr(evaledList[len(lambda.args):],
+				Nil))
+		if err != nil {
+			return err
+		}
+	} else {
+		if len(lambda.args) < len(evaledList) {
+			return fmt.Errorf("too many arguments for function")
+		} else if len(lambda.args) > len(evaledList) {
+			return fmt.Errorf("not enough arguments for function")
+		}
+	}
+	for i, arg := range lambda.args {
+		err := newEnv.Set(arg, evaledList[i])
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func eval(expr Sexpr, e *env) (Sexpr, error) {
 top:
 	switch t := expr.(type) {
@@ -229,29 +259,11 @@ top:
 		// User-defined functions:
 		lambda, ok := evalCar.(*lambdaFn)
 		if ok {
+			var err error
 			newEnv := mkEnv(lambda.env)
-			if lambda.restArg != noRestArg {
-				if len(lambda.args) > len(evaledList) {
-					return nil, fmt.Errorf("not enough arguments for function")
-				}
-				err = newEnv.Set(lambda.restArg,
-					mkListAsConsWithCdr(evaledList[len(lambda.args):],
-						Nil))
-				if err != nil {
-					return nil, err
-				}
-			} else {
-				if len(lambda.args) < len(evaledList) {
-					return nil, fmt.Errorf("too many arguments for function")
-				} else if len(lambda.args) > len(evaledList) {
-					return nil, fmt.Errorf("not enough arguments for function")
-				}
-			}
-			for i, arg := range lambda.args {
-				err := newEnv.Set(arg, evaledList[i])
-				if err != nil {
-					return nil, err
-				}
+			err = setLambdaArgsInEnv(&newEnv, lambda, evaledList)
+			if err != nil {
+				return nil, err
 			}
 			var ret Sexpr = Nil
 			for {

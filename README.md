@@ -95,6 +95,7 @@ See the `examples` directory for more sample `l1` files.
          apply    2      Apply a function to a list of arguments
          atom?    1      Return t if the argument is an atom, () otherwise
           bang    1      Return a new atom with exclamation point added
+          body    1      Return the body of a lambda function
            car    1      Return the first element of a list
            cdr    1      Return a list with the first element removed
          comma    1      Return a new atom with a comma at the end
@@ -131,23 +132,25 @@ See the `examples` directory for more sample `l1` files.
     Other available functions:
     
             **    2      Exponentiation operator
-       __range    1      Deprecated, used internally
        butlast    1      Return everything but the last element
           caar    1      First element of the first element of a list of lists
     capitalize    1      Return the atom argument, capitalized
     complement    1      Return the logical complement of the supplied function
-        concat    2      Concatenate two lists
+        concat    0+     Concatenenate any number of lists
     constantly    1      Given a value, return a function which always returns that value
            dec    1      Return the supplied integer argument, minus one
        dotimes    2      Run the supplied function n times
           drop    2      Drop n items from a list, then return the rest
+         error    1      Return an error and (NOT IMPLEMENTED) short-circuit further processing
          even?    1      Return true if the supplied integer argument is even
      exclaimed    1      Return l as a sentence... emphasized!
         filter    2      Keep only values for which function f is true
        flatten    1      Return a (possibly nested) list, flattened
+      identity    1      Return the argument
            inc    1      Return the supplied integer argument, plus one
           last    1      Return the last item in a list
            map    2      Apply the supplied function to every element in the supplied list
+        mapcat    2      Map a function onto a list and concatenate results
           neg?    1      Return true iff the supplied integer argument is less than zero
            nth    2      Find the nth value of a list, starting from zero
           odd?    1      Return true if the supplied integer argument is odd
@@ -157,6 +160,7 @@ See the `examples` directory for more sample `l1` files.
     randchoice    1      Return an element at random from the supplied list
      randigits    1      Return a random integer between 0 and the argument minus 1
          range    1      List of integers from 0 to n
+        reduce    2+     Successively apply a function against a list of arguments
         remove    2      Keep only values for which function f is false / the empty list
         repeat    2      Return a list of length n whose elements are all x
     repeatedly    2      Return a list of length n whose elements are made from calling f repeatedly

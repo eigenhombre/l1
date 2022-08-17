@@ -1,0 +1,22 @@
+(defn assoc (x pairs)
+  (cond ((not pairs) ())
+        ((= x (caar pairs))
+         (car pairs))
+        (t (assoc x (cdr pairs)))))
+
+(defn mklist (x)
+  (cond ((list? x) x)
+        (t (list x))))
+
+(defn cadr (l) (car (cdr l)))
+
+(assoc 'i
+       '((i . you)
+         (you . i)
+         (me . you)
+         (am . are)))
+(assoc 'am
+       '((i . you)
+         (you . i)
+         (me . you)
+         (am . are)))
