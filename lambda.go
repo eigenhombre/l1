@@ -71,8 +71,8 @@ top:
 		doc,
 		e}
 	if fnName != "" {
-		// Monkey-patch the environment the lambda is created in, so it knows about
-		// this function, so it can call itself:
+		// Monkey-patch the environment the lambda is created in, so the
+		// lambda can invoke itself if the name is available:
 		e.Set(fnName, &f)
 	}
 	return &f, nil
