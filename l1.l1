@@ -7,12 +7,37 @@
   (doc (return the argument))
   x)
 
-(defn concat (a b)
-  (doc (concatenate two lists)
-       (example (= '(1 2 3 4) (concat '(1 2) '(3 4)))))
-  (cond ((not a) b)
-        (t (cons (car a)
-                 (concat (cdr a) b)))))
+;; FIXME: implement this as a real thing (Issue #54):
+(defn error (msg)
+  (doc (return an error and
+               (NOT IMPLEMENTED) short-circuit further processing))
+  (cons 'error msg))
+
+(defn reduce (f x . args)
+  (doc (successively apply a function against a list of arguments))
+  (let ((inner (lambda inner (f acc l)
+                 (cond ((not l) acc)
+                       (t (inner f
+                                 (f acc (car l))
+                                 (cdr l)))))))
+    (cond ((not args)        ;; no accumulator given
+           (cond ((not x) (f))
+                 (t (inner f
+                           (car x)
+                           (cdr x)))))
+          ((= (len args) 1)  ;; x is the accumulator
+           (inner f x (car args)))
+          (t
+           (error '(reduce needs at least two arguments))))))
+
+(defn concat (() . lists)
+  (doc (concatenenate any number of lists))
+  (let ((concat2 (lambda concat2 (a b)
+                   (cond ((not a) b)
+                         (t (cons (car a)
+                                  (concat2 (cdr a) b)))))))
+    (cond ((not lists) ())
+          (t (reduce concat2 lists)))))
 
 (defn reverse (l)
   (doc (reverse a list)

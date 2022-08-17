@@ -226,6 +226,25 @@
   (is (= '(1 2 3) (list 1 (+ 1 1) (+ 4 -1))))
   (is (= () (list))))
 
+(test '(concat)
+  (is (= () (concat)))
+  (is (= () (concat ())))
+  (is (= () (concat () ())))
+  (is (= '(a b c d)
+         (concat '(a b) '(c d))))
+  (is (= '(a b c d e f) (concat '(a b) '(c d) '(e f)))))
+
+(test '(reduce)
+  (is (= 0 (reduce + ())))
+  (is (= 1 (reduce * ())))
+  (is (= 0 (reduce + '(0))))
+  (is (= 0 (reduce + 0 ())))
+  (is (= 1 (reduce + 0 (range 2))))
+  (is (= 6 (reduce + 0 (range 4))))
+  (is (= 362880 (reduce * 1 (split 123456789))))
+  (is (= (range 10)
+         (reduce concat (map list (range 10))))))
+
 (test '(apply)
   (is (= 6 (apply + '(1 2 3))))
   (is (= 0 (apply + ())))
@@ -246,10 +265,15 @@
   (is (= 0 (apply + 0 ())))
   (is (= 10 (apply + 1 2 '(3 4))))
   (is (= 362880 (apply * (cdr (range 10)))))
+  (is (= 499500 (apply + (range 1000))))
   (errors '(not enough arguments) (apply))
   (errors '(not enough arguments) (apply +))
   (errors '(too many arguments)
-    (apply (lambda (x y) (= x y)) (split 123))))
+    (apply (lambda (x y) (= x y)) (split 123)))
+
+  ;; FIXME: this BREAKS EVERYTHING!!!!
+  ;; (apply concat (map list (range 10)))
+  )
 
 (test '(higher order functions)
   (is (zero? ((cond (t +)))))

@@ -64,11 +64,12 @@ Other available functions:
       caar    1      First element of the first element of a list of lists
 capitalize    1      Return the atom argument, capitalized
 complement    1      Return the logical complement of the supplied function
-    concat    2      Concatenate two lists
+    concat    0+     Concatenenate any number of lists
 constantly    1      Given a value, return a function which always returns that value
        dec    1      Return the supplied integer argument, minus one
    dotimes    2      Run the supplied function n times
       drop    2      Drop n items from a list, then return the rest
+     error    1      Return an error and (NOT IMPLEMENTED) short-circuit further processing
      even?    1      Return true if the supplied integer argument is even
  exclaimed    1      Return l as a sentence... emphasized!
     filter    2      Keep only values for which function f is true
@@ -86,6 +87,7 @@ constantly    1      Given a value, return a function which always returns that 
 randchoice    1      Return an element at random from the supplied list
  randigits    1      Return a random integer between 0 and the argument minus 1
      range    1      List of integers from 0 to n
+    reduce    2+     Successively apply a function against a list of arguments
     remove    2      Keep only values for which function f is false / the empty list
     repeat    2      Return a list of length n whose elements are all x
 repeatedly    2      Return a list of length n whose elements are made from calling f repeatedly
