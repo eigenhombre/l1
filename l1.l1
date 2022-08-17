@@ -48,14 +48,12 @@
   (doc (return the supplied integer argument, minus one))
   (- n 1))
 
-(defn __range (n)
-  (doc (deprecated, used internally))
-  (cond ((= 1 n) (cons (dec n) ()))
-        (t (cons (dec n) (__range (dec n))))))
-
 (defn range (n)
   (doc (list of integers from 0 to n))
-  (reverse (__range n)))
+  (let ((inner (lambda inner (n)
+                 (cond ((= 1 n) (cons (dec n) ()))
+                       (t (cons (dec n) (inner (dec n))))))))
+    (reverse (inner n))))
 
 (defn nth (n l)
   (doc (find the nth value of a list, starting from zero))

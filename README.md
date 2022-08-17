@@ -123,7 +123,6 @@ See the `examples` directory for more sample `l1` files.
     Other available functions:
     
             **    2      Exponentiation operator
-       __range    1      Deprecated, used internally
        butlast    1      Return everything but the last element
           caar    1      First element of the first element of a list of lists
     capitalize    1      Return the atom argument, capitalized
