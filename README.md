@@ -87,6 +87,7 @@ See the `examples` directory for more sample `l1` files.
          apply    2      Apply a function to a list of arguments
          atom?    1      Return t if the argument is an atom, () otherwise
           bang    1      Return a new atom with exclamation point added
+          body    1      Return the body of a lambda function
            car    1      Return the first element of a list
            cdr    1      Return a list with the first element removed
          comma    1      Return a new atom with a comma at the end

@@ -53,7 +53,11 @@ func (e *env) Set(s string, v Sexpr) error {
 func (e *env) String() string {
 	ret := ""
 	for k, v := range e.syms {
-		ret += fmt.Sprintf("%s=%s;", k, v)
+		ret += fmt.Sprintf("%s=%s\n", k, v)
+	}
+	ret += "\n"
+	if e.parent != nil {
+		ret += fmt.Sprintf("PARENT: %s\n", e.parent.String())
 	}
 	return ret
 }

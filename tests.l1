@@ -230,6 +230,7 @@
   (is (= () (concat)))
   (is (= () (concat ())))
   (is (= () (concat () ())))
+  (is (= '(a) (concat '(a))))
   (is (= '(a b c d)
          (concat '(a b) '(c d))))
   (is (= '(a b c d e f) (concat '(a b) '(c d) '(e f)))))
@@ -266,14 +267,21 @@
   (is (= 10 (apply + 1 2 '(3 4))))
   (is (= 362880 (apply * (cdr (range 10)))))
   (is (= 499500 (apply + (range 1000))))
+
+  (is (= () (apply concat (map list ()))))
+  (is (= () (apply concat '(()))))
+  (is (= () (apply concat ())))
+  (is (= '(1 2) (concat '(1) '(2))))
+  (is (= '(1 2) (concat '(1) '(2))))
+  (is (= '(1 2) (apply concat '((1) (2)))))
+  (is (= '(1 2) (apply concat '((1) (2)))))
+  (is (= '(1 2) (concat '(1) '(2))))
+  (is (= (range 10) (apply concat (map list (range 10)))))
+
   (errors '(not enough arguments) (apply))
   (errors '(not enough arguments) (apply +))
   (errors '(too many arguments)
-    (apply (lambda (x y) (= x y)) (split 123)))
-
-  ;; FIXME: this BREAKS EVERYTHING!!!!
-  ;; (apply concat (map list (range 10)))
-  )
+    (apply (lambda (x y) (= x y)) (split 123))))
 
 (test '(mapcat)
   (is (= '(0 10 40 90 160 250 360 490 640 810)
@@ -282,7 +290,7 @@
                    (list (* x x 10)))
                  (range 10)))))
 
-(test '(higher order functions)
+(test '(functions as values)
   (is (zero? ((cond (t +)))))
   (is (= 6 ((car (cons + ())) 1 2 3)))
   (def a +)

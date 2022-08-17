@@ -367,35 +367,21 @@ func init() {
 				lambda, ok := evalCar.(*lambdaFn)
 				if ok {
 					newEnv := mkEnv(lambda.env)
-					if len(lambda.args) > len(fnArgs) {
-						return nil, fmt.Errorf("not enough arguments")
-					}
-					for i, arg := range lambda.args {
-						err := newEnv.Set(arg, fnArgs[i])
-						if err != nil {
-							return nil, err
-						}
-					}
-					if len(lambda.args) < len(fnArgs) {
-						if lambda.restArg == "" {
-							return nil, fmt.Errorf("too many arguments")
-						}
-						err := newEnv.Set(lambda.restArg,
-							mkListAsConsWithCdr(fnArgs[len(lambda.args):], Nil))
-						if err != nil {
-							return nil, err
-						}
+					err := setLambdaArgsInEnv(&newEnv, lambda, fnArgs)
+					if err != nil {
+						return nil, err
 					}
 					var ret Sexpr = Nil
+					bodyExpr := lambda.body
 					for {
-						if lambda.body == Nil {
+						if bodyExpr == Nil {
 							return ret, nil
 						}
-						ret, err = eval(lambda.body.car, &newEnv)
+						ret, err = eval(bodyExpr.car, &newEnv)
 						if err != nil {
 							return nil, err
 						}
-						lambda.body = lambda.body.cdr.(*ConsCell)
+						bodyExpr = bodyExpr.cdr.(*ConsCell)
 					}
 				}
 				// Built-in functions:
@@ -439,6 +425,22 @@ func init() {
 					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
 				}
 				return Atom{a.s + "!"}, nil
+			},
+		},
+		"body": {
+			Name:       "body",
+			Docstring:  "Return the body of a lambda function",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				l, ok := args[0].(*lambdaFn)
+				if !ok {
+					return nil, fmt.Errorf("expected lambda function, got '%s'", args[0])
+				}
+				return l.body, nil
 			},
 		},
 		"car": {
