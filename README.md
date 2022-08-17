@@ -17,7 +17,7 @@ converting atoms and numbers to lists, and vice-versa.
 
 # Usage / Examples
 
-You should have Go installed and configured (including setting GOPATH).  At some later point, pre-built
+You should have Go installed and configured (including [setting GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).  At some later point, pre-built
 artifacts for various architectures may be available here.
 
 ## Installing
