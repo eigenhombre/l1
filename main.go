@@ -26,7 +26,7 @@ func evalExprs(exprs []Sexpr, e env, doPrint bool) bool {
 	for _, g := range exprs {
 		res, err := eval(g, &e)
 		if err != nil {
-			fmt.Printf("%v\n", err)
+			fmt.Printf("ERROR in '%s':\n%v\n", exprs, err)
 			return false
 		}
 		if doPrint {

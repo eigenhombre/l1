@@ -706,25 +706,6 @@ func init() {
 				return Nil, nil
 			},
 		},
-		"split": {
-			Name:       "split",
-			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("split expects a single argument")
-				}
-				switch s := args[0].(type) {
-				case Atom:
-					return listOfChars(s.String()), nil
-				case Number:
-					return listOfNums(s.String())
-				default:
-					return nil, fmt.Errorf("split expects an atom or a number")
-				}
-			},
-		},
 		"number?": {
 			Name:       "number?",
 			Docstring:  "Return true if the argument is a number, else ()",
@@ -775,6 +756,25 @@ func init() {
 				}
 				r := rand.New(rand.NewSource(time.Now().UnixNano()))
 				return Num(r.Intn(int(num.bi.Uint64()))), nil
+			},
+		},
+		"split": {
+			Name:       "split",
+			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("split expects a single argument")
+				}
+				switch s := args[0].(type) {
+				case Atom:
+					return listOfChars(s.String()), nil
+				case Number:
+					return listOfNums(s.String())
+				default:
+					return nil, fmt.Errorf("split expects an atom or a number")
+				}
 			},
 		},
 		"test": {

@@ -64,12 +64,49 @@
           ((= input (binding-val binding)) bindings)
           (t fail))))
 
+(defn segment-pattern? (pattern)
+  (doc (Is this a segment matching pattern, e.g. ((?* var) . pat)))
+  (and (list? pattern)
+       (= (car pattern)
+          '?*)))
+
+(defn segment-pattern? (pattern)
+  (doc (Is this a segment matching pattern, e.g. ((?* var) . pat)))
+  (and (list? pattern)
+       (list? (car pattern))
+       (= (car (car pattern))
+          '?*)))
+
+(defn segment-match (pattern input bindings start)
+  (doc (Match the segment pattern ((?* var) . pat) against input))
+  (let ((var (cadr (car pattern)))
+        (pat (cdr pattern)))
+    (cond
+     ((not pat) (match-variable var input bindings))
+     ;; We assume that pat starts with a constant
+     ;; In other words, a pattern can't have 2 consecutive vars
+     (t
+      (let ((pos (position (car pat) input start)))
+        (cond
+         ((not pos) fail)
+         (t
+          (let ((b2 (pat-match pat
+                               (subseq input pos ())
+                               (match-variable var
+                                               (subseq input 0 pos)
+                                               bindings))))
+            ;; If this match failed, try another longer one
+            (cond
+             ((= b2 fail)
+              (segment-match pattern input bindings (+ pos 1)))
+             (t b2))))))))))
+
 (defn pat-match (pattern input bindings)
   (doc (Match pattern against input in the context of the bindings))
   (cond ((= bindings fail) fail)
-        ((variable? pattern)
-         (match-variable pattern input bindings))
         ((= pattern input) bindings)
+        ((segment-pattern? pattern)
+         (segment-match pattern input bindings 0))
         ((and (list? pattern) (list? input))
          (pat-match (cdr pattern)
                     (cdr input)
@@ -77,6 +114,24 @@
                                (car input)
                                bindings)))
         (t fail)))
+
+(defn niladd (a b)
+  (cond ((not a) ())
+        ((not b) ())
+        (t (+ a b))))
+
+(defn position (a input start)
+  (cond ((not input) ())
+        ((< 0 start) (niladd start (position a (drop start input) 0)))
+        ((= a (car input)) 0)
+        (t (niladd 1 (position a (cdr input) 0)))))
+
+(defn subseq (l start end)
+  (cond ((not end) (drop start l))
+        (t (take (- end start) (subseq l start ())))))
+
+(defn rule-pattern (rule) (car rule))
+(defn rule-responses (rule) (cdr rule))
 
 (def *eliza-rules*
      '((((?* ?x) hello (?* ?y))
@@ -97,6 +152,12 @@
         (Do you often feel ?y ?))
        (((?* ?x) I felt (?* ?y))
         (What other feelings do you have?))))
+
+(defn switch-viewpoint (words)
+  (doc (Change I to you and vice versa, and so on))
+  (sublis '((I . you) (you . I) (me . you) (am . are))
+          words))
+
 
 ;; TESTS -----------------------------------------------
 (test '(variable)
@@ -137,28 +198,50 @@
                         if you got a ?X
                         (or something better than a ?X) ?)))))
 
+(test '(segment-pattern?)
+  (is (segment-pattern? '((?* ?x) . a)))
+  (is (not (segment-pattern? '?a))))
+
+(test '(position)
+  (is (= 0 (position 0 (range 5) 0)))
+  (is (= 1 (position 1 (range 5) 0)))
+  (is (not (position 'foo (range 5) 0)))
+  (is (= 4 (position 4 (range 5) 0)))
+  (is (= 4 (position 4 (range 5) 4))))
+
+(test '(subseq)
+  (is (= 'lo_world
+         (fuse (subseq (split 'hello_world)
+                       3 ()))))
+  (is (= 'lo
+         (fuse (subseq (split 'hello_world)
+                       3 5)))))
+
 (test '(pat-match)
-  (is (= '((?X . vacation))
-         (pat-match '(i need a ?X) '(i need a vacation)
+  (is (= '((?y there) (?x))
+         (pat-match '((?* ?x) hello (?* ?y))
+                    '(hello there)
                     no-bindings)))
-  (is (not (pat-match '(i need a ?X)
-                      '(i really need a vacation)
-                      no-bindings)))
+  (is (= '((?y vacation))
+         (pat-match '(i need a (?* ?y))
+                    '(i need a vacation)
+                    no-bindings)))
+  (is (= fail
+         (pat-match '(i really need a (?* ?y))
+                    '(i need a vacation)
+                    no-bindings)))
   (is (= no-bindings
          (pat-match '(this is easy) '(this is easy) no-bindings)))
-  (is (not (pat-match '(?X is ?X) '((2 + 2) is 4)
-                      no-bindings)))
-  (is (= '(what would it mean to you if you got a vacation ?)
 
-         (sublis (pat-match '(i need a ?X)
-                            '(i need a vacation)
-                            no-bindings)
-                 '(what would it mean to you if you got a ?X ?))))
-  (is (= '((?X 2 + 2))
-         (pat-match '(?X is ?X)
-                    '((2 + 2) is (2 + 2))
+  (is (= fail (pat-match '((?* ?p) need (?* ?x))
+                         '(Mr Hulot and I need a vacation)
+                         fail)))
+  (is (= '((?x a vacation) (?p Mr Hulot and I))
+         (pat-match '((?* ?p) need (?* ?x))
+                    '(Mr Hulot and I need a vacation)
                     no-bindings)))
-  (is (= '((?X a long vacation) (?P . i))
-         (pat-match '(?P need . ?X)
-                    '(i need a long vacation)
+
+  (is (= '((?x 1 2 a b))
+         (pat-match '((?* ?x) a b (?* ?x))
+                    '(1 2 a b a b 1 2 a b)
                     no-bindings))))
