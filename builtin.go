@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"math/rand"
 	"os"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 	"unicode"
@@ -66,76 +64,6 @@ func lambdaDocString(name string, e *env) string {
 		name,
 		argstr,
 		capitalize(lambdaDescription(*l)))
-}
-
-func doHelp(out io.Writer, e *env) {
-	fmt.Fprintln(out, "Builtins and Special Forms:")
-	fmt.Fprintln(out, "      Name  Arity    Description")
-	type fnDoc struct {
-		name      string
-		farity    int
-		ismulti   bool
-		doc       string
-		isSpecial bool
-	}
-	forms := []fnDoc{
-		{"cond", 0, true, "Conditional branching", true},
-		{"def", 2, false, "Set a value", true},
-		{"defn", 2, true, "Create and name a function", true},
-		{"errors", 1, true, "Error checking (for tests)", true},
-		{"lambda", 1, true, "Create a function", true},
-		{"let", 1, true, "Create a local scope", true},
-		{"quote", 1, false, "Quote an expression", true},
-		{"and", 0, true, "Boolean and", true},
-		{"or", 0, true, "Boolean or", true},
-	}
-	for _, builtin := range builtins {
-		forms = append(
-			forms,
-			fnDoc{
-				builtin.Name,
-				builtin.FixedArity,
-				builtin.NAry,
-				builtin.Docstring,
-				false})
-	}
-	// sort by name
-	sort.Slice(forms, func(i, j int) bool {
-		return forms[i].name < forms[j].name
-	})
-	for _, form := range forms {
-		special := ""
-		if form.isSpecial {
-			special = "SPECIAL FORM: "
-		}
-		isMultiArity := " "
-		if form.ismulti {
-			isMultiArity = "+"
-		}
-		argstr := fmt.Sprintf("%d%s", form.farity, isMultiArity)
-		fmt.Fprintf(
-			out,
-			"%10s %5s     %s%s\n",
-			form.name,
-			argstr,
-			special,
-			form.doc)
-	}
-	lambdaNames := []string{}
-	for _, name := range EnvKeys(e) {
-		expr, _ := e.Lookup(name)
-		if _, ok := expr.(*lambdaFn); ok {
-			lambdaNames = append(lambdaNames, name)
-		}
-	}
-	sort.Slice(lambdaNames, func(i, j int) bool {
-		return lambdaNames[i] < lambdaNames[j]
-	})
-
-	fmt.Fprint(out, "\n\nOther available functions:\n\n")
-	for _, lambdaName := range lambdaNames {
-		fmt.Fprint(out, lambdaDocString(lambdaName, e))
-	}
 }
 
 func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error) {
@@ -689,6 +617,20 @@ func init() {
 				for _, arg := range args {
 					strArgs = append(strArgs, arg.String())
 				}
+				fmt.Print(strings.Join(strArgs, " "))
+				return Nil, nil
+			},
+		},
+		"println": {
+			Name:       "println",
+			Docstring:  "Print the arguments and a newline",
+			FixedArity: 0,
+			NAry:       true,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				strArgs := []string{}
+				for _, arg := range args {
+					strArgs = append(strArgs, arg.String())
+				}
 				fmt.Println(strings.Join(strArgs, " "))
 				return Nil, nil
 			},
@@ -756,6 +698,23 @@ func init() {
 				}
 				r := rand.New(rand.NewSource(time.Now().UnixNano()))
 				return Num(r.Intn(int(num.bi.Uint64()))), nil
+			},
+		},
+		"readlist": {
+			Name:       "readlist",
+			Docstring:  "Read a list from stdin",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				line, err := readLine()
+				if err != nil {
+					return nil, err
+				}
+				parsed, err := lexAndParse(line)
+				if err != nil {
+					return nil, err
+				}
+				return mkListAsConsWithCdr(parsed, Nil), nil
 			},
 		},
 		"split": {

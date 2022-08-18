@@ -225,6 +225,25 @@ top:
 						return nil, fmt.Errorf("or requires a list of expressions")
 					}
 				}
+			case carAtom.s == "loop":
+				body, ok := t.cdr.(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("loop requires a body")
+				}
+				for {
+					start := body
+				bodyLoop:
+					for {
+						if start == Nil {
+							break bodyLoop
+						}
+						_, err := eval(start.car, e)
+						if err != nil {
+							return nil, err
+						}
+						start = start.cdr.(*ConsCell)
+					}
+				}
 			case carAtom.s == "def":
 				return evDef(t.cdr.(*ConsCell), e)
 			case carAtom.s == "defn":

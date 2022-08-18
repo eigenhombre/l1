@@ -36,4 +36,4 @@
 (defn n-primes (num)
   (helper () num 1))
 
-(print (n-primes 300))
+(println (n-primes 300))

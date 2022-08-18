@@ -151,13 +151,45 @@
        (((?* ?x) I feel (?* ?y))
         (Do you often feel ?y ?))
        (((?* ?x) I felt (?* ?y))
-        (What other feelings do you have?))))
+        (What other feelings do you have?))
+       (((?* ?x))
+        (Interesting))))
 
 (defn switch-viewpoint (words)
   (doc (Change I to you and vice versa, and so on))
   (sublis '((I . you) (you . I) (me . you) (am . are))
           words))
 
+(defn some (f l)
+  (cond ((not l) ())
+        (t
+         (let ((result (f (car l))))
+           (cond (result result)
+                 (t (some f (cdr l))))))))
+
+(defn apply-rule (rule)
+  (let ((result (pat-match (rule-pattern rule)
+                           input
+                           no-bindings)))
+    (cond ((not (= result fail))
+           (sublis (switch-viewpoint result)
+                   (random-elt (rule-responses rule)))))))
+
+(defn use-eliza-rules (input)
+  (doc (Find some rule with which to transform the input))
+  (some (lambda (rule)
+          (let ((result (pat-match (rule-pattern rule) input no-bindings)))
+            (cond ((not (= result fail))
+                   (sublis (switch-viewpoint result)
+                           (randchoice (rule-responses rule)))))))
+        *eliza-rules*))
+
+(defn eliza ()
+  (doc (Respond to user input using pattern matching rules.))
+  (loop
+   (print 'eliza>)
+   (print SPACE)
+   (printl (flatten (use-eliza-rules (readlist))))))
 
 ;; TESTS -----------------------------------------------
 (test '(variable)
@@ -217,6 +249,12 @@
          (fuse (subseq (split 'hello_world)
                        3 5)))))
 
+(test '(some)
+  (is (not (some odd? '(2 4 6))))
+  (is (= t (some odd? '(2 4 5 6))))
+  (is (some (lambda (x) (= x 4))
+            '(2 4 5 6))))
+
 (test '(pat-match)
   (is (= '((?y there) (?x))
          (pat-match '((?* ?x) hello (?* ?y))
@@ -245,3 +283,10 @@
          (pat-match '((?* ?x) a b (?* ?x))
                     '(1 2 a b a b 1 2 a b)
                     no-bindings))))
+
+(test '(response)
+  (is (= '(Do you often feel sad ?)
+         (flatten (use-eliza-rules '(I feel sad))))))
+
+;; Main loop:
+(eliza)

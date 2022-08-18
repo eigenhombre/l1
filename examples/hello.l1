@@ -1,1 +1,1 @@
-(print (quote (hello world)))
+(println (quote (hello world)))

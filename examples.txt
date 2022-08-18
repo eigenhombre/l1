@@ -44,6 +44,7 @@ Builtins and Special Forms:
        let    1+     SPECIAL FORM: Create a local scope
       list    0+     Return a list of the given arguments
      list?    1      Return t if the argument is a list, () otherwise
+      loop    1+     SPECIAL FORM: Loop forever
        not    1      Return t if the argument is nil, () otherwise
    number?    1      Return true if the argument is a number, else ()
         or    0+     SPECIAL FORM: Boolean or
@@ -51,8 +52,10 @@ Builtins and Special Forms:
       pos?    1      Return true if the (numeric) argument is positive, else ()
      print    0+     Print the arguments
     printl    1      Print a list argument, without parentheses
+   println    0+     Print the arguments and a newline
      quote    1      SPECIAL FORM: Quote an expression
    randint    1      Return a random integer between 0 and the argument minus 1
+  readlist    0      Read a list from stdin
        rem    2      Return remainder when second arg divides first
      split    1      Split an atom or number into a list of single-digit numbers or single-character atoms
       test    0+     Establish a testing block (return last expression)

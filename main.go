@@ -87,6 +87,10 @@ func main() {
 	}
 
 	globals := mkEnv(nil)
+	globals.Set("SPACE", Atom{" "})
+	globals.Set("NEWLINE", Atom{"\n"})
+	globals.Set("TAB", Atom{"\t"})
+
 	if !lexParseEval(rawCore, globals, false) {
 		fmt.Println("Failed to load l1 core library!")
 		os.Exit(1)
