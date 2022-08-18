@@ -28,7 +28,7 @@ Specific versions are tagged and available as well.  See [the tags
 page](https://github.com/eigenhombre/l1/tags) for available versions
 and then, for example,
 
-    go install github.com/eigenhombre/l1@v0.0.11
+    go install github.com/eigenhombre/l1@v0.0.12
 
 At this point you should be able to run `l1`:
 
