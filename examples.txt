@@ -21,7 +21,7 @@ Builtins and Special Forms:
             =    1+     Return t if the arguments are equal, () otherwise
             >    1+     Return t if the arguments are in strictly decreasing order, () otherwise
            >=    1+     Return t if the arguments are in decreasing (or equal) order, () otherwise
-          and    0+     (Special Form) Boolean and
+          and    0+     SPECIAL FORM: Boolean and
         apply    2      Apply a function to a list of arguments
         atom?    1      Return t if the argument is an atom, () otherwise
          bang    1      Return a new atom with exclamation point added
@@ -29,32 +29,32 @@ Builtins and Special Forms:
           car    1      Return the first element of a list
           cdr    1      Return a list with the first element removed
         comma    1      Return a new atom with a comma at the end
-         cond    0+     (Special Form) Conditional branching
+         cond    0+     SPECIAL FORM: Conditional branching
          cons    2      Add an element to the front of a (possibly empty) list
-          def    2      (Special Form) Set a value
-         defn    2+     (Special Form) Create and name a function
+          def    2      SPECIAL FORM: Set a value
+         defn    2+     SPECIAL FORM: Create and name a function
           doc    1      Return the doclist for a function
      downcase    1      Return a new atom with all characters in lower case
-       errors    1+     (Special Form) Error checking (for tests)
+       errors    1+     SPECIAL FORM: Error checking (for tests)
          fuse    1      Fuse a list of numbers or atoms into a single atom
          help    0      Print this message
            is    1      Assert that the argument is truthy (not ())
-       lambda    1+     (Special Form) Create a function
+       lambda    1+     SPECIAL FORM: Create a function
           len    1      Return the length of a list
-          let    1+     (Special Form) Create a local scope
+          let    1+     SPECIAL FORM: Create a local scope
          list    0+     Return a list of the given arguments
         list?    1      Return t if the argument is a list, () otherwise
-         loop    1+     (Special Form) Loop forever
+         loop    1+     SPECIAL FORM: Loop forever
 macroexpand-1    1      Expand a macro
           not    1      Return t if the argument is nil, () otherwise
       number?    1      Return true if the argument is a number, else ()
-           or    0+     (Special Form) Boolean or
+           or    0+     SPECIAL FORM: Boolean or
        period    1      Return a new atom with a period added to the end
          pos?    1      Return true if the (numeric) argument is positive, else ()
         print    0+     Print the arguments
        printl    1      Print a list argument, without parentheses
       println    0+     Print the arguments and a newline
-        quote    1      (Special Form) Quote an expression
+        quote    1      SPECIAL FORM: Quote an expression
       randint    1      Return a random integer between 0 and the argument minus 1
      readlist    0      Read a list from stdin
           rem    2      Return remainder when second arg divides first
@@ -82,7 +82,7 @@ Other available functions:
        filter    2+     Keep only values for which function f is true
       flatten    1+     Return a (possibly nested) list, flattened
      identity    1+     Return the argument
-           if    3+     (Macro) Simple conditional with two branches
+           if    3+     Macro: Simple conditional with two branches
           inc    1+     Return the supplied integer argument, plus one
          last    1+     Return the last item in a list
           map    2+     Apply the supplied function to every element in the supplied list
@@ -103,8 +103,8 @@ Other available functions:
       reverse    1+     Reverse a list
          take    2+     Take up to n items from the supplied list
    tosentence    1+     Return l as a sentence... capitalized, with a period at the end
-         when    2+     (Macro) Simple conditional with single branch
-     when-not    2+     (Macro) Complement of the when macro
+         when    2+     Macro: Simple conditional with single branch
+     when-not    2+     Macro: Complement of the when macro
         zero?    1+     Return true iff the supplied argument is zero
 > ^D
 $

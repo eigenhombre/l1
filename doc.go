@@ -35,9 +35,9 @@ func formatFunctionInfo(name, shortDesc string, arity int, isMultiArity, isSpeci
 	}
 	specialOrMacro := ""
 	if isSpecial {
-		specialOrMacro = "(Special Form) "
+		specialOrMacro = "SPECIAL FORM: "
 	} else if isMacro {
-		specialOrMacro = "(Macro) "
+		specialOrMacro = "Macro: "
 	}
 	argstr := fmt.Sprintf("%d%s", arity, isMultiArityStr)
 	return fmt.Sprintf("%13s %5s     %s%s",
