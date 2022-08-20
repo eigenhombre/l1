@@ -156,12 +156,14 @@ See the `examples` directory for more sample `l1` files.
                if    3+     Macro: Simple conditional with two branches
               inc    1+     Return the supplied integer argument, plus one
              last    1+     Return the last item in a list
+            list*    0      Create a list by consing everything but the last arg onto the last
               map    2+     Apply the supplied function to every element in the supplied list
            mapcat    2+     Map a function onto a list and concatenate results
              neg?    1+     Return true iff the supplied integer argument is less than zero
               nth    2+     Find the nth value of a list, starting from zero
              odd?    1+     Return true if the supplied integer argument is odd
              pos?    1+     Return true iff the supplied integer argument is greater than zero
+            progn    0      Macro: Execute multiple statements, returning the last
         punctuate    2+     Return l capitalized, with punctuation determined by the supplied function
         randalpha    1+     Return a list of random (English/Latin/unaccented) alphabetic characters
        randchoice    1+     Return an element at random from the supplied list

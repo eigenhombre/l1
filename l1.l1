@@ -29,6 +29,10 @@
   (list 'cond
         (list (list 'not condition) then)))
 
+(defmacro progn (() . body)
+  (doc (execute multiple statements, returning the last))
+  (list* 'let () body))
+
 (defn reduce (f x . args)
   (doc (successively apply a function against a list of arguments))
   (let ((inner (lambda inner (f acc l)
@@ -78,7 +82,7 @@
 (defn dotimes (n f)
   (doc (run the supplied function n times))
   (when-not (zero? n)
-    (let ()
+    (progn
       (f)
       (dotimes (- n 1) f))))
 
@@ -98,11 +102,13 @@
                    (cons (dec n) (inner (dec n)))))))
     (reverse (inner n))))
 
+;; FIXME: Should error when l is ()!
 (defn nth (n l)
   (doc (find the nth value of a list, starting from zero))
-  (if (zero? n)
-    (car l)
-    (nth (dec n) (cdr l))))
+  (when l
+    (if (zero? n)
+      (car l)
+      (nth (dec n) (cdr l)))))
 
 (defn last (l)
   (doc (return the last item in a list))
@@ -228,3 +234,10 @@
 (defn exclaimed (l)
   (doc (return l as a sentence... emphasized!))
   (punctuate bang l))
+
+(defn list* (() . args)
+  (doc (create a list by consing everything but the last arg onto the last))
+  (when args
+    (let ((endl (last args))
+          (other (butlast args)))
+      (concat other endl))))
