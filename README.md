@@ -104,6 +104,7 @@ See the `examples` directory for more sample `l1` files.
              cond    0+     SPECIAL FORM: Conditional branching
              cons    2      Add an element to the front of a (possibly empty) list
               def    2      SPECIAL FORM: Set a value
+         defmacro    2+     SPECIAL FORM: Create and name a macro
              defn    2+     SPECIAL FORM: Create and name a function
               doc    1      Return the doclist for a function
          downcase    1      Return a new atom with all characters in lower case
