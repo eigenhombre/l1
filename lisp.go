@@ -20,41 +20,6 @@ func stringFromList(l *ConsCell) string {
 	return strings.Join(ret, " ")
 }
 
-func evErrors(args *ConsCell, e *env) (Sexpr, error) {
-	if args == Nil {
-		return nil, fmt.Errorf("no error spec given")
-	}
-	sigExpr, ok := args.car.(*ConsCell)
-	if !ok {
-		return nil, fmt.Errorf("error signature must be a list")
-	}
-	sigEvaled, err := eval(sigExpr, e)
-	if err != nil {
-		return nil, err
-	}
-	sigList, ok := sigEvaled.(*ConsCell)
-	if !ok {
-		return nil, fmt.Errorf("error signature must be a list")
-	}
-	errorStr := stringFromList(sigList)
-	bodyArgs := args.cdr.(*ConsCell)
-	for {
-		if bodyArgs == Nil {
-			return nil, fmt.Errorf("error not found in %s", args)
-		}
-		toEval := bodyArgs.car
-		_, err := eval(toEval, e)
-		if err != nil {
-			if strings.Contains(err.Error(), errorStr) {
-				return Nil, nil
-			}
-			return nil, fmt.Errorf("error '%s' not found in '%s'",
-				errorStr, err.Error())
-		}
-		bodyArgs = bodyArgs.cdr.(*ConsCell)
-	}
-}
-
 func evAtom(a Atom, e *env) (Sexpr, error) {
 	if a.s == "t" {
 		return a, nil
@@ -111,6 +76,41 @@ func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
 	return Nil, nil
 }
 
+func evErrors(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("no error spec given")
+	}
+	sigExpr, ok := args.car.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("error signature must be a list")
+	}
+	sigEvaled, err := eval(sigExpr, e)
+	if err != nil {
+		return nil, err
+	}
+	sigList, ok := sigEvaled.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("error signature must be a list")
+	}
+	errorStr := stringFromList(sigList)
+	bodyArgs := args.cdr.(*ConsCell)
+	for {
+		if bodyArgs == Nil {
+			return nil, fmt.Errorf("error not found in %s", args)
+		}
+		toEval := bodyArgs.car
+		_, err := eval(toEval, e)
+		if err != nil {
+			if strings.Contains(err.Error(), errorStr) {
+				return Nil, nil
+			}
+			return nil, fmt.Errorf("error '%s' not found in '%s'",
+				errorStr, err.Error())
+		}
+		bodyArgs = bodyArgs.cdr.(*ConsCell)
+	}
+}
+
 // Both eval and apply use this to bind lambda arguments in the
 // supplied environment:
 func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error {
@@ -165,25 +165,20 @@ func isMacroCall(args Sexpr, e *env) bool {
 }
 
 func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
-	var ret Sexpr = expr
-	var err error
-	if !isMacroCall(ret, e) {
-		return ret, nil
+	if !isMacroCall(expr, e) {
+		return expr, nil
 	}
-	fn, _ := e.Lookup(ret.(*ConsCell).car.(Atom).s)
-	args := ret.(*ConsCell).cdr.(*ConsCell)
-	fnArgs := fn.(*lambdaFn).args
-	// FIXME: rest args!
-	for _, arg := range fnArgs {
-		err = e.Set(arg, args.car)
-		if err != nil {
-			return nil, err
-		}
-		args = args.cdr.(*ConsCell)
+	fn, _ := e.Lookup(expr.(*ConsCell).car.(Atom).s)
+	argExprs, err := consToExprs(expr.(*ConsCell).cdr)
+	if err != nil {
+		return nil, err
+	}
+	if err := setLambdaArgsInEnv(e, fn.(*lambdaFn), argExprs); err != nil {
+		return nil, err
 	}
 	ast := fn.(*lambdaFn).body
 	toEval := ast.car
-	ret, err = eval(toEval, e)
+	ret, err := eval(toEval, e)
 	if err != nil {
 		return nil, err
 	}

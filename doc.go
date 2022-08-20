@@ -28,20 +28,22 @@ var specialForms = []fnDoc{
 	{"quote", 1, false, "Quote an expression", true},
 }
 
-func formatFunctionInfo(name, shortDesc string, arity int, isMultiArity, isSpecial bool) string {
+func formatFunctionInfo(name, shortDesc string, arity int, isMultiArity, isSpecial, isMacro bool) string {
 	isMultiArityStr := " "
 	if isMultiArity {
 		isMultiArityStr = "+"
 	}
-	special := ""
+	specialOrMacro := ""
 	if isSpecial {
-		special = "SPECIAL FORM: "
+		specialOrMacro = "(Special Form) "
+	} else if isMacro {
+		specialOrMacro = "(Macro) "
 	}
 	argstr := fmt.Sprintf("%d%s", arity, isMultiArityStr)
 	return fmt.Sprintf("%13s %5s     %s%s",
 		name,
 		argstr,
-		special,
+		specialOrMacro,
 		capitalize(shortDesc))
 }
 
@@ -77,7 +79,8 @@ func doHelp(out io.Writer, e *env) {
 			form.doc,
 			form.farity,
 			form.ismulti,
-			form.isSpecial))
+			form.isSpecial,
+			false))
 	}
 	lambdaNames := []string{}
 	for _, name := range EnvKeys(e) {
@@ -95,6 +98,6 @@ func doHelp(out io.Writer, e *env) {
 		expr, _ := e.Lookup(lambdaName)
 		l := expr.(*lambdaFn)
 		fmt.Fprintln(out, formatFunctionInfo(lambdaName,
-			functionDescriptionFromDoc(*l), len(l.args), l.restArg == "", false))
+			functionDescriptionFromDoc(*l), len(l.args), l.restArg == "", false, l.isMacro))
 	}
 }
