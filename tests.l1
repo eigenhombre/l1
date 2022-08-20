@@ -475,8 +475,9 @@
 
 (test '(factorial)
   (defn fact (n)
-    (cond ((zero? n) 1)
-          (t (* n (fact (- n 1))))))
+    (if (zero? n)
+      1
+      (* n (fact (- n 1)))))
   (is (= 30414093201713378043612608166064768844377641568960512000000000000
          (fact 50)))
   (is (= 2568 (len (split (fact 1000))))))
@@ -538,6 +539,7 @@
   (is (= 1000 (len (range 1000))))
   (is (zero? (car (range 5))))
   (is (= 4 (last (range 5))))
+  (is (not (last ())))
 
   (is (= 'abc (fuse (take 3 (split 'abcdefg)))))
   (is (= (range 10) (take 10 (range 100))))
@@ -571,3 +573,35 @@
 
   (is (= '(0 2 4) (filter even? (range 5))))
   (is (= '(1 3))) (remove even? (range 5)))
+
+(test '(macros)
+  (defmacro f (zzz) (list '+ 2 3))
+  (is (= 5 (f 888)))
+
+  (defmacro f (zzz) (list '+ 2 zzz))
+  (is (= 12 (f 10)))
+
+  (is (= 3 (macroexpand-1 3)))
+  (is (= 3 (macroexpand-1 '3))))
+
+(test '(if macro)
+  (is (= 1 (if t 1 2)))
+  (is (= 2 (if () 1 2)))
+  (is (= '(cond (() 1) (t 2))
+         (macroexpand-1 '(if () 1 2))))
+  (is (= 3 (if ()
+             1
+             (when t
+               3)))))
+
+(test '(list*)
+  (is (= '(a b c 0 1 2 3 4)
+         (list* 'a 'b 'c (range 5)))))
+
+(test '(progn)
+  ;; FIXME: add set! and test side effects w/ progn.
+  (is (= 6 (progn
+             1
+             2
+             3
+             6))))

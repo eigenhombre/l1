@@ -40,32 +40,6 @@ func (b Builtin) Equal(o Sexpr) bool {
 	return false
 }
 
-func lambdaDescription(l lambdaFn) string {
-	if l.doc == Nil {
-		return "UNDOCUMENTED"
-	}
-	carDoc := l.doc.car.String()
-	shortDoc := carDoc[1 : len(carDoc)-1]
-	return shortDoc
-}
-
-func lambdaDocString(name string, e *env) string {
-	expr, _ := e.Lookup(name)
-	l, ok := expr.(*lambdaFn)
-	if !ok {
-		panic("should have gotten a lambda here")
-	}
-	isMultiArity := " "
-	if l.restArg != "" {
-		isMultiArity = "+"
-	}
-	argstr := fmt.Sprintf("%d%s", len(l.args), isMultiArity)
-	return fmt.Sprintf("%10s %5s     %s\n",
-		name,
-		argstr,
-		capitalize(lambdaDescription(*l)))
-}
-
 func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error) {
 	if len(args) < 1 {
 		return nil, fmt.Errorf("missing argument")
@@ -86,6 +60,58 @@ func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error
 		last = num
 	}
 	return True, nil
+}
+
+func applyFn(args []Sexpr, env *env) (Sexpr, error) {
+	if len(args) < 2 {
+		return nil, fmt.Errorf("not enough arguments")
+	}
+	l := len(args)
+	var fnArgs []Sexpr
+	// Support (apply f a b l) where l is a list and a, b are scalars:
+	singleArgs := args[1 : l-1]
+	fnArgs, err := consToExprs(args[l-1])
+	if err != nil {
+		return nil, err
+	}
+	fnArgs = append(singleArgs, fnArgs...)
+
+	// Note: what follows is very similar to the function evaluation
+	// logic in eval(), but TCO (goto) there makes it hard to DRY out with
+	// respect to what follows.
+
+	evalCar := args[0]
+	// User-defined functions:
+	lambda, ok := evalCar.(*lambdaFn)
+	if ok {
+		newEnv := mkEnv(lambda.env)
+		err := setLambdaArgsInEnv(&newEnv, lambda, fnArgs)
+		if err != nil {
+			return nil, err
+		}
+		var ret Sexpr = Nil
+		bodyExpr := lambda.body
+		for {
+			if bodyExpr == Nil {
+				return ret, nil
+			}
+			ret, err = eval(bodyExpr.car, &newEnv)
+			if err != nil {
+				return nil, err
+			}
+			bodyExpr = bodyExpr.cdr.(*ConsCell)
+		}
+	}
+	// Built-in functions:
+	builtin, ok := evalCar.(*Builtin)
+	if !ok {
+		return nil, fmt.Errorf("%s is not a function", evalCar)
+	}
+	biResult, err := builtin.Fn(fnArgs, env)
+	if err != nil {
+		return nil, err
+	}
+	return biResult, nil
 }
 
 // moving `builtins` into `init` avoids initialization loop for doHelp:
@@ -274,57 +300,7 @@ func init() {
 			Docstring:  "Apply a function to a list of arguments",
 			FixedArity: 2,
 			NAry:       false,
-			Fn: func(args []Sexpr, env *env) (Sexpr, error) {
-				if len(args) < 2 {
-					return nil, fmt.Errorf("not enough arguments")
-				}
-				l := len(args)
-				var fnArgs []Sexpr
-				// Support (apply f a b l) where l is a list and a, b are scalars:
-				singleArgs := args[1 : l-1]
-				fnArgs, err := consToExprs(args[l-1])
-				if err != nil {
-					return nil, err
-				}
-				fnArgs = append(singleArgs, fnArgs...)
-
-				// Note: what follows is very similar to the function evaluation
-				// logic in eval(), but TCO (goto) there makes it hard to DRY out with
-				// respect to what follows.
-
-				evalCar := args[0]
-				// User-defined functions:
-				lambda, ok := evalCar.(*lambdaFn)
-				if ok {
-					newEnv := mkEnv(lambda.env)
-					err := setLambdaArgsInEnv(&newEnv, lambda, fnArgs)
-					if err != nil {
-						return nil, err
-					}
-					var ret Sexpr = Nil
-					bodyExpr := lambda.body
-					for {
-						if bodyExpr == Nil {
-							return ret, nil
-						}
-						ret, err = eval(bodyExpr.car, &newEnv)
-						if err != nil {
-							return nil, err
-						}
-						bodyExpr = bodyExpr.cdr.(*ConsCell)
-					}
-				}
-				// Built-in functions:
-				builtin, ok := evalCar.(*Builtin)
-				if !ok {
-					return nil, fmt.Errorf("%s is not a function", evalCar)
-				}
-				biResult, err := builtin.Fn(fnArgs, env)
-				if err != nil {
-					return nil, err
-				}
-				return biResult, nil
-			},
+			Fn:         applyFn,
 		},
 		"atom?": {
 			Name:       "atom?",
@@ -576,6 +552,18 @@ func init() {
 				return Nil, nil
 			},
 		},
+		"macroexpand-1": {
+			Name:       "macroexpand-1",
+			Docstring:  "Expand a macro",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("macroexpand-1 expects a single argument")
+				}
+				return macroexpand1(args[0], e)
+			},
+		},
 		"not": {
 			Name:       "not",
 			Docstring:  "Return t if the argument is nil, () otherwise",
@@ -586,6 +574,22 @@ func init() {
 					return nil, fmt.Errorf("not expects a single argument")
 				}
 				if args[0] == Nil {
+					return True, nil
+				}
+				return Nil, nil
+			},
+		},
+		"number?": {
+			Name:       "number?",
+			Docstring:  "Return true if the argument is a number, else ()",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("number? expects a single argument")
+				}
+				_, ok := args[0].(Number)
+				if ok {
 					return True, nil
 				}
 				return Nil, nil
@@ -645,22 +649,6 @@ func init() {
 					return nil, fmt.Errorf("missing argument")
 				}
 				fmt.Println(args[0].String()[1 : len(args[0].String())-1])
-				return Nil, nil
-			},
-		},
-		"number?": {
-			Name:       "number?",
-			Docstring:  "Return true if the argument is a number, else ()",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("number? expects a single argument")
-				}
-				_, ok := args[0].(Number)
-				if ok {
-					return True, nil
-				}
 				return Nil, nil
 			},
 		},

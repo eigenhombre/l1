@@ -28,6 +28,34 @@ var specialForms = []fnDoc{
 	{"quote", 1, false, "Quote an expression", true},
 }
 
+func formatFunctionInfo(name, shortDesc string, arity int, isMultiArity, isSpecial, isMacro bool) string {
+	isMultiArityStr := " "
+	if isMultiArity {
+		isMultiArityStr = "+"
+	}
+	specialOrMacro := ""
+	if isSpecial {
+		specialOrMacro = "SPECIAL FORM: "
+	} else if isMacro {
+		specialOrMacro = "Macro: "
+	}
+	argstr := fmt.Sprintf("%d%s", arity, isMultiArityStr)
+	return fmt.Sprintf("%13s %5s     %s%s",
+		name,
+		argstr,
+		specialOrMacro,
+		capitalize(shortDesc))
+}
+
+func functionDescriptionFromDoc(l lambdaFn) string {
+	if l.doc == Nil {
+		return "UNDOCUMENTED"
+	}
+	carDoc := l.doc.car.String()
+	shortDoc := carDoc[1 : len(carDoc)-1]
+	return shortDoc
+}
+
 func doHelp(out io.Writer, e *env) {
 	fmt.Fprintln(out, "Builtins and Special Forms:")
 	fmt.Fprintln(out, "      Name  Arity    Description")
@@ -47,22 +75,12 @@ func doHelp(out io.Writer, e *env) {
 		return forms[i].name < forms[j].name
 	})
 	for _, form := range forms {
-		special := ""
-		if form.isSpecial {
-			special = "SPECIAL FORM: "
-		}
-		isMultiArity := " "
-		if form.ismulti {
-			isMultiArity = "+"
-		}
-		argstr := fmt.Sprintf("%d%s", form.farity, isMultiArity)
-		fmt.Fprintf(
-			out,
-			"%10s %5s     %s%s\n",
-			form.name,
-			argstr,
-			special,
-			form.doc)
+		fmt.Fprintln(out, formatFunctionInfo(form.name,
+			form.doc,
+			form.farity,
+			form.ismulti,
+			form.isSpecial,
+			false))
 	}
 	lambdaNames := []string{}
 	for _, name := range EnvKeys(e) {
@@ -77,6 +95,9 @@ func doHelp(out io.Writer, e *env) {
 
 	fmt.Fprint(out, "\n\nOther available functions:\n\n")
 	for _, lambdaName := range lambdaNames {
-		fmt.Fprint(out, lambdaDocString(lambdaName, e))
+		expr, _ := e.Lookup(lambdaName)
+		l := expr.(*lambdaFn)
+		fmt.Fprintln(out, formatFunctionInfo(lambdaName,
+			functionDescriptionFromDoc(*l), len(l.args), l.restArg == "", false, l.isMacro))
 	}
 }

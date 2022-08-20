@@ -10,12 +10,13 @@ type lambdaFn struct {
 	restArg string
 	body    *ConsCell
 	doc     *ConsCell
+	isMacro bool
 	env     *env
 }
 
 var noRestArg string = ""
 
-func mkLambda(cdr *ConsCell, e *env) (*lambdaFn, error) {
+func mkLambda(cdr *ConsCell, isMacro bool, e *env) (*lambdaFn, error) {
 	args := []string{}
 	restArg := noRestArg
 	// look for fn name
@@ -69,6 +70,7 @@ top:
 		restArg,
 		body,
 		doc,
+		isMacro,
 		e}
 	if fnName != "" {
 		// Monkey-patch the environment the lambda is created in, so the

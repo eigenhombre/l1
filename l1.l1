@@ -13,18 +13,38 @@
                (NOT IMPLEMENTED) short-circuit further processing))
   (cons 'error msg))
 
+(defmacro if (condition then else)
+  (doc (simple conditional with two branches))
+  (list 'cond
+        (list condition then)
+        (list t else)))
+
+(defmacro when (condition then)
+  (doc (simple conditional with single branch))
+  (list 'cond
+        (list condition then)))
+
+(defmacro when-not (condition then)
+  (doc (complement of the when macro))
+  (list 'cond
+        (list (list 'not condition) then)))
+
+(defmacro progn (() . body)
+  (doc (execute multiple statements, returning the last))
+  (list* 'let () body))
+
 (defn reduce (f x . args)
   (doc (successively apply a function against a list of arguments))
   (let ((inner (lambda inner (f acc l)
-                 (cond ((not l) acc)
-                       (t (inner f
-                                 (f acc (car l))
-                                 (cdr l)))))))
+                 (if (not l)
+                   acc
+                   (inner f
+                          (f acc (car l))
+                          (cdr l))))))
     (cond ((not args)        ;; no accumulator given
-           (cond ((not x) (f))
-                 (t (inner f
-                           (car x)
-                           (cdr x)))))
+           (if (not x)
+             (f)
+             (inner f (car x) (cdr x))))
           ((= (len args) 1)  ;; x is the accumulator
            (inner f x (car args)))
           (t
@@ -33,18 +53,19 @@
 (defn concat (() . lists)
   (doc (concatenenate any number of lists))
   (let ((concat2 (lambda concat2 (a b)
-                   (cond ((not a) b)
-                         (t (cons (car a)
-                                  (concat2 (cdr a) b)))))))
-    (cond ((not lists) ())
-          (t (reduce concat2 lists)))))
+                   (if (not a)
+                     b
+                     (cons (car a)
+                           (concat2 (cdr a) b))))))
+    (when lists
+      (reduce concat2 lists))))
 
 (defn reverse (l)
   (doc (reverse a list)
        (example (= '(c b a) (reverse '(a b c)))))
-  (cond ((not l) ())
-        (t (concat (reverse (cdr l))
-                   (cons (car l) ())))))
+  (when l
+    (concat (reverse (cdr l))
+            (cons (car l) ()))))
 
 (defn zero? (n)
   (doc (return true iff the supplied argument is zero))
@@ -60,10 +81,10 @@
 
 (defn dotimes (n f)
   (doc (run the supplied function n times))
-  (cond ((zero? n) ())
-        (t (let ()
-             (f)
-             (dotimes (- n 1) f)))))
+  (when-not (zero? n)
+    (progn
+      (f)
+      (dotimes (- n 1) f))))
 
 (defn inc (n)
   (doc (return the supplied integer argument, plus one))
@@ -76,14 +97,18 @@
 (defn range (n)
   (doc (list of integers from 0 to n))
   (let ((inner (lambda inner (n)
-                 (cond ((= 1 n) (cons (dec n) ()))
-                       (t (cons (dec n) (inner (dec n))))))))
+                 (if (= 1 n)
+                   (cons (dec n) ())
+                   (cons (dec n) (inner (dec n)))))))
     (reverse (inner n))))
 
+;; FIXME: Should error when l is ()!
 (defn nth (n l)
   (doc (find the nth value of a list, starting from zero))
-  (cond ((zero? n) (car l))
-        (t (nth (dec n) (cdr l)))))
+  (when l
+    (if (zero? n)
+      (car l)
+      (nth (dec n) (cdr l)))))
 
 (defn last (l)
   (doc (return the last item in a list))
@@ -136,19 +161,19 @@
 
 (defn repeat (n x)
   (doc (return a list of length n whose elements are all x))
-  (cond ((zero? n) ())
-        (t (cons x (repeat (dec n) x)))))
+  (when-not (zero? n)
+    (cons x (repeat (dec n) x))))
 
 (defn repeatedly (n f)
   (doc (return a list of length n whose elements are made from calling f repeatedly))
-  (cond ((zero? n) ())
-        (t (cons (f) (repeatedly (dec n) f)))))
+  (when-not (zero? n)
+    (cons (f) (repeatedly (dec n) f))))
 
 (defn map (f l)
   (doc (apply the supplied function to every element in the supplied list))
-  (cond ((not l) ())
-        (t (cons (f (car l))
-                 (map f (cdr l))))))
+  (when l
+    (cons (f (car l))
+          (map f (cdr l)))))
 
 (defn mapcat (f l)
   (doc (map a function onto a list and concatenate results))
@@ -209,3 +234,10 @@
 (defn exclaimed (l)
   (doc (return l as a sentence... emphasized!))
   (punctuate bang l))
+
+(defn list* (() . args)
+  (doc (create a list by consing everything but the last arg onto the last))
+  (when args
+    (let ((endl (last args))
+          (other (butlast args)))
+      (concat other endl))))
