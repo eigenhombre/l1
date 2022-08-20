@@ -83,19 +83,24 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	return val, nil
 }
 
-func evDefn(args *ConsCell, e *env) (Sexpr, error) {
+func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
+	errPreamble := "defn"
+	if isMacro {
+		errPreamble = "defmacro"
+	}
+
 	if args == Nil {
-		return nil, fmt.Errorf("defn requires a function name")
+		return nil, fmt.Errorf("%s requires a function name", errPreamble)
 	}
 	name, ok := args.car.(Atom)
 	if !ok {
-		return nil, fmt.Errorf("defn name must be an atom")
+		return nil, fmt.Errorf("%s name must be an atom", errPreamble)
 	}
 	args = args.cdr.(*ConsCell)
 	if args == Nil {
-		return nil, fmt.Errorf("defn requires an argument list")
+		return nil, fmt.Errorf("%s requires an argument list", errPreamble)
 	}
-	fn, err := mkLambda(args, e)
+	fn, err := mkLambda(args, isMacro, e)
 	if err != nil {
 		return nil, err
 	}
@@ -136,8 +141,79 @@ func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error
 	return nil
 }
 
-func eval(expr Sexpr, e *env) (Sexpr, error) {
+func isMacroCall(args Sexpr, e *env) bool {
+	if args == Nil {
+		return false
+	}
+	argsCons, ok := args.(*ConsCell)
+	if !ok {
+		return false
+	}
+	fn, ok := argsCons.car.(Atom)
+	if !ok {
+		return false
+	}
+	item, found := e.Lookup(fn.s)
+	if !found {
+		return false
+	}
+	f, ok := item.(*lambdaFn)
+	if !ok {
+		return false
+	}
+	return f.isMacro
+}
+
+func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
+	var ret Sexpr = expr
+	var err error
+	if !isMacroCall(ret, e) {
+		return ret, nil
+	}
+	fn, _ := e.Lookup(ret.(*ConsCell).car.(Atom).s)
+	args := ret.(*ConsCell).cdr.(*ConsCell)
+	fnArgs := fn.(*lambdaFn).args
+	// FIXME: rest args!
+	for _, arg := range fnArgs {
+		err = e.Set(arg, args.car)
+		if err != nil {
+			return nil, err
+		}
+		args = args.cdr.(*ConsCell)
+	}
+	ast := fn.(*lambdaFn).body
+	toEval := ast.car
+	ret, err = eval(toEval, e)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func macroexpand(expr Sexpr, e *env) (Sexpr, error) {
+	var ret Sexpr = expr
+	var err error
+	for {
+		ret, err = macroexpand1(ret, e)
+		if err != nil {
+			return nil, err
+		}
+		if !isMacroCall(ret, e) {
+			return ret, nil
+		}
+	}
+}
+
+func eval(exprArg Sexpr, e *env) (Sexpr, error) {
+	expr := exprArg
+	var err error
 top:
+	if isMacroCall(expr, e) {
+		expr, err = macroexpand(expr, e)
+		if err != nil {
+			return nil, err
+		}
+	}
 	switch t := expr.(type) {
 	case Atom:
 		return evAtom(t, e)
@@ -247,7 +323,9 @@ top:
 			case carAtom.s == "def":
 				return evDef(t.cdr.(*ConsCell), e)
 			case carAtom.s == "defn":
-				return evDefn(t.cdr.(*ConsCell), e)
+				return evDefn(t.cdr.(*ConsCell), false, e)
+			case carAtom.s == "defmacro":
+				return evDefn(t.cdr.(*ConsCell), true, e)
 			case carAtom.s == "errors":
 				return evErrors(t.cdr.(*ConsCell), e)
 			case carAtom.s == "let":
@@ -296,7 +374,7 @@ top:
 					body = body.cdr.(*ConsCell)
 				}
 			case carAtom.s == "lambda":
-				return mkLambda(t.cdr.(*ConsCell), e)
+				return mkLambda(t.cdr.(*ConsCell), false, e)
 			}
 		}
 		// Functions / normal order of evaluation.  Get function to use first:

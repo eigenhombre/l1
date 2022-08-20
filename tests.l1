@@ -571,3 +571,21 @@
 
   (is (= '(0 2 4) (filter even? (range 5))))
   (is (= '(1 3))) (remove even? (range 5)))
+
+(test '(macros)
+  (defmacro f (zzz) (list '+ 2 3))
+  (is (= 5 (f 888)))
+
+  (defmacro f (zzz) (list '+ 2 zzz))
+  (is (= 12 (f 10)))
+
+  (defmacro if (condition then else)
+    (list 'cond
+          (list condition then)
+          (list t else)))
+  (is (= 3 (macroexpand-1 3)))
+  (is (= 3 (macroexpand-1 '3)))
+  (is (= '(cond (() 1) (t 2))
+         (macroexpand-1 '(if () 1 2))))
+  (is (= 1 (if t 1 2)))
+  (is (= 2 (if () 1 2))))
