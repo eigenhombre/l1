@@ -9,8 +9,9 @@
         (t (assoc x (cdr pairs)))))
 
 (defn mklist (x)
-  (cond ((list? x) x)
-        (t (list x))))
+  (if (list? x)
+    x
+    (list x)))
 
 (defn variable? (a)
   (and (atom? a)
@@ -21,8 +22,9 @@
 
 (defn assoc-sub (alist item)
   (let ((match (assoc item alist)))
-    (cond (match (cdr match))
-          (t item))))
+    (if match
+      (cdr match)
+      item)))
 
 (defn tree-sub (f x)
   (cond ((not x) ())
@@ -81,11 +83,10 @@
   (doc (Match the segment pattern ((?* var) . pat) against input))
   (let ((var (cadr (car pattern)))
         (pat (cdr pattern)))
-    (cond
-     ((not pat) (match-variable var input bindings))
-     ;; We assume that pat starts with a constant
-     ;; In other words, a pattern can't have 2 consecutive vars
-     (t
+    (if (not pat)
+      (match-variable var input bindings)
+      ;; We assume that pat starts with a constant
+      ;; In other words, a pattern can't have 2 consecutive vars
       (let ((pos (position (car pat) input start)))
         (cond
          ((not pos) fail)
@@ -96,10 +97,9 @@
                                                (subseq input 0 pos)
                                                bindings))))
             ;; If this match failed, try another longer one
-            (cond
-             ((= b2 fail)
-              (segment-match pattern input bindings (+ pos 1)))
-             (t b2))))))))))
+            (if (= b2 fail)
+              (segment-match pattern input bindings (+ pos 1))
+              b2))))))))
 
 (defn pat-match (pattern input bindings)
   (doc (Match pattern against input in the context of the bindings))
@@ -127,8 +127,9 @@
         (t (niladd 1 (position a (cdr input) 0)))))
 
 (defn subseq (l start end)
-  (cond ((not end) (drop start l))
-        (t (take (- end start) (subseq l start ())))))
+  (if (not end)
+    (drop start l)
+    (take (- end start) (subseq l start ()))))
 
 (defn rule-pattern (rule) (car rule))
 (defn rule-responses (rule) (cdr rule))
@@ -161,27 +162,27 @@
           words))
 
 (defn some (f l)
-  (cond ((not l) ())
-        (t
-         (let ((result (f (car l))))
-           (cond (result result)
-                 (t (some f (cdr l))))))))
+  (when l
+    (let ((result (f (car l))))
+      (if result
+        result
+        (some f (cdr l))))))
 
 (defn apply-rule (rule)
   (let ((result (pat-match (rule-pattern rule)
                            input
                            no-bindings)))
-    (cond ((not (= result fail))
-           (sublis (switch-viewpoint result)
-                   (random-elt (rule-responses rule)))))))
+    (when (not (= result fail))
+      (sublis (switch-viewpoint result)
+              (random-elt (rule-responses rule))))))
 
 (defn use-eliza-rules (input)
   (doc (Find some rule with which to transform the input))
   (some (lambda (rule)
           (let ((result (pat-match (rule-pattern rule) input no-bindings)))
-            (cond ((not (= result fail))
-                   (sublis (switch-viewpoint result)
-                           (randchoice (rule-responses rule)))))))
+            (when (not (= result fail))
+              (sublis (switch-viewpoint result)
+                      (randchoice (rule-responses rule))))))
         *eliza-rules*))
 
 (defn eliza ()
@@ -288,5 +289,6 @@
   (is (= '(Do you often feel sad ?)
          (flatten (use-eliza-rules '(I feel sad))))))
 
-;; Main loop:
-(eliza)
+;; Main loop: uncomment this to get the actual loop
+;; (eliza)
+

@@ -49,8 +49,9 @@ Example (using a file in this project):
     $ cat examples/fact.l1
     ;; Return the factorial of `n`:
     (defn fact (n)
-      (cond ((= 0 n) 1)
-            (t (* n (fact (- n 1)))))))
+      (if (zero? n)
+        1
+        (* n (fact (- n 1)))))))
 
     (print (fact 100))
     $ time l1 examples/fact.l1
@@ -58,9 +59,9 @@ Example (using a file in this project):
     952175999932299156089414639761565182862536979208272237582511852
     10916864000000000000000000000000
 
-    real	0m0.008s
-    user	0m0.004s
-    sys	0m0.004s
+    real    0m0.010s
+    user    0m0.005s
+    sys     0m0.005s
 
 See the `examples` directory for more sample `l1` files.
 
@@ -214,8 +215,9 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
 
 (test '(factorial)
   (defn fact (n)
-    (cond ((zero? n) 1)
-          (t (* n (fact (- n 1))))))
+    (if (zero? n)
+      1
+      (* n (fact (- n 1))))))
   (is (= 30414093201713378043612608166064768844377641568960512000000000000
          (fact 50)))
   (is (= 2568 (len (split (fact 1000))))))
@@ -276,8 +278,10 @@ expressions to it.
 
 # Resources / Further Reading
 
-- [Structure and Interpretation of Computer Programs](https://mitpress.mit.edu/sites/default/files/sicp/index.html).  Classic MIT
-  text, presents several Lisp evaluation models, written in Scheme.
+- [Structure and Interpretation of Computer
+  Programs](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs).
+  Classic MIT text, presents several Lisp evaluation models, written
+  in Scheme.
 - [Crafting Interpreters](https://craftinginterpreters.com/) book / website.  Stunning, thorough,
   approachable and beautiful book on building a language in Java and
   in C.
