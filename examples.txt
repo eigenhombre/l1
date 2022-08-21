@@ -60,6 +60,7 @@ macroexpand-1    1      Expand a macro
      readlist    0      Read a list from stdin
           rem    2      Return remainder when second arg divides first
         split    1      Split an atom or number into a list of single-digit numbers or single-character atoms
+ syntax-quote    1      SPECIAL FORM: Syntax-quote an expression
          test    0+     Establish a testing block (return last expression)
        upcase    1      Return the uppercase version of the given atom
       version    0      Return the version of the interpreter

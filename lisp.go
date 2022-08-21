@@ -223,6 +223,8 @@ top:
 			switch {
 			case carAtom.s == "quote":
 				return t.cdr.(*ConsCell).car, nil
+			case carAtom.s == "syntax-quote":
+				return t.cdr.(*ConsCell).car, nil
 			case carAtom.s == "cond":
 				pairList := t.cdr.(*ConsCell)
 				if pairList == Nil {

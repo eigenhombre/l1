@@ -19,6 +19,9 @@ func TestLex(t *testing.T) {
 	A := abbrev(itemAtom)
 	DOT := abbrev(itemDot)
 	QUOTE := abbrev(itemForwardQuote)
+	BACKQUOTE := abbrev(itemSyntaxQuote)
+	UNQUOTE := abbrev(itemUnquote)
+	SPLICINGUNQUOTE := abbrev(itemSplicingUnquote)
 	Err := abbrev(itemError)
 	toks := func(items ...lexutil.LexItem) []lexutil.LexItem {
 		if len(items) == 0 {
@@ -80,6 +83,12 @@ func TestLex(t *testing.T) {
 			A("atom2"),
 			RP(")"))},
 		{"'quoted-atom", toks(QUOTE("'"), A("quoted-atom"))},
+		{"~atom", toks(UNQUOTE("~"), A("atom"))},
+		{"~@atom", toks(SPLICINGUNQUOTE("~@"), A("atom"))},
+		{"`(a ~b ~@c)", toks(BACKQUOTE("`"), LP("("),
+			A("a"),
+			UNQUOTE("~"), A("b"),
+			SPLICINGUNQUOTE("~@"), A("c"), RP(")"))},
 		{"((a . b))", toks(LP("("), LP("("), A("a"), DOT("."), A("b"), RP(")"), RP(")"))},
 		{"((a) . b)", toks(LP("("), LP("("), A("a"), RP(")"), DOT("."), A("b"), RP(")"))},
 		{"&", toks(Err("unexpected character '&' in input"))},

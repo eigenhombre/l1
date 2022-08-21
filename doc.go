@@ -27,6 +27,7 @@ var specialForms = []fnDoc{
 	{"loop", 1, true, "Loop forever", true},
 	{"or", 0, true, "Boolean or", true},
 	{"quote", 1, false, "Quote an expression", true},
+	{"syntax-quote", 1, false, "Syntax-quote an expression", true},
 }
 
 func formatFunctionInfo(name, shortDesc string, arity int, isMultiArity, isSpecial, isMacro bool) string {

@@ -605,3 +605,9 @@
              2
              3
              6))))
+
+(test '(syntax-quote)
+  (is (= (quote foo) (syntax-quote foo)))
+  (is (= 'foo `foo))
+  (is (= '(a list by any other name)
+         `(a list by any other name))))

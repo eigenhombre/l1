@@ -6,7 +6,65 @@ import (
 	"github.com/eigenhombre/lexutil"
 )
 
-// parse returns a list of sexprs parsed from a list of tokens.
+func handleQuoteItem(tokens []lexutil.LexItem, i int, operatorName string) (Sexpr, int, error) {
+	if i >= len(tokens) {
+		return nil, 0, fmt.Errorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
+	}
+	nextParsed, incr, err := parseNext(tokens, i)
+	if err != nil {
+		return nil, 0, err
+	}
+	item := Cons(Atom{operatorName}, Cons(nextParsed, Nil))
+	return item, incr, nil
+}
+
+func parseNext(tokens []lexutil.LexItem, i int) (Sexpr, int, error) {
+	if i >= len(tokens) {
+		return nil, 0, fmt.Errorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
+	}
+	token := tokens[i]
+	switch token.Typ {
+	case itemNumber:
+		return Num(token.Val), 1, nil
+	case itemAtom:
+		return Atom{token.Val}, 1, nil
+	case itemForwardQuote:
+		item, incr, err := handleQuoteItem(tokens, i+1, "quote")
+		if err != nil {
+			return nil, 0, err
+		}
+		return item, incr + 1, nil
+	case itemSyntaxQuote:
+		item, incr, err := handleQuoteItem(tokens, i+1, "syntax-quote")
+		if err != nil {
+			return nil, 0, err
+		}
+		return item, incr + 1, nil
+	case itemUnquote:
+		item, incr, err := handleQuoteItem(tokens, i+1, "unquote")
+		if err != nil {
+			return nil, 0, err
+		}
+		return item, incr + 1, nil
+	case itemSplicingUnquote:
+		item, incr, err := handleQuoteItem(tokens, i+1, "splicing-unquote")
+		if err != nil {
+			return nil, 0, err
+		}
+		return item, incr + 1, nil
+	case itemLeftParen:
+		item, incr, err := parseList(tokens[i:])
+		if err != nil {
+			return nil, 0, err
+		}
+		return item, incr, nil
+	case itemRightParen:
+		return nil, 0, fmt.Errorf("unexpected right paren")
+	default:
+		return nil, 0, fmt.Errorf("unexpected lexeme '%s'", token.Val)
+	}
+}
+
 func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 	ret := []Sexpr{}
 	i := 0
@@ -14,46 +72,12 @@ func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 		if i >= len(tokens) {
 			break
 		}
-		token := tokens[i]
-		switch token.Typ {
-		case itemNumber:
-			ret = append(ret, Num(token.Val))
-			i++
-		case itemAtom:
-			ret = append(ret, Atom{token.Val})
-			i++
-		case itemForwardQuote:
-			i++ // skip ' token
-			if i >= len(tokens) {
-				return nil, fmt.Errorf("unexpected end of input")
-			}
-			if tokens[i].Typ != itemLeftParen {
-				inner, err := parse(tokens[i : i+1])
-				if err != nil {
-					return nil, err
-				}
-				ret = append(ret, Cons(Atom{"quote"}, Cons(inner[0], Nil)))
-				i++
-			} else {
-				inner, incr, err := parseList(tokens[i:])
-				if err != nil {
-					return nil, err
-				}
-				ret = append(ret, Cons(Atom{"quote"}, Cons(inner, Nil)))
-				i += incr
-			}
-		case itemLeftParen:
-			item, incr, err := parseList(tokens[i:])
-			if err != nil {
-				return nil, err
-			}
-			ret = append(ret, item)
-			i += incr
-		case itemRightParen:
-			return nil, fmt.Errorf("unexpected right paren")
-		default:
-			return nil, fmt.Errorf("unexpected lexeme '%s'", token.Val)
+		item, incr, err := parseNext(tokens, i)
+		if err != nil {
+			return nil, err
 		}
+		ret = append(ret, item)
+		i += incr
 	}
 	return ret, nil
 }

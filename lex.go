@@ -16,19 +16,25 @@ const (
 	itemLeftParen
 	itemRightParen
 	itemForwardQuote
+	itemSyntaxQuote
+	itemUnquote
+	itemSplicingUnquote
 	itemDot
 	itemError
 )
 
 // Human-readable versions of above:
 var typeMap = map[lexutil.ItemType]string{
-	itemNumber:       "NUM",
-	itemAtom:         "ATOM",
-	itemLeftParen:    "LP",
-	itemRightParen:   "RP",
-	itemForwardQuote: "QUOTE",
-	itemDot:          "DOT",
-	itemError:        "ERR",
+	itemNumber:          "NUM",
+	itemAtom:            "ATOM",
+	itemLeftParen:       "LP",
+	itemRightParen:      "RP",
+	itemForwardQuote:    "QUOTE",
+	itemSyntaxQuote:     "SYNTAXQUOTE",
+	itemUnquote:         "UNQUOTE",
+	itemSplicingUnquote: "SPLICINGUNQUOTE",
+	itemDot:             "DOT",
+	itemError:           "ERR",
 }
 
 // LexRepr returns a string representation of a known lexeme.
@@ -46,6 +52,12 @@ func LexRepr(i lexutil.LexItem) string {
 		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
 	case itemForwardQuote:
 		return "QUOTE"
+	case itemSyntaxQuote:
+		return "BACKQUOTE"
+	case itemUnquote:
+		return "UNQUOTE"
+	case itemSplicingUnquote:
+		return "SPLICINGUNQUOTE"
 	case itemDot:
 		return "DOT"
 	default:
@@ -89,6 +101,11 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 			return lexAtom
 		case r == '\'':
 			l.Emit(itemForwardQuote)
+		case r == '`':
+			l.Emit(itemSyntaxQuote)
+		case r == '~':
+			l.Backup()
+			return lexUnquote
 		case r == '.':
 			l.Emit(itemDot)
 		default:
@@ -103,10 +120,23 @@ var laterAtomChars = (initialAtomChars + "0123456789" + "!$^.,")
 func isAtomStart(r rune) bool {
 	return strings.ContainsRune(initialAtomChars, r)
 }
+
 func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
 	l.Accept(initialAtomChars)
 	l.AcceptRun(laterAtomChars)
 	l.Emit(itemAtom)
+	return lexStart
+}
+
+func lexUnquote(l *lexutil.Lexer) lexutil.StateFn {
+	l.Accept("~")
+	nextRune := l.Peek()
+	if nextRune == '@' {
+		l.Next()
+		l.Emit(itemSplicingUnquote)
+	} else {
+		l.Emit(itemUnquote)
+	}
 	return lexStart
 }
 
