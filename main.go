@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime/pprof"
 
 	"github.com/eigenhombre/lexutil"
 )
@@ -77,13 +78,25 @@ func repl(e env) {
 
 func main() {
 	var versionFlag bool
+	var cpuProfile string
 
 	flag.BoolVar(&versionFlag, "v", false, "Get l1 version")
+	flag.StringVar(&cpuProfile, "p", "", "Write CPU profile to file")
+
 	flag.Parse()
 
 	if versionFlag {
 		fmt.Println(version)
 		os.Exit(0)
+	}
+
+	if cpuProfile != "" {
+		f, err := os.Create(cpuProfile)
+		if err != nil {
+			panic(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
 	}
 
 	globals := mkEnv(nil)
@@ -95,13 +108,16 @@ func main() {
 		fmt.Println("Failed to load l1 core library!")
 		os.Exit(1)
 	}
-	if len(os.Args) > 1 {
-		bytes, err := os.ReadFile(os.Args[1])
-		if err != nil {
-			panic(err)
-		}
-		if !lexParseEval(string(bytes), globals, false) {
-			os.Exit(1)
+	files := flag.Args()
+	if len(files) > 0 {
+		for _, file := range files {
+			bytes, err := os.ReadFile(file)
+			if err != nil {
+				panic(err)
+			}
+			if !lexParseEval(string(bytes), globals, false) {
+				os.Exit(1)
+			}
 		}
 		return
 	}
