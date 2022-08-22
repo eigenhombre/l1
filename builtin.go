@@ -648,7 +648,11 @@ func init() {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
 				}
-				fmt.Println(args[0].String()[1 : len(args[0].String())-1])
+				list, ok := args[0].(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("expected list, got '%s'", args[0])
+				}
+				fmt.Println(unwrapList(list))
 				return Nil, nil
 			},
 		},
@@ -703,6 +707,116 @@ func init() {
 					return nil, err
 				}
 				return mkListAsConsWithCdr(parsed, Nil), nil
+			},
+		},
+		"screen-start": {
+			Name:       "screen-start",
+			Docstring:  "Start screen for text UIs",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				err := termStart()
+				if err != nil {
+					return nil, err
+				}
+				return Nil, nil
+			},
+		},
+		"screen-end": {
+			Name:       "screen-end",
+			Docstring:  "Stop screen for text UIs, return to console mode",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				err := termEnd()
+				if err != nil {
+					return nil, err
+				}
+				return Nil, nil
+			},
+		},
+		"screen-size": {
+			Name:       "screen-size",
+			Docstring:  "Return the screen size (width, height)",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				width, height, err := termSize()
+				if err != nil {
+					return nil, err
+				}
+				return Cons(Num(width), Cons(Num(height), Nil)), nil
+			},
+		},
+		"screen-clear": {
+			Name:       "screen-clear",
+			Docstring:  "Clear the screen",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				err := termClear()
+				if err != nil {
+					return nil, err
+				}
+				return Nil, nil
+			},
+		},
+		"screen-get-key": {
+			Name:       "getkey",
+			Docstring:  "Return a keystroke as an atom",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 0 {
+					return nil, fmt.Errorf("getkey expects no arguments")
+				}
+				key, err := termGetKey()
+				if err != nil {
+					return nil, err
+				}
+				return Atom{key}, nil
+			},
+		},
+		"screen-write": {
+			Name:       "screen-write",
+			Docstring:  "Write a string to the screen",
+			FixedArity: 3,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 3 {
+					return nil, fmt.Errorf("screen-write expects 3 arguments")
+				}
+				x, ok := args[0].(Number)
+				if !ok {
+					return nil, fmt.Errorf("'%s' is not a number", args[0])
+				}
+				y, ok := args[1].(Number)
+				if !ok {
+					return nil, fmt.Errorf("'%s' is not a number", args[1])
+				}
+				s, ok := args[2].(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("'%s' is not a list", args[2])
+				}
+				termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
+				return Nil, nil
+			},
+		},
+		"sleep": {
+			Name:       "sleep",
+			Docstring:  "Sleep for the given number of milliseconds",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("sleep expects a single argument")
+				}
+				num, ok := args[0].(Number)
+				if !ok {
+					return nil, fmt.Errorf("'%s' is not a number", args[0])
+				}
+				time.Sleep(time.Duration(num.bi.Uint64()) * time.Millisecond)
+				return Nil, nil
 			},
 		},
 		"split": {

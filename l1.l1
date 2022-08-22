@@ -257,3 +257,12 @@
     (let ((endl (last args))
           (other (butlast args)))
       (concat other endl))))
+
+(defmacro with-screen (() . body)
+  (doc (prepare for and clean up after screen operations))
+  `(progn
+     (screen-start)
+     (let ((result
+            (progn ~@body)))
+       (screen-end)
+       result)))

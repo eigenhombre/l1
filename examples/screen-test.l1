@@ -1,0 +1,4 @@
+(with-screen
+ (screen-clear)
+ (screen-write 10 10 '(hello this is a test))
+ (sleep 1000))
