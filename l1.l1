@@ -38,6 +38,22 @@
   (doc (execute multiple statements, returning the last))
   `(let () ~@body))
 
+(defmacro foreach (x xs . body)
+  (doc (execute body for each value in a list))
+  `(progn
+     (map (lambda (~x)
+            ~@body)
+          ~xs)
+     ()))
+
+(defmacro dotimes (n . body)
+  (doc (execute body for each value in a list))
+  `(progn
+     (map (lambda (_)
+            ~@body)
+          (range ~n))
+     ()))
+
 (defn reduce (f x . args)
   (doc (successively apply a function against a list of arguments))
   (let ((inner (lambda inner (f acc l)
@@ -83,13 +99,6 @@
 (defn pos? (n)
   (doc (return true iff the supplied integer argument is greater than zero))
   (< 0 n))
-
-(defn dotimes (n f)
-  (doc (run the supplied function n times))
-  (when-not (zero? n)
-    (progn
-      (f)
-      (dotimes (- n 1) f))))
 
 (defn inc (n)
   (doc (return the supplied integer argument, plus one))

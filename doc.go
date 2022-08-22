@@ -100,6 +100,10 @@ func doHelp(out io.Writer, e *env) {
 		expr, _ := e.Lookup(lambdaName)
 		l := expr.(*lambdaFn)
 		fmt.Fprintln(out, formatFunctionInfo(lambdaName,
-			functionDescriptionFromDoc(*l), len(l.args), l.restArg == "", false, l.isMacro))
+			functionDescriptionFromDoc(*l),
+			len(l.args),
+			l.restArg != "",
+			false,
+			l.isMacro))
 	}
 }

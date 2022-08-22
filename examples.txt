@@ -68,49 +68,50 @@ macroexpand-1    1      Expand a macro
 
 Other available functions:
 
-           **    2+     Exponentiation operator
-      butlast    1+     Return everything but the last element
-         caar    1+     First element of the first element of a list of lists
-   capitalize    1+     Return the atom argument, capitalized
-      comment    0      Macro: Ignore the expressions in the block
-   complement    1+     Return the logical complement of the supplied function
-       concat    0      Concatenenate any number of lists
-   constantly    1+     Given a value, return a function which always returns that value
-          dec    1+     Return the supplied integer argument, minus one
-      dotimes    2+     Run the supplied function n times
-         drop    2+     Drop n items from a list, then return the rest
-        error    1+     Return an error and (NOT IMPLEMENTED) short-circuit further processing
-        even?    1+     Return true if the supplied integer argument is even
-    exclaimed    1+     Return l as a sentence... emphasized!
-       filter    2+     Keep only values for which function f is true
-      flatten    1+     Return a (possibly nested) list, flattened
-     identity    1+     Return the argument
-           if    3+     Macro: Simple conditional with two branches
-       if-not    3+     Macro: Simple (inverted) conditional with two branches
-          inc    1+     Return the supplied integer argument, plus one
-         last    1+     Return the last item in a list
-        list*    0      Create a list by consing everything but the last arg onto the last
-          map    2+     Apply the supplied function to every element in the supplied list
-       mapcat    2+     Map a function onto a list and concatenate results
-         neg?    1+     Return true iff the supplied integer argument is less than zero
-          nth    2+     Find the nth value of a list, starting from zero
-         odd?    1+     Return true if the supplied integer argument is odd
-         pos?    1+     Return true iff the supplied integer argument is greater than zero
-        progn    0      Macro: Execute multiple statements, returning the last
-    punctuate    2+     Return l capitalized, with punctuation determined by the supplied function
-    randalpha    1+     Return a list of random (English/Latin/unaccented) alphabetic characters
-   randchoice    1+     Return an element at random from the supplied list
-    randigits    1+     Return a random integer between 0 and the argument minus 1
-        range    1+     List of integers from 0 to n
-       reduce    2      Successively apply a function against a list of arguments
-       remove    2+     Keep only values for which function f is false / the empty list
-       repeat    2+     Return a list of length n whose elements are all x
-   repeatedly    2+     Return a list of length n whose elements are made from calling f repeatedly
-      reverse    1+     Reverse a list
-         take    2+     Take up to n items from the supplied list
-   tosentence    1+     Return l as a sentence... capitalized, with a period at the end
-         when    2+     Macro: Simple conditional with single branch
-     when-not    2+     Macro: Complement of the when macro
-        zero?    1+     Return true iff the supplied argument is zero
+           **    2      Exponentiation operator
+      butlast    1      Return everything but the last element
+         caar    1      First element of the first element of a list of lists
+   capitalize    1      Return the atom argument, capitalized
+      comment    0+     Macro: Ignore the expressions in the block
+   complement    1      Return the logical complement of the supplied function
+       concat    0+     Concatenenate any number of lists
+   constantly    1      Given a value, return a function which always returns that value
+          dec    1      Return the supplied integer argument, minus one
+      dotimes    1+     Macro: Execute body for each value in a list
+         drop    2      Drop n items from a list, then return the rest
+        error    1      Return an error and (NOT IMPLEMENTED) short-circuit further processing
+        even?    1      Return true if the supplied integer argument is even
+    exclaimed    1      Return l as a sentence... emphasized!
+       filter    2      Keep only values for which function f is true
+      flatten    1      Return a (possibly nested) list, flattened
+      foreach    2+     Macro: Execute body for each value in a list
+     identity    1      Return the argument
+           if    3      Macro: Simple conditional with two branches
+       if-not    3      Macro: Simple (inverted) conditional with two branches
+          inc    1      Return the supplied integer argument, plus one
+         last    1      Return the last item in a list
+        list*    0+     Create a list by consing everything but the last arg onto the last
+          map    2      Apply the supplied function to every element in the supplied list
+       mapcat    2      Map a function onto a list and concatenate results
+         neg?    1      Return true iff the supplied integer argument is less than zero
+          nth    2      Find the nth value of a list, starting from zero
+         odd?    1      Return true if the supplied integer argument is odd
+         pos?    1      Return true iff the supplied integer argument is greater than zero
+        progn    0+     Macro: Execute multiple statements, returning the last
+    punctuate    2      Return l capitalized, with punctuation determined by the supplied function
+    randalpha    1      Return a list of random (English/Latin/unaccented) alphabetic characters
+   randchoice    1      Return an element at random from the supplied list
+    randigits    1      Return a random integer between 0 and the argument minus 1
+        range    1      List of integers from 0 to n
+       reduce    2+     Successively apply a function against a list of arguments
+       remove    2      Keep only values for which function f is false / the empty list
+       repeat    2      Return a list of length n whose elements are all x
+   repeatedly    2      Return a list of length n whose elements are made from calling f repeatedly
+      reverse    1      Reverse a list
+         take    2      Take up to n items from the supplied list
+   tosentence    1      Return l as a sentence... capitalized, with a period at the end
+         when    2      Macro: Simple conditional with single branch
+     when-not    2      Macro: Complement of the when macro
+        zero?    1      Return true iff the supplied argument is zero
 > ^D
 $
