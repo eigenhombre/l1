@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Sexpr is a general-purpose data structure for representing
+// Sexpr is a general-purpose interface for representing
 // S-expressions.
 type Sexpr interface {
 	String() string
@@ -111,7 +111,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	}
 }
 
-// Both eval and apply use this to bind lambda arguments in the
+// Both eval, apply and macroexpansion use this to bind lambda arguments in the
 // supplied environment:
 func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error {
 	var err error

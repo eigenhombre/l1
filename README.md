@@ -158,6 +158,7 @@ See the `examples` directory for more sample `l1` files.
           flatten    1+     Return a (possibly nested) list, flattened
          identity    1+     Return the argument
                if    3+     Macro: Simple conditional with two branches
+           if-not    3+     Macro: Simple (inverted) conditional with two branches
               inc    1+     Return the supplied integer argument, plus one
              last    1+     Return the last item in a list
             list*    0      Create a list by consing everything but the last arg onto the last

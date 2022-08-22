@@ -18,6 +18,11 @@
   `(cond (~condition ~then)
          (t ~else)))
 
+(defmacro if-not (condition then else)
+  (doc (simple (inverted) conditional with two branches))
+  `(cond ((not ~condition) ~then)
+         (t ~else)))
+
 (defmacro comment (() . body)
   (doc (ignore the expressions in the block)))
 
@@ -112,8 +117,10 @@
 
 (defn last (l)
   (doc (return the last item in a list))
-  (let ((len_ (len l)))
-    (nth (dec len_) l)))
+  (let ((c (cdr l)))
+    (if-not c
+      (car l)
+      (last c))))
 
 (defn take (n l)
   (doc (take up to n items from the supplied list))
