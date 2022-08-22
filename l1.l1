@@ -19,7 +19,7 @@
          (t ~else)))
 
 (defmacro comment (() . body)
-  (doc '(ignore the expressions in the block)))
+  (doc (ignore the expressions in the block)))
 
 (defmacro when (condition then)
   (doc (simple conditional with single branch))

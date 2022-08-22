@@ -144,7 +144,7 @@ See the `examples` directory for more sample `l1` files.
           butlast    1+     Return everything but the last element
              caar    1+     First element of the first element of a list of lists
        capitalize    1+     Return the atom argument, capitalized
-          comment    0      Macro: Quote (ignore the expressions in the block)
+          comment    0      Macro: Ignore the expressions in the block
        complement    1+     Return the logical complement of the supplied function
            concat    0      Concatenenate any number of lists
        constantly    1+     Given a value, return a function which always returns that value

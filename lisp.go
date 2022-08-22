@@ -169,11 +169,13 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 		return expr, nil
 	}
 	fn, _ := e.Lookup(expr.(*ConsCell).car.(Atom).s)
-	argExprs, err := consToExprs(expr.(*ConsCell).cdr)
-	if err != nil {
-		return nil, err
+	c, ok := expr.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("macro call must be a list")
 	}
-	if err := setLambdaArgsInEnv(e, fn.(*lambdaFn), argExprs); err != nil {
+	if err := setLambdaArgsInEnv(e,
+		fn.(*lambdaFn),
+		consToExprs(c.cdr)); err != nil {
 		return nil, err
 	}
 	ast := fn.(*lambdaFn).body
@@ -213,10 +215,7 @@ func listStartsWith(expr *ConsCell, s string) bool {
 // Adapted from https://github.com/kanaka/mal/blob/master/impls/go/src/step7_quote/step7_quote.go#L36:
 // FIXME: Rather than converting to slice and back, could recursively build up from the bottom.
 func transformSyntaxQuoteList(l *ConsCell) (*ConsCell, error) {
-	tList, err := consToExprs(l)
-	if err != nil {
-		return Nil, nil
-	}
+	tList := consToExprs(l)
 	ret := Nil
 	for i := len(tList) - 1; 0 <= i; i-- {
 		elt := tList[i]
