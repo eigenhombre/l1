@@ -70,11 +70,11 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	var fnArgs []Sexpr
 	// Support (apply f a b l) where l is a list and a, b are scalars:
 	singleArgs := args[1 : l-1]
-	fnArgs, err := consToExprs(args[l-1])
-	if err != nil {
-		return nil, err
+	c, ok := args[l-1].(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("'%s' is not a list", args[l-1])
 	}
-	fnArgs = append(singleArgs, fnArgs...)
+	fnArgs = append(singleArgs, consToExprs(c)...)
 
 	// Note: what follows is very similar to the function evaluation
 	// logic in eval(), but TCO (goto) there makes it hard to DRY out with

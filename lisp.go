@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Sexpr is a general-purpose data structure for representing
+// Sexpr is a general-purpose interface for representing
 // S-expressions.
 type Sexpr interface {
 	String() string
@@ -111,7 +111,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	}
 }
 
-// Both eval and apply use this to bind lambda arguments in the
+// Both eval, apply and macroexpansion use this to bind lambda arguments in the
 // supplied environment:
 func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error {
 	var err error
@@ -169,11 +169,13 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 		return expr, nil
 	}
 	fn, _ := e.Lookup(expr.(*ConsCell).car.(Atom).s)
-	argExprs, err := consToExprs(expr.(*ConsCell).cdr)
-	if err != nil {
-		return nil, err
+	c, ok := expr.(*ConsCell)
+	if !ok {
+		return nil, fmt.Errorf("macro call must be a list")
 	}
-	if err := setLambdaArgsInEnv(e, fn.(*lambdaFn), argExprs); err != nil {
+	if err := setLambdaArgsInEnv(e,
+		fn.(*lambdaFn),
+		consToExprs(c.cdr)); err != nil {
 		return nil, err
 	}
 	ast := fn.(*lambdaFn).body
@@ -196,6 +198,61 @@ func macroexpand(expr Sexpr, e *env) (Sexpr, error) {
 		if !isMacroCall(ret, e) {
 			return ret, nil
 		}
+	}
+}
+
+func listStartsWith(expr *ConsCell, s string) bool {
+	if expr == Nil {
+		return false
+	}
+	car, ok := expr.car.(Atom)
+	if !ok {
+		return false
+	}
+	return car.s == s
+}
+
+// Adapted from
+// https://github.com/kanaka/mal/blob/master/impls/go/src/step7_quote/step7_quote.go#L36,
+// but done recursively:
+func splicingUnquote(l *ConsCell) (*ConsCell, error) {
+	if l == Nil {
+		return Nil, nil
+	}
+	cdr, ok := l.cdr.(*ConsCell)
+	if !ok {
+		return l, nil
+	}
+	nxt, err := splicingUnquote(cdr)
+	if err != nil {
+		return nil, err
+	}
+	elt := l.car
+	switch t := elt.(type) {
+	case *ConsCell:
+		if listStartsWith(t, "splicing-unquote") {
+			return Cons(Atom{"concat"}, Cons(t.cdr.(*ConsCell).car, Cons(nxt, Nil))), nil
+		}
+	default:
+	}
+	return Cons(Atom{"cons"}, Cons(syntaxQuote(elt), Cons(nxt, Nil))), nil
+}
+
+func syntaxQuote(arg Sexpr) Sexpr {
+	switch t := arg.(type) {
+	case Number, Atom:
+		return Cons(Atom{"quote"}, Cons(arg, Nil))
+	case *ConsCell:
+		if listStartsWith(t, "unquote") {
+			return t.cdr.(*ConsCell).car
+		}
+		ret, err := splicingUnquote(t)
+		if err != nil {
+			return nil
+		}
+		return ret
+	default:
+		return t
 	}
 }
 
@@ -224,7 +281,8 @@ top:
 			case carAtom.s == "quote":
 				return t.cdr.(*ConsCell).car, nil
 			case carAtom.s == "syntax-quote":
-				return t.cdr.(*ConsCell).car, nil
+				expr = syntaxQuote(t.cdr.(*ConsCell).car)
+				goto top
 			case carAtom.s == "cond":
 				pairList := t.cdr.(*ConsCell)
 				if pairList == Nil {

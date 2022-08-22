@@ -18,8 +18,7 @@
                            (cdr (reverse (cdr s)))))))))
 
 (dotimes 10
-  (lambda ()
-    (printl (proper-sentence))))
+  (printl (proper-sentence)))
 ;;=>
 ;; A ball saw a ball.
 ;; The ball took a table.

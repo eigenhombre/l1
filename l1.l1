@@ -15,23 +15,44 @@
 
 (defmacro if (condition then else)
   (doc (simple conditional with two branches))
-  (list 'cond
-        (list condition then)
-        (list t else)))
+  `(cond (~condition ~then)
+         (t ~else)))
+
+(defmacro if-not (condition then else)
+  (doc (simple (inverted) conditional with two branches))
+  `(cond ((not ~condition) ~then)
+         (t ~else)))
+
+(defmacro comment (() . body)
+  (doc (ignore the expressions in the block)))
 
 (defmacro when (condition then)
   (doc (simple conditional with single branch))
-  (list 'cond
-        (list condition then)))
+  `(cond (~condition ~then)))
 
 (defmacro when-not (condition then)
   (doc (complement of the when macro))
-  (list 'cond
-        (list (list 'not condition) then)))
+  `(cond ((not ~condition) ~then)))
 
 (defmacro progn (() . body)
   (doc (execute multiple statements, returning the last))
-  (list* 'let () body))
+  `(let () ~@body))
+
+(defmacro foreach (x xs . body)
+  (doc (execute body for each value in a list))
+  `(progn
+     (map (lambda (~x)
+            ~@body)
+          ~xs)
+     ()))
+
+(defmacro dotimes (n . body)
+  (doc (execute body for each value in a list))
+  `(progn
+     (map (lambda (_)
+            ~@body)
+          (range ~n))
+     ()))
 
 (defn reduce (f x . args)
   (doc (successively apply a function against a list of arguments))
@@ -79,13 +100,6 @@
   (doc (return true iff the supplied integer argument is greater than zero))
   (< 0 n))
 
-(defn dotimes (n f)
-  (doc (run the supplied function n times))
-  (when-not (zero? n)
-    (progn
-      (f)
-      (dotimes (- n 1) f))))
-
 (defn inc (n)
   (doc (return the supplied integer argument, plus one))
   (+ n 1))
@@ -112,8 +126,10 @@
 
 (defn last (l)
   (doc (return the last item in a list))
-  (let ((len_ (len l)))
-    (nth (dec len_) l)))
+  (let ((c (cdr l)))
+    (if-not c
+      (car l)
+      (last c))))
 
 (defn take (n l)
   (doc (take up to n items from the supplied list))
