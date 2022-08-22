@@ -33,8 +33,7 @@ clean:
 install: ${PROG}
 	go install .
 
-verbose: all
-    # The tests are fast!  Just do it again, verbosely:
+verbose: all # The tests are fast!  Just do it again, verbosely:
 	go test -v
 
 docker:

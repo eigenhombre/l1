@@ -13,6 +13,8 @@ func mkListAsConsWithCdr(xs []Sexpr, cdr Sexpr) Sexpr {
 	return Cons(xs[0], mkListAsConsWithCdr(xs[1:], cdr))
 }
 
+// FIXME: only the coercion can fail, so maybe that should be checked in the parent,
+// giving this a simpler return signature.
 func consToExprs(argList Sexpr) ([]Sexpr, error) {
 	args := []Sexpr{}
 	for argList != Nil {

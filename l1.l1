@@ -15,23 +15,23 @@
 
 (defmacro if (condition then else)
   (doc (simple conditional with two branches))
-  (list 'cond
-        (list condition then)
-        (list t else)))
+  `(cond (~condition ~then)
+         (t ~else)))
+
+(defmacro comment (() . body)
+  (doc '(ignore the expressions in the block)))
 
 (defmacro when (condition then)
   (doc (simple conditional with single branch))
-  (list 'cond
-        (list condition then)))
+  `(cond (~condition ~then)))
 
 (defmacro when-not (condition then)
   (doc (complement of the when macro))
-  (list 'cond
-        (list (list 'not condition) then)))
+  `(cond ((not ~condition) ~then)))
 
 (defmacro progn (() . body)
   (doc (execute multiple statements, returning the last))
-  (list* 'let () body))
+  `(let () ~@body))
 
 (defn reduce (f x . args)
   (doc (successively apply a function against a list of arguments))

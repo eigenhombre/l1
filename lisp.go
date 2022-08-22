@@ -199,6 +199,58 @@ func macroexpand(expr Sexpr, e *env) (Sexpr, error) {
 	}
 }
 
+func listStartsWith(expr *ConsCell, s string) bool {
+	if expr == Nil {
+		return false
+	}
+	car, ok := expr.car.(Atom)
+	if !ok {
+		return false
+	}
+	return car.s == s
+}
+
+// Adapted from https://github.com/kanaka/mal/blob/master/impls/go/src/step7_quote/step7_quote.go#L36:
+// FIXME: Rather than converting to slice and back, could recursively build up from the bottom.
+func transformSyntaxQuoteList(l *ConsCell) (*ConsCell, error) {
+	tList, err := consToExprs(l)
+	if err != nil {
+		return Nil, nil
+	}
+	ret := Nil
+	for i := len(tList) - 1; 0 <= i; i-- {
+		elt := tList[i]
+		switch t := elt.(type) {
+		case *ConsCell:
+			if listStartsWith(t, "splicing-unquote") {
+				ret = Cons(Atom{"concat"}, Cons(t.cdr.(*ConsCell).car, Cons(ret, Nil)))
+				continue
+			}
+		default:
+		}
+		ret = Cons(Atom{"cons"}, Cons(syntaxQuote(elt), Cons(ret, Nil)))
+	}
+	return ret, nil
+}
+
+func syntaxQuote(arg Sexpr) Sexpr {
+	switch t := arg.(type) {
+	case Number, Atom:
+		return Cons(Atom{"quote"}, Cons(arg, Nil))
+	case *ConsCell:
+		if listStartsWith(t, "unquote") {
+			return t.cdr.(*ConsCell).car
+		}
+		qql, err := transformSyntaxQuoteList(t)
+		if err != nil {
+			return nil
+		}
+		return qql
+	default:
+		return t
+	}
+}
+
 func eval(exprArg Sexpr, e *env) (Sexpr, error) {
 	expr := exprArg
 	var err error
@@ -224,7 +276,8 @@ top:
 			case carAtom.s == "quote":
 				return t.cdr.(*ConsCell).car, nil
 			case carAtom.s == "syntax-quote":
-				return t.cdr.(*ConsCell).car, nil
+				expr = syntaxQuote(t.cdr.(*ConsCell).car)
+				goto top
 			case carAtom.s == "cond":
 				pairList := t.cdr.(*ConsCell)
 				if pairList == Nil {
