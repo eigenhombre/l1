@@ -212,24 +212,30 @@ func listStartsWith(expr *ConsCell, s string) bool {
 	return car.s == s
 }
 
-// Adapted from https://github.com/kanaka/mal/blob/master/impls/go/src/step7_quote/step7_quote.go#L36:
-// FIXME: Rather than converting to slice and back, could recursively build up from the bottom.
-func transformSyntaxQuoteList(l *ConsCell) (*ConsCell, error) {
-	tList := consToExprs(l)
-	ret := Nil
-	for i := len(tList) - 1; 0 <= i; i-- {
-		elt := tList[i]
-		switch t := elt.(type) {
-		case *ConsCell:
-			if listStartsWith(t, "splicing-unquote") {
-				ret = Cons(Atom{"concat"}, Cons(t.cdr.(*ConsCell).car, Cons(ret, Nil)))
-				continue
-			}
-		default:
-		}
-		ret = Cons(Atom{"cons"}, Cons(syntaxQuote(elt), Cons(ret, Nil)))
+// Adapted from
+// https://github.com/kanaka/mal/blob/master/impls/go/src/step7_quote/step7_quote.go#L36,
+// but done recursively:
+func splicingUnquote(l *ConsCell) (*ConsCell, error) {
+	if l == Nil {
+		return Nil, nil
 	}
-	return ret, nil
+	cdr, ok := l.cdr.(*ConsCell)
+	if !ok {
+		return l, nil
+	}
+	nxt, err := splicingUnquote(cdr)
+	if err != nil {
+		return nil, err
+	}
+	elt := l.car
+	switch t := elt.(type) {
+	case *ConsCell:
+		if listStartsWith(t, "splicing-unquote") {
+			return Cons(Atom{"concat"}, Cons(t.cdr.(*ConsCell).car, Cons(nxt, Nil))), nil
+		}
+	default:
+	}
+	return Cons(Atom{"cons"}, Cons(syntaxQuote(elt), Cons(nxt, Nil))), nil
 }
 
 func syntaxQuote(arg Sexpr) Sexpr {
@@ -240,11 +246,11 @@ func syntaxQuote(arg Sexpr) Sexpr {
 		if listStartsWith(t, "unquote") {
 			return t.cdr.(*ConsCell).car
 		}
-		qql, err := transformSyntaxQuoteList(t)
+		ret, err := splicingUnquote(t)
 		if err != nil {
 			return nil
 		}
-		return qql
+		return ret
 	default:
 		return t
 	}
