@@ -37,13 +37,9 @@ The language core is largely complete.  However, I consider it a work
 in progress still.  Issues and remaining work are [tracked on
 GitHub](https://github.com/eigenhombre/l1/issues).
 
-Although there are many tests, I expect there are plenty of bugs and
-robustness issues.  The interpreter starts fast but, like most
+Although there are many tests, I expect plenty of bugs and
+robustness issues remain.  The interpreter starts fast but, like most
 tree-walking interpreters, is slow for longer calculations.
-
-# Example Programs
-
-Several example programs are available in the [`examples/`](https://github.com/eigenhombre/l1/tree/master/examples) directory.
 
 # Setup
 
@@ -92,6 +88,17 @@ Example (using a file in this project):
     real    0m0.010s
     user    0m0.005s
     sys     0m0.005s
+
+# Example Programs
+
+Several example programs are available in the
+[`examples/`](https://github.com/eigenhombre/l1/tree/master/examples)
+directory.  Most of these are run automatically as tests in the build.
+These can be obtained either by cloning this repository, or after
+installing `l1` by looking under `$GOPATH`. For example, if the
+`latest` release is `v0.0.15`,
+
+    $ ls $GOPATH/pkg/mod/github.com/eigenhombre/l1\@v0.0.15/examples/
 
 ## Example REPL Session
 
@@ -276,9 +283,12 @@ Check out this repo and `cd` to it. Then,
     go build
     go install
 
-Extra testing and build infrastructure for this project relies on
-GitHub Actions, Docker, and Make.  Please look at the `Dockerfile` and
-`Makefile` for more information.
+Or, for a complete build with all tests, etc.,
+
+    make
+
+Testing and builds rely on GitHub Actions, Docker, and Make.  Please
+look at the `Dockerfile` and `Makefile` for more information.
 
 New releases are made using `make release`.  You must commit all
 outstanding changes first.
