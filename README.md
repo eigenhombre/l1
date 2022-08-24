@@ -15,12 +15,27 @@ be a playground for future language experiments.
 features macros, tail-call optimization and a few unique functions for
 converting atoms and numbers to lists, and vice-versa.
 
-# Usage / Examples
+# Objectives
+
+1. Provide a Lisp one can build roguelikes and other text games with.
+1. Provide a Lisp for studying "[Good Old Fashioned AI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)" programs such as those described in [Paradigms of Artificial Intelligence Programming](https://github.com/norvig/paip-lisp) (PAIP).
+1. Answer the question, How far can we get without a 'string' data type?  (Much older Lisp pedagogy, including PAIP and [SICP](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs), do not refer to strings much or at all.)
+1. Build a minimal language core and implement much of the language in the language itself (as is done in Clojure and many Common Lisp implementations).
+
+# Status
+
+The language core is largely complete.  However, I consider it a work in progress still.  Issues and remaining work are [tracked on GitHub](https://github.com/eigenhombre/l1/issues).
+
+# Example Programs
+
+Several example programs are available in the [`examples/`](https://github.com/eigenhombre/l1/tree/master/examples) directory.
+
+# Setup
 
 You should have Go installed and configured (including [setting GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).  At some later point, pre-built
 artifacts for various architectures may be available here.
 
-## Installing
+To install `l1`,
 
     go install github.com/eigenhombre/l1@latest
 
@@ -38,7 +53,7 @@ to print a help message, or, to start a REPL:
 
     $ l1
 
-## Usage
+# Usage
 
 To execute a file:
 
@@ -62,8 +77,6 @@ Example (using a file in this project):
     real    0m0.010s
     user    0m0.005s
     sys     0m0.005s
-
-See the `examples` directory for more sample `l1` files.
 
 ## Example REPL Session
 
@@ -267,6 +280,13 @@ keys for convenience as follows:
       "Major mode for L1 Lisp code"
       (setq inferior-lisp-program (executable-find "l1")
       (paredit-mode 1)
+      (put 'test 'lisp-indent-function 1)
+      (put 'testing 'lisp-indent-function 1)
+      (put 'errors 'lisp-indent-function 1)
+      (put 'if 'lisp-indent-function 1)
+      (put 'if-not 'lisp-indent-function 1)
+      (put 'foreach 'lisp-indent-function 2)
+      (put 'when-not 'lisp-indent-function 1)
       (define-key l1-mode-map (kbd "s-i") 'lisp-eval-last-sexp)
       (define-key l1-mode-map (kbd "s-I") 'lisp-eval-form-and-next)
       (define-key l1-mode-map (kbd "C-o j") 'run-lisp))
@@ -276,18 +296,6 @@ keys for convenience as follows:
 If `l1` has been installed on your path, `M-x run-lisp` or using the appropriate
 keybinding should be enough to start a REPL within Emacs and start sending
 expressions to it.
-
-# Goals
-
-- Learn more about Lisp as a model for computation by building a Lisp with sufficient power to [implement itself](http://www.paulgraham.com/rootsoflisp.html);
-- Improve my Go skills;
-- Build a small, fast-loading Lisp that I can extend how I like;
-- Possibly implement Curses-based terminal control for text games, command line utilities, ...;
-
-# Non-goals
-
-- Backwards compatibility with any existing, popular Lisp.
-- Stability (for now) -- everything is subject to change.
 
 # Resources / Further Reading
 
