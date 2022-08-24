@@ -1,0 +1,6 @@
+(let ((key-received (with-screen
+                     (screen-clear)
+                     (screen-write 10 10 '(hello this is a test))
+                     (screen-write 10 12 '(press any key to continue))
+                     (screen-get-key))))
+  (printl `(I received the ~key-received key!)))

@@ -42,7 +42,7 @@ func formatFunctionInfo(name, shortDesc string, arity int, isMultiArity, isSpeci
 		specialOrMacro = "Macro: "
 	}
 	argstr := fmt.Sprintf("%d%s", arity, isMultiArityStr)
-	return fmt.Sprintf("%13s %5s     %s%s",
+	return fmt.Sprintf("%14s %5s     %s%s",
 		name,
 		argstr,
 		specialOrMacro,

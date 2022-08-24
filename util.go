@@ -26,3 +26,8 @@ func capitalize(s string) string {
 	r, n := utf8.DecodeRuneInString(s)
 	return string(unicode.ToUpper(r)) + s[n:]
 }
+
+func unwrapList(arg *ConsCell) string {
+	s := arg.String()
+	return s[1 : len(s)-1]
+}
