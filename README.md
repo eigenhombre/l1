@@ -275,6 +275,19 @@ Several core library functions are also implemented in `l1`.  The file
 [`l1.l1`](https://github.com/eigenhombre/l1/blob/master/l1.l1) contains these, and is evaluated when the interpreter starts.
 This currently runs quite quickly (8-10 milliseconds on my Mac M1 Air).
 
+# Text User Interfaces
+
+`l1` has a few built-in functions for creating simple text UIs:
+
+- `with-screen`: Enter/exit "screen" (UI) mode
+- `screen-clear`: Clear the screen
+- `screen-get-key`: Get a keystroke
+- `screen-write`: Write a list, without parentheses, to an `x` and `y` position on the screen.
+
+[An example
+program](https://github.com/eigenhombre/l1/blob/master/examples/screen-test.l1)
+shows these functions in action.
+
 # Local Development
 
 Check out this repo and `cd` to it. Then,
