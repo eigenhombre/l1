@@ -340,7 +340,7 @@ expressions to it.
 
 Copyright © 2022, John Jacobsen. MIT License.
 
-The "Eliza" example code in `examples/` was adapted from P. Norvig,
+Two of the example programs in `examples/` were adapted from P. Norvig,
 [Paradigms of Artificial Intelligence Programming: Case Studies in
 Common Lisp](https://github.com/norvig/paip-lisp). MIT License.
 
