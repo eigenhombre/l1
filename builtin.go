@@ -762,7 +762,7 @@ func init() {
 			},
 		},
 		"screen-get-key": {
-			Name:       "getkey",
+			Name:       "screen-get-key",
 			Docstring:  "Return a keystroke as an atom",
 			FixedArity: 0,
 			NAry:       false,
