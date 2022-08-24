@@ -69,5 +69,48 @@ func termSize() (int, int, error) {
 }
 
 func termGetKey() (string, error) {
-	return "", fmt.Errorf("not implemented")
+	if screen == nil {
+		return "", fmt.Errorf("screen not initialized")
+	}
+	for {
+		ev := screen.PollEvent()
+		if ev == nil {
+			return "", nil
+		}
+		switch ev := ev.(type) {
+		case *tcell.EventKey:
+			switch ev.Key() {
+			case tcell.KeyRune:
+				return string(ev.Rune()), nil
+			case tcell.KeyCtrlC:
+				return "INTR", nil
+			case tcell.KeyCtrlD:
+				return "EOF", nil
+			case tcell.KeyCtrlL:
+				return "CLEAR", nil
+			case tcell.KeyBackspace:
+				return "BSP", nil
+			case tcell.KeyBackspace2:
+				return "BSP", nil
+			case tcell.KeyDelete:
+				return "DEL", nil
+			case tcell.KeyDown:
+				return "DOWN", nil
+			case tcell.KeyEnd:
+				return "END", nil
+			case tcell.KeyLeft:
+				return "LEFT", nil
+			case tcell.KeyRight:
+				return "RIGHT", nil
+			case tcell.KeyUp:
+				return "UP", nil
+			case tcell.KeyEnter:
+				return "ENTER", nil
+			case tcell.KeyEscape:
+				return "ESC", nil
+			default:
+				return "", nil
+			}
+		}
+	}
 }
