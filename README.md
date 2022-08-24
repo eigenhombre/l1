@@ -18,9 +18,18 @@ converting atoms and numbers to lists, and vice-versa.
 # Objectives
 
 1. Provide a Lisp one can build roguelikes and other text games with.
-1. Provide a Lisp for studying "[Good Old Fashioned AI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)" programs such as those described in [Paradigms of Artificial Intelligence Programming](https://github.com/norvig/paip-lisp) (PAIP).
-1. Answer the question, How far can we get without a 'string' data type?  (Much older Lisp pedagogy, including PAIP and [SICP](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs), do not refer to strings much or at all.)
-1. Build a minimal language core and implement much of the language in the language itself (as is done in Clojure and many Common Lisp implementations).
+1. Provide a Lisp for studying "[Good Old Fashioned
+   AI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)"
+   programs such as those described in [Paradigms of Artificial
+   Intelligence Programming](https://github.com/norvig/paip-lisp)
+   (PAIP).
+1. Answer the question, How far can we get without a 'string' data
+   type?  (Much older Lisp pedagogy, including PAIP and
+   [SICP](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs),
+   does not refer to strings much or at all.)
+1. Build a minimal language core and implement much of the language in
+   the language itself (as is done in Clojure and many Common Lisp
+   implementations).
 
 # Status
 
