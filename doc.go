@@ -87,8 +87,14 @@ func functionDescriptionFromDoc(l lambdaFn) string {
 	return shortDoc
 }
 
-func formatLambdaArgs(args []string) string {
-	return fmt.Sprintf("(%s)", strings.Join(args, " "))
+func formatLambdaArgs(args []string, restArg string) string {
+	if restArg == "" {
+		return fmt.Sprintf("(%s)", strings.Join(args, " "))
+	}
+	if len(args) == 0 {
+		return fmt.Sprintf("(() . %s)", restArg)
+	}
+	return fmt.Sprintf("(%s . %s)", strings.Join(args, " "), restArg)
 }
 
 func availableForms(e *env) []formRec {
@@ -135,7 +141,7 @@ func availableForms(e *env) []formRec {
 				ismulti: l.restArg != "",
 				doc:     functionDescriptionFromDoc(*l),
 				ftype:   ftype,
-				argsStr: formatLambdaArgs(l.args),
+				argsStr: formatLambdaArgs(l.args, l.restArg),
 				columnDoc: formatFunctionInfo(lambdaName,
 					functionDescriptionFromDoc(*l),
 					len(l.args),

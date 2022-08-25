@@ -1,5 +1,9 @@
 # The `l1` Language
 
+[Link to API](#api-index) (list of operators)
+
+## Expressions
+
 Expressions in `l1` are atoms, lists, numbers, or functions.
 
 Atoms have a name, such as `x`, `foo`, or `Eisenhower!`, and can be
