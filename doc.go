@@ -76,12 +76,14 @@ func doHelp(out io.Writer, e *env) {
 	sortedStrs := []namedDoc{}
 	outStrs = append(outStrs,
 		"l1 - a Lisp interpreter.\n",
-		fmt.Sprintf(formatStr, "Name", "Type", "Arity", "Description"),
-		fmt.Sprintf(formatStr, "----", "---", "----", "-----------"),
+		fmt.Sprintf(formatStr, "", "Type", "", ""),
+		fmt.Sprintf(formatStr, "", "---", "", ""),
 		"                S - special form",
 		"                M - macro",
 		"                N - native (Go) function",
 		"                F - Lisp function\n",
+		fmt.Sprintf(formatStr, "Name", "Type", "Arity", "Description"),
+		fmt.Sprintf(formatStr, "----", "---", "----", "-----------"),
 	)
 
 	// Special forms:

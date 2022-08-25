@@ -119,13 +119,15 @@ installing `l1` by looking under `$GOPATH`. For example, if the
     > (help)
     l1 - a Lisp interpreter.
     
-              Name Type Arity  Description
-              ---- ---  ----  -----------
+                   Type
+                   ---
                     S - special form
                     M - macro
                     N - native (Go) function
                     F - Lisp function
     
+              Name Type Arity  Description
+              ---- ---  ----  -----------
                  *  N    0+  Multiply 0 or more numbers
                 **  F    2   Exponentiation operator
                  +  N    0+  Add 0 or more numbers
