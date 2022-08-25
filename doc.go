@@ -138,8 +138,13 @@ func codeQuote(s string) string {
 }
 
 func longDocStr(e *env) string {
-	outStrs := []string{}
 	sortedForms := availableForms(e)
+	summary := fmt.Sprintf("%d forms available:", len(sortedForms))
+	for _, form := range sortedForms {
+		summary += fmt.Sprintf(" <a href='#%s'>%s</a>",
+			form.name, form.name)
+	}
+	outStrs := []string{summary}
 	for _, doc := range sortedForms {
 		isMulti := " "
 		if doc.ismulti {
