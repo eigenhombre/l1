@@ -266,3 +266,11 @@
             (progn ~@body)))
        (screen-end)
        result)))
+
+(defn some (f l)
+  (doc (return f applied to first element for which that result is truthy, else ()))
+  (when l
+    (let ((result (f (car l))))
+      (if result
+        result
+        (some f (cdr l))))))

@@ -161,13 +161,6 @@
   (sublis '((I . you) (you . I) (me . you) (am . are))
           words))
 
-(defn some (f l)
-  (when l
-    (let ((result (f (car l))))
-      (if result
-        result
-        (some f (cdr l))))))
-
 (defn apply-rule (rule)
   (let ((result (pat-match (rule-pattern rule)
                            input

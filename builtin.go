@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -447,6 +446,15 @@ func init() {
 				return Atom{strings.ToLower(a.s)}, nil
 			},
 		},
+		"forms": {
+			Name:       "forms",
+			Docstring:  "Return available operators, as a list",
+			FixedArity: 0,
+			NAry:       false,
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				return mkListAsConsWithCdr(formsAsSexprList(e), Nil), nil
+			},
+		},
 		"fuse": {
 			Name:       "fuse",
 			Docstring:  "Fuse a list of numbers or atoms into a single atom",
@@ -488,7 +496,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
-				doHelp(os.Stdout, e)
+				shortDocStr(e)
 				return Nil, nil
 			},
 		},
@@ -781,6 +789,26 @@ func init() {
 				}
 				termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
 				return Nil, nil
+			},
+		},
+		"shuffle": {
+			Name:       "shuffle",
+			Docstring:  "Return a shuffled list",
+			FixedArity: 1,
+			NAry:       false,
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("shuffle expects a single argument")
+				}
+				l, ok := args[0].(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("'%s' is not a list", args[0])
+				}
+				exprs := consToExprs(l)
+				rand.Shuffle(len(exprs), func(i, j int) {
+					exprs[i], exprs[j] = exprs[j], exprs[i]
+				})
+				return mkListAsConsWithCdr(exprs, Nil), nil
 			},
 		},
 		"sleep": {

@@ -63,6 +63,7 @@ l1 - a Lisp interpreter.
         filter  F    2   Keep only values for which function f is true
        flatten  F    1   Return a (possibly nested) list, flattened
        foreach  M    2+  Execute body for each value in a list
+         forms  N    0   Return available operators, as a list
           fuse  N    1   Fuse a list of numbers or atoms into a single atom
           help  N    0   Print this message
       identity  F    1   Return the argument
@@ -113,7 +114,9 @@ screen-get-key  N    0   Return a keystroke as an atom
    screen-size  N    0   Return the screen size (width, height)
   screen-start  N    0   Start screen for text UIs
   screen-write  N    3   Write a string to the screen
+       shuffle  N    1   Return a shuffled list
          sleep  N    1   Sleep for the given number of milliseconds
+          some  F    2   Return f applied to first element for which that result is truthy, else ()
          split  N    1   Split an atom or number into a list of single-digit numbers or single-character atoms
   syntax-quote  S    1   Syntax-quote an expression
           take  F    2   Take up to n items from the supplied list

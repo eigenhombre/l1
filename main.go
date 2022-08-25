@@ -104,6 +104,10 @@ func main() {
 	globals.Set("SPACE", Atom{" "})
 	globals.Set("NEWLINE", Atom{"\n"})
 	globals.Set("TAB", Atom{"\t"})
+	globals.Set("BANG", Atom{"!"})
+	globals.Set("QMARK", Atom{"?"})
+	globals.Set("PERIOD", Atom{"."})
+	globals.Set("COMMA", Atom{","})
 
 	if !lexParseEval(rawCore, globals, false) {
 		fmt.Println("Failed to load l1 core library!")
@@ -111,7 +115,7 @@ func main() {
 	}
 
 	if docFlag {
-		fmt.Println(helpStr(&globals))
+		fmt.Println(shortDocStr(&globals))
 		os.Exit(0)
 	}
 

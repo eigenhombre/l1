@@ -617,3 +617,10 @@
   (let ((l (range 3)))
     (is (= '(a b c 0 1 2 d e)
            `(a b c ~@l d e)))))
+
+(test '(docs and forms)
+  (is (some (lambda (x) (= x 'forms))
+            (forms))))
+
+(test '(shuffle)
+  (is (= 100 (len (shuffle (range 100))))))

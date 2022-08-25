@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
 	"sort"
 	"strings"
 )
@@ -67,13 +65,64 @@ func functionDescriptionFromDoc(l lambdaFn) string {
 	return shortDoc
 }
 
-func doHelp(out io.Writer, e *env) {
-	type namedDoc struct {
-		name string
-		doc  string
+type nameDoc struct {
+	name string
+	doc  string
+}
+
+func availableForms(e *env) []nameDoc {
+	out := []nameDoc{}
+	// Special forms:
+	for _, fn := range specialForms {
+		out = append(out, nameDoc{
+			name: fn.name,
+			doc: formatFunctionInfo(fn.name,
+				fn.doc,
+				fn.farity,
+				fn.ismulti,
+				fn.isSpecial,
+				fn.isSpecial,
+				false),
+		})
 	}
+	// Builtins:
+	for _, builtin := range builtins {
+		out = append(out, nameDoc{
+			name: builtin.Name,
+			doc: formatFunctionInfo(builtin.Name,
+				builtin.Docstring,
+				builtin.FixedArity,
+				builtin.NAry,
+				false,
+				false,
+				true),
+		})
+	}
+	// User-defined / internal l1 functions:
+	for _, lambdaName := range EnvKeys(e) {
+		expr, _ := e.Lookup(lambdaName)
+		l, ok := expr.(*lambdaFn)
+		if ok {
+			out = append(out, nameDoc{
+				name: lambdaName,
+				doc: formatFunctionInfo(lambdaName,
+					functionDescriptionFromDoc(*l),
+					len(l.args),
+					l.restArg != "",
+					false,
+					l.isMacro,
+					false)})
+		}
+
+	}
+	sort.Slice(out, func(i, j int) bool {
+		return out[i].name < out[j].name
+	})
+	return out
+}
+
+func shortDocStr(e *env) string {
 	outStrs := []string{}
-	sortedStrs := []namedDoc{}
 	outStrs = append(outStrs,
 		"l1 - a Lisp interpreter.\n",
 		fmt.Sprintf(formatStr, "", "Type", "", ""),
@@ -85,55 +134,18 @@ func doHelp(out io.Writer, e *env) {
 		fmt.Sprintf(formatStr, "Name", "Type", "Arity", "Description"),
 		fmt.Sprintf(formatStr, "----", "---", "----", "-----------"),
 	)
-
-	// Special forms:
-	for _, fn := range specialForms {
-		sortedStrs = append(sortedStrs, namedDoc{fn.name,
-			formatFunctionInfo(fn.name,
-				fn.doc,
-				fn.farity,
-				fn.ismulti,
-				fn.isSpecial,
-				fn.isSpecial,
-				false)})
-	}
-	// Builtins:
-	for _, builtin := range builtins {
-		sortedStrs = append(sortedStrs, namedDoc{builtin.Name,
-			formatFunctionInfo(builtin.Name,
-				builtin.Docstring,
-				builtin.FixedArity,
-				builtin.NAry,
-				false,
-				false,
-				true)})
-	}
-	// User-defined / internal l1 functions:
-	for _, lambdaName := range EnvKeys(e) {
-		expr, _ := e.Lookup(lambdaName)
-		l, ok := expr.(*lambdaFn)
-		if ok {
-			sortedStrs = append(sortedStrs, namedDoc{lambdaName,
-				formatFunctionInfo(lambdaName,
-					functionDescriptionFromDoc(*l),
-					len(l.args),
-					l.restArg != "",
-					false,
-					l.isMacro,
-					false)})
-		}
-	}
-	sort.Slice(sortedStrs, func(i, j int) bool {
-		return sortedStrs[i].name < sortedStrs[j].name
-	})
+	sortedStrs := availableForms(e)
 	for _, doc := range sortedStrs {
 		outStrs = append(outStrs, doc.doc)
 	}
-	fmt.Fprintln(out, strings.Join(outStrs, "\n"))
+	return strings.Join(outStrs, "\n")
 }
 
-func helpStr(e *env) string {
-	helpBuf := bytes.NewBufferString("")
-	doHelp(helpBuf, e)
-	return helpBuf.String()
+// a map... my kingdom for a map...
+func formsAsSexprList(e *env) []Sexpr {
+	out := []Sexpr{}
+	for _, form := range availableForms(e) {
+		out = append(out, Atom{form.name})
+	}
+	return out
 }
