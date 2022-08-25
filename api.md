@@ -1,0 +1,1177 @@
+
+# `*`
+
+Multiply 0 or more numbers
+
+Arity: 0+
+
+                 *  N    0+  Multiply 0 or more numbers
+
+-----------------------------------------------------
+		
+
+# `**`
+
+Exponentiation operator
+
+Arity: 2 
+
+                **  F    2   Exponentiation operator
+
+-----------------------------------------------------
+		
+
+# `+`
+
+Add 0 or more numbers
+
+Arity: 0+
+
+                 +  N    0+  Add 0 or more numbers
+
+-----------------------------------------------------
+		
+
+# `-`
+
+Subtract 0 or more numbers from the first argument
+
+Arity: 1+
+
+                 -  N    1+  Subtract 0 or more numbers from the first argument
+
+-----------------------------------------------------
+		
+
+# `/`
+
+Divide the first argument by the rest
+
+Arity: 2+
+
+                 /  N    2+  Divide the first argument by the rest
+
+-----------------------------------------------------
+		
+
+# `<`
+
+Return t if the arguments are in strictly increasing order, () otherwise
+
+Arity: 1+
+
+                 <  N    1+  Return t if the arguments are in strictly increasing order, () otherwise
+
+-----------------------------------------------------
+		
+
+# `<=`
+
+Return t if the arguments are in increasing (or qual) order, () otherwise
+
+Arity: 1+
+
+                <=  N    1+  Return t if the arguments are in increasing (or qual) order, () otherwise
+
+-----------------------------------------------------
+		
+
+# `=`
+
+Return t if the arguments are equal, () otherwise
+
+Arity: 1+
+
+                 =  N    1+  Return t if the arguments are equal, () otherwise
+
+-----------------------------------------------------
+		
+
+# `>`
+
+Return t if the arguments are in strictly decreasing order, () otherwise
+
+Arity: 1+
+
+                 >  N    1+  Return t if the arguments are in strictly decreasing order, () otherwise
+
+-----------------------------------------------------
+		
+
+# `>=`
+
+Return t if the arguments are in decreasing (or equal) order, () otherwise
+
+Arity: 1+
+
+                >=  N    1+  Return t if the arguments are in decreasing (or equal) order, () otherwise
+
+-----------------------------------------------------
+		
+
+# `and`
+
+Boolean and
+
+Arity: 0+
+
+               and  S    0+  Boolean and
+
+-----------------------------------------------------
+		
+
+# `apply`
+
+Apply a function to a list of arguments
+
+Arity: 2 
+
+             apply  N    2   Apply a function to a list of arguments
+
+-----------------------------------------------------
+		
+
+# `atom?`
+
+Return t if the argument is an atom, () otherwise
+
+Arity: 1 
+
+             atom?  N    1   Return t if the argument is an atom, () otherwise
+
+-----------------------------------------------------
+		
+
+# `bang`
+
+Return a new atom with exclamation point added
+
+Arity: 1 
+
+              bang  N    1   Return a new atom with exclamation point added
+
+-----------------------------------------------------
+		
+
+# `body`
+
+Return the body of a lambda function
+
+Arity: 1 
+
+              body  N    1   Return the body of a lambda function
+
+-----------------------------------------------------
+		
+
+# `butlast`
+
+Return everything but the last element
+
+Arity: 1 
+
+           butlast  F    1   Return everything but the last element
+
+-----------------------------------------------------
+		
+
+# `caar`
+
+First element of the first element of a list of lists
+
+Arity: 1 
+
+              caar  F    1   First element of the first element of a list of lists
+
+-----------------------------------------------------
+		
+
+# `capitalize`
+
+Return the atom argument, capitalized
+
+Arity: 1 
+
+        capitalize  F    1   Return the atom argument, capitalized
+
+-----------------------------------------------------
+		
+
+# `car`
+
+Return the first element of a list
+
+Arity: 1 
+
+               car  N    1   Return the first element of a list
+
+-----------------------------------------------------
+		
+
+# `cdr`
+
+Return a list with the first element removed
+
+Arity: 1 
+
+               cdr  N    1   Return a list with the first element removed
+
+-----------------------------------------------------
+		
+
+# `comma`
+
+Return a new atom with a comma at the end
+
+Arity: 1 
+
+             comma  N    1   Return a new atom with a comma at the end
+
+-----------------------------------------------------
+		
+
+# `comment`
+
+Ignore the expressions in the block
+
+Arity: 0+
+
+           comment  M    0+  Ignore the expressions in the block
+
+-----------------------------------------------------
+		
+
+# `complement`
+
+Return the logical complement of the supplied function
+
+Arity: 1 
+
+        complement  F    1   Return the logical complement of the supplied function
+
+-----------------------------------------------------
+		
+
+# `concat`
+
+Concatenenate any number of lists
+
+Arity: 0+
+
+            concat  F    0+  Concatenenate any number of lists
+
+-----------------------------------------------------
+		
+
+# `cond`
+
+Conditional branching
+
+Arity: 0+
+
+              cond  S    0+  Conditional branching
+
+-----------------------------------------------------
+		
+
+# `cons`
+
+Add an element to the front of a (possibly empty) list
+
+Arity: 2 
+
+              cons  N    2   Add an element to the front of a (possibly empty) list
+
+-----------------------------------------------------
+		
+
+# `constantly`
+
+Given a value, return a function which always returns that value
+
+Arity: 1 
+
+        constantly  F    1   Given a value, return a function which always returns that value
+
+-----------------------------------------------------
+		
+
+# `dec`
+
+Return the supplied integer argument, minus one
+
+Arity: 1 
+
+               dec  F    1   Return the supplied integer argument, minus one
+
+-----------------------------------------------------
+		
+
+# `def`
+
+Set a value
+
+Arity: 2 
+
+               def  S    2   Set a value
+
+-----------------------------------------------------
+		
+
+# `defmacro`
+
+Create and name a macro
+
+Arity: 2+
+
+          defmacro  S    2+  Create and name a macro
+
+-----------------------------------------------------
+		
+
+# `defn`
+
+Create and name a function
+
+Arity: 2+
+
+              defn  S    2+  Create and name a function
+
+-----------------------------------------------------
+		
+
+# `doc`
+
+Return the doclist for a function
+
+Arity: 1 
+
+               doc  N    1   Return the doclist for a function
+
+-----------------------------------------------------
+		
+
+# `dotimes`
+
+Execute body for each value in a list
+
+Arity: 1+
+
+           dotimes  M    1+  Execute body for each value in a list
+
+-----------------------------------------------------
+		
+
+# `downcase`
+
+Return a new atom with all characters in lower case
+
+Arity: 1 
+
+          downcase  N    1   Return a new atom with all characters in lower case
+
+-----------------------------------------------------
+		
+
+# `drop`
+
+Drop n items from a list, then return the rest
+
+Arity: 2 
+
+              drop  F    2   Drop n items from a list, then return the rest
+
+-----------------------------------------------------
+		
+
+# `error`
+
+Return an error and (NOT IMPLEMENTED) short-circuit further processing
+
+Arity: 1 
+
+             error  F    1   Return an error and (NOT IMPLEMENTED) short-circuit further processing
+
+-----------------------------------------------------
+		
+
+# `errors`
+
+Error checking (for tests)
+
+Arity: 1+
+
+            errors  S    1+  Error checking (for tests)
+
+-----------------------------------------------------
+		
+
+# `even?`
+
+Return true if the supplied integer argument is even
+
+Arity: 1 
+
+             even?  F    1   Return true if the supplied integer argument is even
+
+-----------------------------------------------------
+		
+
+# `exclaimed`
+
+Return l as a sentence... emphasized!
+
+Arity: 1 
+
+         exclaimed  F    1   Return l as a sentence... emphasized!
+
+-----------------------------------------------------
+		
+
+# `filter`
+
+Keep only values for which function f is true
+
+Arity: 2 
+
+            filter  F    2   Keep only values for which function f is true
+
+-----------------------------------------------------
+		
+
+# `flatten`
+
+Return a (possibly nested) list, flattened
+
+Arity: 1 
+
+           flatten  F    1   Return a (possibly nested) list, flattened
+
+-----------------------------------------------------
+		
+
+# `foreach`
+
+Execute body for each value in a list
+
+Arity: 2+
+
+           foreach  M    2+  Execute body for each value in a list
+
+-----------------------------------------------------
+		
+
+# `forms`
+
+Return available operators, as a list
+
+Arity: 0 
+
+             forms  N    0   Return available operators, as a list
+
+-----------------------------------------------------
+		
+
+# `fuse`
+
+Fuse a list of numbers or atoms into a single atom
+
+Arity: 1 
+
+              fuse  N    1   Fuse a list of numbers or atoms into a single atom
+
+-----------------------------------------------------
+		
+
+# `help`
+
+Print this message
+
+Arity: 0 
+
+              help  N    0   Print this message
+
+-----------------------------------------------------
+		
+
+# `identity`
+
+Return the argument
+
+Arity: 1 
+
+          identity  F    1   Return the argument
+
+-----------------------------------------------------
+		
+
+# `if`
+
+Simple conditional with two branches
+
+Arity: 3 
+
+                if  M    3   Simple conditional with two branches
+
+-----------------------------------------------------
+		
+
+# `if-not`
+
+Simple (inverted) conditional with two branches
+
+Arity: 3 
+
+            if-not  M    3   Simple (inverted) conditional with two branches
+
+-----------------------------------------------------
+		
+
+# `inc`
+
+Return the supplied integer argument, plus one
+
+Arity: 1 
+
+               inc  F    1   Return the supplied integer argument, plus one
+
+-----------------------------------------------------
+		
+
+# `is`
+
+Assert that the argument is truthy (not ())
+
+Arity: 1 
+
+                is  N    1   Assert that the argument is truthy (not ())
+
+-----------------------------------------------------
+		
+
+# `lambda`
+
+Create a function
+
+Arity: 1+
+
+            lambda  S    1+  Create a function
+
+-----------------------------------------------------
+		
+
+# `last`
+
+Return the last item in a list
+
+Arity: 1 
+
+              last  F    1   Return the last item in a list
+
+-----------------------------------------------------
+		
+
+# `len`
+
+Return the length of a list
+
+Arity: 1 
+
+               len  N    1   Return the length of a list
+
+-----------------------------------------------------
+		
+
+# `let`
+
+Create a local scope
+
+Arity: 1+
+
+               let  S    1+  Create a local scope
+
+-----------------------------------------------------
+		
+
+# `list`
+
+Return a list of the given arguments
+
+Arity: 0+
+
+              list  N    0+  Return a list of the given arguments
+
+-----------------------------------------------------
+		
+
+# `list*`
+
+Create a list by consing everything but the last arg onto the last
+
+Arity: 0+
+
+             list*  F    0+  Create a list by consing everything but the last arg onto the last
+
+-----------------------------------------------------
+		
+
+# `list?`
+
+Return t if the argument is a list, () otherwise
+
+Arity: 1 
+
+             list?  N    1   Return t if the argument is a list, () otherwise
+
+-----------------------------------------------------
+		
+
+# `loop`
+
+Loop forever
+
+Arity: 1+
+
+              loop  S    1+  Loop forever
+
+-----------------------------------------------------
+		
+
+# `macroexpand-1`
+
+Expand a macro
+
+Arity: 1 
+
+     macroexpand-1  N    1   Expand a macro
+
+-----------------------------------------------------
+		
+
+# `map`
+
+Apply the supplied function to every element in the supplied list
+
+Arity: 2 
+
+               map  F    2   Apply the supplied function to every element in the supplied list
+
+-----------------------------------------------------
+		
+
+# `mapcat`
+
+Map a function onto a list and concatenate results
+
+Arity: 2 
+
+            mapcat  F    2   Map a function onto a list and concatenate results
+
+-----------------------------------------------------
+		
+
+# `neg?`
+
+Return true iff the supplied integer argument is less than zero
+
+Arity: 1 
+
+              neg?  F    1   Return true iff the supplied integer argument is less than zero
+
+-----------------------------------------------------
+		
+
+# `not`
+
+Return t if the argument is nil, () otherwise
+
+Arity: 1 
+
+               not  N    1   Return t if the argument is nil, () otherwise
+
+-----------------------------------------------------
+		
+
+# `nth`
+
+Find the nth value of a list, starting from zero
+
+Arity: 2 
+
+               nth  F    2   Find the nth value of a list, starting from zero
+
+-----------------------------------------------------
+		
+
+# `number?`
+
+Return true if the argument is a number, else ()
+
+Arity: 1 
+
+           number?  N    1   Return true if the argument is a number, else ()
+
+-----------------------------------------------------
+		
+
+# `odd?`
+
+Return true if the supplied integer argument is odd
+
+Arity: 1 
+
+              odd?  F    1   Return true if the supplied integer argument is odd
+
+-----------------------------------------------------
+		
+
+# `or`
+
+Boolean or
+
+Arity: 0+
+
+                or  S    0+  Boolean or
+
+-----------------------------------------------------
+		
+
+# `period`
+
+Return a new atom with a period added to the end
+
+Arity: 1 
+
+            period  N    1   Return a new atom with a period added to the end
+
+-----------------------------------------------------
+		
+
+# `pos?`
+
+Return true iff the supplied integer argument is greater than zero
+
+Arity: 1 
+
+              pos?  F    1   Return true iff the supplied integer argument is greater than zero
+
+-----------------------------------------------------
+		
+
+# `print`
+
+Print the arguments
+
+Arity: 0+
+
+             print  N    0+  Print the arguments
+
+-----------------------------------------------------
+		
+
+# `printl`
+
+Print a list argument, without parentheses
+
+Arity: 1 
+
+            printl  N    1   Print a list argument, without parentheses
+
+-----------------------------------------------------
+		
+
+# `println`
+
+Print the arguments and a newline
+
+Arity: 0+
+
+           println  N    0+  Print the arguments and a newline
+
+-----------------------------------------------------
+		
+
+# `progn`
+
+Execute multiple statements, returning the last
+
+Arity: 0+
+
+             progn  M    0+  Execute multiple statements, returning the last
+
+-----------------------------------------------------
+		
+
+# `punctuate`
+
+Return l capitalized, with punctuation determined by the supplied function
+
+Arity: 2 
+
+         punctuate  F    2   Return l capitalized, with punctuation determined by the supplied function
+
+-----------------------------------------------------
+		
+
+# `quote`
+
+Quote an expression
+
+Arity: 1 
+
+             quote  S    1   Quote an expression
+
+-----------------------------------------------------
+		
+
+# `randalpha`
+
+Return a list of random (English/Latin/unaccented) alphabetic characters
+
+Arity: 1 
+
+         randalpha  F    1   Return a list of random (English/Latin/unaccented) alphabetic characters
+
+-----------------------------------------------------
+		
+
+# `randchoice`
+
+Return an element at random from the supplied list
+
+Arity: 1 
+
+        randchoice  F    1   Return an element at random from the supplied list
+
+-----------------------------------------------------
+		
+
+# `randigits`
+
+Return a random integer between 0 and the argument minus 1
+
+Arity: 1 
+
+         randigits  F    1   Return a random integer between 0 and the argument minus 1
+
+-----------------------------------------------------
+		
+
+# `randint`
+
+Return a random integer between 0 and the argument minus 1
+
+Arity: 1 
+
+           randint  N    1   Return a random integer between 0 and the argument minus 1
+
+-----------------------------------------------------
+		
+
+# `range`
+
+List of integers from 0 to n
+
+Arity: 1 
+
+             range  F    1   List of integers from 0 to n
+
+-----------------------------------------------------
+		
+
+# `readlist`
+
+Read a list from stdin
+
+Arity: 0 
+
+          readlist  N    0   Read a list from stdin
+
+-----------------------------------------------------
+		
+
+# `reduce`
+
+Successively apply a function against a list of arguments
+
+Arity: 2+
+
+            reduce  F    2+  Successively apply a function against a list of arguments
+
+-----------------------------------------------------
+		
+
+# `rem`
+
+Return remainder when second arg divides first
+
+Arity: 2 
+
+               rem  N    2   Return remainder when second arg divides first
+
+-----------------------------------------------------
+		
+
+# `remove`
+
+Keep only values for which function f is false / the empty list
+
+Arity: 2 
+
+            remove  F    2   Keep only values for which function f is false / the empty list
+
+-----------------------------------------------------
+		
+
+# `repeat`
+
+Return a list of length n whose elements are all x
+
+Arity: 2 
+
+            repeat  F    2   Return a list of length n whose elements are all x
+
+-----------------------------------------------------
+		
+
+# `repeatedly`
+
+Return a list of length n whose elements are made from calling f repeatedly
+
+Arity: 2 
+
+        repeatedly  F    2   Return a list of length n whose elements are made from calling f repeatedly
+
+-----------------------------------------------------
+		
+
+# `reverse`
+
+Reverse a list
+
+Arity: 1 
+
+           reverse  F    1   Reverse a list
+
+-----------------------------------------------------
+		
+
+# `screen-clear`
+
+Clear the screen
+
+Arity: 0 
+
+      screen-clear  N    0   Clear the screen
+
+-----------------------------------------------------
+		
+
+# `screen-end`
+
+Stop screen for text UIs, return to console mode
+
+Arity: 0 
+
+        screen-end  N    0   Stop screen for text UIs, return to console mode
+
+-----------------------------------------------------
+		
+
+# `screen-get-key`
+
+Return a keystroke as an atom
+
+Arity: 0 
+
+    screen-get-key  N    0   Return a keystroke as an atom
+
+-----------------------------------------------------
+		
+
+# `screen-size`
+
+Return the screen size (width, height)
+
+Arity: 0 
+
+       screen-size  N    0   Return the screen size (width, height)
+
+-----------------------------------------------------
+		
+
+# `screen-start`
+
+Start screen for text UIs
+
+Arity: 0 
+
+      screen-start  N    0   Start screen for text UIs
+
+-----------------------------------------------------
+		
+
+# `screen-write`
+
+Write a string to the screen
+
+Arity: 3 
+
+      screen-write  N    3   Write a string to the screen
+
+-----------------------------------------------------
+		
+
+# `shuffle`
+
+Return a shuffled list
+
+Arity: 1 
+
+           shuffle  N    1   Return a shuffled list
+
+-----------------------------------------------------
+		
+
+# `sleep`
+
+Sleep for the given number of milliseconds
+
+Arity: 1 
+
+             sleep  N    1   Sleep for the given number of milliseconds
+
+-----------------------------------------------------
+		
+
+# `some`
+
+Return f applied to first element for which that result is truthy, else ()
+
+Arity: 2 
+
+              some  F    2   Return f applied to first element for which that result is truthy, else ()
+
+-----------------------------------------------------
+		
+
+# `split`
+
+Split an atom or number into a list of single-digit numbers or single-character atoms
+
+Arity: 1 
+
+             split  N    1   Split an atom or number into a list of single-digit numbers or single-character atoms
+
+-----------------------------------------------------
+		
+
+# `syntax-quote`
+
+Syntax-quote an expression
+
+Arity: 1 
+
+      syntax-quote  S    1   Syntax-quote an expression
+
+-----------------------------------------------------
+		
+
+# `take`
+
+Take up to n items from the supplied list
+
+Arity: 2 
+
+              take  F    2   Take up to n items from the supplied list
+
+-----------------------------------------------------
+		
+
+# `test`
+
+Establish a testing block (return last expression)
+
+Arity: 0+
+
+              test  N    0+  Establish a testing block (return last expression)
+
+-----------------------------------------------------
+		
+
+# `tosentence`
+
+Return l as a sentence... capitalized, with a period at the end
+
+Arity: 1 
+
+        tosentence  F    1   Return l as a sentence... capitalized, with a period at the end
+
+-----------------------------------------------------
+		
+
+# `upcase`
+
+Return the uppercase version of the given atom
+
+Arity: 1 
+
+            upcase  N    1   Return the uppercase version of the given atom
+
+-----------------------------------------------------
+		
+
+# `version`
+
+Return the version of the interpreter
+
+Arity: 0 
+
+           version  N    0   Return the version of the interpreter
+
+-----------------------------------------------------
+		
+
+# `when`
+
+Simple conditional with single branch
+
+Arity: 2 
+
+              when  M    2   Simple conditional with single branch
+
+-----------------------------------------------------
+		
+
+# `when-not`
+
+Complement of the when macro
+
+Arity: 2 
+
+          when-not  M    2   Complement of the when macro
+
+-----------------------------------------------------
+		
+
+# `with-screen`
+
+Prepare for and clean up after screen operations
+
+Arity: 0+
+
+       with-screen  M    0+  Prepare for and clean up after screen operations
+
+-----------------------------------------------------
+		
+
+# `zero?`
+
+Return true iff the supplied argument is zero
+
+Arity: 1 
+
+             zero?  F    1   Return true iff the supplied argument is zero
+
+-----------------------------------------------------
+		

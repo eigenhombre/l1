@@ -49,6 +49,7 @@ docker:
 	docker build -t ${PROG} .
 
 doc:
+	./l1 -longdoc > api.md
 	python updatereadme.py
 
 release:

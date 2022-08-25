@@ -77,12 +77,12 @@ func repl(e env) {
 }
 
 func main() {
-	var versionFlag bool
+	var versionFlag, docFlag, longDocFlag bool
 	var cpuProfile string
-	var docFlag bool
 	flag.BoolVar(&versionFlag, "v", false, "Get l1 version")
 	flag.StringVar(&cpuProfile, "p", "", "Write CPU profile to file")
 	flag.BoolVar(&docFlag, "doc", false, "Print documentation")
+	flag.BoolVar(&longDocFlag, "longdoc", false, "Print documentation")
 
 	flag.Parse()
 
@@ -116,6 +116,10 @@ func main() {
 
 	if docFlag {
 		fmt.Println(shortDocStr(&globals))
+		os.Exit(0)
+	}
+	if longDocFlag {
+		fmt.Println(longDocStr(&globals))
 		os.Exit(0)
 	}
 

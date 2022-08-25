@@ -6,31 +6,32 @@ import (
 	"strings"
 )
 
-type fnDoc struct {
+type formRec struct {
 	name      string
 	farity    int
 	ismulti   bool
 	doc       string
+	columnDoc string
 	isSpecial bool
 }
 
 // When you add a special form to eval, you should add it here as well.s
-var specialForms = []fnDoc{
-	{"and", 0, true, "Boolean and", true},
-	{"cond", 0, true, "Conditional branching", true},
-	{"def", 2, false, "Set a value", true},
-	{"defn", 2, true, "Create and name a function", true},
-	{"defmacro", 2, true, "Create and name a macro", true},
-	{"errors", 1, true, "Error checking (for tests)", true},
-	{"lambda", 1, true, "Create a function", true},
-	{"let", 1, true, "Create a local scope", true},
-	{"loop", 1, true, "Loop forever", true},
-	{"or", 0, true, "Boolean or", true},
-	{"quote", 1, false, "Quote an expression", true},
-	{"syntax-quote", 1, false, "Syntax-quote an expression", true},
+var specialForms = []formRec{
+	{"and", 0, true, "Boolean and", "", true},
+	{"cond", 0, true, "Conditional branching", "", true},
+	{"def", 2, false, "Set a value", "", true},
+	{"defn", 2, true, "Create and name a function", "", true},
+	{"defmacro", 2, true, "Create and name a macro", "", true},
+	{"errors", 1, true, "Error checking (for tests)", "", true},
+	{"lambda", 1, true, "Create a function", "", true},
+	{"let", 1, true, "Create a local scope", "", true},
+	{"loop", 1, true, "Loop forever", "", true},
+	{"or", 0, true, "Boolean or", "", true},
+	{"quote", 1, false, "Quote an expression", "", true},
+	{"syntax-quote", 1, false, "Syntax-quote an expression", "", true},
 }
 
-const formatStr = "%14s %2s %5s  %s"
+const columnsFormat = "%14s %2s %5s  %s"
 
 func formatFunctionInfo(name, shortDesc string,
 	arity int,
@@ -49,7 +50,7 @@ func formatFunctionInfo(name, shortDesc string,
 		formType = "N"
 	}
 	argstr := fmt.Sprintf("%d%s", arity, isMultiArityStr)
-	return fmt.Sprintf(formatStr,
+	return fmt.Sprintf(columnsFormat,
 		name,
 		formType,
 		argstr,
@@ -65,18 +66,16 @@ func functionDescriptionFromDoc(l lambdaFn) string {
 	return shortDoc
 }
 
-type nameDoc struct {
-	name string
-	doc  string
-}
-
-func availableForms(e *env) []nameDoc {
-	out := []nameDoc{}
+func availableForms(e *env) []formRec {
+	out := []formRec{}
 	// Special forms:
 	for _, fn := range specialForms {
-		out = append(out, nameDoc{
-			name: fn.name,
-			doc: formatFunctionInfo(fn.name,
+		out = append(out, formRec{
+			name:    fn.name,
+			farity:  fn.farity,
+			ismulti: fn.ismulti,
+			doc:     fn.doc,
+			columnDoc: formatFunctionInfo(fn.name,
 				fn.doc,
 				fn.farity,
 				fn.ismulti,
@@ -87,9 +86,12 @@ func availableForms(e *env) []nameDoc {
 	}
 	// Builtins:
 	for _, builtin := range builtins {
-		out = append(out, nameDoc{
-			name: builtin.Name,
-			doc: formatFunctionInfo(builtin.Name,
+		out = append(out, formRec{
+			name:    builtin.Name,
+			farity:  builtin.FixedArity,
+			ismulti: builtin.NAry,
+			doc:     builtin.Docstring,
+			columnDoc: formatFunctionInfo(builtin.Name,
 				builtin.Docstring,
 				builtin.FixedArity,
 				builtin.NAry,
@@ -103,9 +105,12 @@ func availableForms(e *env) []nameDoc {
 		expr, _ := e.Lookup(lambdaName)
 		l, ok := expr.(*lambdaFn)
 		if ok {
-			out = append(out, nameDoc{
-				name: lambdaName,
-				doc: formatFunctionInfo(lambdaName,
+			out = append(out, formRec{
+				name:    lambdaName,
+				farity:  len(l.args),
+				ismulti: l.restArg != "",
+				doc:     functionDescriptionFromDoc(*l),
+				columnDoc: formatFunctionInfo(lambdaName,
 					functionDescriptionFromDoc(*l),
 					len(l.args),
 					l.restArg != "",
@@ -121,22 +126,54 @@ func availableForms(e *env) []nameDoc {
 	return out
 }
 
+func codeQuote(s string) string {
+	return fmt.Sprintf("`%s`", s)
+}
+
+func longDocStr(e *env) string {
+	outStrs := []string{}
+	sortedForms := availableForms(e)
+	for _, doc := range sortedForms {
+		isMulti := " "
+		if doc.ismulti {
+			isMulti = "+"
+		}
+		outStrs = append(outStrs, fmt.Sprintf(`
+# %s
+
+%s
+
+Arity: %d%s
+
+    %s
+
+-----------------------------------------------------
+		`,
+			codeQuote(doc.name),
+			capitalize(doc.doc),
+			doc.farity,
+			isMulti,
+			doc.columnDoc))
+	}
+	return strings.Join(outStrs, "\n")
+}
+
 func shortDocStr(e *env) string {
 	outStrs := []string{}
 	outStrs = append(outStrs,
 		"l1 - a Lisp interpreter.\n",
-		fmt.Sprintf(formatStr, "", "Type", "", ""),
-		fmt.Sprintf(formatStr, "", "---", "", ""),
+		fmt.Sprintf(columnsFormat, "", "Type", "", ""),
+		fmt.Sprintf(columnsFormat, "", "---", "", ""),
 		"                S - special form",
 		"                M - macro",
 		"                N - native (Go) function",
 		"                F - Lisp function\n",
-		fmt.Sprintf(formatStr, "Name", "Type", "Arity", "Description"),
-		fmt.Sprintf(formatStr, "----", "---", "----", "-----------"),
+		fmt.Sprintf(columnsFormat, "Name", "Type", "Arity", "Description"),
+		fmt.Sprintf(columnsFormat, "----", "---", "----", "-----------"),
 	)
-	sortedStrs := availableForms(e)
-	for _, doc := range sortedStrs {
-		outStrs = append(outStrs, doc.doc)
+	sortedForms := availableForms(e)
+	for _, doc := range sortedForms {
+		outStrs = append(outStrs, doc.columnDoc)
 	}
 	return strings.Join(outStrs, "\n")
 }
