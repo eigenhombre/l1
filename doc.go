@@ -141,8 +141,7 @@ func longDocStr(e *env) string {
 	sortedForms := availableForms(e)
 	summary := fmt.Sprintf("%d forms available:", len(sortedForms))
 	for _, form := range sortedForms {
-		summary += fmt.Sprintf(" <a href='#%s'>%s</a>",
-			form.name, form.name)
+		summary += fmt.Sprintf("\n[`%s`](#%s)", form.name, form.name)
 	}
 	outStrs := []string{summary}
 	for _, doc := range sortedForms {
