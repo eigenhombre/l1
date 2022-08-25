@@ -146,7 +146,7 @@ func longDocStr(e *env) string {
 			isMulti = "+"
 		}
 		outStrs = append(outStrs, fmt.Sprintf(`
-# %s
+## %s
 
 %s
 

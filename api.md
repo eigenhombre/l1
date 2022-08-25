@@ -1,5 +1,5 @@
 
-# `*`
+## `*`
 
 Multiply 0 or more numbers
 
@@ -12,7 +12,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `**`
+## `**`
 
 Exponentiation operator
 
@@ -25,7 +25,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `+`
+## `+`
 
 Add 0 or more numbers
 
@@ -38,7 +38,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `-`
+## `-`
 
 Subtract 0 or more numbers from the first argument
 
@@ -51,7 +51,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `/`
+## `/`
 
 Divide the first argument by the rest
 
@@ -64,7 +64,7 @@ Arity: 2+
 -----------------------------------------------------
 		
 
-# `<`
+## `<`
 
 Return t if the arguments are in strictly increasing order, () otherwise
 
@@ -77,7 +77,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `<=`
+## `<=`
 
 Return t if the arguments are in increasing (or qual) order, () otherwise
 
@@ -90,7 +90,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `=`
+## `=`
 
 Return t if the arguments are equal, () otherwise
 
@@ -103,7 +103,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `>`
+## `>`
 
 Return t if the arguments are in strictly decreasing order, () otherwise
 
@@ -116,7 +116,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `>=`
+## `>=`
 
 Return t if the arguments are in decreasing (or equal) order, () otherwise
 
@@ -129,7 +129,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `and`
+## `and`
 
 Boolean and
 
@@ -142,7 +142,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `apply`
+## `apply`
 
 Apply a function to a list of arguments
 
@@ -155,7 +155,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `atom?`
+## `atom?`
 
 Return t if the argument is an atom, () otherwise
 
@@ -168,7 +168,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `bang`
+## `bang`
 
 Return a new atom with exclamation point added
 
@@ -181,7 +181,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `body`
+## `body`
 
 Return the body of a lambda function
 
@@ -194,7 +194,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `butlast`
+## `butlast`
 
 Return everything but the last element
 
@@ -207,7 +207,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `caar`
+## `caar`
 
 First element of the first element of a list of lists
 
@@ -220,7 +220,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `capitalize`
+## `capitalize`
 
 Return the atom argument, capitalized
 
@@ -233,7 +233,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `car`
+## `car`
 
 Return the first element of a list
 
@@ -246,7 +246,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `cdr`
+## `cdr`
 
 Return a list with the first element removed
 
@@ -259,7 +259,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `comma`
+## `comma`
 
 Return a new atom with a comma at the end
 
@@ -272,7 +272,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `comment`
+## `comment`
 
 Ignore the expressions in the block
 
@@ -285,7 +285,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `complement`
+## `complement`
 
 Return the logical complement of the supplied function
 
@@ -298,7 +298,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `concat`
+## `concat`
 
 Concatenenate any number of lists
 
@@ -311,7 +311,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `cond`
+## `cond`
 
 Conditional branching
 
@@ -324,7 +324,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `cons`
+## `cons`
 
 Add an element to the front of a (possibly empty) list
 
@@ -337,7 +337,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `constantly`
+## `constantly`
 
 Given a value, return a function which always returns that value
 
@@ -350,7 +350,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `dec`
+## `dec`
 
 Return the supplied integer argument, minus one
 
@@ -363,7 +363,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `def`
+## `def`
 
 Set a value
 
@@ -376,7 +376,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `defmacro`
+## `defmacro`
 
 Create and name a macro
 
@@ -389,7 +389,7 @@ Arity: 2+
 -----------------------------------------------------
 		
 
-# `defn`
+## `defn`
 
 Create and name a function
 
@@ -402,7 +402,7 @@ Arity: 2+
 -----------------------------------------------------
 		
 
-# `doc`
+## `doc`
 
 Return the doclist for a function
 
@@ -415,7 +415,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `dotimes`
+## `dotimes`
 
 Execute body for each value in a list
 
@@ -428,7 +428,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `downcase`
+## `downcase`
 
 Return a new atom with all characters in lower case
 
@@ -441,7 +441,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `drop`
+## `drop`
 
 Drop n items from a list, then return the rest
 
@@ -454,7 +454,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `error`
+## `error`
 
 Return an error and (NOT IMPLEMENTED) short-circuit further processing
 
@@ -467,7 +467,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `errors`
+## `errors`
 
 Error checking (for tests)
 
@@ -480,7 +480,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `even?`
+## `even?`
 
 Return true if the supplied integer argument is even
 
@@ -493,7 +493,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `exclaimed`
+## `exclaimed`
 
 Return l as a sentence... emphasized!
 
@@ -506,7 +506,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `filter`
+## `filter`
 
 Keep only values for which function f is true
 
@@ -519,7 +519,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `flatten`
+## `flatten`
 
 Return a (possibly nested) list, flattened
 
@@ -532,7 +532,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `foreach`
+## `foreach`
 
 Execute body for each value in a list
 
@@ -545,7 +545,7 @@ Arity: 2+
 -----------------------------------------------------
 		
 
-# `forms`
+## `forms`
 
 Return available operators, as a list
 
@@ -558,7 +558,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `fuse`
+## `fuse`
 
 Fuse a list of numbers or atoms into a single atom
 
@@ -571,7 +571,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `help`
+## `help`
 
 Print this message
 
@@ -584,7 +584,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `identity`
+## `identity`
 
 Return the argument
 
@@ -597,7 +597,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `if`
+## `if`
 
 Simple conditional with two branches
 
@@ -610,7 +610,7 @@ Arity: 3
 -----------------------------------------------------
 		
 
-# `if-not`
+## `if-not`
 
 Simple (inverted) conditional with two branches
 
@@ -623,7 +623,7 @@ Arity: 3
 -----------------------------------------------------
 		
 
-# `inc`
+## `inc`
 
 Return the supplied integer argument, plus one
 
@@ -636,7 +636,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `is`
+## `is`
 
 Assert that the argument is truthy (not ())
 
@@ -649,7 +649,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `lambda`
+## `lambda`
 
 Create a function
 
@@ -662,7 +662,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `last`
+## `last`
 
 Return the last item in a list
 
@@ -675,7 +675,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `len`
+## `len`
 
 Return the length of a list
 
@@ -688,7 +688,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `let`
+## `let`
 
 Create a local scope
 
@@ -701,7 +701,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `list`
+## `list`
 
 Return a list of the given arguments
 
@@ -714,7 +714,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `list*`
+## `list*`
 
 Create a list by consing everything but the last arg onto the last
 
@@ -727,7 +727,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `list?`
+## `list?`
 
 Return t if the argument is a list, () otherwise
 
@@ -740,7 +740,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `loop`
+## `loop`
 
 Loop forever
 
@@ -753,7 +753,7 @@ Arity: 1+
 -----------------------------------------------------
 		
 
-# `macroexpand-1`
+## `macroexpand-1`
 
 Expand a macro
 
@@ -766,7 +766,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `map`
+## `map`
 
 Apply the supplied function to every element in the supplied list
 
@@ -779,7 +779,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `mapcat`
+## `mapcat`
 
 Map a function onto a list and concatenate results
 
@@ -792,7 +792,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `neg?`
+## `neg?`
 
 Return true iff the supplied integer argument is less than zero
 
@@ -805,7 +805,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `not`
+## `not`
 
 Return t if the argument is nil, () otherwise
 
@@ -818,7 +818,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `nth`
+## `nth`
 
 Find the nth value of a list, starting from zero
 
@@ -831,7 +831,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `number?`
+## `number?`
 
 Return true if the argument is a number, else ()
 
@@ -844,7 +844,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `odd?`
+## `odd?`
 
 Return true if the supplied integer argument is odd
 
@@ -857,7 +857,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `or`
+## `or`
 
 Boolean or
 
@@ -870,7 +870,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `period`
+## `period`
 
 Return a new atom with a period added to the end
 
@@ -883,7 +883,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `pos?`
+## `pos?`
 
 Return true iff the supplied integer argument is greater than zero
 
@@ -896,7 +896,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `print`
+## `print`
 
 Print the arguments
 
@@ -909,7 +909,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `printl`
+## `printl`
 
 Print a list argument, without parentheses
 
@@ -922,7 +922,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `println`
+## `println`
 
 Print the arguments and a newline
 
@@ -935,7 +935,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `progn`
+## `progn`
 
 Execute multiple statements, returning the last
 
@@ -948,7 +948,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `punctuate`
+## `punctuate`
 
 Return l capitalized, with punctuation determined by the supplied function
 
@@ -961,7 +961,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `quote`
+## `quote`
 
 Quote an expression
 
@@ -974,7 +974,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `randalpha`
+## `randalpha`
 
 Return a list of random (English/Latin/unaccented) alphabetic characters
 
@@ -987,7 +987,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `randchoice`
+## `randchoice`
 
 Return an element at random from the supplied list
 
@@ -1000,7 +1000,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `randigits`
+## `randigits`
 
 Return a random integer between 0 and the argument minus 1
 
@@ -1013,7 +1013,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `randint`
+## `randint`
 
 Return a random integer between 0 and the argument minus 1
 
@@ -1026,7 +1026,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `range`
+## `range`
 
 List of integers from 0 to n
 
@@ -1039,7 +1039,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `readlist`
+## `readlist`
 
 Read a list from stdin
 
@@ -1052,7 +1052,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `reduce`
+## `reduce`
 
 Successively apply a function against a list of arguments
 
@@ -1065,7 +1065,7 @@ Arity: 2+
 -----------------------------------------------------
 		
 
-# `rem`
+## `rem`
 
 Return remainder when second arg divides first
 
@@ -1078,7 +1078,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `remove`
+## `remove`
 
 Keep only values for which function f is false / the empty list
 
@@ -1091,7 +1091,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `repeat`
+## `repeat`
 
 Return a list of length n whose elements are all x
 
@@ -1104,7 +1104,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `repeatedly`
+## `repeatedly`
 
 Return a list of length n whose elements are made from calling f repeatedly
 
@@ -1117,7 +1117,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `reverse`
+## `reverse`
 
 Reverse a list
 
@@ -1130,7 +1130,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `screen-clear`
+## `screen-clear`
 
 Clear the screen
 
@@ -1143,7 +1143,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `screen-end`
+## `screen-end`
 
 Stop screen for text UIs, return to console mode
 
@@ -1156,7 +1156,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `screen-get-key`
+## `screen-get-key`
 
 Return a keystroke as an atom
 
@@ -1169,7 +1169,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `screen-size`
+## `screen-size`
 
 Return the screen size (width, height)
 
@@ -1182,7 +1182,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `screen-start`
+## `screen-start`
 
 Start screen for text UIs
 
@@ -1195,7 +1195,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `screen-write`
+## `screen-write`
 
 Write a string to the screen
 
@@ -1208,7 +1208,7 @@ Arity: 3
 -----------------------------------------------------
 		
 
-# `shuffle`
+## `shuffle`
 
 Return a shuffled list
 
@@ -1221,7 +1221,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `sleep`
+## `sleep`
 
 Sleep for the given number of milliseconds
 
@@ -1234,7 +1234,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `some`
+## `some`
 
 Return f applied to first element for which that result is truthy, else ()
 
@@ -1247,7 +1247,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `split`
+## `split`
 
 Split an atom or number into a list of single-digit numbers or single-character atoms
 
@@ -1260,7 +1260,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `syntax-quote`
+## `syntax-quote`
 
 Syntax-quote an expression
 
@@ -1273,7 +1273,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `take`
+## `take`
 
 Take up to n items from the supplied list
 
@@ -1286,7 +1286,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `test`
+## `test`
 
 Establish a testing block (return last expression)
 
@@ -1299,7 +1299,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `tosentence`
+## `tosentence`
 
 Return l as a sentence... capitalized, with a period at the end
 
@@ -1312,7 +1312,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `upcase`
+## `upcase`
 
 Return the uppercase version of the given atom
 
@@ -1325,7 +1325,7 @@ Arity: 1
 -----------------------------------------------------
 		
 
-# `version`
+## `version`
 
 Return the version of the interpreter
 
@@ -1338,7 +1338,7 @@ Arity: 0
 -----------------------------------------------------
 		
 
-# `when`
+## `when`
 
 Simple conditional with single branch
 
@@ -1351,7 +1351,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `when-not`
+## `when-not`
 
 Complement of the when macro
 
@@ -1364,7 +1364,7 @@ Arity: 2
 -----------------------------------------------------
 		
 
-# `with-screen`
+## `with-screen`
 
 Prepare for and clean up after screen operations
 
@@ -1377,7 +1377,7 @@ Arity: 0+
 -----------------------------------------------------
 		
 
-# `zero?`
+## `zero?`
 
 Return true iff the supplied argument is zero
 
