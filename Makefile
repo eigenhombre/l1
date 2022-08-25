@@ -50,6 +50,7 @@ docker:
 
 doc:
 	./l1 -longdoc > api.md
+	cat intro.md api.md > l1.md
 	python updatereadme.py
 
 release:

@@ -1,4 +1,4 @@
-# Index
+# API Index
 107 forms available:
 [`*`](#*)
 [`**`](#**)

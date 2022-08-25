@@ -139,7 +139,7 @@ func codeQuote(s string) string {
 
 func longDocStr(e *env) string {
 	sortedForms := availableForms(e)
-	summary := fmt.Sprintf("# Index\n%d forms available:", len(sortedForms))
+	summary := fmt.Sprintf("# API Index\n%d forms available:", len(sortedForms))
 	for _, form := range sortedForms {
 		summary += fmt.Sprintf("\n[`%s`](#%s)", form.name, form.name)
 	}
