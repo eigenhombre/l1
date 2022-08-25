@@ -158,6 +158,10 @@ func longDocStr(e *env) string {
 		if doc.ismulti {
 			isMulti = "+"
 		}
+		argsStr := ""
+		if doc.argsStr != "" {
+			argsStr = fmt.Sprintf("\nArgs: `%s`", doc.argsStr)
+		}
 		outStrs = append(outStrs, fmt.Sprintf(`
 ## %s
 
@@ -166,8 +170,7 @@ func longDocStr(e *env) string {
 Type: %s
 
 Arity: %d%s
-
-    %s
+%s
 
 -----------------------------------------------------
 		`,
@@ -176,7 +179,7 @@ Arity: %d%s
 			doc.ftype,
 			doc.farity,
 			isMulti,
-			doc.columnDoc))
+			argsStr))
 	}
 	return strings.Join(outStrs, "\n")
 }

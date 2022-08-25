@@ -118,7 +118,6 @@ Type: native function
 
 Arity: 0+
 
-                 *  N    0+  Multiply 0 or more numbers
 
 -----------------------------------------------------
 		
@@ -131,7 +130,7 @@ Type: function
 
 Arity: 2 
 
-                **  F    2   Exponentiation operator
+Args: `(n m)`
 
 -----------------------------------------------------
 		
@@ -144,7 +143,6 @@ Type: native function
 
 Arity: 0+
 
-                 +  N    0+  Add 0 or more numbers
 
 -----------------------------------------------------
 		
@@ -157,7 +155,6 @@ Type: native function
 
 Arity: 1+
 
-                 -  N    1+  Subtract 0 or more numbers from the first argument
 
 -----------------------------------------------------
 		
@@ -170,7 +167,6 @@ Type: native function
 
 Arity: 2+
 
-                 /  N    2+  Divide the first argument by the rest
 
 -----------------------------------------------------
 		
@@ -183,7 +179,6 @@ Type: native function
 
 Arity: 1+
 
-                 <  N    1+  Return t if the arguments are in strictly increasing order, () otherwise
 
 -----------------------------------------------------
 		
@@ -196,7 +191,6 @@ Type: native function
 
 Arity: 1+
 
-                <=  N    1+  Return t if the arguments are in increasing (or qual) order, () otherwise
 
 -----------------------------------------------------
 		
@@ -209,7 +203,6 @@ Type: native function
 
 Arity: 1+
 
-                 =  N    1+  Return t if the arguments are equal, () otherwise
 
 -----------------------------------------------------
 		
@@ -222,7 +215,6 @@ Type: native function
 
 Arity: 1+
 
-                 >  N    1+  Return t if the arguments are in strictly decreasing order, () otherwise
 
 -----------------------------------------------------
 		
@@ -235,7 +227,6 @@ Type: native function
 
 Arity: 1+
 
-                >=  N    1+  Return t if the arguments are in decreasing (or equal) order, () otherwise
 
 -----------------------------------------------------
 		
@@ -248,7 +239,7 @@ Type: special form
 
 Arity: 0+
 
-               and  S    0+  Boolean and
+Args: `(() . xs)`
 
 -----------------------------------------------------
 		
@@ -261,7 +252,6 @@ Type: native function
 
 Arity: 2 
 
-             apply  N    2   Apply a function to a list of arguments
 
 -----------------------------------------------------
 		
@@ -274,7 +264,6 @@ Type: native function
 
 Arity: 1 
 
-             atom?  N    1   Return t if the argument is an atom, () otherwise
 
 -----------------------------------------------------
 		
@@ -287,7 +276,6 @@ Type: native function
 
 Arity: 1 
 
-              bang  N    1   Return a new atom with exclamation point added
 
 -----------------------------------------------------
 		
@@ -300,7 +288,6 @@ Type: native function
 
 Arity: 1 
 
-              body  N    1   Return the body of a lambda function
 
 -----------------------------------------------------
 		
@@ -313,7 +300,7 @@ Type: function
 
 Arity: 1 
 
-           butlast  F    1   Return everything but the last element
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -326,7 +313,7 @@ Type: function
 
 Arity: 1 
 
-              caar  F    1   First element of the first element of a list of lists
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -339,7 +326,7 @@ Type: function
 
 Arity: 1 
 
-        capitalize  F    1   Return the atom argument, capitalized
+Args: `(a)`
 
 -----------------------------------------------------
 		
@@ -352,7 +339,6 @@ Type: native function
 
 Arity: 1 
 
-               car  N    1   Return the first element of a list
 
 -----------------------------------------------------
 		
@@ -365,7 +351,6 @@ Type: native function
 
 Arity: 1 
 
-               cdr  N    1   Return a list with the first element removed
 
 -----------------------------------------------------
 		
@@ -378,7 +363,6 @@ Type: native function
 
 Arity: 1 
 
-             comma  N    1   Return a new atom with a comma at the end
 
 -----------------------------------------------------
 		
@@ -391,7 +375,7 @@ Type: macro
 
 Arity: 0+
 
-           comment  M    0+  Ignore the expressions in the block
+Args: `()`
 
 -----------------------------------------------------
 		
@@ -404,7 +388,7 @@ Type: function
 
 Arity: 1 
 
-        complement  F    1   Return the logical complement of the supplied function
+Args: `(f)`
 
 -----------------------------------------------------
 		
@@ -417,7 +401,7 @@ Type: function
 
 Arity: 0+
 
-            concat  F    0+  Concatenenate any number of lists
+Args: `()`
 
 -----------------------------------------------------
 		
@@ -430,7 +414,7 @@ Type: special form
 
 Arity: 0+
 
-              cond  S    0+  Conditional branching
+Args: `(() . pairs)`
 
 -----------------------------------------------------
 		
@@ -443,7 +427,6 @@ Type: native function
 
 Arity: 2 
 
-              cons  N    2   Add an element to the front of a (possibly empty) list
 
 -----------------------------------------------------
 		
@@ -456,7 +439,7 @@ Type: function
 
 Arity: 1 
 
-        constantly  F    1   Given a value, return a function which always returns that value
+Args: `(x)`
 
 -----------------------------------------------------
 		
@@ -469,7 +452,7 @@ Type: function
 
 Arity: 1 
 
-               dec  F    1   Return the supplied integer argument, minus one
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -482,7 +465,7 @@ Type: special form
 
 Arity: 2 
 
-               def  S    2   Set a value
+Args: `(x val)`
 
 -----------------------------------------------------
 		
@@ -495,7 +478,6 @@ Type: special form
 
 Arity: 2+
 
-          defmacro  S    2+  Create and name a macro
 
 -----------------------------------------------------
 		
@@ -508,7 +490,7 @@ Type: special form
 
 Arity: 2+
 
-              defn  S    2+  Create and name a function
+Args: `(f args . body)`
 
 -----------------------------------------------------
 		
@@ -521,7 +503,6 @@ Type: native function
 
 Arity: 1 
 
-               doc  N    1   Return the doclist for a function
 
 -----------------------------------------------------
 		
@@ -534,7 +515,7 @@ Type: macro
 
 Arity: 1+
 
-           dotimes  M    1+  Execute body for each value in a list
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -547,7 +528,6 @@ Type: native function
 
 Arity: 1 
 
-          downcase  N    1   Return a new atom with all characters in lower case
 
 -----------------------------------------------------
 		
@@ -560,7 +540,7 @@ Type: function
 
 Arity: 2 
 
-              drop  F    2   Drop n items from a list, then return the rest
+Args: `(n l)`
 
 -----------------------------------------------------
 		
@@ -573,7 +553,7 @@ Type: function
 
 Arity: 1 
 
-             error  F    1   Return an error and (NOT IMPLEMENTED) short-circuit further processing
+Args: `(msg)`
 
 -----------------------------------------------------
 		
@@ -586,7 +566,6 @@ Type: special form
 
 Arity: 1+
 
-            errors  S    1+  Error checking (for tests)
 
 -----------------------------------------------------
 		
@@ -599,7 +578,7 @@ Type: function
 
 Arity: 1 
 
-             even?  F    1   Return true if the supplied integer argument is even
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -612,7 +591,7 @@ Type: function
 
 Arity: 1 
 
-         exclaimed  F    1   Return l as a sentence... emphasized!
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -625,7 +604,7 @@ Type: function
 
 Arity: 2 
 
-            filter  F    2   Keep only values for which function f is true
+Args: `(f l)`
 
 -----------------------------------------------------
 		
@@ -638,7 +617,7 @@ Type: function
 
 Arity: 1 
 
-           flatten  F    1   Return a (possibly nested) list, flattened
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -651,7 +630,7 @@ Type: macro
 
 Arity: 2+
 
-           foreach  M    2+  Execute body for each value in a list
+Args: `(x xs)`
 
 -----------------------------------------------------
 		
@@ -664,7 +643,6 @@ Type: native function
 
 Arity: 0 
 
-             forms  N    0   Return available operators, as a list
 
 -----------------------------------------------------
 		
@@ -677,7 +655,6 @@ Type: native function
 
 Arity: 1 
 
-              fuse  N    1   Fuse a list of numbers or atoms into a single atom
 
 -----------------------------------------------------
 		
@@ -690,7 +667,6 @@ Type: native function
 
 Arity: 0 
 
-              help  N    0   Print this message
 
 -----------------------------------------------------
 		
@@ -703,7 +679,7 @@ Type: function
 
 Arity: 1 
 
-          identity  F    1   Return the argument
+Args: `(x)`
 
 -----------------------------------------------------
 		
@@ -716,7 +692,7 @@ Type: macro
 
 Arity: 3 
 
-                if  M    3   Simple conditional with two branches
+Args: `(condition then else)`
 
 -----------------------------------------------------
 		
@@ -729,7 +705,7 @@ Type: macro
 
 Arity: 3 
 
-            if-not  M    3   Simple (inverted) conditional with two branches
+Args: `(condition then else)`
 
 -----------------------------------------------------
 		
@@ -742,7 +718,7 @@ Type: function
 
 Arity: 1 
 
-               inc  F    1   Return the supplied integer argument, plus one
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -755,7 +731,6 @@ Type: native function
 
 Arity: 1 
 
-                is  N    1   Assert that the argument is truthy (not ())
 
 -----------------------------------------------------
 		
@@ -768,7 +743,6 @@ Type: special form
 
 Arity: 1+
 
-            lambda  S    1+  Create a function
 
 -----------------------------------------------------
 		
@@ -781,7 +755,7 @@ Type: function
 
 Arity: 1 
 
-              last  F    1   Return the last item in a list
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -794,7 +768,6 @@ Type: native function
 
 Arity: 1 
 
-               len  N    1   Return the length of a list
 
 -----------------------------------------------------
 		
@@ -807,7 +780,6 @@ Type: special form
 
 Arity: 1+
 
-               let  S    1+  Create a local scope
 
 -----------------------------------------------------
 		
@@ -820,7 +792,6 @@ Type: native function
 
 Arity: 0+
 
-              list  N    0+  Return a list of the given arguments
 
 -----------------------------------------------------
 		
@@ -833,7 +804,7 @@ Type: function
 
 Arity: 0+
 
-             list*  F    0+  Create a list by consing everything but the last arg onto the last
+Args: `()`
 
 -----------------------------------------------------
 		
@@ -846,7 +817,6 @@ Type: native function
 
 Arity: 1 
 
-             list?  N    1   Return t if the argument is a list, () otherwise
 
 -----------------------------------------------------
 		
@@ -859,7 +829,6 @@ Type: special form
 
 Arity: 1+
 
-              loop  S    1+  Loop forever
 
 -----------------------------------------------------
 		
@@ -872,7 +841,6 @@ Type: native function
 
 Arity: 1 
 
-     macroexpand-1  N    1   Expand a macro
 
 -----------------------------------------------------
 		
@@ -885,7 +853,7 @@ Type: function
 
 Arity: 2 
 
-               map  F    2   Apply the supplied function to every element in the supplied list
+Args: `(f l)`
 
 -----------------------------------------------------
 		
@@ -898,7 +866,7 @@ Type: function
 
 Arity: 2 
 
-            mapcat  F    2   Map a function onto a list and concatenate results
+Args: `(f l)`
 
 -----------------------------------------------------
 		
@@ -911,7 +879,7 @@ Type: function
 
 Arity: 1 
 
-              neg?  F    1   Return true iff the supplied integer argument is less than zero
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -924,7 +892,6 @@ Type: native function
 
 Arity: 1 
 
-               not  N    1   Return t if the argument is nil, () otherwise
 
 -----------------------------------------------------
 		
@@ -937,7 +904,7 @@ Type: function
 
 Arity: 2 
 
-               nth  F    2   Find the nth value of a list, starting from zero
+Args: `(n l)`
 
 -----------------------------------------------------
 		
@@ -950,7 +917,6 @@ Type: native function
 
 Arity: 1 
 
-           number?  N    1   Return true if the argument is a number, else ()
 
 -----------------------------------------------------
 		
@@ -963,7 +929,7 @@ Type: function
 
 Arity: 1 
 
-              odd?  F    1   Return true if the supplied integer argument is odd
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -976,7 +942,6 @@ Type: special form
 
 Arity: 0+
 
-                or  S    0+  Boolean or
 
 -----------------------------------------------------
 		
@@ -989,7 +954,6 @@ Type: native function
 
 Arity: 1 
 
-            period  N    1   Return a new atom with a period added to the end
 
 -----------------------------------------------------
 		
@@ -1002,7 +966,7 @@ Type: function
 
 Arity: 1 
 
-              pos?  F    1   Return true iff the supplied integer argument is greater than zero
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -1015,7 +979,6 @@ Type: native function
 
 Arity: 0+
 
-             print  N    0+  Print the arguments
 
 -----------------------------------------------------
 		
@@ -1028,7 +991,6 @@ Type: native function
 
 Arity: 1 
 
-            printl  N    1   Print a list argument, without parentheses
 
 -----------------------------------------------------
 		
@@ -1041,7 +1003,6 @@ Type: native function
 
 Arity: 0+
 
-           println  N    0+  Print the arguments and a newline
 
 -----------------------------------------------------
 		
@@ -1054,7 +1015,7 @@ Type: macro
 
 Arity: 0+
 
-             progn  M    0+  Execute multiple statements, returning the last
+Args: `()`
 
 -----------------------------------------------------
 		
@@ -1067,7 +1028,7 @@ Type: function
 
 Arity: 2 
 
-         punctuate  F    2   Return l capitalized, with punctuation determined by the supplied function
+Args: `(f l)`
 
 -----------------------------------------------------
 		
@@ -1080,7 +1041,6 @@ Type: special form
 
 Arity: 1 
 
-             quote  S    1   Quote an expression
 
 -----------------------------------------------------
 		
@@ -1093,7 +1053,7 @@ Type: function
 
 Arity: 1 
 
-         randalpha  F    1   Return a list of random (English/Latin/unaccented) alphabetic characters
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -1106,7 +1066,7 @@ Type: function
 
 Arity: 1 
 
-        randchoice  F    1   Return an element at random from the supplied list
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -1119,7 +1079,7 @@ Type: function
 
 Arity: 1 
 
-         randigits  F    1   Return a random integer between 0 and the argument minus 1
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -1132,7 +1092,6 @@ Type: native function
 
 Arity: 1 
 
-           randint  N    1   Return a random integer between 0 and the argument minus 1
 
 -----------------------------------------------------
 		
@@ -1145,7 +1104,7 @@ Type: function
 
 Arity: 1 
 
-             range  F    1   List of integers from 0 to n
+Args: `(n)`
 
 -----------------------------------------------------
 		
@@ -1158,7 +1117,6 @@ Type: native function
 
 Arity: 0 
 
-          readlist  N    0   Read a list from stdin
 
 -----------------------------------------------------
 		
@@ -1171,7 +1129,7 @@ Type: function
 
 Arity: 2+
 
-            reduce  F    2+  Successively apply a function against a list of arguments
+Args: `(f x)`
 
 -----------------------------------------------------
 		
@@ -1184,7 +1142,6 @@ Type: native function
 
 Arity: 2 
 
-               rem  N    2   Return remainder when second arg divides first
 
 -----------------------------------------------------
 		
@@ -1197,7 +1154,7 @@ Type: function
 
 Arity: 2 
 
-            remove  F    2   Keep only values for which function f is false / the empty list
+Args: `(f l)`
 
 -----------------------------------------------------
 		
@@ -1210,7 +1167,7 @@ Type: function
 
 Arity: 2 
 
-            repeat  F    2   Return a list of length n whose elements are all x
+Args: `(n x)`
 
 -----------------------------------------------------
 		
@@ -1223,7 +1180,7 @@ Type: function
 
 Arity: 2 
 
-        repeatedly  F    2   Return a list of length n whose elements are made from calling f repeatedly
+Args: `(n f)`
 
 -----------------------------------------------------
 		
@@ -1236,7 +1193,7 @@ Type: function
 
 Arity: 1 
 
-           reverse  F    1   Reverse a list
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -1249,7 +1206,6 @@ Type: native function
 
 Arity: 0 
 
-      screen-clear  N    0   Clear the screen
 
 -----------------------------------------------------
 		
@@ -1262,7 +1218,6 @@ Type: native function
 
 Arity: 0 
 
-        screen-end  N    0   Stop screen for text UIs, return to console mode
 
 -----------------------------------------------------
 		
@@ -1275,7 +1230,6 @@ Type: native function
 
 Arity: 0 
 
-    screen-get-key  N    0   Return a keystroke as an atom
 
 -----------------------------------------------------
 		
@@ -1288,7 +1242,6 @@ Type: native function
 
 Arity: 0 
 
-       screen-size  N    0   Return the screen size (width, height)
 
 -----------------------------------------------------
 		
@@ -1301,7 +1254,6 @@ Type: native function
 
 Arity: 0 
 
-      screen-start  N    0   Start screen for text UIs
 
 -----------------------------------------------------
 		
@@ -1314,7 +1266,6 @@ Type: native function
 
 Arity: 3 
 
-      screen-write  N    3   Write a string to the screen
 
 -----------------------------------------------------
 		
@@ -1327,7 +1278,6 @@ Type: native function
 
 Arity: 1 
 
-           shuffle  N    1   Return a shuffled list
 
 -----------------------------------------------------
 		
@@ -1340,7 +1290,6 @@ Type: native function
 
 Arity: 1 
 
-             sleep  N    1   Sleep for the given number of milliseconds
 
 -----------------------------------------------------
 		
@@ -1353,7 +1302,7 @@ Type: function
 
 Arity: 2 
 
-              some  F    2   Return f applied to first element for which that result is truthy, else ()
+Args: `(f l)`
 
 -----------------------------------------------------
 		
@@ -1366,7 +1315,6 @@ Type: native function
 
 Arity: 1 
 
-             split  N    1   Split an atom or number into a list of single-digit numbers or single-character atoms
 
 -----------------------------------------------------
 		
@@ -1379,7 +1327,6 @@ Type: special form
 
 Arity: 1 
 
-      syntax-quote  S    1   Syntax-quote an expression
 
 -----------------------------------------------------
 		
@@ -1392,7 +1339,7 @@ Type: function
 
 Arity: 2 
 
-              take  F    2   Take up to n items from the supplied list
+Args: `(n l)`
 
 -----------------------------------------------------
 		
@@ -1405,7 +1352,6 @@ Type: native function
 
 Arity: 0+
 
-              test  N    0+  Establish a testing block (return last expression)
 
 -----------------------------------------------------
 		
@@ -1418,7 +1364,7 @@ Type: function
 
 Arity: 1 
 
-        tosentence  F    1   Return l as a sentence... capitalized, with a period at the end
+Args: `(l)`
 
 -----------------------------------------------------
 		
@@ -1431,7 +1377,6 @@ Type: native function
 
 Arity: 1 
 
-            upcase  N    1   Return the uppercase version of the given atom
 
 -----------------------------------------------------
 		
@@ -1444,7 +1389,6 @@ Type: native function
 
 Arity: 0 
 
-           version  N    0   Return the version of the interpreter
 
 -----------------------------------------------------
 		
@@ -1457,7 +1401,7 @@ Type: macro
 
 Arity: 2 
 
-              when  M    2   Simple conditional with single branch
+Args: `(condition then)`
 
 -----------------------------------------------------
 		
@@ -1470,7 +1414,7 @@ Type: macro
 
 Arity: 2 
 
-          when-not  M    2   Complement of the when macro
+Args: `(condition then)`
 
 -----------------------------------------------------
 		
@@ -1483,7 +1427,7 @@ Type: macro
 
 Arity: 0+
 
-       with-screen  M    0+  Prepare for and clean up after screen operations
+Args: `()`
 
 -----------------------------------------------------
 		
@@ -1496,7 +1440,7 @@ Type: function
 
 Arity: 1 
 
-             zero?  F    1   Return true iff the supplied argument is zero
+Args: `(n)`
 
 -----------------------------------------------------
 		
