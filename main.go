@@ -79,9 +79,10 @@ func repl(e env) {
 func main() {
 	var versionFlag bool
 	var cpuProfile string
-
+	var docFlag bool
 	flag.BoolVar(&versionFlag, "v", false, "Get l1 version")
 	flag.StringVar(&cpuProfile, "p", "", "Write CPU profile to file")
+	flag.BoolVar(&docFlag, "doc", false, "Print documentation")
 
 	flag.Parse()
 
@@ -108,6 +109,12 @@ func main() {
 		fmt.Println("Failed to load l1 core library!")
 		os.Exit(1)
 	}
+
+	if docFlag {
+		fmt.Println(helpStr(&globals))
+		os.Exit(0)
+	}
+
 	files := flag.Args()
 	if len(files) > 0 {
 		for _, file := range files {

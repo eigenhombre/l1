@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"os"
 	"strings"
 	"testing"
@@ -146,11 +145,8 @@ func TestEval(t *testing.T) {
 	}
 	examples = append(examples, "> (help)\n")
 	outstr := strings.Join(examples, "\n")
+	outstr += helpStr(&globals)
 	bs := []byte(outstr)
-
-	helpBuf := bytes.NewBufferString("")
-	doHelp(helpBuf, &globals)
-	bs = append(bs, helpBuf.Bytes()...)
 	bs = append(bs, "> ^D\n$\n"...)
 	err := os.WriteFile("examples.txt", bs, 0644)
 	if err != nil {

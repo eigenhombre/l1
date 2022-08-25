@@ -656,25 +656,6 @@ func init() {
 				return Nil, nil
 			},
 		},
-		"pos?": {
-			Name:       "pos?",
-			Docstring:  "Return true if the (numeric) argument is positive, else ()",
-			FixedArity: 1,
-			NAry:       false,
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("pos? expects a single argument")
-				}
-				num, ok := args[0].(Number)
-				if !ok {
-					return nil, fmt.Errorf("'%s' is not a number", args[0])
-				}
-				if num.Greater(Num(0)) {
-					return True, nil
-				}
-				return Nil, nil
-			},
-		},
 		"randint": {
 			Name:       "randint",
 			Docstring:  "Return a random integer between 0 and the argument minus 1",

@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"sort"
+	"strings"
 )
 
 type fnDoc struct {
@@ -30,22 +32,29 @@ var specialForms = []fnDoc{
 	{"syntax-quote", 1, false, "Syntax-quote an expression", true},
 }
 
-func formatFunctionInfo(name, shortDesc string, arity int, isMultiArity, isSpecial, isMacro bool) string {
+const formatStr = "%14s %2s %5s  %s"
+
+func formatFunctionInfo(name, shortDesc string,
+	arity int,
+	isMultiArity, isSpecial, isMacro, isNativeFn bool) string {
+
 	isMultiArityStr := " "
 	if isMultiArity {
 		isMultiArityStr = "+"
 	}
-	specialOrMacro := ""
+	formType := "F"
 	if isSpecial {
-		specialOrMacro = "SPECIAL FORM: "
+		formType = "S"
 	} else if isMacro {
-		specialOrMacro = "Macro: "
+		formType = "M"
+	} else if isNativeFn {
+		formType = "N"
 	}
 	argstr := fmt.Sprintf("%d%s", arity, isMultiArityStr)
-	return fmt.Sprintf("%14s %5s     %s%s",
+	return fmt.Sprintf(formatStr,
 		name,
+		formType,
 		argstr,
-		specialOrMacro,
 		capitalize(shortDesc))
 }
 
@@ -59,51 +68,70 @@ func functionDescriptionFromDoc(l lambdaFn) string {
 }
 
 func doHelp(out io.Writer, e *env) {
-	fmt.Fprintln(out, "Builtins and Special Forms:")
-	fmt.Fprintln(out, "      Name  Arity    Description")
-	forms := specialForms
+	type namedDoc struct {
+		name string
+		doc  string
+	}
+	outStrs := []string{}
+	sortedStrs := []namedDoc{}
+	outStrs = append(outStrs,
+		"l1 - a Lisp interpreter.\n",
+		fmt.Sprintf(formatStr, "Name", "Type", "Arity", "Description"),
+		fmt.Sprintf(formatStr, "----", "---", "----", "-----------"),
+		"                S - special form",
+		"                M - macro",
+		"                N - native (Go) function",
+		"                F - Lisp function\n",
+	)
+
+	// Special forms:
+	for _, fn := range specialForms {
+		sortedStrs = append(sortedStrs, namedDoc{fn.name,
+			formatFunctionInfo(fn.name,
+				fn.doc,
+				fn.farity,
+				fn.ismulti,
+				fn.isSpecial,
+				fn.isSpecial,
+				false)})
+	}
+	// Builtins:
 	for _, builtin := range builtins {
-		forms = append(
-			forms,
-			fnDoc{
-				builtin.Name,
+		sortedStrs = append(sortedStrs, namedDoc{builtin.Name,
+			formatFunctionInfo(builtin.Name,
+				builtin.Docstring,
 				builtin.FixedArity,
 				builtin.NAry,
-				builtin.Docstring,
-				false})
+				false,
+				false,
+				true)})
 	}
-	// sort by name
-	sort.Slice(forms, func(i, j int) bool {
-		return forms[i].name < forms[j].name
-	})
-	for _, form := range forms {
-		fmt.Fprintln(out, formatFunctionInfo(form.name,
-			form.doc,
-			form.farity,
-			form.ismulti,
-			form.isSpecial,
-			false))
-	}
-	lambdaNames := []string{}
-	for _, name := range EnvKeys(e) {
-		expr, _ := e.Lookup(name)
-		if _, ok := expr.(*lambdaFn); ok {
-			lambdaNames = append(lambdaNames, name)
+	// User-defined / internal l1 functions:
+	for _, lambdaName := range EnvKeys(e) {
+		expr, _ := e.Lookup(lambdaName)
+		l, ok := expr.(*lambdaFn)
+		if ok {
+			sortedStrs = append(sortedStrs, namedDoc{lambdaName,
+				formatFunctionInfo(lambdaName,
+					functionDescriptionFromDoc(*l),
+					len(l.args),
+					l.restArg != "",
+					false,
+					l.isMacro,
+					false)})
 		}
 	}
-	sort.Slice(lambdaNames, func(i, j int) bool {
-		return lambdaNames[i] < lambdaNames[j]
+	sort.Slice(sortedStrs, func(i, j int) bool {
+		return sortedStrs[i].name < sortedStrs[j].name
 	})
-
-	fmt.Fprint(out, "\n\nOther available functions:\n\n")
-	for _, lambdaName := range lambdaNames {
-		expr, _ := e.Lookup(lambdaName)
-		l := expr.(*lambdaFn)
-		fmt.Fprintln(out, formatFunctionInfo(lambdaName,
-			functionDescriptionFromDoc(*l),
-			len(l.args),
-			l.restArg != "",
-			false,
-			l.isMacro))
+	for _, doc := range sortedStrs {
+		outStrs = append(outStrs, doc.doc)
 	}
+	fmt.Fprintln(out, strings.Join(outStrs, "\n"))
+}
+
+func helpStr(e *env) string {
+	helpBuf := bytes.NewBufferString("")
+	doHelp(helpBuf, e)
+	return helpBuf.String()
 }
