@@ -18,24 +18,26 @@ type formRec struct {
 	farity    int
 	ismulti   bool
 	doc       string
+	longDoc   string
 	columnDoc string
 	ftype     string
+	argsStr   string
 }
 
 // When you add a special form to eval, you should add it here as well.s
 var specialForms = []formRec{
-	{"and", 0, true, "Boolean and", "", special},
-	{"cond", 0, true, "Conditional branching", "", special},
-	{"def", 2, false, "Set a value", "", special},
-	{"defn", 2, true, "Create and name a function", "", special},
-	{"defmacro", 2, true, "Create and name a macro", "", special},
-	{"errors", 1, true, "Error checking (for tests)", "", special},
-	{"lambda", 1, true, "Create a function", "", special},
-	{"let", 1, true, "Create a local scope", "", special},
-	{"loop", 1, true, "Loop forever", "", special},
-	{"or", 0, true, "Boolean or", "", special},
-	{"quote", 1, false, "Quote an expression", "", special},
-	{"syntax-quote", 1, false, "Syntax-quote an expression", "", special},
+	{"and", 0, true, "Boolean and", "", "", special, "(() . xs)"},
+	{"cond", 0, true, "Conditional branching", "", "", special, "(() . pairs)"},
+	{"def", 2, false, "Set a value", "", "", special, "(x val)"},
+	{"defn", 2, true, "Create and name a function", "", "", special, "(f args . body)"},
+	{"defmacro", 2, true, "Create and name a macro", "", "", special, ""},
+	{"errors", 1, true, "Error checking (for tests)", "", "", special, ""},
+	{"lambda", 1, true, "Create a function", "", "", special, ""},
+	{"let", 1, true, "Create a local scope", "", "", special, ""},
+	{"loop", 1, true, "Loop forever", "", "", special, ""},
+	{"or", 0, true, "Boolean or", "", "", special, ""},
+	{"quote", 1, false, "Quote an expression", "", "", special, ""},
+	{"syntax-quote", 1, false, "Syntax-quote an expression", "", "", special, ""},
 }
 
 const columnsFormat = "%14s %2s %5s  %s"
@@ -73,6 +75,10 @@ func functionDescriptionFromDoc(l lambdaFn) string {
 	return shortDoc
 }
 
+func formatLambdaArgs(args []string) string {
+	return fmt.Sprintf("(%s)", strings.Join(args, " "))
+}
+
 func availableForms(e *env) []formRec {
 	// Special forms - only need to add formatted column description:
 	out := []formRec{}
@@ -89,6 +95,7 @@ func availableForms(e *env) []formRec {
 			ismulti: builtin.NAry,
 			doc:     builtin.Docstring,
 			ftype:   native,
+			argsStr: "",
 			columnDoc: formatFunctionInfo(builtin.Name,
 				builtin.Docstring,
 				builtin.FixedArity,
@@ -116,6 +123,7 @@ func availableForms(e *env) []formRec {
 				ismulti: l.restArg != "",
 				doc:     functionDescriptionFromDoc(*l),
 				ftype:   ftype,
+				argsStr: formatLambdaArgs(l.args),
 				columnDoc: formatFunctionInfo(lambdaName,
 					functionDescriptionFromDoc(*l),
 					len(l.args),
