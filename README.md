@@ -85,9 +85,9 @@ Example (using a file in this project):
     952175999932299156089414639761565182862536979208272237582511852
     10916864000000000000000000000000
 
-    real    0m0.010s
-    user    0m0.005s
-    sys     0m0.005s
+    real	0m0.012s
+    user	0m0.007s
+    sys	0m0.005s
 
 # Example Programs
 
@@ -280,7 +280,7 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
 
 Several core library functions are also implemented in `l1`.  The file
 [`l1.l1`](https://github.com/eigenhombre/l1/blob/master/l1.l1) contains these, and is evaluated when the interpreter starts.
-This currently runs quite quickly (8-10 milliseconds on my Mac M1 Air).
+This currently runs quite quickly (12 milliseconds on my Mac M1 Air).
 
 # Text User Interfaces
 
