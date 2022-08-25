@@ -1,3 +1,4 @@
+# Index
 107 forms available:
 [`*`](#*)
 [`**`](#**)
@@ -106,6 +107,8 @@
 [`when-not`](#when-not)
 [`with-screen`](#with-screen)
 [`zero?`](#zero?)
+# Operators
+
 
 ## `*`
 
