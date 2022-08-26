@@ -131,6 +131,12 @@ func init() {
 	E := func(args ...Sexpr) *ConsCell {
 		return mkListAsConsWithCdr(args, Nil).(*ConsCell)
 	}
+	QL := func(args ...Sexpr) *ConsCell {
+		return L(A("quote"), L(args...)).(*ConsCell)
+	}
+	QA := func(s string) *ConsCell {
+		return L(A("quote"), A(s)).(*ConsCell)
+	}
 	builtins = map[string]*Builtin{
 		"+": {
 			Name:       "+",
@@ -381,7 +387,7 @@ func init() {
 			ArgString:  "(x)",
 			Examples: E(
 				L(A("atom?"), N(1)),
-				L(A("atom?"), L(A("quote"), A("one"))),
+				L(A("atom?"), QA("one")),
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -420,7 +426,7 @@ func init() {
 			NAry:       false,
 			ArgString:  "(x)",
 			Examples: E(
-				L(A("car"), L(A("quote"), L(A("one"), A("two")))),
+				L(A("car"), QL(A("one"), A("two"))),
 				L(A("car"), L()),
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
@@ -444,7 +450,7 @@ func init() {
 			NAry:       false,
 			ArgString:  "(x)",
 			Examples: E(
-				L(A("cdr"), L(A("quote"), L(A("one"), A("two")))),
+				L(A("cdr"), QL(A("one"), A("two"))),
 				L(A("cdr"), L()),
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
@@ -468,7 +474,7 @@ func init() {
 			NAry:       false,
 			ArgString:  "(x xs)",
 			Examples: E(
-				L(A("cons"), N(1), L(A("quote"), L(A("one"), A("two")))),
+				L(A("cons"), N(1), QL(A("one"), A("two"))),
 				L(A("cons"), N(1), L()),
 				L(A("cons"), N(1), N(2)),
 			),
@@ -508,8 +514,8 @@ func init() {
 			NAry:       false,
 			ArgString:  "(x)",
 			Examples: E(
-				L(A("downcase"), L(A("quote"), A("Hello"))),
-				L(A("downcase"), L(A("quote"), A("HELLO"))),
+				L(A("downcase"), QA("Hello")),
+				L(A("downcase"), QA("HELLO")),
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -539,7 +545,7 @@ func init() {
 			NAry:       false,
 			ArgString:  "(x)",
 			Examples: E(
-				L(A("fuse"), L(A("quote"), L(A("A"), A("B"), A("C")))),
+				L(A("fuse"), QL(A("A"), A("B"), A("C"))),
 				L(A("fuse"), L(A("reverse"), L(A("range"), N(10)))),
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
@@ -649,8 +655,8 @@ func init() {
 			NAry:       false,
 			ArgString:  "(x)",
 			Examples: E(
-				L(A("macroexpand-1"), L(A("quote"), L(A("+"), A("x"), N(1)))),
-				L(A("macroexpand-1"), L(A("quote"), L(A("if"), L(), N(1), N(2)))),
+				L(A("macroexpand-1"), QL(A("+"), A("x"), N(1))),
+				L(A("macroexpand-1"), QL(A("if"), L(), N(1), N(2))),
 			),
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -665,6 +671,11 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("not"), L()),
+				L(A("not"), A("t")),
+				L(A("not"), L(A("range"), N(10))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("not expects a single argument")
@@ -681,6 +692,11 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("number?"), N(1)),
+				L(A("number?"), A("t")),
+				L(A("number?"), A("+")),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("number? expects a single argument")
@@ -920,6 +936,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("split"), N(123)),
+				L(A("split"), QA("abc")),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("split expects a single argument")

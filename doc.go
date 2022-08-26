@@ -34,16 +34,16 @@ var specialForms = []formRec{
 		ftype:   special,
 		argsStr: "(() . xs)",
 		examples: `(and)
-;; =>
+;;=>
 true
 > (and t t)
-;; =>
+;;=>
 true
 > (and t t ())
-;; =>
+;;=>
 ()
 > (and () (launch-missiles))
-;; =>
+;;=>
 ()
 `,
 	},
