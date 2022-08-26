@@ -124,7 +124,32 @@ helpful for this sort of construction:
     SPACE
     TAB
 
-These all evaluate to atoms whose names are the unreadable characters.
+These all evaluate to atoms whose names are the unreadable characters,
+some of which may be helpful for text games and other diversions:
+
+    > (dotimes 10
+        (println
+         (fuse
+          (repeatedly 10
+                      (lambda ()
+                        (randchoice (list COMMA
+                                          COLON
+                                          PERIOD
+                                          BANG
+                                          QMARK)))))))
+
+    .!!!.???..
+    ,??::?!,.?
+    ?,?!?..:!!
+    ,:.,?.:!!!
+    !!:?!::.,?
+    ,:!!!:,!!:
+    ,???:?!:!?
+    .,!!?,!:!?
+    !:,!!!.:!:
+    ??.,,:.:..
+    ()
+    >
 
 # Functions
 

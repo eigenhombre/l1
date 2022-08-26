@@ -334,7 +334,7 @@ func init() {
 			Docstring:  "Return the body of a lambda function",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
+			ArgString:  "(f)",
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
