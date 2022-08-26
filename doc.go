@@ -105,6 +105,19 @@ true
 		doc:     "Create and name a macro",
 		ftype:   special,
 		argsStr: "(name args . body)",
+		examples: `> (defmacro ignore-car (l)
+    (doc (ignore first element of list,
+                 treat rest as normal expression)
+         (examples
+           (ignore-car (adorable + 1 2 3))
+           (ignore-car (deplorable - 4 4))))
+    (cdr l))
+;;=>
+()
+> (ignore-car (hilarious * 2 3 4))
+;;=>
+24
+	`,
 	},
 	{
 		name:    "error",
