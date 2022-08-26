@@ -69,7 +69,11 @@
            (error '(reduce needs at least two arguments))))))
 
 (defn concat (() . lists)
-  (doc (concatenenate any number of lists))
+  (doc (concatenenate any number of lists)
+       (examples
+        (concat (range 3) '(wow) (reverse (range 3)))
+        ;;=> (0 1 2 wow 2 1 0)
+        ))
   (let ((concat2 (lambda concat2 (a b)
                    (if (not a)
                      b
@@ -80,7 +84,8 @@
 
 (defn reverse (l)
   (doc (reverse a list)
-       (example (= '(c b a) (reverse '(a b c)))))
+       (examples
+        (= '(c b a) (reverse '(a b c)))))
   (when l
     (concat (reverse (cdr l))
             (cons (car l) ()))))
@@ -184,7 +189,12 @@
         (t (list l))))
 
 (defn constantly (x)
-  (doc (given a value, return a function which always returns that value))
+  (doc (given a value, return a function which always returns that value)
+       (examples
+        (map (constantly t)
+             (range 10))
+        ;;=> (t t t t t t t t t t)
+        ))
   (lambda (() . _)
     x))
 

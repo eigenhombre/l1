@@ -55,11 +55,11 @@ true
 		ftype:   special,
 		argsStr: "(() . pairs)",
 		examples: `> (cond)
-;; => ()
+;;=> ()
 > (cond (t 1) (t 2) (t 3))
-;; => 1
+;;=> 1
 > (cond (() 1) (t 2))
-;; => 2
+;;=> 2
 `,
 	},
 	{
