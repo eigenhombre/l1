@@ -201,7 +201,11 @@
   (filter (complement f) l))
 
 (defn ** (n m)
-  (doc (exponentiation operator))
+  (doc (exponentiation operator)
+       (examples
+        (** 1 0)
+        (** 2 4)
+        (** 10 10)))
   (apply * (repeat m n)))
 
 (defn capitalize (a)

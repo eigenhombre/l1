@@ -187,6 +187,22 @@ func functionDescriptionFromDoc(l lambdaFn) string {
 	return shortDoc
 }
 
+func functionExamplesFromDoc(l lambdaFn) *ConsCell {
+	doc := l.doc
+	if doc == Nil {
+		return Nil
+	}
+	for {
+		if doc == Nil {
+			return Nil
+		}
+		if doc.car.(*ConsCell).car.Equal(Atom{"examples"}) {
+			return doc.car.(*ConsCell).cdr.(*ConsCell)
+		}
+		doc = doc.cdr.(*ConsCell)
+	}
+}
+
 func formatLambdaArgs(args []string, restArg string) string {
 	if restArg == "" {
 		return fmt.Sprintf("(%s)", strings.Join(args, " "))
@@ -197,9 +213,8 @@ func formatLambdaArgs(args []string, restArg string) string {
 	return fmt.Sprintf("(%s . %s)", strings.Join(args, " "), restArg)
 }
 
-func examplesToString(examples *ConsCell) (string, error) {
+func examplesToString(examples *ConsCell, e *env) (string, error) {
 	ret := ""
-	dummyEnv := mkEnv(nil)
 	for {
 		if examples == Nil {
 			break
@@ -208,7 +223,7 @@ func examplesToString(examples *ConsCell) (string, error) {
 		if example == Nil {
 			break
 		}
-		output, err := eval(example, &dummyEnv)
+		output, err := eval(example, e)
 		if err != nil {
 			ret += fmt.Sprintf("ERROR: %s\n", err)
 		} else {
@@ -234,7 +249,7 @@ func availableForms(e *env) []formRec {
 
 	// Builtins:
 	for _, builtin := range builtins {
-		examples, err := examplesToString(builtin.Examples)
+		examples, err := examplesToString(builtin.Examples, e)
 		if err != nil {
 			// our fault:
 			panic(err)
@@ -267,14 +282,19 @@ func availableForms(e *env) []formRec {
 		if l.isMacro {
 			ftype = macro
 		}
+		examples, err := examplesToString(functionExamplesFromDoc(*l), e)
+		if err != nil {
+			examples = "ERROR: " + err.Error()
+		}
 		if ok {
 			out = append(out, formRec{
-				name:    lambdaName,
-				farity:  len(l.args),
-				ismulti: l.restArg != "",
-				doc:     functionDescriptionFromDoc(*l),
-				ftype:   ftype,
-				argsStr: formatLambdaArgs(l.args, l.restArg),
+				name:     lambdaName,
+				farity:   len(l.args),
+				ismulti:  l.restArg != "",
+				doc:      functionDescriptionFromDoc(*l),
+				ftype:    ftype,
+				argsStr:  formatLambdaArgs(l.args, l.restArg),
+				examples: examples,
 				columnDoc: formatFunctionInfo(lambdaName,
 					functionDescriptionFromDoc(*l),
 					len(l.args),
