@@ -138,6 +138,10 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . xs)",
+			Examples: E(
+				L(A("+"), N(1), N(2), N(3)),
+				L(A("+")),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Num(0), nil
@@ -159,6 +163,11 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Examples: E(
+				L(A("-"), N(1), N(1)),
+				L(A("-"), N(5), N(2), N(1)),
+				L(A("-"), N(99)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
 					return nil, fmt.Errorf("missing argument")
@@ -210,7 +219,12 @@ func init() {
 			Docstring:  "Divide the first argument by the rest",
 			FixedArity: 2,
 			NAry:       true,
-			ArgString:  "(x . xs)",
+			ArgString:  "(numerator denominator1 . more)",
+			Examples: E(
+				L(A("/"), N(1), N(2)),
+				L(A("/"), N(12), N(2), N(3)),
+				L(A("/"), N(1), N(0)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) < 1 {
 					return nil, fmt.Errorf("missing argument")

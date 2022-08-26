@@ -213,7 +213,7 @@ func formatLambdaArgs(args []string, restArg string) string {
 	return fmt.Sprintf("(%s . %s)", strings.Join(args, " "), restArg)
 }
 
-func examplesToString(examples *ConsCell, e *env) (string, error) {
+func examplesToString(examples *ConsCell, e *env) string {
 	ret := ""
 	for {
 		if examples == Nil {
@@ -225,18 +225,18 @@ func examplesToString(examples *ConsCell, e *env) (string, error) {
 		}
 		output, err := eval(example, e)
 		if err != nil {
-			ret += fmt.Sprintf("ERROR: %s\n", err)
+			ret += fmt.Sprintf("> %s\n;;=>\nERROR: %s\n", example, err)
 		} else {
 			ret += fmt.Sprintf("> %s\n;;=>\n%s\n", example, output)
 		}
 		var ok bool
 		examples, ok = examples.cdr.(*ConsCell)
 		if !ok {
-			return "", fmt.Errorf("examples must be lists")
+			ret += "ERROR: examples must be lists!"
 		}
 
 	}
-	return ret, nil
+	return ret
 }
 
 func availableForms(e *env) []formRec {
@@ -249,11 +249,6 @@ func availableForms(e *env) []formRec {
 
 	// Builtins:
 	for _, builtin := range builtins {
-		examples, err := examplesToString(builtin.Examples, e)
-		if err != nil {
-			// our fault:
-			panic(err)
-		}
 		out = append(out, formRec{
 			name:     builtin.Name,
 			farity:   builtin.FixedArity,
@@ -261,7 +256,7 @@ func availableForms(e *env) []formRec {
 			doc:      builtin.Docstring,
 			ftype:    native,
 			argsStr:  builtin.ArgString,
-			examples: examples,
+			examples: examplesToString(builtin.Examples, e),
 			columnDoc: formatFunctionInfo(builtin.Name,
 				builtin.Docstring,
 				builtin.FixedArity,
@@ -282,10 +277,7 @@ func availableForms(e *env) []formRec {
 		if l.isMacro {
 			ftype = macro
 		}
-		examples, err := examplesToString(functionExamplesFromDoc(*l), e)
-		if err != nil {
-			examples = "ERROR: " + err.Error()
-		}
+		examples := examplesToString(functionExamplesFromDoc(*l), e)
 		if ok {
 			out = append(out, formRec{
 				name:     lambdaName,
