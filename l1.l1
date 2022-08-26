@@ -107,40 +107,55 @@
   (+ n 1))
 
 (defn dec (n)
-  (doc (return the supplied integer argument, minus one))
+  (doc (return the supplied integer argument, minus one)
+       (examples
+        (dec 2)
+        (dec -1)))
   (- n 1))
 
 (defn range (n)
-  (doc (list of integers from 0 to n))
-  (let ((inner (lambda inner (n)
-                 (if (= 1 n)
-                   (cons (dec n) ())
-                   (cons (dec n) (inner (dec n)))))))
-    (reverse (inner n))))
+  (doc (list of integers from 0 to n)
+       (examples
+        (range 10)
+        (len (range 100))))
+  (when (pos? n)
+    (let ((inner (lambda inner (n)
+                   (if (= 1 n)
+                     (cons (dec n) ())
+                     (cons (dec n) (inner (dec n)))))))
+      (reverse (inner n)))))
 
-;; FIXME: Should error when l is ()!
 (defn nth (n l)
-  (doc (find the nth value of a list, starting from zero))
-  (when l
-    (if (zero? n)
-      (car l)
-      (nth (dec n) (cdr l)))))
+  (doc (find the nth value of a list, starting from zero)
+       (examples
+        (nth 3 '(one two three four five))))
+  (cond
+   ((not l) (error '(supplied list must not be empty)))
+   ((zero? n) (car l))
+   (t (nth (dec n) (cdr l)))))
 
 (defn last (l)
-  (doc (return the last item in a list))
+  (doc (return the last item in a list)
+       (examples
+        (last (range 10))
+        (last (split 'ATOM!))))
   (let ((c (cdr l)))
     (if-not c
       (car l)
       (last c))))
 
 (defn take (n l)
-  (doc (take up to n items from the supplied list))
+  (doc (take up to n items from the supplied list)
+       (examples
+        (take 3 (range 10))))
   (cond ((zero? n) ())
         ((not l) ())
         (t (cons (car l) (take (dec n) (cdr l))))))
 
 (defn drop (n l)
-  (doc (drop n items from a list, then return the rest))
+  (doc (drop n items from a list, then return the rest)
+       (examples
+        (drop 3 (range 10))))
   (cond ((zero? n) l)
         ((not l) ())
         (t (drop (dec n)
@@ -199,34 +214,57 @@
     x))
 
 (defn repeat (n x)
-  (doc (return a list of length n whose elements are all x))
+  (doc (return a list of length n whose elements are all x)
+       (examples
+        (repeat 5 'repetitive)))
   (when-not (zero? n)
     (cons x (repeat (dec n) x))))
 
 (defn repeatedly (n f)
-  (doc (return a list of length n whose elements are made from calling f repeatedly))
+  (doc (return a list of length n whose elements are made from calling f repeatedly)
+       (examples
+        (repeatedly 3 (lambda () (range 5)))))
   (when-not (zero? n)
     (cons (f) (repeatedly (dec n) f))))
 
+(defn true? (x)
+  (doc (return t if the argument is t)
+       (examples
+        (true? 3)
+        (true? t)))
+  (= x t))
+
 (defn map (f l)
-  (doc (apply the supplied function to every element in the supplied list))
+  (doc (apply the supplied function to every element in the supplied list)
+       (examples
+        (map odd? (range 5))
+        (map true? '(foo t () t 3))))
   (when l
     (cons (f (car l))
           (map f (cdr l)))))
 
 (defn mapcat (f l)
-  (doc (map a function onto a list and concatenate results))
+  (doc (map a function onto a list and concatenate results)
+       (examples
+        (map list (range 5))
+        (mapcat list (range 5))
+        (map range (range 5))
+        (mapcat range (range 5))))
   (reduce concat (map f l)))
 
 (defn filter (f l)
-  (doc (keep only values for which function f is true))
+  (doc (keep only values for which function f is true)
+       (examples
+        (filter odd? (range 5))))
   (cond ((not l) ())
         ((f (car l)) (cons (car l)
                            (filter f (cdr l))))
         (t (filter f (cdr l)))))
 
 (defn remove (f l)
-  (doc (keep only values for which function f is false / the empty list))
+  (doc (keep only values for which function f is false / the empty list)
+       (examples
+        (remove odd? (range 5))))
   (filter (complement f) l))
 
 (defn ** (n m)
