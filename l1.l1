@@ -8,12 +8,23 @@
   x)
 
 (defmacro if (condition then else)
-  (doc (simple conditional with two branches))
+  (doc (simple conditional with two branches)
+       (examples
+        (if t
+          111
+          333)
+        (if ()
+          'abc
+          'def)))
   `(cond (~condition ~then)
          (t ~else)))
 
 (defmacro if-not (condition then else)
-  (doc (simple (inverted) conditional with two branches))
+  (doc (simple (inverted) conditional with two branches)
+       (examples
+        (if-not (odd? 3)
+          '(help, they broke three)
+          '(three is odd))))
   `(cond ((not ~condition) ~then)
          (t ~else)))
 
@@ -24,11 +35,21 @@
                  did gyre and gimble in the wabe))))
 
 (defmacro when (condition then)
-  (doc (simple conditional with single branch))
+  (doc (simple conditional with single branch)
+       (examples
+        (when ()
+          (/ 1 0))
+        (when t
+          '(the sun rises in the east))))
   `(cond (~condition ~then)))
 
 (defmacro when-not (condition then)
-  (doc (complement of the when macro))
+  (doc (complement of the when macro)
+       (examples
+        (when-not ()
+          '(do all the things))
+        (when-not t
+          (error '(oh no mister bill)))))
   `(cond ((not ~condition) ~then)))
 
 (defmacro progn (() . body)

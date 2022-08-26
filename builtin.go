@@ -984,6 +984,9 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("upcase"), QA("abc")),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("upcase expects a single argument")
@@ -1001,6 +1004,9 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Examples: E(
+				L(A("version")),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				versionSexprs := semverAsExprs(version)
 				return mkListAsConsWithCdr(versionSexprs, Nil), nil

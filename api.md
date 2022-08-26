@@ -1226,6 +1226,18 @@ Arity: 3
 Args: `(condition then else)`
 
 
+### Examples
+
+```
+> (if t 111 333)
+;;=>
+111
+> (if () (quote abc) (quote def))
+;;=>
+def
+
+```
+
 -----------------------------------------------------
 		
 
@@ -1239,6 +1251,15 @@ Arity: 3
 
 Args: `(condition then else)`
 
+
+### Examples
+
+```
+> (if-not (odd? 3) (quote (help, they broke three)) (quote (three is odd)))
+;;=>
+(three is odd)
+
+```
 
 -----------------------------------------------------
 		
@@ -2347,6 +2368,15 @@ Arity: 1
 Args: `(x)`
 
 
+### Examples
+
+```
+> (upcase (quote abc))
+;;=>
+ABC
+
+```
+
 -----------------------------------------------------
 		
 
@@ -2360,6 +2390,15 @@ Arity: 0
 
 Args: `()`
 
+
+### Examples
+
+```
+> (version)
+;;=>
+(0 0 16 dirty)
+
+```
 
 -----------------------------------------------------
 		
@@ -2375,6 +2414,18 @@ Arity: 2
 Args: `(condition then)`
 
 
+### Examples
+
+```
+> (when () (/ 1 0))
+;;=>
+()
+> (when t (quote (the sun rises in the east)))
+;;=>
+(the sun rises in the east)
+
+```
+
 -----------------------------------------------------
 		
 
@@ -2388,6 +2439,18 @@ Arity: 2
 
 Args: `(condition then)`
 
+
+### Examples
+
+```
+> (when-not () (quote (do all the things)))
+;;=>
+(do all the things)
+> (when-not t (error (quote (oh no mister bill))))
+;;=>
+()
+
+```
 
 -----------------------------------------------------
 		
