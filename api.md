@@ -961,9 +961,13 @@ Args: `(name args . rest)`
 > (defn add (x y)
     (doc (add two numbers)
          (examples
-           (add 1 2))))
+           (add 1 2)))
+    (+ x y))
 ;;=>
 ()
+> (doc add)
+;;=>
+((add two numbers) (examples (add 1 2)))
 
 ```
 
