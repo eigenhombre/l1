@@ -294,6 +294,12 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Examples: E(
+				L(A("<"), N(1), N(2)),
+				L(A("<"), N(1), N(1)),
+				L(A("<"), N(1)),
+				L(A("apply"), A("<"), L(A("range"), N(100))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.Less(a)
@@ -306,6 +312,11 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Examples: E(
+				L(A("<="), N(1), N(2)),
+				L(A("<="), N(1), N(1)),
+				L(A("<="), N(1)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.LessEqual(a)
@@ -318,6 +329,11 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Examples: E(
+				L(A(">"), N(1), N(2)),
+				L(A(">"), N(1), N(1)),
+				L(A(">"), N(1)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.Greater(a)
@@ -330,6 +346,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Examples: E(
+				L(A(">="), N(1), N(2)),
+				L(A(">="), N(1), N(1)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.GreaterEqual(a)
@@ -342,7 +362,11 @@ func init() {
 			FixedArity: 2,
 			NAry:       false,
 			ArgString:  "(f args)",
-			Fn:         applyFn,
+			Examples: E(
+				L(A("apply"), A("+"), L(A("repeat"), N(10), N(1))),
+				L(A("apply"), A("*"), L(A("cdr"), L(A("range"), N(10)))),
+			),
+			Fn: applyFn,
 		},
 		"atom?": {
 			Name:       "atom?",
@@ -350,6 +374,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("atom?"), N(1)),
+				L(A("atom?"), L(A("quote"), A("one"))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("atom? expects a single argument")
@@ -366,6 +394,9 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(f)",
+			Examples: E(
+				L(A("body"), L(A("lambda"), L(A("x")), L(A("+"), A("x"), N(1)))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
@@ -383,6 +414,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("car"), L(A("quote"), L(A("one"), A("two")))),
+				L(A("car"), L()),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
@@ -403,6 +438,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("cdr"), L(A("quote"), L(A("one"), A("two")))),
+				L(A("cdr"), L()),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
@@ -423,6 +462,11 @@ func init() {
 			FixedArity: 2,
 			NAry:       false,
 			ArgString:  "(x xs)",
+			Examples: E(
+				L(A("cons"), N(1), L(A("quote"), L(A("one"), A("two")))),
+				L(A("cons"), N(1), L()),
+				L(A("cons"), N(1), N(2)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("missing argument")
@@ -436,6 +480,11 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("doc"), L(A("lambda"), L(A("x")),
+					L(A("doc"), L(A("does"), A("stuff"))),
+					L(A("+"), A("x"), N(1)))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("missing argument")
@@ -453,6 +502,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("downcase"), L(A("quote"), A("Hello"))),
+				L(A("downcase"), L(A("quote"), A("HELLO"))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("downcase requires one argument")
@@ -480,6 +533,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("fuse"), L(A("quote"), L(A("A"), A("B"), A("C")))),
+				L(A("fuse"), L(A("reverse"), L(A("range"), N(10)))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("fuse expects a single argument")
@@ -527,6 +584,9 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("len"), L(A("range"), N(10))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("len expects a single argument")
@@ -549,6 +609,10 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . xs)",
+			Examples: E(
+				L(A("list"), N(1), N(2), N(3)),
+				L(A("list")),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				return mkListAsConsWithCdr(args, Nil), nil
 			},
@@ -559,6 +623,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("list?"), L(A("range"), N(10))),
+				L(A("list?"), N(1)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("list? expects a single argument")
@@ -575,6 +643,10 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Examples: E(
+				L(A("macroexpand-1"), L(A("quote"), L(A("+"), A("x"), N(1)))),
+				L(A("macroexpand-1"), L(A("quote"), L(A("if"), L(), N(1), N(2)))),
+			),
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, fmt.Errorf("macroexpand-1 expects a single argument")
