@@ -69,6 +69,13 @@ true
 		doc:     "Set a value",
 		ftype:   special,
 		argsStr: "(name value)",
+		examples: `> (def a 1)
+;;=>
+1
+> a
+;;=>
+1
+`,
 	},
 	{
 		name:    "defn",
@@ -76,7 +83,20 @@ true
 		ismulti: true,
 		doc:     "Create and name a function",
 		ftype:   special,
-		argsStr: "(name args . body)",
+		argsStr: "(name args . rest)",
+		examples: `> (defn add (x y) (+ x y))
+;;=>
+()
+> (add 1 2)
+;;=>
+3
+> (defn add (x y)
+    (doc (add two numbers)
+         (examples
+			(add 1 2))))
+;;=>
+()
+`,
 	},
 	{
 		name:    "defmacro",
