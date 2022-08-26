@@ -151,21 +151,32 @@
   (car (car l)))
 
 (defn complement (f)
-  (doc (return the logical complement of the supplied function))
+  (doc (return the logical complement of the supplied function)
+       (examples
+        ((complement even?) 1)              ;;=> t
+        (map (complement odd?) (range 5)))) ;;=> (t () t () t)
   ;; FIXME: n-ary? Need to fix `apply` to work w/ rest arguments.
   (lambda (x)
     (not (f x))))
 
 (defn even? (n)
-  (doc (return true if the supplied integer argument is even))
+  (doc (return true if the supplied integer argument is even)
+       (examples
+        (map even? (range 5))))
   (zero? (rem n 2)))
 
 (defn odd? (n)
-  (doc (return true if the supplied integer argument is odd))
+  (doc (return true if the supplied integer argument is odd)
+       (examples
+        (map even? (range 5))))
   (not (even? n)))
 
 (defn flatten (l)
-  (doc (return a (possibly nested) list, flattened))
+  (doc (return a (possibly nested) list, flattened)
+       (examples
+        (flatten '(this is a
+                        (really
+                         (nested) list)))))
   (cond ((not l) ())
         ((list? l)
          (concat (flatten (car l))
@@ -311,7 +322,8 @@
 
 (defn colon (a)
   (doc (add a colon at end of atom)
-       (colon 'remember-this)) ;;=> remember-this:
+       (examples
+        (colon 'remember-this))) ;;=> remember-this:
   (punctuate-atom a COLON))
 
 (defmacro is (expr)

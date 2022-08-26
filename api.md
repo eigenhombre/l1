@@ -667,6 +667,15 @@ Arity: 1
 Args: `(a)`
 
 
+### Examples
+
+```
+> (colon (quote remember-this))
+;;=>
+remember-this:
+
+```
+
 -----------------------------------------------------
 		
 
@@ -726,6 +735,18 @@ Arity: 1
 
 Args: `(f)`
 
+
+### Examples
+
+```
+> ((complement even?) 1)
+;;=>
+t
+> (map (complement odd?) (range 5))
+;;=>
+(t () t () t)
+
+```
 
 -----------------------------------------------------
 		
@@ -985,6 +1006,15 @@ Arity: 1
 Args: `(n)`
 
 
+### Examples
+
+```
+> (map even? (range 5))
+;;=>
+(t () t () t)
+
+```
+
 -----------------------------------------------------
 		
 
@@ -1026,6 +1056,15 @@ Arity: 1
 
 Args: `(l)`
 
+
+### Examples
+
+```
+> (flatten (quote (this is a (really (nested) list))))
+;;=>
+(this is a really nested list)
+
+```
 
 -----------------------------------------------------
 		
@@ -1475,6 +1514,15 @@ Arity: 1
 
 Args: `(n)`
 
+
+### Examples
+
+```
+> (map even? (range 5))
+;;=>
+(t () t () t)
+
+```
 
 -----------------------------------------------------
 		
