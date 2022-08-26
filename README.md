@@ -141,14 +141,15 @@ installing `l1` by looking under `$GOPATH`. For example, if the
                and  S    0+  Boolean and
              apply  N    2   Apply a function to a list of arguments
              atom?  N    1   Return t if the argument is an atom, () otherwise
-              bang  N    1   Return a new atom with exclamation point added
+              bang  F    1   Add an exclamation point at end of atom
               body  N    1   Return the body of a lambda function
            butlast  F    1   Return everything but the last element
               caar  F    1   First element of the first element of a list of lists
         capitalize  F    1   Return the atom argument, capitalized
                car  N    1   Return the first element of a list
                cdr  N    1   Return a list with the first element removed
-             comma  N    1   Return a new atom with a comma at the end
+             colon  F    1   Add a colon at end of atom
+             comma  F    1   Add a comma at end of atom
            comment  M    0+  Ignore the expressions in the block
         complement  F    1   Return the logical complement of the supplied function
             concat  F    0+  Concatenenate any number of lists
@@ -163,7 +164,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
            dotimes  M    1+  Execute body for each value in a list
           downcase  N    1   Return a new atom with all characters in lower case
               drop  F    2   Drop n items from a list, then return the rest
-             error  F    1   Return an error and (NOT IMPLEMENTED) short-circuit further processing
+             error  S    1   Raise an error
             errors  S    1+  Error checking (for tests)
              even?  F    1   Return true if the supplied integer argument is even
          exclaimed  F    1   Return l as a sentence... emphasized!
@@ -177,7 +178,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
                 if  M    3   Simple conditional with two branches
             if-not  M    3   Simple (inverted) conditional with two branches
                inc  F    1   Return the supplied integer argument, plus one
-                is  N    1   Assert that the argument is truthy (not ())
+                is  M    1   Assert a condition is truthy, or show failing code
             lambda  S    1+  Create a function
               last  F    1   Return the last item in a list
                len  N    1   Return the length of a list
@@ -195,13 +196,14 @@ installing `l1` by looking under `$GOPATH`. For example, if the
            number?  N    1   Return true if the argument is a number, else ()
               odd?  F    1   Return true if the supplied integer argument is odd
                 or  S    0+  Boolean or
-            period  N    1   Return a new atom with a period added to the end
+            period  F    1   Add a period at end of atom
               pos?  F    1   Return true iff the supplied integer argument is greater than zero
              print  N    0+  Print the arguments
             printl  N    1   Print a list argument, without parentheses
            println  N    0+  Print the arguments and a newline
              progn  M    0+  Execute multiple statements, returning the last
-         punctuate  F    2   Return l capitalized, with punctuation determined by the supplied function
+         punctuate  F    2   Return x capitalized, with punctuation determined by the supplied function
+    punctuate-atom  F    2   Add a punctuation mark at end of atom
              quote  S    1   Quote an expression
          randalpha  F    1   Return a list of random (English/Latin/unaccented) alphabetic characters
         randchoice  F    1   Return an element at random from the supplied list

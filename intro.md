@@ -1,6 +1,6 @@
 # The `l1` Language
 
-[Link to API](#api-index) (list of operators)
+[Jump to API](#api-index) / list of operators
 
 ## Expressions
 
@@ -8,7 +8,8 @@ Expressions in `l1` are atoms, lists, numbers, or functions.
 
 Atoms have a name, such as `x`, `foo`, or `Eisenhower!`, and can be
 "bound to an expression in the current environment," meaning,
-essentially, given a value. For example,
+essentially, given a value. For example, we can bind a value to `a`
+and retrieve it:
 
     > (def a 1)
     > a
@@ -22,8 +23,10 @@ Lists are collections of zero or more expressions.  Examples:
     (+ 2 2)
     ()
 
-Note: `(+ 2 2)` is a list that evaluates to the number `4`.  To
-prevent evaluation of a list, prepend a quote character:
+In general, lists represent operations whose name is the first element
+and whose arguments are the remaining elements.  For example, `(+ 2
+2)` is a list that evaluates to the number `4`.  To prevent evaluation
+of a list, prepend a quote character:
 
     > '(+ 2 2)
     (+ 2 2)
@@ -153,5 +156,4 @@ specified using the empty list as its fixed argument:
         (list* 'hello friends))
     > (say-hello 'John 'Jerry 'Eden)
     (hello John Jerry Eden)
-
 

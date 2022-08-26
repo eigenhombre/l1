@@ -624,3 +624,11 @@
 
 (test '(shuffle)
   (is (= 100 (len (shuffle (range 100))))))
+
+(test '(error)
+  (errors '(requires a non-empty argument)
+    (error))
+  (errors '(3)
+    (error 3))
+  (errors '(i fail)
+    (error '(i fail))))

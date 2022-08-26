@@ -329,23 +329,6 @@ func init() {
 				return Nil, nil
 			},
 		},
-		"bang": {
-			Name:       "bang",
-			Docstring:  "Return a new atom with exclamation point added",
-			FixedArity: 1,
-			NAry:       false,
-			ArgString:  "(x)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
-				}
-				a, ok := args[0].(Atom)
-				if !ok {
-					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
-				}
-				return Atom{a.s + "!"}, nil
-			},
-		},
 		"body": {
 			Name:       "body",
 			Docstring:  "Return the body of a lambda function",
@@ -401,23 +384,6 @@ func init() {
 					return Nil, nil
 				}
 				return cdrCons.cdr, nil
-			},
-		},
-		"comma": {
-			Name:       "comma",
-			Docstring:  "Return a new atom with a comma at the end",
-			FixedArity: 1,
-			NAry:       false,
-			ArgString:  "(x)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("comma requires one argument")
-				}
-				a, ok := args[0].(Atom)
-				if !ok {
-					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
-				}
-				return Atom{a.s + ","}, nil
 			},
 		},
 		"cons": {
@@ -524,22 +490,6 @@ func init() {
 				return Nil, nil
 			},
 		},
-		"is": {
-			Name:       "is",
-			Docstring:  "Assert that the argument is truthy (not ())",
-			FixedArity: 1,
-			NAry:       false,
-			ArgString:  "(x)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
-				}
-				if args[0] == Nil {
-					return nil, fmt.Errorf("'is' assertion failed")
-				}
-				return args[0], nil
-			},
-		},
 		"len": {
 			Name:       "len",
 			Docstring:  "Return the length of a list",
@@ -632,23 +582,6 @@ func init() {
 					return True, nil
 				}
 				return Nil, nil
-			},
-		},
-		"period": {
-			Name:       "period",
-			Docstring:  "Return a new atom with a period added to the end",
-			FixedArity: 1,
-			NAry:       false,
-			ArgString:  "(x)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, fmt.Errorf("period requires one argument")
-				}
-				a, ok := args[0].(Atom)
-				if !ok {
-					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
-				}
-				return Atom{a.s + "."}, nil
 			},
 		},
 		"print": {

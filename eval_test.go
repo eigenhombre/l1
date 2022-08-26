@@ -8,9 +8,9 @@ import (
 
 // See also: tests.l1
 func TestEval(t *testing.T) {
-	globals := mkEnv(nil)
+	globals := initGlobals()
 	if !lexParseEval(rawCore, globals, false) {
-		t.Fatal("Failed to load l1 core library!")
+		t.Error("Failed to load l1 core library!")
 	}
 	type evalCase struct {
 		in        string
@@ -83,7 +83,6 @@ func TestEval(t *testing.T) {
 		{Cases(S("(errors t t)", "", "error signature must be a list"))},
 		{Cases(S("(errors (+ 1 1) t)", "", "error signature must be a list"))},
 		{Cases(S("(errors '(no error) 1 2 3)", "", "error not found"))},
-		{Cases(S("(errors '(assertion failed) (is ()))", "()", OK))},
 		{Cases(S("(errors '(division by zero) (/ 1 0))", "()", OK))},
 		{Cases(S("(errors (cons 'division '(by zero)) (/ 1 0))", "()", OK))},
 		{Cases(S("(errors '(one) (/ 1 0))", "", "division by zero"))},

@@ -1,5 +1,5 @@
 # API Index
-107 forms available:
+109 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -20,6 +20,7 @@
 [`capitalize`](#capitalize)
 [`car`](#car)
 [`cdr`](#cdr)
+[`colon`](#colon)
 [`comma`](#comma)
 [`comment`](#comment)
 [`complement`](#complement)
@@ -74,6 +75,7 @@
 [`println`](#println)
 [`progn`](#progn)
 [`punctuate`](#punctuate)
+[`punctuate-atom`](#punctuate-atom)
 [`quote`](#quote)
 [`randalpha`](#randalpha)
 [`randchoice`](#randchoice)
@@ -281,13 +283,13 @@ Args: `(x)`
 
 ## `bang`
 
-Return a new atom with exclamation point added
+Add an exclamation point at end of atom
 
-Type: native function
+Type: function
 
 Arity: 1 
 
-Args: `(x)`
+Args: `(a)`
 
 -----------------------------------------------------
 		
@@ -370,15 +372,28 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `comma`
+## `colon`
 
-Return a new atom with a comma at the end
+Add a colon at end of atom
 
-Type: native function
+Type: function
 
 Arity: 1 
 
-Args: `(x)`
+Args: `(a)`
+
+-----------------------------------------------------
+		
+
+## `comma`
+
+Add a comma at end of atom
+
+Type: function
+
+Arity: 1 
+
+Args: `(a)`
 
 -----------------------------------------------------
 		
@@ -567,13 +582,13 @@ Args: `(n l)`
 
 ## `error`
 
-Return an error and (NOT IMPLEMENTED) short-circuit further processing
+Raise an error
 
-Type: function
+Type: special form
 
 Arity: 1 
 
-Args: `(msg)`
+Args: `(msg-list)`
 
 -----------------------------------------------------
 		
@@ -749,13 +764,13 @@ Args: `(n)`
 
 ## `is`
 
-Assert that the argument is truthy (not ())
+Assert a condition is truthy, or show failing code
 
-Type: native function
+Type: macro
 
 Arity: 1 
 
-Args: `(x)`
+Args: `(expr)`
 
 -----------------------------------------------------
 		
@@ -983,13 +998,13 @@ Args: `(() . xs)`
 
 ## `period`
 
-Return a new atom with a period added to the end
+Add a period at end of atom
 
-Type: native function
+Type: function
 
 Arity: 1 
 
-Args: `(x)`
+Args: `(a)`
 
 -----------------------------------------------------
 		
@@ -1061,13 +1076,26 @@ Args: `(() . body)`
 
 ## `punctuate`
 
-Return l capitalized, with punctuation determined by the supplied function
+Return x capitalized, with punctuation determined by the supplied function
 
 Type: function
 
 Arity: 2 
 
-Args: `(f l)`
+Args: `(f x)`
+
+-----------------------------------------------------
+		
+
+## `punctuate-atom`
+
+Add a punctuation mark at end of atom
+
+Type: function
+
+Arity: 2 
+
+Args: `(a mark)`
 
 -----------------------------------------------------
 		

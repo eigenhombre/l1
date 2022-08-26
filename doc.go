@@ -36,6 +36,8 @@ var specialForms = []formRec{
 		"(f args . body)"},
 	{"defmacro", 2, true, "Create and name a macro", "", "", special,
 		"(f args . body)"},
+	{"error", 1, false, "Raise an error", "", "", special,
+		"(msg-list)"},
 	{"errors", 1, true, "Error checking (for tests)", "", "", special,
 		"(x . xs)"},
 	{"lambda", 1, true, "Create a function", "", "", special,

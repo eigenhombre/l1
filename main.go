@@ -27,7 +27,7 @@ func evalExprs(exprs []Sexpr, e env, doPrint bool) bool {
 	for _, g := range exprs {
 		res, err := eval(g, &e)
 		if err != nil {
-			fmt.Printf("ERROR in '%s':\n%v\n", exprs, err)
+			fmt.Printf("ERROR in '%s':\n%v\n", g, err)
 			return false
 		}
 		if doPrint {
@@ -76,6 +76,19 @@ func repl(e env) {
 	}
 }
 
+func initGlobals() env {
+	globals := mkEnv(nil)
+	globals.Set("SPACE", Atom{" "})
+	globals.Set("NEWLINE", Atom{"\n"})
+	globals.Set("TAB", Atom{"\t"})
+	globals.Set("BANG", Atom{"!"})
+	globals.Set("QMARK", Atom{"?"})
+	globals.Set("PERIOD", Atom{"."})
+	globals.Set("COMMA", Atom{","})
+	globals.Set("COLON", Atom{":"})
+	return globals
+}
+
 func main() {
 	var versionFlag, docFlag, longDocFlag bool
 	var cpuProfile string
@@ -100,14 +113,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	globals := mkEnv(nil)
-	globals.Set("SPACE", Atom{" "})
-	globals.Set("NEWLINE", Atom{"\n"})
-	globals.Set("TAB", Atom{"\t"})
-	globals.Set("BANG", Atom{"!"})
-	globals.Set("QMARK", Atom{"?"})
-	globals.Set("PERIOD", Atom{"."})
-	globals.Set("COMMA", Atom{","})
+	globals := initGlobals()
 
 	if !lexParseEval(rawCore, globals, false) {
 		fmt.Println("Failed to load l1 core library!")

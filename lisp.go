@@ -381,6 +381,16 @@ top:
 				return evDefn(t.cdr.(*ConsCell), false, e)
 			case carAtom.s == "defmacro":
 				return evDefn(t.cdr.(*ConsCell), true, e)
+			case carAtom.s == "error":
+				cdrCons, ok := t.cdr.(*ConsCell)
+				if !ok || cdrCons == Nil {
+					return nil, fmt.Errorf("error requires a non-empty argument list")
+				}
+				errorExpr, err := eval(cdrCons.car, e)
+				if err != nil {
+					return nil, err
+				}
+				return nil, fmt.Errorf("%s", errorExpr)
 			case carAtom.s == "errors":
 				return evErrors(t.cdr.(*ConsCell), e)
 			case carAtom.s == "let":
@@ -400,7 +410,14 @@ top:
 						return nil, fmt.Errorf("a let binding must be a list")
 					}
 					name := binding.car.(Atom).s
-					val, err := eval(binding.cdr.(*ConsCell).car, e)
+					asCons, ok := binding.cdr.(*ConsCell)
+					if !ok {
+						return nil, fmt.Errorf("a let binding must be a list")
+					}
+					if asCons == Nil {
+						return Nil, nil
+					}
+					val, err := eval(asCons.car, e)
 					if err != nil {
 						return nil, err
 					}

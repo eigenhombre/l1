@@ -7,12 +7,6 @@
   (doc (return the argument))
   x)
 
-;; FIXME: implement this as a real thing (Issue #54):
-(defn error (msg)
-  (doc (return an error and
-               (NOT IMPLEMENTED) short-circuit further processing))
-  (cons 'error msg))
-
 (defmacro if (condition then else)
   (doc (simple conditional with two branches))
   `(cond (~condition ~then)
@@ -235,13 +229,13 @@
   (doc (return everything but the last element))
   (take (dec (len l)) l))
 
-(defn punctuate (f l)
-  (doc (return l capitalized, with punctuation determined by the supplied function))
-  (cond ((not l) l)
-        ((= (len l) 1) (list (capitalize (f (car l)))))
-        (t (cons (capitalize (car l))
-                 (concat (cdr (butlast l))
-                         (list (f (last l))))))))
+(defn punctuate (f x)
+  (doc (return x capitalized, with punctuation determined by the supplied function))
+  (cond ((not x) x)
+        ((= (len x) 1) (list (capitalize (f (car x)))))
+        (t (cons (capitalize (car x))
+                 (concat (cdr (butlast x))
+                         (list (f (last x))))))))
 
 (defn tosentence (l)
   (doc (return l as a sentence... capitalized, with a period at the end))
@@ -274,3 +268,29 @@
       (if result
         result
         (some f (cdr l))))))
+
+(defn punctuate-atom (a mark)
+  (doc (add a punctuation mark at end of atom))
+  (let ((l (split a)))
+    (fuse (concat l (list mark)))))
+
+(defn bang (a)
+  (doc (add an exclamation point at end of atom))
+  (punctuate-atom a BANG))
+
+(defn comma (a)
+  (doc (add a comma at end of atom))
+  (punctuate-atom a COMMA))
+
+(defn period (a)
+  (doc (add a period at end of atom))
+  (punctuate-atom a PERIOD))
+
+(defn colon (a)
+  (doc (add a colon at end of atom))
+  (punctuate-atom a COLON))
+
+(defmacro is (expr)
+  (doc (assert a condition is truthy, or show failing code))
+  `(when-not ~expr
+     (error '(assertion ~(fuse (list 'failed COLON)) ~expr))))
