@@ -52,7 +52,13 @@
      ()))
 
 (defn reduce (f x . args)
-  (doc (successively apply a function against a list of arguments))
+  (doc (successively apply a function against a list of arguments)
+       (examples
+        (reduce * (cdr (range 10)))
+        (reduce (lambda (acc x)
+                  (cons x acc))
+                ()
+                (range 10))))
   (let ((inner (lambda inner (f acc l)
                  (if (not l)
                    acc
