@@ -35,9 +35,9 @@ var specialForms = []formRec{
 		argsStr: "(() . xs)",
 		examples: `(and)
 ;; => true
-(and t t)
+> (and t t)
 ;; => true
-(and t t ())
+> (and t t ())
 ;; => ()
 `,
 	},
@@ -48,11 +48,11 @@ var specialForms = []formRec{
 		doc:     "Fundamental branching construct",
 		ftype:   special,
 		argsStr: "(() . pairs)",
-		examples: `(cond)
+		examples: `> (cond)
 ;; => ()
-(cond (t 1) (t 2) (t 3))
+> (cond (t 1) (t 2) (t 3))
 ;; => 1
-(cond (() 1) (t 2))
+> (cond (() 1) (t 2))
 ;; => 2
 `,
 	},
@@ -127,11 +127,11 @@ var specialForms = []formRec{
 		doc:     "Boolean or",
 		ftype:   special,
 		argsStr: "(() . xs)",
-		examples: `(or)
+		examples: `> (or)
 ;; => false
-(or t t)
+> (or t t)
 ;; => true
-(or t t ())
+> (or t t ())
 ;; => t`,
 	},
 	{
@@ -212,7 +212,7 @@ func examplesToString(examples *ConsCell) (string, error) {
 		if err != nil {
 			ret += fmt.Sprintf("ERROR: %s\n", err)
 		} else {
-			ret += fmt.Sprintf("%s\n;;=>\n%s\n", example, output)
+			ret += fmt.Sprintf("> %s\n;;=>\n%s\n", example, output)
 		}
 		var ok bool
 		examples, ok = examples.cdr.(*ConsCell)
@@ -311,7 +311,7 @@ func longDocStr(e *env) string {
 		}
 		examples := ""
 		if doc.examples != "" {
-			examples = fmt.Sprintf("\n### Examples\n```\n%s\n```\n", doc.examples)
+			examples = fmt.Sprintf("\n### Examples\n\n```\n%s\n```\n", doc.examples)
 		}
 		outStrs = append(outStrs, fmt.Sprintf(`
 ## %s

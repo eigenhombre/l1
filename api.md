@@ -124,11 +124,12 @@ Args: `(() . xs)`
 
 
 ### Examples
+
 ```
-(* 1 2 3)
+> (* 1 2 3)
 ;;=>
 6
-(*)
+> (*)
 ;;=>
 1
 
@@ -275,12 +276,13 @@ Args: `(() . xs)`
 
 
 ### Examples
+
 ```
 (and)
 ;; => true
-(and t t)
+> (and t t)
 ;; => true
-(and t t ())
+> (and t t ())
 ;; => ()
 
 ```
@@ -496,12 +498,13 @@ Args: `(() . pairs)`
 
 
 ### Examples
+
 ```
-(cond)
+> (cond)
 ;; => ()
-(cond (t 1) (t 2) (t 3))
+> (cond (t 1) (t 2) (t 3))
 ;; => 1
-(cond (() 1) (t 2))
+> (cond (() 1) (t 2))
 ;; => 2
 
 ```
@@ -1095,12 +1098,13 @@ Args: `(() . xs)`
 
 
 ### Examples
+
 ```
-(or)
+> (or)
 ;; => false
-(or t t)
+> (or t t)
 ;; => true
-(or t t ())
+> (or t t ())
 ;; => t
 ```
 
