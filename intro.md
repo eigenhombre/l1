@@ -115,13 +115,14 @@ This is admittedly awkward, but rare in practice for the kinds of
 programs `l1` was designed for.  `BANG` is one of a small set of atoms
 helpful for this sort of construction:
 
-    SPACE
-    NEWLINE
-    TAB
     BANG
-    QMARK
-    PERIOD
+    COLON
     COMMA
+    NEWLINE
+    PERIOD
+    QMARK
+    SPACE
+    TAB
 
 These all evaluate to atoms whose names are the unreadable characters.
 

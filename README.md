@@ -33,7 +33,7 @@ converting atoms and numbers to lists, and vice-versa.
 
 # Status
 
-The language core is largely complete.  However, I consider it a work
+The language core is largely complete, but I consider it a work
 in progress still.  Issues and remaining work are [tracked on
 GitHub](https://github.com/eigenhombre/l1/issues).
 
@@ -88,6 +88,10 @@ Example (using a file in this project):
     real	0m0.012s
     user	0m0.007s
     sys	0m0.005s
+
+# Documentation
+
+See the [language reference](https://github.com/eigenhombre/l1/blob/master/l1.md) and the [API docs](https://github.com/eigenhombre/l1/blob/master/l1.md#api-index).
 
 # Example Programs
 
