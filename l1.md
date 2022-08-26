@@ -62,7 +62,7 @@ And lists can be turned into atoms or numbers:
     > (fuse '(10 9 8 7 6 5 4 3 2 1))
     10987654321
 
-# Boolean Logic
+## Boolean Logic
 
 In `l1`, `()` is the only "falsey" value; everything else is "truthy".
 Falsey and truthy are important when evaluating conditional statements
@@ -91,7 +91,7 @@ languages:
         555)
     555
 
-# Special Characters
+## Special Characters
 
 Unlike many modern languages, `l1` doesn't have strings.  Instead,
 atoms and lists are used where strings normally would be:
@@ -151,7 +151,7 @@ some of which may be helpful for text games and other diversions:
     ()
     >
 
-# Functions
+## Functions
 
 Functions come in two flavors: temporary functions, called "lambda"
 functions for historical reasons, and functions which are defined and
@@ -225,7 +225,7 @@ hide the `acc` argument from the user:
 This version is both tail-recursive (in `inner`), and as convenient to
 use as our first, non-tail-recursive version was.
 
-# Text User Interfaces
+## Text User Interfaces
 
 `l1` has a few built-in functions for creating simple text UIs:
 
@@ -238,7 +238,7 @@ use as our first, non-tail-recursive version was.
 program](https://github.com/eigenhombre/l1/blob/master/examples/screen-test.l1)
 shows these functions in action.
 
-# Emacs Integration
+## Emacs Integration
 
 If you are using Emacs, you can set it up to work with `l1` as an "inferior
 lisp" process as described in [the Emacs manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/External-Lisp.html).
