@@ -1558,6 +1558,20 @@ Arity: 1+
 Args: `(() . body)`
 
 
+### Examples
+
+```
+> (loop
+    (printl '(Help me, I am looping forever!))
+    (sleep 1000))
+;;=> (prints:)
+Help me, I am looping forever!
+Help me, I am looping forever!
+Help me, I am looping forever!
+...
+
+```
+
 -----------------------------------------------------
 		
 
@@ -2404,7 +2418,7 @@ foo
 (1 2 3 4)
 > (syntax-quote (1 (unquote (+ 1 1)) (splicing-unquote (list 3 4))))
 (1 2 3 4)
-> `(1 ~(1 1) ~@(list 3 4))
+> `(1 ~(+ 1 1) ~@(list 3 4))
 (1 2 3 4)
 
 ```
