@@ -582,11 +582,14 @@
   (is (= 3 (macroexpand-1 3)))
   (is (= 3 (macroexpand-1 '3))))
 
-(test '(if macro)
+(test '(if when and when-not macro)
   (is (= 1 (if t 1 2)))
   (is (= 2 (if () 1 2)))
   (is (= '(cond (() 1) (t 2))
          (macroexpand-1 '(if () 1 2))))
+  (is (not (when () 3)))
+  (is (= 3 (when-not () 3)))
+  (is (= 3 (when-not (list? 3) 3)))
   (is (= 3 (if ()
              1
              (when t

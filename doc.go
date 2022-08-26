@@ -130,6 +130,16 @@ true
 		doc:     "Raise an error",
 		ftype:   special,
 		argsStr: "(msg-list)",
+		examples: `> (defn ensure-list (x)
+    (when-not (list? x)
+      (error '(ensure-list argument not a list!))))
+;;=>
+()
+> (ensure-list 3)
+;;=>
+ERROR in '(ensure-list 3)':
+(ensure-list argument not a list!)
+`,
 	},
 	{
 		name:    "errors",
@@ -138,6 +148,16 @@ true
 		doc:     "Error checking (for tests)",
 		ftype:   special,
 		argsStr: "(message-pattern-list . exprs)",
+		examples: `> (errors '(is not a function)
+    (1))
+;;=>
+()
+> (errors '(is not a function)
+    (+))
+;;=>
+ERROR in '(errors (quote (is not a function)) (+))':
+error not found in ((quote (is not a function)) (+))
+`,
 	},
 	{
 		name:    "lambda",
