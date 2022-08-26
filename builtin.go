@@ -20,7 +20,7 @@ type Builtin struct {
 	NAry      bool
 	Docstring string
 	ArgString string
-	Examples  Sexpr
+	Examples  *ConsCell
 }
 
 func (b Builtin) String() string {
@@ -128,8 +128,8 @@ func init() {
 	L := func(args ...Sexpr) Sexpr {
 		return mkListAsConsWithCdr(args, Nil)
 	}
-	E := func(args ...Sexpr) Sexpr {
-		return mkListAsConsWithCdr(args, Nil)
+	E := func(args ...Sexpr) *ConsCell {
+		return mkListAsConsWithCdr(args, Nil).(*ConsCell)
 	}
 	builtins = map[string]*Builtin{
 		"+": {

@@ -197,6 +197,33 @@ func formatLambdaArgs(args []string, restArg string) string {
 	return fmt.Sprintf("(%s . %s)", strings.Join(args, " "), restArg)
 }
 
+func examplesToString(examples *ConsCell) (string, error) {
+	ret := ""
+	dummyEnv := mkEnv(nil)
+	for {
+		if examples == Nil {
+			break
+		}
+		example := examples.car
+		if example == Nil {
+			break
+		}
+		output, err := eval(example, &dummyEnv)
+		if err != nil {
+			ret += fmt.Sprintf("ERROR: %s\n", err)
+		} else {
+			ret += fmt.Sprintf("%s\n;;=>\n%s\n", example, output)
+		}
+		var ok bool
+		examples, ok = examples.cdr.(*ConsCell)
+		if !ok {
+			return "", fmt.Errorf("examples must be lists")
+		}
+
+	}
+	return ret, nil
+}
+
 func availableForms(e *env) []formRec {
 	// Special forms - only need to add formatted column description:
 	out := []formRec{}
@@ -207,13 +234,19 @@ func availableForms(e *env) []formRec {
 
 	// Builtins:
 	for _, builtin := range builtins {
+		examples, err := examplesToString(builtin.Examples)
+		if err != nil {
+			// our fault:
+			panic(err)
+		}
 		out = append(out, formRec{
-			name:    builtin.Name,
-			farity:  builtin.FixedArity,
-			ismulti: builtin.NAry,
-			doc:     builtin.Docstring,
-			ftype:   native,
-			argsStr: builtin.ArgString,
+			name:     builtin.Name,
+			farity:   builtin.FixedArity,
+			ismulti:  builtin.NAry,
+			doc:      builtin.Docstring,
+			ftype:    native,
+			argsStr:  builtin.ArgString,
+			examples: examples,
 			columnDoc: formatFunctionInfo(builtin.Name,
 				builtin.Docstring,
 				builtin.FixedArity,
@@ -276,6 +309,10 @@ func longDocStr(e *env) string {
 		if doc.ismulti {
 			isMulti = "+"
 		}
+		examples := ""
+		if doc.examples != "" {
+			examples = fmt.Sprintf("\n### Examples\n```\n%s\n```\n", doc.examples)
+		}
 		outStrs = append(outStrs, fmt.Sprintf(`
 ## %s
 
@@ -287,6 +324,7 @@ Arity: %d%s
 
 Args: %s
 
+%s
 -----------------------------------------------------
 		`,
 			codeQuote(doc.name),
@@ -294,7 +332,8 @@ Args: %s
 			doc.ftype,
 			doc.farity,
 			isMulti,
-			fmt.Sprintf("`%s`", doc.argsStr)))
+			fmt.Sprintf("`%s`", doc.argsStr),
+			examples))
 	}
 	return strings.Join(outStrs, "\n")
 }
