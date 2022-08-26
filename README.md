@@ -183,6 +183,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
             if-not  M    3   Simple (inverted) conditional with two branches
                inc  F    1   Return the supplied integer argument, plus one
                 is  M    1   Assert a condition is truthy, or show failing code
+              juxt  F    0+  Create a function which combines multiple operations into a single list of results
             lambda  S    1+  Create a function
               last  F    1   Return the last item in a list
                len  N    1   Return the length of a list

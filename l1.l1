@@ -53,7 +53,13 @@
   `(cond ((not ~condition) ~then)))
 
 (defmacro progn (() . body)
-  (doc (execute multiple statements, returning the last))
+  (doc (execute multiple statements, returning the last)
+       (examples
+        (progn)
+        (progn
+          1
+          2
+          3)))
   `(let () ~@body))
 
 (defmacro foreach (x xs . body)
@@ -118,15 +124,36 @@
             (cons (car l) ()))))
 
 (defn zero? (n)
-  (doc (return true iff the supplied argument is zero))
+  (doc (return true iff the supplied argument is zero)
+       (examples
+        (zero? 'zero)
+        (zero? (- 1 1))))
   (= n 0))
 
 (defn neg? (n)
   (doc (return true iff the supplied integer argument is less than zero))
   (< n 0))
 
+(defn juxt (() . fs)
+  (doc (create a function which combines multiple
+               operations into a single list of results)
+       (examples
+        ((juxt inc dec) 0)
+        (map (juxt inc dec) (range 3))
+        (map (juxt even? odd? zero?)
+             '(-2 -1 0 1 2))
+        (map (juxt) (range 3))))
+  (lambda (x)
+    (map (lambda (f)
+           (f x))
+         fs)))
+
 (defn pos? (n)
-  (doc (return true iff the supplied integer argument is greater than zero))
+  (doc (return true iff the supplied integer argument is greater than zero)
+       (examples
+        (map pos?
+             (map (lambda (x) (- x 5))
+                  (range 10)))))
   (< 0 n))
 
 (defn inc (n)

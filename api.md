@@ -1,5 +1,5 @@
 # API Index
-110 forms available:
+111 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -51,6 +51,7 @@
 [`if-not`](#if-not)
 [`inc`](#inc)
 [`is`](#is)
+[`juxt`](#juxt)
 [`lambda`](#lambda)
 [`last`](#last)
 [`len`](#len)
@@ -1304,6 +1305,38 @@ ERROR: (assertion failed: (car (cons () (quote (this one should fail)))))
 -----------------------------------------------------
 		
 
+## `juxt`
+
+Create a function which combines multiple operations into a single list of results
+
+Type: function
+
+Arity: 0+
+
+Args: `(() . fs)`
+
+
+### Examples
+
+```
+> ((juxt inc dec) 0)
+;;=>
+(1 -1)
+> (map (juxt inc dec) (range 3))
+;;=>
+((1 -1) (2 0) (3 1))
+> (map (juxt even? odd? zero?) (quote (-2 -1 0 1 2)))
+;;=>
+((t () ()) (() t ()) (t () t) (() t ()) (t () ()))
+> (map (juxt) (range 3))
+;;=>
+(() () ())
+
+```
+
+-----------------------------------------------------
+		
+
 ## `lambda`
 
 Create a function
@@ -1737,6 +1770,15 @@ Arity: 1
 Args: `(n)`
 
 
+### Examples
+
+```
+> (map pos? (map (lambda (x) (- x 5)) (range 10)))
+;;=>
+(() () () () () () t t t t)
+
+```
+
 -----------------------------------------------------
 		
 
@@ -1792,6 +1834,18 @@ Arity: 0+
 
 Args: `(() . body)`
 
+
+### Examples
+
+```
+> (progn)
+;;=>
+()
+> (progn 1 2 3)
+;;=>
+3
+
+```
 
 -----------------------------------------------------
 		
@@ -2479,6 +2533,18 @@ Arity: 1
 
 Args: `(n)`
 
+
+### Examples
+
+```
+> (zero? (quote zero))
+;;=>
+()
+> (zero? (- 1 1))
+;;=>
+t
+
+```
 
 -----------------------------------------------------
 		
