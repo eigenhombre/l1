@@ -252,6 +252,11 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Examples: E(
+				L(A("="), N(1), N(1)),
+				L(A("="), N(1), N(2)),
+				L(A("apply"), A("="), L(A("repeat"), N(10), A("t"))),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) < 1 {
 					return nil, fmt.Errorf("missing argument")
