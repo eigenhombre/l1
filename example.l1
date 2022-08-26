@@ -1,0 +1,3 @@
+#!/usr/bin/env l1
+
+(printl '(Hello, world!))

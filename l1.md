@@ -175,7 +175,7 @@ argument is then bound to a list of all remaining arguments:
     > (multiply-then-sum 5 1 2 3)
     30
 
-A functions that has a rest argument but no fixed arguments is
+A function that has a rest argument but no fixed arguments is
 specified using the empty list as its fixed argument:
 
     > (defn say-hello (() . friends)
