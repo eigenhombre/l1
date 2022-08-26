@@ -93,7 +93,7 @@ true
 > (defn add (x y)
     (doc (add two numbers)
          (examples
-			(add 1 2))))
+           (add 1 2))))
 ;;=>
 ()
 `,
