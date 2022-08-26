@@ -318,11 +318,19 @@
   (punctuate period l))
 
 (defn exclaimed (l)
-  (doc (return l as a sentence... emphasized!))
+  (doc (return l as a sentence... emphasized!)
+       (examples
+        (exclaimed '(well, hello))
+        (exclaimed '(help))
+        (exclaimed '(begone, fiend))))
   (punctuate bang l))
 
 (defn list* (() . args)
-  (doc (create a list by consing everything but the last arg onto the last))
+  (doc (create a list by consing everything but the last arg onto the last)
+       (examples
+        (list* 1 2 '(3))
+        (list* 1 2 '(3 4))
+        (list*)))
   (when args
     (let ((endl (last args))
           (other (butlast args)))
@@ -338,7 +346,10 @@
        result)))
 
 (defn some (f l)
-  (doc (return f applied to first element for which that result is truthy, else ()))
+  (doc (return f applied to first element for which that result is truthy, else ())
+       (examples
+        (some even? '(1 3 5 7 9 11 13))
+        (some even? '(1 3 5 7 9 1000 11 13))))
   (when l
     (let ((result (f (car l))))
       (if result
@@ -346,7 +357,10 @@
         (some f (cdr l))))))
 
 (defn punctuate-atom (a mark)
-  (doc (add a punctuation mark at end of atom))
+  (doc (add a punctuation mark at end of atom)
+       (examples
+        (punctuate-atom 'list '*)
+        (punctuate-atom 'list COLON)))
   (let ((l (split a)))
     (fuse (concat l (list mark)))))
 

@@ -935,9 +935,9 @@ Args: `(x)`
 ### Examples
 
 ```
-> (doc (lambda (x) (doc (does stuff)) (+ x 1)))
+> (doc (lambda (x) (doc (does stuff) (and other stuff)) (+ x 1)))
 ;;=>
-((does stuff))
+((does stuff) (and other stuff))
 
 ```
 
@@ -1068,6 +1068,21 @@ Arity: 1
 
 Args: `(l)`
 
+
+### Examples
+
+```
+> (exclaimed (quote (well, hello)))
+;;=>
+(Well, hello!)
+> (exclaimed (quote (help)))
+;;=>
+(Help!)
+> (exclaimed (quote (begone, fiend)))
+;;=>
+(Begone, fiend!)
+
+```
 
 -----------------------------------------------------
 		
@@ -1381,6 +1396,21 @@ Arity: 0+
 
 Args: `(() . args)`
 
+
+### Examples
+
+```
+> (list* 1 2 (quote (3)))
+;;=>
+(1 2 3)
+> (list* 1 2 (quote (3 4)))
+;;=>
+(1 2 3 4)
+> (list*)
+;;=>
+()
+
+```
 
 -----------------------------------------------------
 		
@@ -1770,6 +1800,18 @@ Arity: 2
 Args: `(a mark)`
 
 
+### Examples
+
+```
+> (punctuate-atom (quote list) (quote *))
+;;=>
+list*
+> (punctuate-atom (quote list) COLON)
+;;=>
+list:
+
+```
+
 -----------------------------------------------------
 		
 
@@ -2125,6 +2167,18 @@ Arity: 2
 
 Args: `(f l)`
 
+
+### Examples
+
+```
+> (some even? (quote (1 3 5 7 9 11 13)))
+;;=>
+()
+> (some even? (quote (1 3 5 7 9 1000 11 13)))
+;;=>
+t
+
+```
 
 -----------------------------------------------------
 		

@@ -493,7 +493,8 @@ func init() {
 			ArgString:  "(x)",
 			Examples: E(
 				L(A("doc"), L(A("lambda"), L(A("x")),
-					L(A("doc"), L(A("does"), A("stuff"))),
+					L(A("doc"), L(A("does"), A("stuff")),
+						L(A("and"), A("other"), A("stuff"))),
 					L(A("+"), A("x"), N(1)))),
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
