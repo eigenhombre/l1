@@ -24,7 +24,7 @@ type formRec struct {
 	examples  string
 }
 
-// When you add a special form to eval, you should add it here as well.s
+// When you add a special form to eval, you should add it here as well:
 var specialForms = []formRec{
 	{
 		name:    "and",
@@ -184,6 +184,13 @@ true
 		doc:     "Quote an expression",
 		ftype:   special,
 		argsStr: "(x)",
+		examples: `> (quote foo)
+foo
+> (quote (1 2 3))
+(1 2 3)
+> '(1 2 3)
+(1 2 3)
+`,
 	},
 	{
 		name:    "syntax-quote",
@@ -192,6 +199,13 @@ true
 		doc:     "Syntax-quote an expression",
 		ftype:   special,
 		argsStr: "(x)",
+		examples: `> (syntax-quote foo)
+foo
+> (syntax-quote (1 2 3 4))
+(1 2 3 4)
+> (syntax-quote (1 (unquote (+ 1 1)) (splicing-unquote '(3 4))))
+(1 2 3 4)
+`,
 	},
 }
 
