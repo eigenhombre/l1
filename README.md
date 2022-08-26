@@ -157,7 +157,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
            comment  M    0+  Ignore the expressions in the block
         complement  F    1   Return the logical complement of the supplied function
             concat  F    0+  Concatenenate any number of lists
-              cond  S    0+  Conditional branching
+              cond  S    0+  Fundamental branching construct
               cons  N    2   Add an element to the front of a (possibly empty) list
         constantly  F    1   Given a value, return a function which always returns that value
                dec  F    1   Return the supplied integer argument, minus one
@@ -186,7 +186,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
             lambda  S    1+  Create a function
               last  F    1   Return the last item in a list
                len  N    1   Return the length of a list
-               let  S    1+  Create a local scope
+               let  S    1+  Create a local scope with bindings
               list  N    0+  Return a list of the given arguments
              list*  F    0+  Create a list by consing everything but the last arg onto the last
              list?  N    1   Return t if the argument is a list, () otherwise

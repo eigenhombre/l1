@@ -439,7 +439,7 @@ Args: `(() . lists)`
 
 ## `cond`
 
-Conditional branching
+Fundamental branching construct
 
 Type: special form
 
@@ -497,7 +497,7 @@ Type: special form
 
 Arity: 2 
 
-Args: `(x val)`
+Args: `(name value)`
 
 -----------------------------------------------------
 		
@@ -510,7 +510,7 @@ Type: special form
 
 Arity: 2+
 
-Args: `(f args . body)`
+Args: `(name args . body)`
 
 -----------------------------------------------------
 		
@@ -523,7 +523,7 @@ Type: special form
 
 Arity: 2+
 
-Args: `(f args . body)`
+Args: `(name args . body)`
 
 -----------------------------------------------------
 		
@@ -601,7 +601,7 @@ Type: special form
 
 Arity: 1+
 
-Args: `(x . xs)`
+Args: `(message-pattern-list . exprs)`
 
 -----------------------------------------------------
 		
@@ -816,7 +816,7 @@ Args: `(x)`
 
 ## `let`
 
-Create a local scope
+Create a local scope with bindings
 
 Type: special form
 

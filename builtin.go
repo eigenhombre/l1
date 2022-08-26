@@ -20,6 +20,7 @@ type Builtin struct {
 	NAry      bool
 	Docstring string
 	ArgString string
+	Examples  Sexpr
 }
 
 func (b Builtin) String() string {
@@ -118,6 +119,18 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 var builtins map[string]*Builtin
 
 func init() {
+	A := func(s string) Atom {
+		return Atom{s}
+	}
+	N := func(n int) Number {
+		return Num(n)
+	}
+	L := func(args ...Sexpr) Sexpr {
+		return mkListAsConsWithCdr(args, Nil)
+	}
+	E := func(args ...Sexpr) Sexpr {
+		return mkListAsConsWithCdr(args, Nil)
+	}
 	builtins = map[string]*Builtin{
 		"+": {
 			Name:       "+",
@@ -173,6 +186,10 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . xs)",
+			Examples: E(
+				L(A("*"), N(1), N(2), N(3)),
+				L(A("*")),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Num(1), nil

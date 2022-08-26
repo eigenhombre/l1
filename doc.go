@@ -18,40 +18,138 @@ type formRec struct {
 	farity    int
 	ismulti   bool
 	doc       string
-	longDoc   string
 	columnDoc string
 	ftype     string
 	argsStr   string
+	examples  string
 }
 
 // When you add a special form to eval, you should add it here as well.s
 var specialForms = []formRec{
-	{"and", 0, true, "Boolean and", "", "", special,
-		"(() . xs)"},
-	{"cond", 0, true, "Conditional branching", "", "", special,
-		"(() . pairs)"},
-	{"def", 2, false, "Set a value", "", "", special,
-		"(x val)"},
-	{"defn", 2, true, "Create and name a function", "", "", special,
-		"(f args . body)"},
-	{"defmacro", 2, true, "Create and name a macro", "", "", special,
-		"(f args . body)"},
-	{"error", 1, false, "Raise an error", "", "", special,
-		"(msg-list)"},
-	{"errors", 1, true, "Error checking (for tests)", "", "", special,
-		"(x . xs)"},
-	{"lambda", 1, true, "Create a function", "", "", special,
-		"(args . body) or (name args . body)"},
-	{"let", 1, true, "Create a local scope", "", "", special,
-		"(bindings . body)"},
-	{"loop", 1, true, "Loop forever", "", "", special,
-		"(() . body)"},
-	{"or", 0, true, "Boolean or", "", "", special,
-		"(() . xs)"},
-	{"quote", 1, false, "Quote an expression", "", "", special,
-		"(x)"},
-	{"syntax-quote", 1, false, "Syntax-quote an expression", "", "", special,
-		"(x)"},
+	{
+		name:    "and",
+		farity:  0,
+		ismulti: true,
+		doc:     "Boolean and",
+		ftype:   special,
+		argsStr: "(() . xs)",
+		examples: `(and)
+;; => true
+(and t t)
+;; => true
+(and t t ())
+;; => ()
+`,
+	},
+	{
+		name:    "cond",
+		farity:  0,
+		ismulti: true,
+		doc:     "Fundamental branching construct",
+		ftype:   special,
+		argsStr: "(() . pairs)",
+		examples: `(cond)
+;; => ()
+(cond (t 1) (t 2) (t 3))
+;; => 1
+(cond (() 1) (t 2))
+;; => 2
+`,
+	},
+	{
+		name:    "def",
+		farity:  2,
+		ismulti: false,
+		doc:     "Set a value",
+		ftype:   special,
+		argsStr: "(name value)",
+	},
+	{
+		name:    "defn",
+		farity:  2,
+		ismulti: true,
+		doc:     "Create and name a function",
+		ftype:   special,
+		argsStr: "(name args . body)",
+	},
+	{
+		name:    "defmacro",
+		farity:  2,
+		ismulti: true,
+		doc:     "Create and name a macro",
+		ftype:   special,
+		argsStr: "(name args . body)",
+	},
+	{
+		name:    "error",
+		farity:  1,
+		ismulti: false,
+		doc:     "Raise an error",
+		ftype:   special,
+		argsStr: "(msg-list)",
+	},
+	{
+		name:    "errors",
+		farity:  1,
+		ismulti: true,
+		doc:     "Error checking (for tests)",
+		ftype:   special,
+		argsStr: "(message-pattern-list . exprs)",
+	},
+	{
+		name:    "lambda",
+		farity:  1,
+		ismulti: true,
+		doc:     "Create a function",
+		ftype:   special,
+		argsStr: "(args . body) or (name args . body)",
+	},
+	{
+		name:    "let",
+		farity:  1,
+		ismulti: true,
+		doc:     "Create a local scope with bindings",
+		ftype:   special,
+		argsStr: "(bindings . body)",
+	},
+	{
+		name:    "loop",
+		farity:  1,
+		ismulti: true,
+		doc:     "Loop forever",
+		ftype:   special,
+		argsStr: "(() . body)",
+	},
+	{
+		name:    "or",
+		farity:  0,
+		ismulti: true,
+		doc:     "Boolean or",
+		ftype:   special,
+		argsStr: "(() . xs)",
+		examples: `(or)
+;; => false
+(or t t)
+;; => true
+(or t t ())
+;; => t`,
+	},
+	{
+		name:    "quote",
+		farity:  1,
+		ismulti: false,
+		doc:     "Quote an expression",
+		ftype:   special,
+		argsStr: "(x)",
+	},
+	{
+		name:    "syntax-quote",
+		farity:  1,
+		ismulti: false,
+		doc:     "Syntax-quote an expression",
+		ftype:   special,
+		argsStr: "(x)",
+	},
 }
 
 const columnsFormat = "%14s %2s %5s  %s"
