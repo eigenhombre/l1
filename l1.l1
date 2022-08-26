@@ -320,7 +320,9 @@
                          (list (f (last x))))))))
 
 (defn tosentence (l)
-  (doc (return l as a sentence... capitalized, with a period at the end))
+  (doc (return l as a sentence... capitalized, with a period at the end)
+       (examples
+        (tosentence '(to be, or not to be, that is the question))))
   (punctuate period l))
 
 (defn exclaimed (l)

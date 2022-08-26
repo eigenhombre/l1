@@ -1962,6 +1962,21 @@ Arity: 2
 Args: `(x y)`
 
 
+### Examples
+
+```
+> (rem 5 2)
+;;=>
+1
+> (rem 4 2)
+;;=>
+0
+> (rem 1 0)
+;;=>
+ERROR: division by zero
+
+```
+
 -----------------------------------------------------
 		
 
@@ -2282,6 +2297,15 @@ Arity: 1
 
 Args: `(l)`
 
+
+### Examples
+
+```
+> (tosentence (quote (to be, or not to be, that is the question)))
+;;=>
+(To be, or not to be, that is the question.)
+
+```
 
 -----------------------------------------------------
 		

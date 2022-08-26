@@ -281,6 +281,11 @@ func init() {
 			FixedArity: 2,
 			NAry:       false,
 			ArgString:  "(x y)",
+			Examples: E(
+				L(A("rem"), N(5), N(2)),
+				L(A("rem"), N(4), N(2)),
+				L(A("rem"), N(1), N(0)),
+			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, fmt.Errorf("rem requires two arguments")
