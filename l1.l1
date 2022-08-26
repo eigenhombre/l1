@@ -139,7 +139,12 @@
                  (cdr l)))))
 
 (defn caar (l)
-  (doc (first element of the first element of a list of lists))
+  (doc (first element of the first element of a list of lists)
+       (examples
+        (caar ())                ;;=> ()
+        (caar '(()))             ;;=> ()
+        (caar '((one two)
+                (three four))))) ;;=> one
   (car (car l)))
 
 (defn complement (f)
@@ -209,7 +214,9 @@
   (apply * (repeat m n)))
 
 (defn capitalize (a)
-  (doc (return the atom argument, capitalized))
+  (doc (return the atom argument, capitalized)
+       (examples
+        (capitalize 'hello))) ;;=> Hello
   (let ((s (split a)))
     (fuse (concat (map upcase (take 1 s))
                   (drop 1 s)))))
@@ -230,7 +237,10 @@
                 (randchoice (split 'abcdefghijklmnopqrstuvwxyz)))))
 
 (defn butlast (l)
-  (doc (return everything but the last element))
+  (doc (return everything but the last element)
+       (examples
+        (butlast ()) ;;=> ()
+        (butlast (range 3)))) ;;=> (0 1)
   (take (dec (len l)) l))
 
 (defn punctuate (f x)
@@ -279,7 +289,9 @@
     (fuse (concat l (list mark)))))
 
 (defn bang (a)
-  (doc (add an exclamation point at end of atom))
+  (doc (add an exclamation point at end of atom)
+       (examples
+        (bang 'Bang))) ;; Bang!
   (punctuate-atom a BANG))
 
 (defn comma (a)

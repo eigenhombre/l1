@@ -42,7 +42,7 @@ true
 > (and t t ())
 ;;=>
 ()
-> (and () (launch-missiles))
+> (and () (/ 1 0))
 ;;=>
 ()
 `,
