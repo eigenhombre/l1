@@ -10,7 +10,7 @@
 [`=`](#=)
 [`>`](#>)
 [`>=`](#>=)
-[`and`](#and)
+[**`and`**](#and)
 [`apply`](#apply)
 [`atom?`](#atom?)
 [`bang`](#bang)
@@ -22,44 +22,44 @@
 [`cdr`](#cdr)
 [`colon`](#colon)
 [`comma`](#comma)
-[`comment`](#comment)
+[*`comment`*](#comment)
 [`complement`](#complement)
 [`concat`](#concat)
-[`cond`](#cond)
+[**`cond`**](#cond)
 [`cons`](#cons)
 [`constantly`](#constantly)
 [`dec`](#dec)
-[`def`](#def)
-[`defmacro`](#defmacro)
-[`defn`](#defn)
+[**`def`**](#def)
+[**`defmacro`**](#defmacro)
+[**`defn`**](#defn)
 [`doc`](#doc)
-[`dotimes`](#dotimes)
+[*`dotimes`*](#dotimes)
 [`downcase`](#downcase)
 [`drop`](#drop)
-[`error`](#error)
-[`errors`](#errors)
+[**`error`**](#error)
+[**`errors`**](#errors)
 [`even?`](#even?)
 [`exclaimed`](#exclaimed)
 [`filter`](#filter)
 [`flatten`](#flatten)
-[`foreach`](#foreach)
+[*`foreach`*](#foreach)
 [`forms`](#forms)
 [`fuse`](#fuse)
 [`help`](#help)
 [`identity`](#identity)
-[`if`](#if)
-[`if-not`](#if-not)
+[*`if`*](#if)
+[*`if-not`*](#if-not)
 [`inc`](#inc)
-[`is`](#is)
+[*`is`*](#is)
 [`juxt`](#juxt)
-[`lambda`](#lambda)
+[**`lambda`**](#lambda)
 [`last`](#last)
 [`len`](#len)
-[`let`](#let)
+[**`let`**](#let)
 [`list`](#list)
 [`list*`](#list*)
 [`list?`](#list?)
-[`loop`](#loop)
+[**`loop`**](#loop)
 [`macroexpand-1`](#macroexpand-1)
 [`map`](#map)
 [`mapcat`](#mapcat)
@@ -68,16 +68,16 @@
 [`nth`](#nth)
 [`number?`](#number?)
 [`odd?`](#odd?)
-[`or`](#or)
+[**`or`**](#or)
 [`period`](#period)
 [`pos?`](#pos?)
 [`print`](#print)
 [`printl`](#printl)
 [`println`](#println)
-[`progn`](#progn)
+[*`progn`*](#progn)
 [`punctuate`](#punctuate)
 [`punctuate-atom`](#punctuate-atom)
-[`quote`](#quote)
+[**`quote`**](#quote)
 [`randalpha`](#randalpha)
 [`randchoice`](#randchoice)
 [`randigits`](#randigits)
@@ -100,16 +100,16 @@
 [`sleep`](#sleep)
 [`some`](#some)
 [`split`](#split)
-[`syntax-quote`](#syntax-quote)
+[**`syntax-quote`**](#syntax-quote)
 [`take`](#take)
 [`test`](#test)
 [`tosentence`](#tosentence)
 [`true?`](#true?)
 [`upcase`](#upcase)
 [`version`](#version)
-[`when`](#when)
-[`when-not`](#when-not)
-[`with-screen`](#with-screen)
+[*`when`*](#when)
+[*`when-not`*](#when-not)
+[*`with-screen`*](#with-screen)
 [`zero?`](#zero?)
 # Operators
 
@@ -1604,6 +1604,15 @@ Arity: 1
 Args: `(n)`
 
 
+### Examples
+
+```
+> (map neg? (map (lambda (x) (- x 5)) (range 10)))
+;;=>
+(t t t t t () () () () ())
+
+```
+
 -----------------------------------------------------
 		
 
@@ -1906,7 +1915,7 @@ Args: `(x)`
 
 ## `randalpha`
 
-Return a list of random (English/Latin/unaccented) alphabetic characters
+Return a list of random (English/Latin/unaccented) lower-case alphabetic characters
 
 Type: function
 

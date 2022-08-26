@@ -318,7 +318,13 @@ func longDocStr(e *env) string {
 	sortedForms := availableForms(e)
 	summary := fmt.Sprintf("# API Index\n%d forms available:", len(sortedForms))
 	for _, form := range sortedForms {
-		summary += fmt.Sprintf("\n[`%s`](#%s)", form.name, form.name)
+		nameStr := fmt.Sprintf("`%s`", form.name)
+		if form.ftype == macro {
+			nameStr = fmt.Sprintf("*`%s`*", form.name)
+		} else if form.ftype == special {
+			nameStr = fmt.Sprintf("**`%s`**", form.name)
+		}
+		summary += fmt.Sprintf("\n[%s](#%s)", nameStr, form.name)
 	}
 	summary += "\n# Operators\n"
 	outStrs := []string{summary}

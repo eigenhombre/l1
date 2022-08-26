@@ -99,7 +99,7 @@ l1 - a Lisp interpreter.
      punctuate  F    2   Return x capitalized, with punctuation determined by the supplied function
 punctuate-atom  F    2   Add a punctuation mark at end of atom
          quote  S    1   Quote an expression
-     randalpha  F    1   Return a list of random (English/Latin/unaccented) alphabetic characters
+     randalpha  F    1   Return a list of random (English/Latin/unaccented) lower-case alphabetic characters
     randchoice  F    1   Return an element at random from the supplied list
      randigits  F    1   Return a random integer between 0 and the argument minus 1
        randint  N    1   Return a random integer between 0 and the argument minus 1

@@ -131,7 +131,11 @@
   (= n 0))
 
 (defn neg? (n)
-  (doc (return true iff the supplied integer argument is less than zero))
+  (doc (return true iff the supplied integer argument is less than zero)
+       (examples
+        (map neg?
+             (map (lambda (x) (- x 5))
+                  (range 10)))))
   (< n 0))
 
 (defn juxt (() . fs)
@@ -347,7 +351,8 @@
   (nth (randint (len l)) l))
 
 (defn randalpha (n)
-  (doc (return a list of random (English/Latin/unaccented) alphabetic characters))
+  (doc (return a list of random (English/Latin/unaccented)
+               lower-case alphabetic characters))
   (repeatedly n
               (lambda ()
                 (randchoice (split 'abcdefghijklmnopqrstuvwxyz)))))
