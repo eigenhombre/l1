@@ -18,7 +18,10 @@
          (t ~else)))
 
 (defmacro comment (() . body)
-  (doc (ignore the expressions in the block)))
+  (doc (ignore the expressions in the block)
+       (examples
+        (comment twas brillig, and the slithy toves
+                 did gyre and gimble in the wabe))))
 
 (defmacro when (condition then)
   (doc (simple conditional with single branch))
@@ -291,22 +294,30 @@
 (defn bang (a)
   (doc (add an exclamation point at end of atom)
        (examples
-        (bang 'Bang))) ;; Bang!
+        (bang 'Bang))) ;;=> Bang!
   (punctuate-atom a BANG))
 
 (defn comma (a)
-  (doc (add a comma at end of atom))
+  (doc (add a comma at end of atom)
+       (examples
+        (comma 'hello))) ;;=> hello,
   (punctuate-atom a COMMA))
 
 (defn period (a)
-  (doc (add a period at end of atom))
+  (doc (add a period at end of atom)
+       (examples
+        (period 'Woot))) ;;=> Woot.
   (punctuate-atom a PERIOD))
 
 (defn colon (a)
-  (doc (add a colon at end of atom))
+  (doc (add a colon at end of atom)
+       (colon 'remember-this)) ;;=> remember-this:
   (punctuate-atom a COLON))
 
 (defmacro is (expr)
-  (doc (assert a condition is truthy, or show failing code))
+  (doc (assert a condition is truthy, or show failing code)
+       (examples
+        (is t)
+        (is (car (cons () '(this one should fail))))))
   `(when-not ~expr
      (error '(assertion ~(fuse (list 'failed COLON)) ~expr))))

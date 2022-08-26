@@ -681,6 +681,15 @@ Arity: 1
 Args: `(a)`
 
 
+### Examples
+
+```
+> (comma (quote hello))
+;;=>
+hello,
+
+```
+
 -----------------------------------------------------
 		
 
@@ -694,6 +703,15 @@ Arity: 0+
 
 Args: `(() . body)`
 
+
+### Examples
+
+```
+> (comment twas brillig, and the slithy toves did gyre and gimble in the wabe)
+;;=>
+()
+
+```
 
 -----------------------------------------------------
 		
@@ -1147,6 +1165,18 @@ Arity: 1
 Args: `(expr)`
 
 
+### Examples
+
+```
+> (is t)
+;;=>
+()
+> (is (car (cons () (quote (this one should fail)))))
+;;=>
+ERROR: (assertion failed: (car (cons () (quote (this one should fail)))))
+
+```
+
 -----------------------------------------------------
 		
 
@@ -1484,6 +1514,15 @@ Arity: 1
 
 Args: `(a)`
 
+
+### Examples
+
+```
+> (period (quote Woot))
+;;=>
+Woot.
+
+```
 
 -----------------------------------------------------
 		

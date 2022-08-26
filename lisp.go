@@ -179,6 +179,9 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 		return nil, err
 	}
 	ast := fn.(*lambdaFn).body
+	if ast == Nil {
+		return Nil, nil
+	}
 	toEval := ast.car
 	ret, err := eval(toEval, e)
 	if err != nil {
