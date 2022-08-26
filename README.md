@@ -288,19 +288,6 @@ Several core library functions are also implemented in `l1`.  The file
 [`l1.l1`](https://github.com/eigenhombre/l1/blob/master/l1.l1) contains these, and is evaluated when the interpreter starts.
 This currently runs quite quickly (12 milliseconds on my Mac M1 Air).
 
-# Text User Interfaces
-
-`l1` has a few built-in functions for creating simple text UIs:
-
-- `with-screen`: Enter/exit "screen" (UI) mode
-- `screen-clear`: Clear the screen
-- `screen-get-key`: Get a keystroke
-- `screen-write`: Write a list, without parentheses, to an `x` and `y` position on the screen.
-
-[An example
-program](https://github.com/eigenhombre/l1/blob/master/examples/screen-test.l1)
-shows these functions in action.
-
 # Local Development
 
 Check out this repo and `cd` to it. Then,
@@ -318,35 +305,6 @@ look at the `Dockerfile` and `Makefile` for more information.
 
 New releases are made using `make release`.  You must commit all
 outstanding changes first.
-
-# Emacs Integration
-
-If you are using Emacs, you can set it up to work with `l1` as an "inferior
-lisp" process as described in [the Emacs manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/External-Lisp.html).
-I currently derive a new major mode from the base `lisp-mode` and bind a few
-keys for convenience as follows:
-
-    (define-derived-mode l1-mode
-      lisp-mode "L1 Mode"
-      "Major mode for L1 Lisp code"
-      (setq inferior-lisp-program (executable-find "l1")
-      (paredit-mode 1)
-      (put 'test 'lisp-indent-function 1)
-      (put 'testing 'lisp-indent-function 1)
-      (put 'errors 'lisp-indent-function 1)
-      (put 'if 'lisp-indent-function 1)
-      (put 'if-not 'lisp-indent-function 1)
-      (put 'foreach 'lisp-indent-function 2)
-      (put 'when-not 'lisp-indent-function 1)
-      (define-key l1-mode-map (kbd "s-i") 'lisp-eval-last-sexp)
-      (define-key l1-mode-map (kbd "s-I") 'lisp-eval-form-and-next)
-      (define-key l1-mode-map (kbd "C-o j") 'run-lisp))
-
-    (add-to-list 'auto-mode-alist '("\\.l1" . l1-mode))
-
-If `l1` has been installed on your path, `M-x run-lisp` or using the appropriate
-keybinding should be enough to start a REPL within Emacs and start sending
-expressions to it.
 
 # Resources / Further Reading
 
@@ -366,7 +324,7 @@ expressions to it.
 
 Copyright © 2022, John Jacobsen. MIT License.
 
-Two of the example programs in `examples/` were adapted from P. Norvig,
+Two of the programs in `examples/` were adapted from P. Norvig,
 [Paradigms of Artificial Intelligence Programming: Case Studies in
 Common Lisp](https://github.com/norvig/paip-lisp). MIT License.
 
