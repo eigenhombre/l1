@@ -50,12 +50,12 @@ Numbers evaluate to themselves:
 
 Numbers and atoms can be turned into lists:
 
-    > (split atomic)
+    > (split 'atomic)
     (a t o m i c)
     > (split 1234)
     (1 2 3 4)
 
-And lists can be turned into atoms:
+And lists can be turned into atoms or numbers:
 
     > (fuse '(getting atomic))
     gettingatomic
@@ -183,3 +183,44 @@ specified using the empty list as its fixed argument:
     > (say-hello 'John 'Jerry 'Eden)
     (hello John Jerry Eden)
 
+Functions may invoke themselves recursively:
+
+    > (defn sum-nums (l)
+        (if-not l
+          0
+          (+ (car l) (sum-nums (cdr l)))))
+    ()
+    > (sum-nums '(0 1 2 3 4 5 6 7 8 9))
+    45
+
+The above function performs an addition after it invokes itself.  A
+function which invokes itself *immediately before returning*, without
+doing any more work, is called "tail recursive."  Such functions are
+turned into iterations automatically by the interpreter ("tail call
+optimization").  The above function can be rewritten into a
+tail-recursive version:
+
+    > (defn sum-nums-accumulator (l acc)
+        (if-not l
+          acc
+          (sum-nums-accumulator (cdr l) (+ acc (car l)))))
+    ()
+    > (sum-nums-accumulator '(0 1 2 3 4 5 6 7 8 9) 0)
+    45
+
+Lambda functions can invoke themselves if given a name directly before
+the parameters are declared.  We can rewrite the above function to
+hide the `acc` argument from the user:
+
+    > (defn sum-nums (l)
+        (let ((inner (lambda inner (l acc)
+                       (if-not l
+                         acc
+                         (inner (cdr l) (+ acc (car l)))))))
+          (inner l 0)))
+    ()
+    > (sum-nums '(0 1 2 3 4 5 6 7 8 9))
+    45
+
+This version is both tail-recursive (in `inner`), and as convenient to
+use as our first, non-tail-recursive version was.
