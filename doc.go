@@ -146,6 +146,20 @@ true
 		doc:     "Create a function",
 		ftype:   special,
 		argsStr: "(args . body) or (name args . body)",
+		examples: `> ((lambda () t))
+;;=>
+t
+> ((lambda (x) (+ 5 x)) 5)
+;;=>
+10
+> ((lambda my-length (x)
+     (if-not x
+       0
+       (+ 1 (my-length (cdr x)))))
+    (range 20))
+;;=>
+20
+`,
 	},
 	{
 		name:    "let",
@@ -154,6 +168,12 @@ true
 		doc:     "Create a local scope with bindings",
 		ftype:   special,
 		argsStr: "(bindings . body)",
+		examples: `> (let ((a 1)
+        (b 2))
+    (+ a b))
+;;=>
+3
+`,
 	},
 	{
 		name:    "loop",
@@ -165,7 +185,7 @@ true
 		examples: `> (loop
     (printl '(Help me, I am looping forever!))
     (sleep 1000))
-;;=> (prints:)
+;; Prints =>
 Help me, I am looping forever!
 Help me, I am looping forever!
 Help me, I am looping forever!

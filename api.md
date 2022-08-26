@@ -1400,6 +1400,25 @@ Arity: 1+
 Args: `(args . body) or (name args . body)`
 
 
+### Examples
+
+```
+> ((lambda () t))
+;;=>
+t
+> ((lambda (x) (+ 5 x)) 5)
+;;=>
+10
+> ((lambda my-length (x)
+     (if-not x
+       0
+       (+ 1 (my-length (cdr x)))))
+    (range 20))
+;;=>
+20
+
+```
+
 -----------------------------------------------------
 		
 
@@ -1462,6 +1481,17 @@ Arity: 1+
 
 Args: `(bindings . body)`
 
+
+### Examples
+
+```
+> (let ((a 1)
+        (b 2))
+    (+ a b))
+;;=>
+3
+
+```
 
 -----------------------------------------------------
 		
@@ -1564,7 +1594,7 @@ Args: `(() . body)`
 > (loop
     (printl '(Help me, I am looping forever!))
     (sleep 1000))
-;;=> (prints:)
+;; Prints =>
 Help me, I am looping forever!
 Help me, I am looping forever!
 Help me, I am looping forever!
