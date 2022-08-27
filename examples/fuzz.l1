@@ -6,11 +6,30 @@
 (def operators (remove (lambda (x) (= x 'loop))
                        (forms)))
 
+(defn genint (n)
+  (lambda ()
+    (randint n)))
+
+(defn randargs ()
+  (map (lambda (_) ((arg))) (range (randint 10))))
+
+(defn arg ()
+  (randchoice (list (constantly t)
+                    (constantly ())
+                    randargs
+                    (genint 10)
+                    (genint 100)
+                    (genint 1000))))
+
+(defn randlist ()
+  (repeatedly (randint 10) (arg)))
+
 (defn expr ()
   (cons (randchoice operators)
-        (randigits (randint 10))))
+        (randargs)))
 
 (map (lambda (x)
+       (println x)
        (swallow
         (eval x)))
-     (repeatedly 10 expr))
+     (repeatedly 30 expr))
