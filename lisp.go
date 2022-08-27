@@ -36,12 +36,47 @@ func evAtom(a Atom, e *env) (Sexpr, error) {
 }
 
 func evDef(args *ConsCell, e *env) (Sexpr, error) {
-	name := args.car.(Atom).s
-	val, err := eval(args.cdr.(*ConsCell).car, e)
+	if args == Nil {
+		return nil, fmt.Errorf("missing argument")
+	}
+	carAtom, ok := args.car.(Atom)
+	if !ok {
+		return nil, fmt.Errorf("first argument must be an atom")
+	}
+	name := carAtom.s
+	args, ok = args.cdr.(*ConsCell)
+	if !ok || args == Nil {
+		return nil, fmt.Errorf("missing argument")
+	}
+	val, err := eval(args.car, e)
 	if err != nil {
 		return nil, err
 	}
 	err = e.Set(name, val)
+	if err != nil {
+		return nil, err
+	}
+	return val, nil
+}
+
+func evSet(args *ConsCell, e *env) (Sexpr, error) {
+	if args == Nil {
+		return nil, fmt.Errorf("missing argument")
+	}
+	carAtom, ok := args.car.(Atom)
+	if !ok {
+		return nil, fmt.Errorf("first argument must be an atom")
+	}
+	name := carAtom.s
+	args, ok = args.cdr.(*ConsCell)
+	if !ok || args == Nil {
+		return nil, fmt.Errorf("missing argument")
+	}
+	val, err := eval(args.car, e)
+	if err != nil {
+		return nil, err
+	}
+	err = e.Update(name, val)
 	if err != nil {
 		return nil, err
 	}
@@ -282,9 +317,17 @@ top:
 		if carAtom, ok := t.car.(Atom); ok {
 			switch {
 			case carAtom.s == "quote":
-				return t.cdr.(*ConsCell).car, nil
+				cdrCons, ok := t.cdr.(*ConsCell)
+				if !ok || cdrCons == Nil {
+					return nil, fmt.Errorf("quote needs an argument")
+				}
+				return cdrCons.car, nil
 			case carAtom.s == "syntax-quote":
-				expr = syntaxQuote(t.cdr.(*ConsCell).car)
+				cdrCons, ok := t.cdr.(*ConsCell)
+				if !ok || cdrCons == Nil {
+					return nil, fmt.Errorf("syntax-quote needs an argument")
+				}
+				expr = syntaxQuote(cdrCons.car)
 				goto top
 			case carAtom.s == "cond":
 				pairList := t.cdr.(*ConsCell)
@@ -396,6 +439,8 @@ top:
 				}
 			case carAtom.s == "def":
 				return evDef(t.cdr.(*ConsCell), e)
+			case carAtom.s == "set!":
+				return evSet(t.cdr.(*ConsCell), e)
 			case carAtom.s == "defn":
 				return evDefn(t.cdr.(*ConsCell), false, e)
 			case carAtom.s == "defmacro":
@@ -425,13 +470,16 @@ top:
 				newEnv := mkEnv(e)
 				for ; bindings != Nil; bindings = bindings.cdr.(*ConsCell) {
 					binding, ok := bindings.car.(*ConsCell)
-					if !ok {
-						return nil, fmt.Errorf("a let binding must be a list")
+					if !ok || binding == Nil {
+						return nil, fmt.Errorf("a let binding must be a list of binding pairs")
 					}
-					name := binding.car.(Atom).s
+					carAtom, ok := binding.car.(Atom)
+					if !ok {
+						return nil, fmt.Errorf("a let binding must be a list of binding pairs")
+					}
 					asCons, ok := binding.cdr.(*ConsCell)
 					if !ok {
-						return nil, fmt.Errorf("a let binding must be a list")
+						return nil, fmt.Errorf("a let binding must be a list of binding pairs")
 					}
 					if asCons == Nil {
 						return Nil, nil
@@ -440,7 +488,7 @@ top:
 					if err != nil {
 						return nil, err
 					}
-					err = newEnv.Set(name, val)
+					err = newEnv.Set(carAtom.s, val)
 					if err != nil {
 						return nil, err
 					}

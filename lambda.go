@@ -20,11 +20,17 @@ func mkLambda(cdr *ConsCell, isMacro bool, e *env) (*lambdaFn, error) {
 	args := []string{}
 	restArg := noRestArg
 	// look for fn name
+	if cdr == Nil {
+		return nil, fmt.Errorf("missing arguments")
+	}
 	fnNameAtom, ok := cdr.car.(Atom)
 	var fnName string
 	if ok {
 		fnName = fnNameAtom.s
 		cdr = cdr.cdr.(*ConsCell)
+	}
+	if cdr == Nil {
+		return nil, fmt.Errorf("missing arguments")
 	}
 	argList, ok := cdr.car.(*ConsCell)
 	if !ok {
@@ -59,7 +65,7 @@ top:
 	body := cdr.cdr.(*ConsCell)
 	// Find `doc` form and save it if found:
 	doc := Nil
-	if body != Nil {
+	if body != Nil && body.car != Nil {
 		doc2, ok := body.car.(*ConsCell)
 		if ok && doc2.car.Equal(Atom{"doc"}) {
 			doc = doc2.cdr.(*ConsCell)

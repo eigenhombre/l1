@@ -34,6 +34,19 @@
         (comment twas brillig, and the slithy toves
                  did gyre and gimble in the wabe))))
 
+(defmacro progn (() . body)
+  (doc (execute multiple statements, returning the last)
+       (examples
+        (progn)
+        (progn
+          1
+          2
+          3)))
+  `(let () ~@body))
+
+;; FIXME: want to be able to have `then`
+;; be a real body.  But this leads to failures
+;; I don't understand yet.
 (defmacro when (condition then)
   (doc (simple conditional with single branch)
        (examples
@@ -51,16 +64,6 @@
         (when-not t
           (error '(oh no mister bill)))))
   `(cond ((not ~condition) ~then)))
-
-(defmacro progn (() . body)
-  (doc (execute multiple statements, returning the last)
-       (examples
-        (progn)
-        (progn
-          1
-          2
-          3)))
-  `(let () ~@body))
 
 (defmacro foreach (x xs . body)
   (doc (execute body for each value in a list))

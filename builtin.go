@@ -793,6 +793,9 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a number", args[0])
 				}
+				if num.Equal(N(0)) {
+					return nil, fmt.Errorf("randint expects a non-zero argument")
+				}
 				r := rand.New(rand.NewSource(time.Now().UnixNano()))
 				return Num(r.Intn(int(num.bi.Uint64()))), nil
 			},
@@ -910,7 +913,10 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a list", args[2])
 				}
-				termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
+				err := termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
+				if err != nil {
+					return nil, err
+				}
 				return Nil, nil
 			},
 		},

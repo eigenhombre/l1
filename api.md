@@ -1,5 +1,5 @@
 # API Index
-113 forms available:
+114 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -97,6 +97,7 @@
 [`screen-size`](#screen-size)
 [`screen-start`](#screen-start)
 [`screen-write`](#screen-write)
+[**`set!`**](#set!)
 [`shuffle`](#shuffle)
 [`sleep`](#sleep)
 [`some`](#some)
@@ -2402,6 +2403,38 @@ Arity: 3
 
 Args: `(x y list)`
 
+
+-----------------------------------------------------
+		
+
+## `set!`
+
+Update a value in an existing binding
+
+Type: special form
+
+Arity: 2 
+
+Args: `(name value)`
+
+
+### Examples
+
+```
+> (def a 1)
+;;=>
+1
+> a
+;;=>
+1
+> (set! a 2)
+;;=>
+2
+> a
+;;=>
+2
+
+```
 
 -----------------------------------------------------
 		

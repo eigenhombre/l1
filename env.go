@@ -50,6 +50,20 @@ func (e *env) Set(s string, v Sexpr) error {
 	return nil
 }
 
+func (e *env) Update(s string, v Sexpr) error {
+	if s == "t" {
+		return fmt.Errorf("cannot bind or set t")
+	}
+	if _, ok := e.syms[s]; ok {
+		e.syms[s] = v
+		return nil
+	}
+	if e.parent != nil {
+		return e.parent.Update(s, v)
+	}
+	return fmt.Errorf("%s is not bound in any environment", s)
+}
+
 func (e *env) String() string {
 	ret := ""
 	for k, v := range e.syms {

@@ -1,9 +1,18 @@
 
+(defn in? (x l)
+  (cond ((not l) ())
+        ((= (car l) x) t)
+        (t (in? x (cdr l)))))
+
 ;; Try these operators to POC the approach:
 ;; (def operators '(+ - * / list cons concat))
 
-;; Don't loop infinitely, bad for the test:
-(def operators (remove (lambda (x) (= x 'loop))
+;; Remove operators that muddle the test:
+(def operators (remove (lambda (x)
+                         (in? x '(loop
+                                  with-screen
+                                  screen-start
+                                  readlist)))
                        (forms)))
 
 (defn genint (n)
@@ -28,8 +37,7 @@
   (cons (randchoice operators)
         (randargs)))
 
-(map (lambda (x)
-       (println x)
-       (swallow
-        (eval x)))
-     (repeatedly 30 expr))
+(dotimes 10000
+  (let ((e (expr)))
+    (println e)
+    (println (swallow (eval e)))))

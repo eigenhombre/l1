@@ -229,6 +229,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
        screen-size  N    0   Return the screen size (width, height)
       screen-start  N    0   Start screen for text UIs
       screen-write  N    3   Write a string to the screen
+              set!  S    2   Update a value in an existing binding
            shuffle  N    1   Return a (quickly!) shuffled list
              sleep  N    1   Sleep for the given number of milliseconds
               some  F    2   Return f applied to first element for which that result is truthy, else ()
