@@ -544,6 +544,23 @@ func init() {
 				return mkListAsConsWithCdr(formsAsSexprList(e), Nil), nil
 			},
 		},
+		"eval": {
+			Name:       "eval",
+			Docstring:  "Evaluate an expression",
+			FixedArity: 1,
+			NAry:       false,
+			ArgString:  "(x)",
+			Examples: E(
+				L(A("eval"), QL(A("one"), A("two"))),
+				L(A("eval"), QL(L(A("+"), N(1), N(2)))),
+			),
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, fmt.Errorf("missing argument")
+				}
+				return eval(args[0], e)
+			},
+		},
 		"fuse": {
 			Name:       "fuse",
 			Docstring:  "Fuse a list of numbers or atoms into a single atom",

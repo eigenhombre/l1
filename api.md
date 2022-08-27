@@ -1,5 +1,5 @@
 # API Index
-111 forms available:
+113 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -38,6 +38,7 @@
 [`drop`](#drop)
 [**`error`**](#error)
 [**`errors`**](#errors)
+[`eval`](#eval)
 [`even?`](#even?)
 [`exclaimed`](#exclaimed)
 [`filter`](#filter)
@@ -100,6 +101,7 @@
 [`sleep`](#sleep)
 [`some`](#some)
 [`split`](#split)
+[**`swallow`**](#swallow)
 [**`syntax-quote`**](#syntax-quote)
 [`take`](#take)
 [`test`](#test)
@@ -1112,6 +1114,32 @@ Args: `(message-pattern-list . exprs)`
 ;;=>
 ERROR in '(errors (quote (is not a function)) (+))':
 error not found in ((quote (is not a function)) (+))
+
+```
+
+-----------------------------------------------------
+		
+
+## `eval`
+
+Evaluate an expression
+
+Type: native function
+
+Arity: 1 
+
+Args: `(x)`
+
+
+### Examples
+
+```
+> (eval (quote (one two)))
+;;=>
+ERROR: unknown symbol: one
+> (eval (quote ((+ 1 2))))
+;;=>
+ERROR: 3 is not a function
 
 ```
 
@@ -2452,6 +2480,33 @@ Args: `(x)`
 > (split (quote abc))
 ;;=>
 (a b c)
+
+```
+
+-----------------------------------------------------
+		
+
+## `swallow`
+
+Swallow errors thrown in body, return t if any occur
+
+Type: special form
+
+Arity: 0+
+
+Args: `(() . body)`
+
+
+### Examples
+
+```
+> (swallow
+	(error '(boom)))
+;;=>
+t
+> (swallow 1 2 3)
+;;=>
+()
 
 ```
 

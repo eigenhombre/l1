@@ -170,6 +170,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
               drop  F    2   Drop n items from a list, then return the rest
              error  S    1   Raise an error
             errors  S    1+  Error checking (for tests)
+              eval  N    1   Evaluate an expression
              even?  F    1   Return true if the supplied integer argument is even
          exclaimed  F    1   Return l as a sentence... emphasized!
             filter  F    2   Keep only values for which function f is true
@@ -232,6 +233,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
              sleep  N    1   Sleep for the given number of milliseconds
               some  F    2   Return f applied to first element for which that result is truthy, else ()
              split  N    1   Split an atom or number into a list of single-digit numbers or single-character atoms
+           swallow  S    0+  Swallow errors thrown in body, return t if any occur
       syntax-quote  S    1   Syntax-quote an expression
               take  F    2   Take up to n items from the supplied list
               test  N    0+  Establish a testing block (return last expression)

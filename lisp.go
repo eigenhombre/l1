@@ -362,7 +362,7 @@ top:
 			case carAtom.s == "loop":
 				body, ok := t.cdr.(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("loop requires a body")
+					return nil, fmt.Errorf("loop requires a list body")
 				}
 				for {
 					start := body
@@ -377,6 +377,22 @@ top:
 						}
 						start = start.cdr.(*ConsCell)
 					}
+				}
+			case carAtom.s == "swallow":
+				body, ok := t.cdr.(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("swallow requires a list body")
+				}
+				start := body
+				for {
+					if start == Nil {
+						return Nil, nil
+					}
+					_, err := eval(start.car, e)
+					if err != nil {
+						return True, nil
+					}
+					start = start.cdr.(*ConsCell)
 				}
 			case carAtom.s == "def":
 				return evDef(t.cdr.(*ConsCell), e)

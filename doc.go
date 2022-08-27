@@ -242,6 +242,22 @@ foo
 `,
 	},
 	{
+		name:    "swallow",
+		farity:  0,
+		ismulti: true,
+		doc:     "Swallow errors thrown in body, return t if any occur",
+		ftype:   special,
+		argsStr: "(() . body)",
+		examples: `> (swallow
+	(error '(boom)))
+;;=>
+t
+> (swallow 1 2 3)
+;;=>
+()
+`,
+	},
+	{
 		name:    "syntax-quote",
 		farity:  1,
 		ismulti: false,

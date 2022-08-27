@@ -635,3 +635,8 @@
     (error 3))
   (errors '(i fail)
     (error '(i fail))))
+
+(test '(swallow)
+  (is (not (swallow)))
+  (is (not (swallow 1 2 3)))
+  (is (swallow 1 2 (error '(boom)) 3 4)))

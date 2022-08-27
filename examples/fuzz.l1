@@ -1,0 +1,16 @@
+
+;; Try these operators to POC the approach:
+;; (def operators '(+ - * / list cons concat))
+
+;; Don't loop infinitely, bad for the test:
+(def operators (remove (lambda (x) (= x 'loop))
+                       (forms)))
+
+(defn expr ()
+  (cons (randchoice operators)
+        (randigits (randint 10))))
+
+(map (lambda (x)
+       (swallow
+        (eval x)))
+     (repeatedly 10 expr))
