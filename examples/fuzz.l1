@@ -1,3 +1,5 @@
+;; Fuzzing eval tests.  Generate expressions endleslly and see if we
+;; can crash the interpreter.
 
 (defn in? (x l)
   (cond ((not l) ())
@@ -7,37 +9,51 @@
 ;; Try these operators to POC the approach:
 ;; (def operators '(+ - * / list cons concat))
 
-;; Remove operators that muddle the test:
+;; Remove operators that muddle or slow the test:
 (def operators (remove (lambda (x)
                          (in? x '(loop
                                   with-screen
+                                  sleep
+                                  range
                                   screen-start
+                                  eval
                                   readlist)))
                        (forms)))
 
-(defn genint (n)
-  (lambda ()
-    (randint n)))
+(defn oper ()
+  (randchoice operators))
 
-(defn randargs ()
-  (map (lambda (_) ((arg))) (range (randint 10))))
+(defn randpos (n)
+  (inc (randint n)))
 
-(defn arg ()
-  (randchoice (list (constantly t)
-                    (constantly ())
-                    randargs
-                    (genint 10)
-                    (genint 100)
-                    (genint 1000))))
+(defn genatom ()
+  (fuse (randalpha (randpos (randpos (randpos 20))))))
 
-(defn randlist ()
-  (repeatedly (randint 10) (arg)))
+(defn genint ()
+  (fuse (randigits (randpos 3))))
 
-(defn expr ()
-  (cons (randchoice operators)
-        (randargs)))
+(defn gennumlis ()
+  (repeatedly (randint 10) genint))
 
-(dotimes 10000
-  (let ((e (expr)))
-    (println e)
-    (println (swallow (eval e)))))
+(defn args (n)
+  (if (zero? n)
+    ()
+    (cons ((randchoice (concat (list (lambda () (expr (/ (* n 3) 5)))
+                                     (lambda () (args (/ (* n 3) 5)))
+                                     (lambda () (lambda (() . _)))
+                                     (constantly t))
+                               (repeat 5 genatom)
+                               (repeat 10 genint))))
+          (args (dec n)))))
+
+(defn expr (n)
+  (cons (oper) (args n)))
+
+(def ELLIPSIS (fuse (repeat 3 PERIOD)))
+
+(loop
+ (let ((e (expr (randpos (randpos 10)))))
+   (print e ELLIPSIS)
+   (if (swallow (eval e))
+     (println BANG)
+     (println PERIOD))))

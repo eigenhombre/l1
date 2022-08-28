@@ -55,8 +55,7 @@ top:
 		case *ConsCell:
 			argList = t
 		default:
-			// I was unable to reach this with a test:
-			panic("unknown type in lambda arg list")
+			return nil, fmt.Errorf("unknown type in lambda arg list")
 		}
 	}
 	if emptyArgList && restArg == noRestArg {
@@ -68,7 +67,10 @@ top:
 	if body != Nil && body.car != Nil {
 		doc2, ok := body.car.(*ConsCell)
 		if ok && doc2.car.Equal(Atom{"doc"}) {
-			doc = doc2.cdr.(*ConsCell)
+			doc, ok = doc2.cdr.(*ConsCell)
+			if !ok {
+				return nil, fmt.Errorf("doc form is not a list")
+			}
 			body = body.cdr.(*ConsCell) // Skip `doc` part.
 		}
 	}

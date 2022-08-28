@@ -1,5 +1,5 @@
 # API Index
-114 forms available:
+115 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -25,6 +25,7 @@
 [*`comment`*](#comment)
 [`complement`](#complement)
 [`concat`](#concat)
+[`concat2`](#concat2)
 [**`cond`**](#cond)
 [`cons`](#cons)
 [`constantly`](#constantly)
@@ -773,6 +774,32 @@ Args: `(() . lists)`
 > (concat (range 3) (quote (wow)) (reverse (range 3)))
 ;;=>
 (0 1 2 wow 2 1 0)
+
+```
+
+-----------------------------------------------------
+		
+
+## `concat2`
+
+Concatenate two lists
+
+Type: function
+
+Arity: 2 
+
+Args: `(a b)`
+
+
+### Examples
+
+```
+> (concat2 () ())
+;;=>
+()
+> (concat2 (quote (1 2)) (quote (3 4)))
+;;=>
+(1 2 3 4)
 
 ```
 
@@ -2712,9 +2739,9 @@ Simple conditional with single branch
 
 Type: macro
 
-Arity: 2 
+Arity: 1+
 
-Args: `(condition then)`
+Args: `(condition . body)`
 
 
 ### Examples
@@ -2738,9 +2765,9 @@ Complement of the when macro
 
 Type: macro
 
-Arity: 2 
+Arity: 1+
 
-Args: `(condition then)`
+Args: `(condition . body)`
 
 
 ### Examples

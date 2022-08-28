@@ -208,12 +208,18 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 	if !ok {
 		return nil, fmt.Errorf("macro call must be a list")
 	}
-	if err := setLambdaArgsInEnv(e,
-		fn.(*lambdaFn),
-		consToExprs(c.cdr)); err != nil {
+	lambda, ok := fn.(*lambdaFn)
+	if !ok {
+		panic("macro call not a lambda function")
+	}
+	asCons, err := consToExprs(c.cdr)
+	if err != nil {
 		return nil, err
 	}
-	ast := fn.(*lambdaFn).body
+	if err := setLambdaArgsInEnv(e, lambda, asCons); err != nil {
+		return nil, err
+	}
+	ast := lambda.body
 	if ast == Nil {
 		return Nil, nil
 	}
@@ -269,7 +275,7 @@ func splicingUnquote(l *ConsCell) (*ConsCell, error) {
 	switch t := elt.(type) {
 	case *ConsCell:
 		if listStartsWith(t, "splicing-unquote") {
-			return Cons(Atom{"concat"}, Cons(t.cdr.(*ConsCell).car, Cons(nxt, Nil))), nil
+			return Cons(Atom{"concat2"}, Cons(t.cdr.(*ConsCell).car, Cons(nxt, Nil))), nil
 		}
 	default:
 	}
@@ -313,24 +319,26 @@ top:
 		if t == Nil {
 			return Nil, nil
 		}
+		cdrCons, ok := t.cdr.(*ConsCell)
+		if !ok {
+			return nil, fmt.Errorf("malformed list for eval")
+		}
 		// special forms:
 		if carAtom, ok := t.car.(Atom); ok {
 			switch {
 			case carAtom.s == "quote":
-				cdrCons, ok := t.cdr.(*ConsCell)
-				if !ok || cdrCons == Nil {
+				if cdrCons == Nil {
 					return nil, fmt.Errorf("quote needs an argument")
 				}
 				return cdrCons.car, nil
 			case carAtom.s == "syntax-quote":
-				cdrCons, ok := t.cdr.(*ConsCell)
-				if !ok || cdrCons == Nil {
+				if cdrCons == Nil {
 					return nil, fmt.Errorf("syntax-quote needs an argument")
 				}
 				expr = syntaxQuote(cdrCons.car)
 				goto top
 			case carAtom.s == "cond":
-				pairList := t.cdr.(*ConsCell)
+				pairList := cdrCons
 				if pairList == Nil {
 					return Nil, nil
 				}
@@ -360,10 +368,7 @@ top:
 				}
 			// FIXME: Do as a macro:
 			case carAtom.s == "and":
-				pairList, ok := t.cdr.(*ConsCell)
-				if !ok {
-					return nil, fmt.Errorf("and requires a list of expressions")
-				}
+				pairList := cdrCons
 				for {
 					if pairList == Nil {
 						return True, nil
@@ -382,10 +387,7 @@ top:
 				}
 			// FIXME: Do as a macro:
 			case carAtom.s == "or":
-				pairList, ok := t.cdr.(*ConsCell)
-				if !ok {
-					return nil, fmt.Errorf("or requires a list of expressions")
-				}
+				pairList := cdrCons
 				for {
 					if pairList == Nil {
 						return Nil, nil
@@ -403,10 +405,7 @@ top:
 					}
 				}
 			case carAtom.s == "loop":
-				body, ok := t.cdr.(*ConsCell)
-				if !ok {
-					return nil, fmt.Errorf("loop requires a list body")
-				}
+				body := cdrCons
 				for {
 					start := body
 				bodyLoop:
@@ -422,11 +421,7 @@ top:
 					}
 				}
 			case carAtom.s == "swallow":
-				body, ok := t.cdr.(*ConsCell)
-				if !ok {
-					return nil, fmt.Errorf("swallow requires a list body")
-				}
-				start := body
+				start := cdrCons
 				for {
 					if start == Nil {
 						return Nil, nil
@@ -438,16 +433,15 @@ top:
 					start = start.cdr.(*ConsCell)
 				}
 			case carAtom.s == "def":
-				return evDef(t.cdr.(*ConsCell), e)
+				return evDef(cdrCons, e)
 			case carAtom.s == "set!":
-				return evSet(t.cdr.(*ConsCell), e)
+				return evSet(cdrCons, e)
 			case carAtom.s == "defn":
-				return evDefn(t.cdr.(*ConsCell), false, e)
+				return evDefn(cdrCons, false, e)
 			case carAtom.s == "defmacro":
-				return evDefn(t.cdr.(*ConsCell), true, e)
+				return evDefn(cdrCons, true, e)
 			case carAtom.s == "error":
-				cdrCons, ok := t.cdr.(*ConsCell)
-				if !ok || cdrCons == Nil {
+				if cdrCons == Nil {
 					return nil, fmt.Errorf("error requires a non-empty argument list")
 				}
 				errorExpr, err := eval(cdrCons.car, e)
@@ -456,9 +450,9 @@ top:
 				}
 				return nil, fmt.Errorf("%s", errorExpr)
 			case carAtom.s == "errors":
-				return evErrors(t.cdr.(*ConsCell), e)
+				return evErrors(cdrCons, e)
 			case carAtom.s == "let":
-				args := t.cdr.(*ConsCell)
+				args := cdrCons
 				if args == Nil {
 					return nil, fmt.Errorf("let requires a binding list")
 				}
@@ -466,7 +460,10 @@ top:
 				if !ok {
 					return nil, fmt.Errorf("let bindings must be a list")
 				}
-				body := args.cdr.(*ConsCell)
+				body, ok := args.cdr.(*ConsCell)
+				if !ok {
+					return nil, fmt.Errorf("let requires a body")
+				}
 				newEnv := mkEnv(e)
 				for ; bindings != Nil; bindings = bindings.cdr.(*ConsCell) {
 					binding, ok := bindings.car.(*ConsCell)
@@ -513,7 +510,7 @@ top:
 					body = body.cdr.(*ConsCell)
 				}
 			case carAtom.s == "lambda":
-				return mkLambda(t.cdr.(*ConsCell), false, e)
+				return mkLambda(cdrCons, false, e)
 			}
 		}
 		// Functions / normal order of evaluation.  Get function to use first:
@@ -524,7 +521,7 @@ top:
 		// In normal function application, evaluate the arguments executing the
 		// function:
 		evaledList := []Sexpr{}
-		start := t.cdr.(*ConsCell)
+		start := cdrCons
 		for {
 			if start == Nil {
 				break
@@ -574,6 +571,6 @@ top:
 		}
 		return biResult, nil
 	default:
-		panic(fmt.Sprintf("unknown type to eval: %T", t))
+		return nil, fmt.Errorf("unknown expression type: %q", t)
 	}
 }

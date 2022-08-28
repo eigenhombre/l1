@@ -75,7 +75,11 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	if !ok {
 		return nil, fmt.Errorf("'%s' is not a list", args[l-1])
 	}
-	fnArgs = append(singleArgs, consToExprs(c)...)
+	asCons, err := consToExprs(c)
+	if err != nil {
+		return nil, err
+	}
+	fnArgs = append(singleArgs, asCons...)
 
 	// Note: what follows is very similar to the function evaluation
 	// logic in eval(), but TCO (goto) there makes it hard to DRY out with
@@ -934,7 +938,10 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a list", args[0])
 				}
-				exprs := consToExprs(l)
+				exprs, err := consToExprs(l)
+				if err != nil {
+					return nil, err
+				}
 				rand.Shuffle(len(exprs), func(i, j int) {
 					exprs[i], exprs[j] = exprs[j], exprs[i]
 				})
