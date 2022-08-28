@@ -33,8 +33,6 @@ of a list, prepend a quote character:
     > (+ 2 2)
     4
 
-`()` is alternatively called the empty list, or nil.
-
 Numbers are integer values and can be of arbitrary magnitude:
 
     0
@@ -64,10 +62,10 @@ And lists can be turned into atoms or numbers:
 
 ## Boolean Logic
 
-In `l1`, `()` is the only "falsey" value; everything else is "truthy".
-Falsey and truthy are important when evaluating conditional statements
-such as `if`, `when`, or `cond`.  The default truthy value is `t`.
-`t` and `()` evaluate to themselves.
+In `l1`, the empty list `()` is the only "falsey" value; everything
+else is "truthy".  Falsey and truthy are important when evaluating
+conditional statements such as `if`, `when`, or `cond`.  The default
+truthy value is `t`.  `t` and `()` evaluate to themselves.
 
 The `and`, `or` and `not` operators work like they do in most other
 languages:
@@ -103,7 +101,8 @@ atoms and lists are used where strings normally would be:
 (In this example, the `Hello, world!` is output to the terminal, and
 then the return value of `printl`, namely `()`.)
 
-Atom names in a program can start with the characters
+Atom names can be arbitrarily long (they are Go strings under the hood)
+and can start with the characters
 
     abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+*/-=_<>?
 
@@ -116,6 +115,10 @@ handling.  For example:
 
     > (printl '(!Hello, world!))
     unexpected lexeme 'unexpected character '!' in input'
+
+A workaround is to use syntax quote and unquote, described below, to
+dynamically create a new atom name using the `BANG` alias for `!`:
+
     > (printl `(~(fuse `(~BANG Hello,)) world!))
     !Hello, world!
     ()
