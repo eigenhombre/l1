@@ -234,8 +234,8 @@ hide the `acc` argument from the user:
     > (sum-nums '(0 1 2 3 4 5 6 7 8 9))
     45
 
-This version is both tail-recursive (in `inner`), and as convenient to
-use as our first, non-tail-recursive version was.
+In this version, `inner` is tail-recursive, and `sum-nums` is now as
+convenient to use as our first, non-tail-recursive version was.
 
 ## Macros
 
