@@ -40,6 +40,8 @@ func TestParse(t *testing.T) {
 					Cons(Atom{"b"}, Nil)),
 					Cons(Cons(Atom{"splicing-unquote"},
 						Cons(Atom{"c"}, Nil)), Nil))), Nil))},
+		{"#_(a b c)", Cons(Atom{"comment"}, Cons(Cons(Atom{"a"}, Cons(Atom{"b"}, Cons(Atom{"c"}, Nil))), Nil))},
+		{"#_1", Cons(Atom{"comment"}, Cons(Num(1), Nil))},
 	}
 	for _, test := range tests {
 		got, err := lexAndParse(test.input)
@@ -48,7 +50,7 @@ func TestParse(t *testing.T) {
 			continue
 		}
 		if len(got) != 1 {
-			t.Errorf("lexAndParse(%q) returned %d values, want 1", test.input, len(got))
+			t.Errorf("lexAndParse(%q) returned %d values ('%s'), want 1", test.input, len(got), got)
 			continue
 		}
 		if !reflect.DeepEqual(got[0], test.want) {

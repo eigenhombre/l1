@@ -20,6 +20,7 @@ const (
 	itemUnquote
 	itemSplicingUnquote
 	itemDot
+	itemCommentNext
 	itemError
 )
 
@@ -34,6 +35,7 @@ var typeMap = map[lexutil.ItemType]string{
 	itemUnquote:         "UNQUOTE",
 	itemSplicingUnquote: "SPLICINGUNQUOTE",
 	itemDot:             "DOT",
+	itemCommentNext:     "COMMENTNEXT",
 	itemError:           "ERR",
 }
 
@@ -60,6 +62,8 @@ func LexRepr(i lexutil.LexItem) string {
 		return "SPLICINGUNQUOTE"
 	case itemDot:
 		return "DOT"
+	case itemCommentNext:
+		return "COMMENTNEXT"
 	default:
 		panic("bad item type")
 	}
@@ -108,6 +112,9 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 			return lexUnquote
 		case r == '.':
 			l.Emit(itemDot)
+		case r == '#':
+			l.Backup()
+			return lexCommentNext
 		default:
 			l.Errorf("unexpected character %q in input", itemError, r)
 		}
@@ -125,6 +132,18 @@ func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
 	l.Accept(initialAtomChars)
 	l.AcceptRun(laterAtomChars)
 	l.Emit(itemAtom)
+	return lexStart
+}
+
+func lexCommentNext(l *lexutil.Lexer) lexutil.StateFn {
+	l.Accept("#")
+	nextRune := l.Peek()
+	if nextRune == '_' {
+		l.Next()
+		l.Emit(itemCommentNext)
+		return lexStart
+	}
+	l.Errorf("unexpected character %q in input", itemError, nextRune)
 	return lexStart
 }
 

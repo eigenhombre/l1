@@ -259,6 +259,19 @@ is the same as
           (names '(moe curly)))
       `(hello, ~name as well as ~@names))
 
+In addition to the quote (`'`), syntax-quote (`` ` ``), unquote (`~`),
+and splicing unquote (`~@`) shortcuts, the shortcut `#_` is available, which is equivalent to `(comment ...)`, e.g.,
+
+    #_(this is a commented form)
+
+is equivalent to
+
+    (comment (this is a commented form))
+
+## Reader Shortcuts
+
+`l1` does not have reader macros per se, but the following operators do have
+
 ## Text User Interfaces
 
 `l1` has a few built-in functions for creating simple text UIs:

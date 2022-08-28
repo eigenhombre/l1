@@ -52,6 +52,12 @@ func parseNext(tokens []lexutil.LexItem, i int) (Sexpr, int, error) {
 			return nil, 0, err
 		}
 		return item, incr + 1, nil
+	case itemCommentNext:
+		item, incr, err := handleQuoteItem(tokens, i+1, "comment")
+		if err != nil {
+			return nil, 0, err
+		}
+		return item, incr + 1, nil
 	case itemLeftParen:
 		item, incr, err := parseList(tokens[i:])
 		if err != nil {

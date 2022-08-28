@@ -22,6 +22,7 @@ func TestLex(t *testing.T) {
 	BACKQUOTE := abbrev(itemSyntaxQuote)
 	UNQUOTE := abbrev(itemUnquote)
 	SPLICINGUNQUOTE := abbrev(itemSplicingUnquote)
+	COMMENTNEXT := abbrev(itemCommentNext)
 	Err := abbrev(itemError)
 	toks := func(items ...lexutil.LexItem) []lexutil.LexItem {
 		if len(items) == 0 {
@@ -99,6 +100,8 @@ func TestLex(t *testing.T) {
 			Err("unexpected character '&' in input"),
 			N("3"),
 			RP(")"))},
+		{"#_1", toks(COMMENTNEXT("#_"), N("1"))},
+		{"#_(1 2 3)", toks(COMMENTNEXT("#_"), LP("("), N("1"), N("2"), N("3"), RP(")"))},
 	}
 
 	for _, test := range tests {
