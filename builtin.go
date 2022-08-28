@@ -75,7 +75,11 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	if !ok {
 		return nil, fmt.Errorf("'%s' is not a list", args[l-1])
 	}
-	fnArgs = append(singleArgs, consToExprs(c)...)
+	asCons, err := consToExprs(c)
+	if err != nil {
+		return nil, err
+	}
+	fnArgs = append(singleArgs, asCons...)
 
 	// Note: what follows is very similar to the function evaluation
 	// logic in eval(), but TCO (goto) there makes it hard to DRY out with
@@ -793,6 +797,9 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a number", args[0])
 				}
+				if num.Equal(N(0)) {
+					return nil, fmt.Errorf("randint expects a non-zero argument")
+				}
 				r := rand.New(rand.NewSource(time.Now().UnixNano()))
 				return Num(r.Intn(int(num.bi.Uint64()))), nil
 			},
@@ -910,7 +917,10 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a list", args[2])
 				}
-				termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
+				err := termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
+				if err != nil {
+					return nil, err
+				}
 				return Nil, nil
 			},
 		},
@@ -928,7 +938,10 @@ func init() {
 				if !ok {
 					return nil, fmt.Errorf("'%s' is not a list", args[0])
 				}
-				exprs := consToExprs(l)
+				exprs, err := consToExprs(l)
+				if err != nil {
+					return nil, err
+				}
 				rand.Shuffle(len(exprs), func(i, j int) {
 					exprs[i], exprs[j] = exprs[j], exprs[i]
 				})

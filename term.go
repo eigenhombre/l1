@@ -44,7 +44,10 @@ func termEnd() error {
 	return nil
 }
 
-func termDrawText(x, y int, str string) {
+func termDrawText(x, y int, str string) error {
+	if screen == nil {
+		return fmt.Errorf("screen not initialized")
+	}
 	for _, c := range str {
 		var combc []rune
 		w := runewidth.RuneWidth(c)
@@ -58,6 +61,7 @@ func termDrawText(x, y int, str string) {
 		x += w
 	}
 	screen.Show()
+	return nil
 }
 
 func termSize() (int, int, error) {

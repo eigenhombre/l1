@@ -242,6 +242,27 @@ foo
 `,
 	},
 	{
+		name:    "set!",
+		farity:  2,
+		ismulti: false,
+		doc:     "Update a value in an existing binding",
+		ftype:   special,
+		argsStr: "(name value)",
+		examples: `> (def a 1)
+;;=>
+1
+> a
+;;=>
+1
+> (set! a 2)
+;;=>
+2
+> a
+;;=>
+2
+`,
+	},
+	{
 		name:    "swallow",
 		farity:  0,
 		ismulti: true,

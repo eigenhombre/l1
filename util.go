@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"unicode"
 	"unicode/utf8"
 )
@@ -12,14 +13,17 @@ func mkListAsConsWithCdr(xs []Sexpr, cdr Sexpr) Sexpr {
 	return Cons(xs[0], mkListAsConsWithCdr(xs[1:], cdr))
 }
 
-func consToExprs(argList Sexpr) []Sexpr {
+func consToExprs(argList Sexpr) ([]Sexpr, error) {
 	args := []Sexpr{}
 	for argList != Nil {
-		cons := argList.(*ConsCell)
+		cons, ok := argList.(*ConsCell)
+		if !ok {
+			return nil, fmt.Errorf("expected list, got %q", argList)
+		}
 		args = append(args, cons.car)
 		argList = cons.cdr
 	}
-	return args
+	return args, nil
 }
 
 func capitalize(s string) string {

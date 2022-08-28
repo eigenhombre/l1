@@ -7,6 +7,18 @@
   (doc (return the argument))
   x)
 
+(defn concat2 (a b)
+  (doc (concatenate two lists)
+       (used in syntax quote expansion -- use only builtin functions)
+       (as it is used during syntax quote expansion, it needs to be
+           defined early and to use native functinos only)
+       (examples
+        (concat2 () ())
+        (concat2 '(1 2) '(3 4))))
+  (cond ((not a) b)
+        (t (cons (car a)
+                 (concat2 (cdr a) b)))))
+
 (defmacro if (condition then else)
   (doc (simple conditional with two branches)
        (examples
@@ -34,24 +46,6 @@
         (comment twas brillig, and the slithy toves
                  did gyre and gimble in the wabe))))
 
-(defmacro when (condition then)
-  (doc (simple conditional with single branch)
-       (examples
-        (when ()
-          (/ 1 0))
-        (when t
-          '(the sun rises in the east))))
-  `(cond (~condition ~then)))
-
-(defmacro when-not (condition then)
-  (doc (complement of the when macro)
-       (examples
-        (when-not ()
-          '(do all the things))
-        (when-not t
-          (error '(oh no mister bill)))))
-  `(cond ((not ~condition) ~then)))
-
 (defmacro progn (() . body)
   (doc (execute multiple statements, returning the last)
        (examples
@@ -62,20 +56,31 @@
           3)))
   `(let () ~@body))
 
+(defmacro when (condition . body)
+  (doc (simple conditional with single branch)
+       (examples
+        (when ()
+          (/ 1 0))
+        (when t
+          '(the sun rises in the east))))
+  `(cond (~condition (progn ~@body))))
+
+(defmacro when-not (condition . body)
+  (doc (complement of the when macro)
+       (examples
+        (when-not ()
+          '(do all the things))
+        (when-not t
+          (error '(oh no mister bill)))))
+  `(when (not ~condition)
+     ~@body))
+
 (defmacro foreach (x xs . body)
   (doc (execute body for each value in a list))
   `(progn
      (map (lambda (~x)
             ~@body)
           ~xs)
-     ()))
-
-(defmacro dotimes (n . body)
-  (doc (execute body for each value in a list))
-  `(progn
-     (map (lambda (_)
-            ~@body)
-          (range ~n))
      ()))
 
 (defn reduce (f x . args)
@@ -275,7 +280,7 @@
   (doc (return a list of length n whose elements are all x)
        (examples
         (repeat 5 'repetitive)))
-  (when-not (zero? n)
+  (when (pos? n)
     (cons x (repeat (dec n) x))))
 
 (defn repeatedly (n f)
@@ -331,7 +336,9 @@
         (** 1 0)
         (** 2 4)
         (** 10 10)))
-  (apply * (repeat m n)))
+  (if (zero? m)
+    1
+    (* n (** n (dec m)))))
 
 (defn capitalize (a)
   (doc (return the atom argument, capitalized)
@@ -356,6 +363,16 @@
   (repeatedly n
               (lambda ()
                 (randchoice (split 'abcdefghijklmnopqrstuvwxyz)))))
+
+(defmacro dotimes (n . body)
+  (doc (execute body for each value in a list))
+  ;; FIXME: Use a real gensym:
+  (let ((inner-sym (fuse (cons 'gensym (randigits 10)))))
+    `(let ((~inner-sym (lambda ~inner-sym (count)
+                         (when-not (zero? count)
+                           ~@body
+                           (~inner-sym (- count 1))))))
+       (~inner-sym n))))
 
 (defn butlast (l)
   (doc (return everything but the last element)

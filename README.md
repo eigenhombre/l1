@@ -157,6 +157,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
            comment  M    0+  Ignore the expressions in the block
         complement  F    1   Return the logical complement of the supplied function
             concat  F    0+  Concatenenate any number of lists
+           concat2  F    2   Concatenate two lists
               cond  S    0+  Fundamental branching construct
               cons  N    2   Add an element to the front of a (possibly empty) list
         constantly  F    1   Given a value, return a function which always returns that value
@@ -229,6 +230,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
        screen-size  N    0   Return the screen size (width, height)
       screen-start  N    0   Start screen for text UIs
       screen-write  N    3   Write a string to the screen
+              set!  S    2   Update a value in an existing binding
            shuffle  N    1   Return a (quickly!) shuffled list
              sleep  N    1   Sleep for the given number of milliseconds
               some  F    2   Return f applied to first element for which that result is truthy, else ()
@@ -241,8 +243,8 @@ installing `l1` by looking under `$GOPATH`. For example, if the
              true?  F    1   Return t if the argument is t
             upcase  N    1   Return the uppercase version of the given atom
            version  N    0   Return the version of the interpreter
-              when  M    2   Simple conditional with single branch
-          when-not  M    2   Complement of the when macro
+              when  M    1+  Simple conditional with single branch
+          when-not  M    1+  Complement of the when macro
        with-screen  M    0+  Prepare for and clean up after screen operations
              zero?  F    1   Return true iff the supplied argument is zero
     > ^D
