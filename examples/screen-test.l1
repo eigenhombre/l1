@@ -1,6 +1,8 @@
-(let ((key-received (with-screen
-                     (screen-clear)
-                     (screen-write 10 10 '(hello this is a test))
-                     (screen-write 10 12 '(press any key to continue))
-                     (screen-get-key))))
-  (printl `(I received the ~key-received key!)))
+(let ((result (with-screen
+               (screen-clear)
+               (screen-write 10 10 '(hello this is a test))
+               (screen-write 10 12 '(press any key to continue))
+               (list (screen-get-key)
+                     (screen-size)))))
+  (printl `(I received the ~(car result) key!
+              The screen is ~(car (cdr result)) in size.)))
