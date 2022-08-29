@@ -2,7 +2,7 @@
 
 [Jump to API](#api-index) / list of operators
 
-# Expressions
+## Expressions
 
 Expressions in `l1` are atoms, lists, numbers, or functions.
 
@@ -60,7 +60,7 @@ And lists can be turned into atoms or numbers:
     > (fuse '(10 9 8 7 6 5 4 3 2 1))
     10987654321
 
-# Boolean Logic
+## Boolean Logic
 
 In `l1`, the empty list `()` is the only "falsey" value; everything
 else is "truthy".  Falsey and truthy are important when evaluating
@@ -163,7 +163,7 @@ some of which may be helpful for text games and other diversions:
     ()
     >
 
-# Functions
+## Functions
 
 Functions come in two flavors: temporary functions, called "lambda"
 functions for historical reasons, and functions which are defined and
@@ -237,7 +237,7 @@ hide the `acc` argument from the user:
 In this version, `inner` is tail-recursive, and `sum-nums` is now as
 convenient to use as our first, non-tail-recursive version was.
 
-# Macros
+## Macros
 
 For those familiar with macros (if you're not I recommend Paul
 Graham's *On Lisp*), `l1` macros are
@@ -272,7 +272,7 @@ is equivalent to
 
     (comment (this is a commented form))
 
-# Text User Interfaces
+## Text User Interfaces
 
 `l1` has a few built-in functions for creating simple text UIs:
 
@@ -308,7 +308,7 @@ then you can run `hello.l1` "by itself," without explicitly invoking `l1`:
     hello world
     $
 
-# Emacs Integration
+## Emacs Integration
 
 If you are using Emacs, you can set it up to work with `l1` as an "inferior
 lisp" process as described in [the Emacs manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/External-Lisp.html).
