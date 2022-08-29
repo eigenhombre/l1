@@ -1,3 +1,5 @@
+#!/usr/bin/env l1
+
 ;; Adapted from Norvig, Paradigms of Artificial Intelligence
 ;; Programming, p. 36 (MIT License):
 (defn one-of (l) (list (randchoice l)))

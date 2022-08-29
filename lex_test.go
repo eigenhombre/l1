@@ -23,6 +23,7 @@ func TestLex(t *testing.T) {
 	UNQUOTE := abbrev(itemUnquote)
 	SPLICINGUNQUOTE := abbrev(itemSplicingUnquote)
 	COMMENTNEXT := abbrev(itemCommentNext)
+	SHEBANG := abbrev(itemShebang)
 	Err := abbrev(itemError)
 	toks := func(items ...lexutil.LexItem) []lexutil.LexItem {
 		if len(items) == 0 {
@@ -102,14 +103,16 @@ func TestLex(t *testing.T) {
 			RP(")"))},
 		{"#_1", toks(COMMENTNEXT("#_"), N("1"))},
 		{"#_(1 2 3)", toks(COMMENTNEXT("#_"), LP("("), N("1"), N("2"), N("3"), RP(")"))},
+		{"#!/bin/bash\n1(+)\n", toks(SHEBANG("#!/bin/bash"),
+			N("1"), LP("("), A("+"), RP(")"))},
 	}
 
 	for _, test := range tests {
 		items := lexItems(test.input)
 		if !reflect.DeepEqual(items, test.output) {
-			t.Errorf("%q: expected %v, got %v", test.input, test.output, items)
+			t.Errorf("%q: expected %v, got %v ... ERROR", test.input, test.output, items)
 		} else {
-			t.Logf("%q -> %v", test.input, items)
+			t.Logf("%q -> %v ... OK", test.input, items)
 		}
 	}
 }

@@ -21,6 +21,7 @@ const (
 	itemSplicingUnquote
 	itemDot
 	itemCommentNext
+	itemShebang
 	itemError
 )
 
@@ -36,6 +37,7 @@ var typeMap = map[lexutil.ItemType]string{
 	itemSplicingUnquote: "SPLICINGUNQUOTE",
 	itemDot:             "DOT",
 	itemCommentNext:     "COMMENTNEXT",
+	itemShebang:         "SHEBANG",
 	itemError:           "ERR",
 }
 
@@ -64,6 +66,8 @@ func LexRepr(i lexutil.LexItem) string {
 		return "DOT"
 	case itemCommentNext:
 		return "COMMENTNEXT"
+	case itemShebang:
+		return "SHEBANG"
 	default:
 		panic("bad item type")
 	}
@@ -77,7 +81,7 @@ func isSpace(r rune) bool {
 	return strings.ContainsRune(" \t\n\r", r)
 }
 
-func ignoreComment(l *lexutil.Lexer) {
+func ignoreToEndOfLine(l *lexutil.Lexer) {
 	for {
 		if r := l.Next(); r == '\n' || r == lexutil.EOF {
 			return
@@ -91,7 +95,7 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 		case isSpace(r):
 			l.Ignore()
 		case r == ';':
-			ignoreComment(l)
+			ignoreToEndOfLine(l)
 		case r == lexutil.EOF:
 			return nil
 		case isDigit(r) || r == '-' || r == '+':
@@ -114,7 +118,7 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 			l.Emit(itemDot)
 		case r == '#':
 			l.Backup()
-			return lexCommentNext
+			return lexHashSugar
 		default:
 			l.Errorf("unexpected character %q in input", itemError, r)
 		}
@@ -135,13 +139,23 @@ func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
 	return lexStart
 }
 
-func lexCommentNext(l *lexutil.Lexer) lexutil.StateFn {
+func lexHashSugar(l *lexutil.Lexer) lexutil.StateFn {
 	l.Accept("#")
 	nextRune := l.Peek()
 	if nextRune == '_' {
 		l.Next()
 		l.Emit(itemCommentNext)
 		return lexStart
+	} else if nextRune == '!' {
+		l.Next()
+		for {
+			r := l.Next()
+			if r == '\n' || r == lexutil.EOF {
+				l.Backup()
+				l.Emit(itemShebang)
+				return lexStart
+			}
+		}
 	}
 	l.Errorf("unexpected character %q in input", itemError, nextRune)
 	return lexStart

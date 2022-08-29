@@ -74,6 +74,10 @@ func parseNext(tokens []lexutil.LexItem, i int) (Sexpr, int, error) {
 func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 	ret := []Sexpr{}
 	i := 0
+	// Look for shebang, only at beginning of file:
+	if len(tokens) > 0 && tokens[0].Typ == itemShebang {
+		i++
+	}
 	for {
 		if i >= len(tokens) {
 			break
