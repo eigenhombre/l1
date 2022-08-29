@@ -612,7 +612,7 @@ func init() {
 			NAry:       false,
 			ArgString:  "()",
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
-				shortDocStr(e)
+				fmt.Println(shortDocStr(e))
 				return Nil, nil
 			},
 		},
