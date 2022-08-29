@@ -653,7 +653,11 @@
   (set! abcd 6)
   (= abcd 6))
 
-(test '(fuzz found these strange birds, each of which crashed the interpreter)
+(test '(comment sugar)
+  #_(/ 1 0))
+
+(test '(fuzz found these strange birds, each of which crashed
+             the interpreter)
   (errors '(needs an argument)
     (quote))
   (defmacro x () () ())
