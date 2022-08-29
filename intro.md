@@ -271,9 +271,27 @@ is equivalent to
 
     (comment (this is a commented form))
 
-## Reader Shortcuts
+## Running l1 Programs as Command Line Scripts
 
-`l1` does not have reader macros per se, but the following operators do have
+Programs can be run by giving the program name as an argument to `l1`:
+
+    l1 hello.l1
+
+However, if you add `#!/usr/bin/env l1` at the beginning of an `l1` file:
+
+    #!/usr/bin/env l1
+    ;; hello.l1
+    (printl '(hello world))
+
+and set the execute bit on the file permissions:
+
+    chmod +x hello.l1
+
+then you can run hello.l1 "by itself," without explicitly invoking `l1`:
+
+    $ ./hello.l1
+    hello world
+    $
 
 ## Text User Interfaces
 
