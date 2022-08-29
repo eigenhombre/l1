@@ -1,5 +1,5 @@
 # API Index
-115 forms available:
+116 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -47,6 +47,7 @@
 [*`foreach`*](#foreach)
 [`forms`](#forms)
 [`fuse`](#fuse)
+[`gensym`](#gensym)
 [`help`](#help)
 [`identity`](#identity)
 [*`if`*](#if)
@@ -1320,6 +1321,32 @@ ABC
 > (fuse (reverse (range 10)))
 ;;=>
 9876543210
+
+```
+
+-----------------------------------------------------
+		
+
+## `gensym`
+
+Return a new symbol
+
+Type: native function
+
+Arity: 0+
+
+Args: `(() . x)`
+
+
+### Examples
+
+```
+> (gensym)
+;;=>
+<gensym-1>
+> (gensym (quote x))
+;;=>
+<gensym-x-2>
 
 ```
 

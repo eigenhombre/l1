@@ -366,8 +366,7 @@
 
 (defmacro dotimes (n . body)
   (doc (execute body for each value in a list))
-  ;; FIXME: Use a real gensym:
-  (let ((inner-sym (fuse (cons 'gensym (randigits 10)))))
+  (let ((inner-sym (gensym)))
     `(let ((~inner-sym (lambda ~inner-sym (count)
                          (when-not (zero? count)
                            ~@body

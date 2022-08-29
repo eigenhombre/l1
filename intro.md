@@ -242,12 +242,13 @@ convenient to use as our first, non-tail-recursive version was.
 For those familiar with macros (if you're not I recommend Paul
 Graham's *On Lisp*), `l1` macros are
 [non-hygienic](https://en.wikipedia.org/wiki/Hygienic_macro) by
-default and there is no built-in gensym utility
-([yet](https://github.com/eigenhombre/l1/issues/63)).  Collisions can
-be made arbitrarily unlikely by constructing random atom names:
+default.  Gensyms, unique atom names useful for writing safe macros,
+are available via the `gensym` built-in function:
 
-    (defn gensym ()
-      (fuse (concat (randalpha 5) (randigits 5))))
+    > (gensym)
+    <gensym-0>
+    > (gensym 'foo)
+    <gensym-foo-1>
 
 The traditional `syntax-quote`, `unquote`, and `splicing-unquote` are available, and
 have sugared equivalents:

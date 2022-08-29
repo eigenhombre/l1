@@ -656,6 +656,16 @@
 (test '(comment sugar)
   #_(/ 1 0))
 
+(test '(gensym)
+  (is (= '<gensym- (fuse (take 8 (split (gensym))))))
+  (is (= '<gensym-foo (fuse (take 11 (split (gensym 'foo))))))
+  (is (not (= (gensym) (gensym))))
+  (is (not (= (gensym 'foo) (gensym 'foo))))
+  (errors '(expects an atom)
+    (gensym (range 5)))
+  (errors '(0 or 1 arguments)
+    (gensym 'really 'unique)))
+
 (test '(fuzz found these strange birds, each of which crashed
              the interpreter)
   (errors '(needs an argument)

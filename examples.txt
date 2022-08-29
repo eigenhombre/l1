@@ -68,6 +68,7 @@ l1 - a Lisp interpreter.
        foreach  M    2+  Execute body for each value in a list
          forms  N    0   Return available operators, as a list
           fuse  N    1   Fuse a list of numbers or atoms into a single atom
+        gensym  N    0+  Return a new symbol
           help  N    0   Print this message
       identity  F    1   Return the argument
             if  M    3   Simple conditional with two branches

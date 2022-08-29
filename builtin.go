@@ -605,6 +605,30 @@ func init() {
 				}
 			},
 		},
+		"gensym": {
+			Name:       "gensym",
+			Docstring:  "Return a new symbol",
+			FixedArity: 0,
+			NAry:       true,
+			ArgString:  "(() . x)",
+			Examples: E(
+				L(A("gensym")),
+				L(A("gensym"), QA("x")),
+			),
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				if len(args) != 0 && len(args) != 1 {
+					return nil, fmt.Errorf("gensym expects 0 or 1 arguments")
+				}
+				if len(args) == 0 {
+					return Atom{gensym("")}, nil
+				}
+				prefix, ok := args[0].(Atom)
+				if !ok {
+					return nil, fmt.Errorf("gensym expects an atom as its first argument")
+				}
+				return Atom{gensym("-" + prefix.s)}, nil
+			},
+		},
 		"help": {
 			Name:       "help",
 			Docstring:  "Print this message",

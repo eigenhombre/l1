@@ -1,1 +1,3 @@
-(println (quote (hello world)))
+#!/usr/bin/env l1
+;; hello.l1
+(printl '(hello world))
