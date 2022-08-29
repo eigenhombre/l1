@@ -287,7 +287,7 @@ and set the execute bit on the file permissions:
 
     chmod +x hello.l1
 
-then you can run hello.l1 "by itself," without explicitly invoking `l1`:
+then you can run `hello.l1` "by itself," without explicitly invoking `l1`:
 
     $ ./hello.l1
     hello world
