@@ -86,6 +86,8 @@ func initGlobals() env {
 	globals.Set("PERIOD", Atom{"."})
 	globals.Set("COMMA", Atom{","})
 	globals.Set("COLON", Atom{":"})
+	globals.Set("HASH", Atom{"#"})
+	globals.Set("ATSIGN", Atom{"@"})
 	return globals
 }
 

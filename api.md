@@ -1,5 +1,5 @@
 # API Index
-121 forms available:
+123 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -68,6 +68,8 @@
 [`macroexpand-1`](#macroexpand-1)
 [`map`](#map)
 [`mapcat`](#mapcat)
+[`max`](#max)
+[`min`](#min)
 [`neg?`](#neg?)
 [`not`](#not)
 [`nth`](#nth)
@@ -1844,6 +1846,64 @@ Args: `(f l)`
 > (mapcat range (range 5))
 ;;=>
 (0 0 1 0 1 2 0 1 2 3)
+
+```
+
+-----------------------------------------------------
+		
+
+## `max`
+
+Find maximum of one or more numbers
+
+Type: function
+
+Arity: 0+
+
+Args: `(() . args)`
+
+
+### Examples
+
+```
+> (max -5)
+;;=>
+1
+> (max 2 3)
+;;=>
+3
+> (apply max (range 10))
+;;=>
+9
+
+```
+
+-----------------------------------------------------
+		
+
+## `min`
+
+Find minimum of one or more numbers
+
+Type: function
+
+Arity: 0+
+
+Args: `(() . args)`
+
+
+### Examples
+
+```
+> (min -5)
+;;=>
+1
+> (min 2 3)
+;;=>
+2
+> (apply min (range 10))
+;;=>
+0
 
 ```
 

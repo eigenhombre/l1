@@ -507,6 +507,8 @@
        (let* (~@(cdr pairs))
          ~@body))))
 
+(def first car)
+
 (defn second (l)
   (doc (return the second element of a list,
                or () if not enough elements)
@@ -546,3 +548,30 @@
   (lambda (() . more)
     (apply f (concat args more))))
 
+(defn max (() . args)
+  (doc (find maximum of one or more numbers)
+       (examples
+        (max -5)
+        (max 2 3)
+        (apply max (range 10))))
+  (let ((n (len args))
+        (n1 (first args))
+        (n2 (second args)))
+    (cond ((zero? n) (error '(max needs at least one number)))
+          ((= 1 n) n)
+          ((= 2 n) (if (< n1 n2) n2 n1))
+          (t (reduce max (max n1 n2) (cdr (cdr args)))))))
+
+(defn min (() . args)
+  (doc (find minimum of one or more numbers)
+       (examples
+        (min -5)
+        (min 2 3)
+        (apply min (range 10))))
+  (let ((n (len args))
+        (n1 (first args))
+        (n2 (second args)))
+    (cond ((zero? n) (error '(min needs at least one number)))
+          ((= 1 n) n)
+          ((= 2 n) (if (< n2 n1) n2 n1))
+          (t (reduce min (min n1 n2) (cdr (cdr args)))))))

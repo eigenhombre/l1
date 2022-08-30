@@ -89,6 +89,8 @@ l1 - a Lisp interpreter.
  macroexpand-1  N    1   Expand a macro
            map  F    2   Apply the supplied function to every element in the supplied list
         mapcat  F    2   Map a function onto a list and concatenate results
+           max  F    0+  Find maximum of one or more numbers
+           min  F    0+  Find minimum of one or more numbers
           neg?  F    1   Return true iff the supplied integer argument is less than zero
            not  N    1   Return t if the argument is nil, () otherwise
            nth  F    2   Find the nth value of a list, starting from zero
