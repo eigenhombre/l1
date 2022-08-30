@@ -1,3 +1,3 @@
 package main
 
-var version string = "v0.0.17-dirty"
+var version string = "v0.0.18-dirty"
