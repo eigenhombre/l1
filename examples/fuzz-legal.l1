@@ -1,5 +1,7 @@
 #!/usr/bin/env l1
 
+;; fuzzing variant which only creates and evaluates legally evaluable expressions.
+
 (defn partial (f . args)
   (doc (partial function application)
        (return a new function which wraps the supplied arguments))
@@ -54,7 +56,7 @@
 (defn quote-list (n)
   (list 'quote ((one-of range
                         nums)
-                n)))
+                (cool n))))
 
 (defn boolean (_)
   (one-of t ()))
@@ -62,7 +64,7 @@
 (defn dolen (n)
   (list 'len ((one-of quote-list
                       dosplit)
-              n)))
+              (cool n))))
 
 (defn dosplit (n)
   (list 'split
@@ -76,10 +78,9 @@
            boolean)
    n))
 
-(foreach n (range 1000)
-  (dotimes 10
-    (let ((e (expr n)))
-      (println e
-               '==>
-               (eval e))
-      (println))))
+(while t
+  (let ((e (expr 100)))
+    (println e
+             '==>
+             (eval e))
+    (println)))

@@ -1344,10 +1344,10 @@ Args: `(() . x)`
 ```
 > (gensym)
 ;;=>
-<gensym-6>
+<gensym-1>
 > (gensym (quote x))
 ;;=>
-<gensym-x-7>
+<gensym-x-2>
 
 ```
 
@@ -2754,7 +2754,7 @@ Args: `()`
 ```
 > (version)
 ;;=>
-(0 0 17 dirty)
+(0 0 18 dirty)
 
 ```
 

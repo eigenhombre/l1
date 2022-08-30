@@ -237,6 +237,24 @@ hide the `acc` argument from the user:
 In this version, `inner` is tail-recursive, and `sum-nums` is now as
 convenient to use as our first, non-tail-recursive version was.
 
+## Flow of Control
+
+In addition to the basic conditional statements `cond`, `if`,
+`if-not`, `when`, and `when-not`, flow of control is generally
+implemented via recursion, as it is in Scheme, and inspection of its
+core library
+[`l1.l1`](https://github.com/eigenhombre/l1/blob/master/l1.l1) will
+show several examples of recursive functions being used as the primary
+recurrence method. A few other control flow methods are also
+available: [`while`](#while), which loops so long as a condition is
+true; [`dotimes`](#dotimes), which executes a body of statements a
+given number of times; [`foreach`](#foreach), which executes a body of
+statements for each element in a loop; and [`loop`](#loop), which
+loops forever.  Macros can be used to create new control abstractions;
+however, possibilities are somewhat restricted compared to some
+languages, due to the inability of `l1` to handle branches or "goto"
+statements.
+
 ## Macros
 
 For those familiar with macros (if you're not I recommend Paul
