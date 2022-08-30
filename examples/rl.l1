@@ -1,0 +1,82 @@
+#!/usr/bin/env l1
+
+;; Beginnings of a roguelike game
+
+(defn listlen (msg)
+  (let ((words-len (apply + (map (comp len split) msg)))
+        (spaces-len (dec (len msg))))
+    (+ words-len spaces-len)))
+
+(defn write-width-centered (h msg)
+  (let* ((dims (screen-size))
+         (w (- (/ (car dims) 2)
+               (/ (listlen msg) 2))))
+    (screen-write w h msg)))
+
+(defn press-any-key () (screen-get-key))
+
+(defn intro ()
+  (screen-clear)
+  (write-width-centered 10 '(O N O M A T))
+  (write-width-centered 12 '(press any key to continue))
+  (press-any-key)
+  (screen-clear))
+
+(def MAXROOM 20)
+(def MINROOM 4)
+
+(defn make-room (screen-dims)
+  (let* ((w (first screen-dims))
+         (h (second screen-dims))
+         (room-width (min MAXROOM
+                          (max MINROOM
+                               (inc (randint (dec w))))))
+         (room-height (min MAXROOM
+                           (max MINROOM
+                                (inc (randint (dec h))))))
+         (room-pos-w (inc (randint (inc (- w room-width)))))
+         (room-pos-h (inc (randint (inc (- h room-height))))))
+    (list room-pos-w
+          room-pos-h
+          room-width
+          room-height)))
+
+(defn room-x (room)      (nth 0 room))
+(defn room-y (room)      (nth 1 room))
+(defn room-width (room)  (nth 2 room))
+(defn room-height (room) (nth 3 room))
+
+(defn random-position-in-room (room)
+  (list (+ (room-x room) (randint (room-width room)))
+        (+ (room-y room) (randint (room-height room)))))
+
+(defn draw-room (room)
+  (foreach h (map (partial + (room-y room))
+                  (range (room-height room)))
+    (screen-write (room-x room) h
+                  (list (fuse (repeat (room-width room)
+                                      PERIOD))))))
+
+(defn make-player (player-position)
+  player-position)
+
+(defn player-x (player)
+  (first player))
+
+(defn player-y (player)
+  (second player))
+
+(defn draw-player (player)
+  (screen-write (player-x player)
+                (player-y player)
+                (list ATSIGN)))
+
+(with-screen
+ (intro)
+ (let* ((dims (screen-size))
+        (room (make-room dims))
+        (player-pos (random-position-in-room room))
+        (player (make-player player-pos)))
+   (draw-room room)
+   (draw-player player))
+ (press-any-key))
