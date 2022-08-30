@@ -611,10 +611,6 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . x)",
-			Examples: E(
-				L(A("gensym")),
-				L(A("gensym"), QA("x")),
-			),
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
 				if len(args) != 0 && len(args) != 1 {
 					return nil, fmt.Errorf("gensym expects 0 or 1 arguments")

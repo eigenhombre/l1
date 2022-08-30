@@ -191,6 +191,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
               last  F    1   Return the last item in a list
                len  N    1   Return the length of a list
                let  S    1+  Create a local scope with bindings
+              let*  M    1+  Let form with ability to refer to previously-bound pairs in the binding list
               list  N    0+  Return a list of the given arguments
              list*  F    0+  Create a list by consing everything but the last arg onto the last
              list?  N    1   Return t if the argument is a list, () otherwise

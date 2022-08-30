@@ -257,8 +257,8 @@ statements.
 
 ## Macros
 
-For those familiar with macros (if you're not I recommend Paul
-Graham's *On Lisp*), `l1` macros are
+For those familiar with macros (I recommend Paul
+Graham's *On Lisp* for those who are not), `l1` macros are
 [non-hygienic](https://en.wikipedia.org/wiki/Hygienic_macro) by
 default.  Gensyms, unique atom names useful for writing safe macros,
 are available via the `gensym` built-in function:
@@ -274,6 +274,8 @@ have sugared equivalents:
     (let ((name 'larry)
           (names '(moe curly)))
       (syntax-quote (hello, (unquote name) as well as (splicing-unquote names))))
+    ;;=>
+    (hello, larry as well as moe curly)
 
 is the same as
 

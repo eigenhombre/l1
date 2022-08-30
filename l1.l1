@@ -494,3 +494,15 @@
         (is (car (cons () '(this one should fail))))))
   `(when-not ~expr
      (error '(assertion ~(fuse (list 'failed COLON)) ~expr))))
+
+(defmacro let* (pairs . body)
+  (doc (let form with ability to refer to previously-bound
+            pairs in the binding list)
+       (examples
+        (let* ((a 1) (b (inc a)))
+          (+ a b))))
+  (if-not pairs
+    (list* 'progn body)
+    `(let (~(car pairs))
+       (let* (~@(cdr pairs))
+         ~@body))))

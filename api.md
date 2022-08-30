@@ -1,5 +1,5 @@
 # API Index
-117 forms available:
+118 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -59,6 +59,7 @@
 [`last`](#last)
 [`len`](#len)
 [**`let`**](#let)
+[*`let*`*](#let*)
 [`list`](#list)
 [`list*`](#list*)
 [`list?`](#list?)
@@ -1339,18 +1340,6 @@ Arity: 0+
 Args: `(() . x)`
 
 
-### Examples
-
-```
-> (gensym)
-;;=>
-<gensym-6>
-> (gensym (quote x))
-;;=>
-<gensym-x-7>
-
-```
-
 -----------------------------------------------------
 		
 
@@ -1602,6 +1591,29 @@ Args: `(bindings . body)`
 > (let ((a 1)
         (b 2))
     (+ a b))
+;;=>
+3
+
+```
+
+-----------------------------------------------------
+		
+
+## `let*`
+
+Let form with ability to refer to previously-bound pairs in the binding list
+
+Type: macro
+
+Arity: 1+
+
+Args: `(pairs . body)`
+
+
+### Examples
+
+```
+> (let* ((a 1) (b (inc a))) (+ a b))
 ;;=>
 3
 
