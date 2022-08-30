@@ -246,6 +246,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
            version  N    0   Return the version of the interpreter
               when  M    1+  Simple conditional with single branch
           when-not  M    1+  Complement of the when macro
+             while  M    1+  Loop for as long as condition is true
        with-screen  M    0+  Prepare for and clean up after screen operations
              zero?  F    1   Return true iff the supplied argument is zero
     > ^D

@@ -177,16 +177,37 @@
   (- n 1))
 
 (defn range (n)
-  (doc (list of integers from 0 to n)
-       (examples
-        (range 10)
-        (len (range 100))))
   (when (pos? n)
     (let ((inner (lambda inner (n)
                    (if (= 1 n)
                      (cons (dec n) ())
                      (cons (dec n) (inner (dec n)))))))
       (reverse (inner n)))))
+
+(defmacro while (condition . body)
+  (doc (loop for as long as condition is true)
+       (examples
+        (while ()
+          (launch-missiles))))
+  (let ((inner-sym (gensym 'inner)))
+    `(let ((~inner-sym (lambda ~inner-sym ()
+                         (when ~condition
+                           ~@body
+                           (~inner-sym)))))
+       (~inner-sym))))
+
+(defn range (n)
+  (doc (list of integers from 0 to n)
+       (examples
+        (range 10)
+        (len (range 100))))
+  (when (pos? n)
+    (let ((c n)
+          (acc ()))
+      (while (pos? c)
+        (set! c (dec c))
+        (set! acc (cons c acc)))
+      acc)))
 
 (defn nth (n l)
   (doc (find the nth value of a list, starting from zero)

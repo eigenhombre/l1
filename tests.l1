@@ -248,6 +248,12 @@
          (concat '(a b) '(c d))))
   (is (= '(a b c d e f) (concat '(a b) '(c d) '(e f)))))
 
+(test '(range)
+  (is (not (range 0)))
+  (is (= '(0) (range 1)))
+  (is (= '(0 1) (range 2)))
+  (is (= 100 (len (range 100)))))
+
 (test '(reduce)
   (is (= 0 (reduce + ())))
   (is (= 1 (reduce * ())))

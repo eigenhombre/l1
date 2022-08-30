@@ -1,5 +1,5 @@
 # API Index
-116 forms available:
+117 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -114,6 +114,7 @@
 [`version`](#version)
 [*`when`*](#when)
 [*`when-not`*](#when-not)
+[*`while`*](#while)
 [*`with-screen`*](#with-screen)
 [`zero?`](#zero?)
 # Operators
@@ -1343,10 +1344,10 @@ Args: `(() . x)`
 ```
 > (gensym)
 ;;=>
-<gensym-1>
+<gensym-7>
 > (gensym (quote x))
 ;;=>
-<gensym-x-2>
+<gensym-x-8>
 
 ```
 
@@ -2804,6 +2805,29 @@ Args: `(condition . body)`
 ;;=>
 (do all the things)
 > (when-not t (error (quote (oh no mister bill))))
+;;=>
+()
+
+```
+
+-----------------------------------------------------
+		
+
+## `while`
+
+Loop for as long as condition is true
+
+Type: macro
+
+Arity: 1+
+
+Args: `(condition . body)`
+
+
+### Examples
+
+```
+> (while () (launch-missiles))
 ;;=>
 ()
 
