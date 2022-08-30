@@ -558,7 +558,7 @@
         (n1 (first args))
         (n2 (second args)))
     (cond ((zero? n) (error '(max needs at least one number)))
-          ((= 1 n) n)
+          ((= 1 n) n1)
           ((= 2 n) (if (< n1 n2) n2 n1))
           (t (reduce max (max n1 n2) (cdr (cdr args)))))))
 
@@ -572,6 +572,6 @@
         (n1 (first args))
         (n2 (second args)))
     (cond ((zero? n) (error '(min needs at least one number)))
-          ((= 1 n) n)
+          ((= 1 n) n1)
           ((= 2 n) (if (< n2 n1) n2 n1))
           (t (reduce min (min n1 n2) (cdr (cdr args)))))))
