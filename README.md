@@ -155,6 +155,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
              colon  F    1   Add a colon at end of atom
              comma  F    1   Add a comma at end of atom
            comment  M    0+  Ignore the expressions in the block
+              comp  F    0+  Function composition -- return a function which applies a series of functions in reverse order
         complement  F    1   Return the logical complement of the supplied function
             concat  F    0+  Concatenenate any number of lists
            concat2  F    2   Concatenate two lists
@@ -205,6 +206,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
            number?  N    1   Return true if the argument is a number, else ()
               odd?  F    1   Return true if the supplied integer argument is odd
                 or  S    0+  Boolean or
+           partial  F    1+  Partial function application
             period  F    1   Add a period at end of atom
               pos?  F    1   Return true iff the supplied integer argument is greater than zero
              print  N    0+  Print the arguments
@@ -232,6 +234,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
        screen-size  N    0   Return the screen size (width, height)
       screen-start  N    0   Start screen for text UIs
       screen-write  N    3   Write a string to the screen
+            second  F    1   Return the second element of a list, or () if not enough elements
               set!  S    2   Update a value in an existing binding
            shuffle  N    1   Return a (quickly!) shuffled list
              sleep  N    1   Sleep for the given number of milliseconds

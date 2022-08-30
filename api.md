@@ -1,5 +1,5 @@
 # API Index
-118 forms available:
+121 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -23,6 +23,7 @@
 [`colon`](#colon)
 [`comma`](#comma)
 [*`comment`*](#comment)
+[`comp`](#comp)
 [`complement`](#complement)
 [`concat`](#concat)
 [`concat2`](#concat2)
@@ -73,6 +74,7 @@
 [`number?`](#number?)
 [`odd?`](#odd?)
 [**`or`**](#or)
+[`partial`](#partial)
 [`period`](#period)
 [`pos?`](#pos?)
 [`print`](#print)
@@ -100,6 +102,7 @@
 [`screen-size`](#screen-size)
 [`screen-start`](#screen-start)
 [`screen-write`](#screen-write)
+[`second`](#second)
 [**`set!`**](#set!)
 [`shuffle`](#shuffle)
 [`sleep`](#sleep)
@@ -728,6 +731,38 @@ Args: `(() . body)`
 > (comment twas brillig, and the slithy toves did gyre and gimble in the wabe)
 ;;=>
 ()
+
+```
+
+-----------------------------------------------------
+		
+
+## `comp`
+
+Function composition -- return a function which applies a series of functions in reverse order
+
+Type: function
+
+Arity: 0+
+
+Args: `(() . fs)`
+
+
+### Examples
+
+```
+> ((comp) (quote hello))
+;;=>
+hello
+> ((comp split) (quote hello))
+;;=>
+(h e l l o)
+> ((comp len split) (quote hello))
+;;=>
+5
+> ((comp (partial apply +) (partial map len) (partial map split)) (quote (hello world)))
+;;=>
+10
 
 ```
 
@@ -1967,6 +2002,32 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
+## `partial`
+
+Partial function application
+
+Type: function
+
+Arity: 1+
+
+Args: `(f . args)`
+
+
+### Examples
+
+```
+> ((partial + 1) 1)
+;;=>
+2
+> ((partial + 2 3) 4 5)
+;;=>
+14
+
+```
+
+-----------------------------------------------------
+		
+
 ## `period`
 
 Add a period at end of atom
@@ -2470,6 +2531,38 @@ Arity: 3
 
 Args: `(x y list)`
 
+
+-----------------------------------------------------
+		
+
+## `second`
+
+Return the second element of a list, or () if not enough elements
+
+Type: function
+
+Arity: 1 
+
+Args: `(l)`
+
+
+### Examples
+
+```
+> (second ())
+;;=>
+()
+> (second (quote (a)))
+;;=>
+()
+> (second (quote (a b)))
+;;=>
+b
+> (second (quote (1 2 3)))
+;;=>
+2
+
+```
 
 -----------------------------------------------------
 		

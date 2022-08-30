@@ -506,3 +506,43 @@
     `(let (~(car pairs))
        (let* (~@(cdr pairs))
          ~@body))))
+
+(defn second (l)
+  (doc (return the second element of a list,
+               or () if not enough elements)
+       (examples
+        (second ())
+        (second '(a))
+        (second '(a b))
+        (second '(1 2 3))))
+  (car (cdr l)))
+
+(defn comp (() . fs)
+  (doc (function composition -- return a function which
+                 applies a series of functions in reverse order)
+       (examples
+        ((comp) 'hello)
+        ((comp split) 'hello)
+        ((comp len split) 'hello)
+        ((comp (partial apply +)
+               (partial map len)
+               (partial map split))
+         '(hello world))))
+  (let ((n (len fs))
+        (f (car fs))
+        (g (second fs)))
+    (cond ((zero? n) identity)
+          ((= n 1) f)
+          ((= n 2) (lambda (() . xs)
+                     (f (apply g xs))))
+          (t (reduce comp (list* f g (cdr (cdr fs))))))))
+
+(defn partial (f . args)
+  (doc (partial function application)
+       (return a new function which wraps the supplied arguments)
+       (examples
+        ((partial + 1) 1)
+        ((partial + 2 3) 4 5)))
+  (lambda (() . more)
+    (apply f (concat args more))))
+

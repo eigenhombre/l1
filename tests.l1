@@ -704,3 +704,23 @@
     (let ((lll (lambda ())))
       (lambda t () (doc . lll) 5)))
   (is (not (repeat (- 1) 'a))))
+
+(test '(second)
+  (is (not (second ())))
+  (is (not (second '(a))))
+  (is (= 2 (second '(1 2))))
+  (is (= 2 (second '(1 2 3)))))
+
+(test '(comp)
+  (is (= 1 ((comp) 1)))
+  (is (= 2 ((comp inc) 1)))
+  (is (= 3 ((comp inc inc) 1)))
+  (is (= 4 ((comp inc inc inc) 1)))
+  (is (= 5 ((comp inc inc inc inc) 1)))
+  (is (= 1 ((comp dec inc) 1)))
+  (is (= 6 ((comp inc +) 2 3))))
+
+(test '(partial)
+  (is (partial +))
+  (is (= 1 ((partial +) 1)))
+  (is (= 3 ((partial + 2) 1))))

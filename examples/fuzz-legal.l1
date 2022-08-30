@@ -2,12 +2,6 @@
 
 ;; fuzzing variant which only creates and evaluates legally evaluable expressions.
 
-(defn partial (f . args)
-  (doc (partial function application)
-       (return a new function which wraps the supplied arguments))
-  (lambda (() . more)
-    (apply f (concat args more))))
-
 (defn one-of (() . xs)
   (randchoice xs))
 
