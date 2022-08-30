@@ -1344,10 +1344,10 @@ Args: `(() . x)`
 ```
 > (gensym)
 ;;=>
-<gensym-7>
+<gensym-6>
 > (gensym (quote x))
 ;;=>
-<gensym-x-8>
+<gensym-x-7>
 
 ```
 
