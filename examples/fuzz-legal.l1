@@ -1,0 +1,85 @@
+#!/usr/bin/env l1
+
+(defn partial (f . args)
+  (doc (partial function application)
+       (return a new function which wraps the supplied arguments))
+  (lambda (() . more)
+    (apply f (concat args more))))
+
+(defn one-of (() . xs)
+  (randchoice xs))
+
+(defn randpos (n) (inc (randint (inc n))))
+
+(defn cool (x) (/ x 2))
+
+(defn randnum (n) (fuse (randigits (randpos n))))
+
+(defn num (n)
+  ((one-of randnum
+           arith
+           dolen)
+   (cool n)))
+
+(defn nums (n)
+  (repeatedly (randint n) (partial num n)))
+
+(defn atom (n)
+  (fuse (randalpha (randpos n))))
+
+(defn atoms (n)
+  (repeatedly (randpos n) (partial atom n)))
+
+(defn quoteatom (n)
+  (list 'quote (atom n)))
+
+(defn nums (n)
+  (repeatedly (randpos n)
+              (partial num n)))
+
+(defn /not0 (x . xs)
+  (doc (do not divide by zero))
+  (let ((divisor (apply * xs)))
+    (if (zero? divisor)
+      1
+      (/ x divisor))))
+
+(defn arith (n)
+  (list* (one-of '+ '- '* '/not0)
+         (nums (cool n))))
+
+(defn quote-atom (n)
+  `(quote ~(atom n)))
+
+(defn quote-list (n)
+  (list 'quote ((one-of range
+                        nums)
+                n)))
+
+(defn boolean (_)
+  (one-of t ()))
+
+(defn dolen (n)
+  (list 'len ((one-of quote-list
+                      dosplit)
+              n)))
+
+(defn dosplit (n)
+  (list 'split
+        ((one-of quote-atom num) n)))
+
+(defn expr (n)
+  ((one-of arith
+           quote-atom
+           quote-list
+           dolen
+           boolean)
+   n))
+
+(foreach n (range 1000)
+  (dotimes 10
+    (let ((e (expr n)))
+      (println e
+               '==>
+               (eval e))
+      (println))))

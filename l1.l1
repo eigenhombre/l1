@@ -355,6 +355,7 @@
 
 (defn randchoice (l)
   (doc (return an element at random from the supplied list))
+  (is l)
   (nth (randint (len l)) l))
 
 (defn randalpha (n)
