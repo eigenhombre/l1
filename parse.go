@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/eigenhombre/lexutil"
 )
 
-func handleQuoteItem(tokens []lexutil.LexItem, i int, operatorName string) (Sexpr, int, error) {
+func handleQuoteItem(tokens []token, i int, operatorName string) (Sexpr, int, error) {
 	if i >= len(tokens) {
 		return nil, 0, fmt.Errorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
 	}
@@ -18,16 +16,16 @@ func handleQuoteItem(tokens []lexutil.LexItem, i int, operatorName string) (Sexp
 	return item, incr, nil
 }
 
-func parseNext(tokens []lexutil.LexItem, i int) (Sexpr, int, error) {
+func parseNext(tokens []token, i int) (Sexpr, int, error) {
 	if i >= len(tokens) {
 		return nil, 0, fmt.Errorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
 	}
 	token := tokens[i]
-	switch token.Typ {
+	switch token.lexeme.Typ {
 	case itemNumber:
-		return Num(token.Val), 1, nil
+		return Num(token.lexeme.Val), 1, nil
 	case itemAtom:
-		return Atom{token.Val}, 1, nil
+		return Atom{token.lexeme.Val}, 1, nil
 	case itemForwardQuote:
 		item, incr, err := handleQuoteItem(tokens, i+1, "quote")
 		if err != nil {
@@ -65,17 +63,17 @@ func parseNext(tokens []lexutil.LexItem, i int) (Sexpr, int, error) {
 		}
 		return item, incr, nil
 	case itemRightParen:
-		return nil, 0, fmt.Errorf("unexpected right paren")
+		return nil, 0, fmt.Errorf("unexpected right paren on line %d", token.line)
 	default:
-		return nil, 0, fmt.Errorf("unexpected lexeme '%s'", token.Val)
+		return nil, 0, fmt.Errorf("unexpected lexeme '%s' on line %d", token.lexeme.Val, token.line)
 	}
 }
 
-func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
+func parse(tokens []token) ([]Sexpr, error) {
 	ret := []Sexpr{}
 	i := 0
 	// Look for shebang, only at beginning of file:
-	if len(tokens) > 0 && tokens[0].Typ == itemShebang {
+	if len(tokens) > 0 && tokens[0].lexeme.Typ == itemShebang {
 		i++
 	}
 	for {
@@ -93,12 +91,12 @@ func parse(tokens []lexutil.LexItem) ([]Sexpr, error) {
 }
 
 // parseList is used when a list has been detected in a slice of tokens.
-func parseList(tokens []lexutil.LexItem) (Sexpr, int, error) {
+func parseList(tokens []token) (Sexpr, int, error) {
 	chunkEnd, endTok, err := listChunk(tokens)
 	if err != nil {
 		return nil, 0, err
 	}
-	if endTok.Typ == itemDot {
+	if endTok.lexeme.Typ == itemDot {
 		carList, err := parse(tokens[1:chunkEnd])
 		if err != nil {
 			return nil, 0, err
@@ -120,14 +118,14 @@ func parseList(tokens []lexutil.LexItem) (Sexpr, int, error) {
 	return mkListAsConsWithCdr(contents, Nil), chunkEnd + 1, nil
 }
 
-func lexAndParse(s string) ([]Sexpr, error) {
-	return parse(lexItems(s))
+func lexAndParse(ss []string) ([]Sexpr, error) {
+	return parse(lexItems(ss))
 }
 
-func listChunk(tokens []lexutil.LexItem) (int, lexutil.LexItem, error) {
+func listChunk(tokens []token) (int, token, error) {
 	level := 0
 	for i, token := range tokens {
-		switch token.Typ {
+		switch token.lexeme.Typ {
 		case itemLeftParen:
 			level++
 		case itemRightParen:
@@ -141,13 +139,13 @@ func listChunk(tokens []lexutil.LexItem) (int, lexutil.LexItem, error) {
 			}
 		}
 	}
-	return 0, lexutil.LexItem{}, fmt.Errorf("unbalanced parens")
+	return 0, token{}, fmt.Errorf("unbalanced parens")
 }
 
-func dotChunk(tokens []lexutil.LexItem) (int, error) {
+func dotChunk(tokens []token) (int, error) {
 	level := 1
 	for i, token := range tokens {
-		switch token.Typ {
+		switch token.lexeme.Typ {
 		case itemLeftParen:
 			level++
 		case itemRightParen:

@@ -1,3 +1,5 @@
+#!/usr/bin/env l1
+
 ;; Adapted from P. Norvig, PAIP Chapter 5, which itself was adapted
 ;; from Eliza, by Joseph Weizenbaum
 ;; (https://en.wikipedia.org/wiki/ELIZA)
@@ -282,5 +284,4 @@
   (is (= '(Do you often feel sad ?)
          (flatten (use-eliza-rules '(I feel sad))))))
 
-;; Main loop: uncomment this to get the actual loop
-;; (eliza)
+(eliza)

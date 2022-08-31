@@ -835,7 +835,7 @@ func init() {
 				if err != nil {
 					return nil, err
 				}
-				parsed, err := lexAndParse(line)
+				parsed, err := lexAndParse(strings.Split(line, "\n"))
 				if err != nil {
 					return nil, err
 				}

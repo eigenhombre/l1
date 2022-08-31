@@ -27,7 +27,6 @@ run-examples: ${PROG}
 	./l1 examples/fails.l1 && exit 1 || true
 	./l1 examples/primes.l1
 	./l1 examples/sentences.l1
-	./l1 examples/eliza.l1
 
 tco-test: ${PROG}
 	./l1 examples/tco.l1

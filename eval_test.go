@@ -112,7 +112,7 @@ func TestEval(t *testing.T) {
 	for _, test := range tests {
 		globals := mkEnv(nil)
 		for _, testCase := range test.evalCases {
-			got, err := lexAndParse(testCase.in)
+			got, err := lexAndParse(strings.Split(testCase.in, "\n"))
 			if isError(err, testCase) {
 				continue
 			}

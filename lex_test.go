@@ -8,10 +8,13 @@ import (
 )
 
 func TestLex(t *testing.T) {
-	abbrev := func(typ lexutil.ItemType) func(string) lexutil.LexItem {
-		return func(input string) lexutil.LexItem {
-			return lexutil.LexItem{Typ: typ, Val: input}
+	abbrev := func(typ lexutil.ItemType) func(string, int) token {
+		return func(input string, line int) token {
+			return token{lexutil.LexItem{Typ: typ, Val: input}, line}
 		}
+	}
+	S := func(input ...string) []string {
+		return input
 	}
 	N := abbrev(itemNumber)
 	LP := abbrev(itemLeftParen)
@@ -25,86 +28,86 @@ func TestLex(t *testing.T) {
 	COMMENTNEXT := abbrev(itemCommentNext)
 	SHEBANG := abbrev(itemShebang)
 	Err := abbrev(itemError)
-	toks := func(items ...lexutil.LexItem) []lexutil.LexItem {
+	toks := func(items ...token) []token {
 		if len(items) == 0 {
-			return []lexutil.LexItem{}
+			return []token{}
 		}
 		return items
 	}
 	var tests = []struct {
-		input  string
-		output []lexutil.LexItem
+		input  []string
+		output []token
 	}{
-		{"", toks()},
-		{" ", toks()},
-		{"\t", toks()},
-		{"\n\t\r   \r\n", toks()},
-		{";", toks()},
-		{";; Ignored until end of line", toks()},
-		{"1", toks(N("1"))},
-		{"1 ;; is such a lonely number", toks(N("1"))},
-		{"12", toks(N("12"))},
-		{"123 ", toks(N("123"))},
-		{" 312", toks(N("312"))},
-		{"111 222", toks(N("111"), N("222"))},
-		{" 111 \n222 ", toks(N("111"), N("222"))},
-		{"-1", toks(N("-1"))},
-		{"+0", toks(N("+0"))},
-		{"+3 -5 ", toks(N("+3"), N("-5"))},
-		{"(", toks(LP("("))},
-		{"( ", toks(LP("("))},
-		{" (", toks(LP("("))},
-		{"1 (", toks(N("1"), LP("("))},
-		{"(1", toks(LP("("), N("1"))},
-		{")", toks(RP(")"))},
-		{"(3)", toks(LP("("), N("3"), RP(")"))},
-		{"Z", toks(A("Z"))},
-		{"(EQUAL (TIMES 3 4) 12)", toks(
-			LP("("),
-			A("EQUAL"),
-			LP("("),
-			A("TIMES"),
-			N("3"),
-			N("4"),
-			RP(")"),
-			N("12"),
-			RP(")"),
+		{S(""), toks()},
+		{S(" "), toks()},
+		{S("\t"), toks()},
+		{S("\n\t\r   \r\n"), toks()},
+		{S(";"), toks()},
+		{S(";; Ignored until end of line"), toks()},
+		{S("1"), toks(N("1", 1))},
+		{S("1 ;; is such a lonely number"), toks(N("1", 1))},
+		{S("12"), toks(N("12", 1))},
+		{S("123 "), toks(N("123", 1))},
+		{S(" 312"), toks(N("312", 1))},
+		{S("111 222"), toks(N("111", 1), N("222", 1))},
+		{S(" 111", "222 "), toks(N("111", 1), N("222", 2))},
+		{S("-1"), toks(N("-1", 1))},
+		{S("+0"), toks(N("+0", 1))},
+		{S("+3 -5 "), toks(N("+3", 1), N("-5", 1))},
+		{S("("), toks(LP("(", 1))},
+		{S("( "), toks(LP("(", 1))},
+		{S(" ("), toks(LP("(", 1))},
+		{S("1 ("), toks(N("1", 1), LP("(", 1))},
+		{S("(1"), toks(LP("(", 1), N("1", 1))},
+		{S(")"), toks(RP(")", 1))},
+		{S("(3)"), toks(LP("(", 1), N("3", 1), RP(")", 1))},
+		{S("Z"), toks(A("Z", 1))},
+		{S("(EQUAL ", "(TIMES ", "3 4", ") 12", ")"), toks(
+			LP("(", 1),
+			A("EQUAL", 1),
+			LP("(", 2),
+			A("TIMES", 2),
+			N("3", 3),
+			N("4", 3),
+			RP(")", 4),
+			N("12", 4),
+			RP(")", 5),
 		)},
-		{"+", toks(A("+"))},
-		{"(+ +1 -2)", toks(LP("("), A("+"), N("+1"), N("-2"), RP(")"))},
-		{"/", toks(A("/"))},
-		{"(/ 1 2)", toks(LP("("), A("/"), N("1"), N("2"), RP(")"))},
-		{"(QUOTE (LAMBDA (X) (PLUS X X)))", toks(
-			LP("("), A("QUOTE"), LP("("), A("LAMBDA"), LP("("), A("X"), RP(")"),
-			LP("("), A("PLUS"), A("X"), A("X"), RP(")"), RP(")"), RP(")"))},
+		{S("+"), toks(A("+", 1))},
+		{S("(+ +1 -2)"), toks(LP("(", 1), A("+", 1), N("+1", 1), N("-2", 1), RP(")", 1))},
+		{S("/"), toks(A("/", 1))},
+		{S("(/ 1 2)"), toks(LP("(", 1), A("/", 1), N("1", 1), N("2", 1), RP(")", 1))},
+		{S("(QUOTE (LAMBDA (X) (PLUS X X)))"), toks(
+			LP("(", 1), A("QUOTE", 1), LP("(", 1), A("LAMBDA", 1), LP("(", 1), A("X", 1), RP(")", 1),
+			LP("(", 1), A("PLUS", 1), A("X", 1), A("X", 1), RP(")", 1), RP(")", 1), RP(")", 1))},
 		// Error handling:
-		{"(atom1 . atom2)", toks(
-			LP("("),
-			A("atom1"),
-			DOT("."),
-			A("atom2"),
-			RP(")"))},
-		{"'quoted-atom", toks(QUOTE("'"), A("quoted-atom"))},
-		{"~atom", toks(UNQUOTE("~"), A("atom"))},
-		{"~@atom", toks(SPLICINGUNQUOTE("~@"), A("atom"))},
-		{"`(a ~b ~@c)", toks(BACKQUOTE("`"), LP("("),
-			A("a"),
-			UNQUOTE("~"), A("b"),
-			SPLICINGUNQUOTE("~@"), A("c"), RP(")"))},
-		{"((a . b))", toks(LP("("), LP("("), A("a"), DOT("."), A("b"), RP(")"), RP(")"))},
-		{"((a) . b)", toks(LP("("), LP("("), A("a"), RP(")"), DOT("."), A("b"), RP(")"))},
-		{"&", toks(Err("unexpected character '&' in input"))},
-		{"(1 2 & 3)", toks(
-			LP("("),
-			N("1"),
-			N("2"),
-			Err("unexpected character '&' in input"),
-			N("3"),
-			RP(")"))},
-		{"#_1", toks(COMMENTNEXT("#_"), N("1"))},
-		{"#_(1 2 3)", toks(COMMENTNEXT("#_"), LP("("), N("1"), N("2"), N("3"), RP(")"))},
-		{"#!/bin/bash\n1(+)\n", toks(SHEBANG("#!/bin/bash"),
-			N("1"), LP("("), A("+"), RP(")"))},
+		{S("(atom1 . atom2)"), toks(
+			LP("(", 1),
+			A("atom1", 1),
+			DOT(".", 1),
+			A("atom2", 1),
+			RP(")", 1))},
+		{S("'quoted-atom"), toks(QUOTE("'", 1), A("quoted-atom", 1))},
+		{S("~atom"), toks(UNQUOTE("~", 1), A("atom", 1))},
+		{S("~@atom"), toks(SPLICINGUNQUOTE("~@", 1), A("atom", 1))},
+		{S("`(a ~b ~@c)"), toks(BACKQUOTE("`", 1), LP("(", 1),
+			A("a", 1),
+			UNQUOTE("~", 1), A("b", 1),
+			SPLICINGUNQUOTE("~@", 1), A("c", 1), RP(")", 1))},
+		{S("((a . b))"), toks(LP("(", 1), LP("(", 1), A("a", 1), DOT(".", 1), A("b", 1), RP(")", 1), RP(")", 1))},
+		{S("((a) . b)"), toks(LP("(", 1), LP("(", 1), A("a", 1), RP(")", 1), DOT(".", 1), A("b", 1), RP(")", 1))},
+		{S("&"), toks(Err("unexpected character '&' in input", 1))},
+		{S("(", "1 ", "2 & ", "3)"), toks(
+			LP("(", 1),
+			N("1", 2),
+			N("2", 3),
+			Err("unexpected character '&' in input", 3),
+			N("3", 4),
+			RP(")", 4))},
+		{S("#_1"), toks(COMMENTNEXT("#_", 1), N("1", 1))},
+		{S("#_(1 2 3)"), toks(COMMENTNEXT("#_", 1), LP("(", 1), N("1", 1), N("2", 1), N("3", 1), RP(")", 1))},
+		{S("#!/bin/bash\n1(+)\n"), toks(SHEBANG("#!/bin/bash", 1),
+			N("1", 1), LP("(", 1), A("+", 1), RP(")", 1))},
 	}
 
 	for _, test := range tests {

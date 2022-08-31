@@ -103,7 +103,7 @@ func TestStrToSexprs(T *testing.T) {
 		{"(((1 2) (3 4)) (5 6))", S(L(L(L(Num(1), Num(2)), L(Num(3), Num(4))), L(Num(5), Num(6))))},
 	}
 	for _, test := range happyPathTests {
-		parsed, err := lexAndParse(test.input)
+		parsed, err := lexAndParse([]string{test.input})
 		if err != nil {
 			T.Errorf("lexAndParse(%q) failed: %v", test.input, err)
 		}
@@ -122,7 +122,7 @@ func TestStrToSexprs(T *testing.T) {
 		{")())"},
 	}
 	for _, test := range sadPathTests {
-		_, err := lexAndParse(test.input)
+		_, err := lexAndParse([]string{test.input})
 		if err == nil {
 			T.Errorf("lexAndParse(%q) should have failed", test.input)
 		} else {

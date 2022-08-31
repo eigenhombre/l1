@@ -47,11 +47,14 @@ func TestParse(t *testing.T) {
 		{"#_1", Cons(Atom{"comment"}, Cons(Num(1), Nil)), OK},
 		{"#!/bin/bash\n(1 2)\n", Cons(Num(1), Cons(Num(2), Nil)), OK},
 		{"\n\n#!/bin/bash\n(1 2)\n", Cons(Num(1), Cons(Num(2), Nil)), OK},
-		// Make sure that shebang must come first:
+		// Make sure that shebang must come first...
 		{"1\n#!/bin/bash", Nil, "unexpected lexeme"},
+		// ... and that it reports line number correctly:
+		{"1\n#!/bin/bash", Nil, "on line 2"},
+		{"1\n2\n3\n)", Nil, "unexpected right paren on line 4"},
 	}
 	for _, test := range tests {
-		got, err := lexAndParse(test.input)
+		got, err := lexAndParse(strings.Split(test.input, "\n"))
 		if err != nil {
 			if test.error == OK {
 				t.Errorf("lexAndParse(%q) failed: %v", test.input, err)

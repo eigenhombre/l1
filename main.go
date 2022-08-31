@@ -7,8 +7,7 @@ import (
 	"io"
 	"os"
 	"runtime/pprof"
-
-	"github.com/eigenhombre/lexutil"
+	"strings"
 )
 
 func readLine() (string, error) {
@@ -38,7 +37,7 @@ func evalExprs(exprs []Sexpr, e env, doPrint bool) bool {
 }
 
 func lexParseEval(s string, e env, doPrint bool) bool {
-	got, err := lexAndParse(s)
+	got, err := lexAndParse(strings.Split(s, "\n"))
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		return false
@@ -49,13 +48,13 @@ func lexParseEval(s string, e env, doPrint bool) bool {
 func repl(e env) {
 	for {
 		fmt.Print("> ")
-		tokens := []lexutil.LexItem{}
+		tokens := []token{}
 	Inner:
 		for {
 			s, err := readLine()
 			switch err {
 			case nil:
-				these := lexItems(s)
+				these := lexItems([]string{s})
 				tokens = append(tokens, these...)
 				if isBalanced(tokens) {
 					break Inner

@@ -9,7 +9,12 @@ import (
 
 // Use with lexutil.go (which should eventually be its own package).
 
-// Lexemes:
+type token struct {
+	lexeme lexutil.LexItem
+	line   int
+}
+
+// Token Types:
 const (
 	itemNumber lexutil.ItemType = iota
 	itemAtom
@@ -42,18 +47,18 @@ var typeMap = map[lexutil.ItemType]string{
 }
 
 // LexRepr returns a string representation of a known lexeme.
-func LexRepr(i lexutil.LexItem) string {
-	switch i.Typ {
+func LexRepr(i token) string {
+	switch i.lexeme.Typ {
 	case itemNumber:
-		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
+		return fmt.Sprintf("%s(%s)", typeMap[i.lexeme.Typ], i.lexeme.Val)
 	case itemAtom:
-		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
+		return fmt.Sprintf("%s(%s)", typeMap[i.lexeme.Typ], i.lexeme.Val)
 	case itemLeftParen:
 		return "LP"
 	case itemRightParen:
 		return "RP"
 	case itemError:
-		return fmt.Sprintf("%s(%s)", typeMap[i.Typ], i.Val)
+		return fmt.Sprintf("%s(%s)", typeMap[i.lexeme.Typ], i.lexeme.Val)
 	case itemForwardQuote:
 		return "QUOTE"
 	case itemSyntaxQuote:
@@ -184,19 +189,23 @@ func lexInt(l *lexutil.Lexer) lexutil.StateFn {
 	return lexAtom
 }
 
-func lexItems(s string) []lexutil.LexItem {
-	l := lexutil.Lex("main", s, lexStart)
-	ret := []lexutil.LexItem{}
-	for tok := range l.Items {
-		ret = append(ret, tok)
+func lexItems(ss []string) []token {
+	ret := []token{}
+	for line, s := range ss {
+		l := lexutil.Lex("main", s, lexStart)
+		for tok := range l.Items {
+			// Programmers may be civilians, counting lines from 1 rather than
+			// 0:
+			ret = append(ret, token{tok, line + 1})
+		}
 	}
 	return ret
 }
 
-func isBalanced(tokens []lexutil.LexItem) bool {
+func isBalanced(tokens []token) bool {
 	level := 0
 	for _, token := range tokens {
-		switch token.Typ {
+		switch token.lexeme.Typ {
 		case itemLeftParen:
 			level++
 		case itemRightParen:
