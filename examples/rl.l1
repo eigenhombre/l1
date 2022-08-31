@@ -71,12 +71,65 @@
                 (player-y player)
                 (list ATSIGN)))
 
+(defn move-player-y (player incr)
+  (list (first player)
+        (+ (second player) incr)))
+
+(defn update-pos (l n f)
+  (doc (update nth position of a list by applying f to the
+               value of the nth element, leaving the others
+               unchanged))
+  (when (< n (len l))
+    (concat (take n l)
+            (list (f (nth n l)))
+            (drop (inc n) l))))
+
+(defn move-player (player delta)
+  (list (+ (player-x player) (first delta))
+        (+ (player-y player) (second delta))))
+
+(defn valid-move (room player delta)
+  (and (<= (room-x room)
+           (+ (player-x player) (first delta))
+           (+ (room-x room) (room-width room) -1))
+       (<= (room-y room)
+           (+ (player-y player) (second delta))
+           (+ (room-y room) (room-height room) -1))))
+
 (with-screen
  (intro)
  (let* ((dims (screen-size))
         (room (make-room dims))
         (player-pos (random-position-in-room room))
-        (player (make-player player-pos)))
-   (draw-room room)
-   (draw-player player))
- (press-any-key))
+        (player (make-player player-pos))
+        (continue t))
+   (while continue
+     (draw-room room)
+     (draw-player player)
+     (let ((k (screen-get-key)))
+       (cond
+        ((= k 'q) (set! continue ()))
+        ((= k 'h) (when (valid-move room player '(-1 0))
+                    (set! player
+                          (move-player player '(-1 0)))))
+        ((= k 'l) (when (valid-move room player '(1 0))
+                    (set! player
+                          (move-player player '(1 0)))))
+        ((= k 'k) (when (valid-move room player '(0 -1))
+                    (set! player
+                          (move-player player '(0 -1)))))
+        ((= k 'j) (when (valid-move room player '(0 1))
+                    (set! player
+                          (move-player player '(0 1)))))
+        ((= k 'y) (when (valid-move room player '(-1 -1))
+                    (set! player
+                          (move-player player '(-1 -1)))))
+        ((= k 'u) (when (valid-move room player '(1 -1))
+                    (set! player
+                          (move-player player '(1 -1)))))
+        ((= k 'b) (when (valid-move room player '(-1 1))
+                    (set! player
+                          (move-player player '(-1 1)))))
+        ((= k 'n) (when (valid-move room player '(1 1))
+                    (set! player
+                          (move-player player '(1 1))))))))))
