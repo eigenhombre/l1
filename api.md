@@ -42,7 +42,7 @@
 [**`errors`**](#errors)
 [`eval`](#eval)
 [`even?`](#even?)
-[`exclaimed`](#exclaimed)
+[`exclaim`](#exclaim)
 [`filter`](#filter)
 [`flatten`](#flatten)
 [*`foreach`*](#foreach)
@@ -1237,7 +1237,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `exclaimed`
+## `exclaim`
 
 Return l as a sentence... emphasized!
 
@@ -1251,13 +1251,13 @@ Args: `(l)`
 ### Examples
 
 ```
-> (exclaimed (quote (well, hello)))
+> (exclaim (quote (well, hello)))
 ;;=>
 (Well, hello!)
-> (exclaimed (quote (help)))
+> (exclaim (quote (help)))
 ;;=>
 (Help!)
-> (exclaimed (quote (begone, fiend)))
+> (exclaim (quote (begone, fiend)))
 ;;=>
 (Begone, fiend!)
 

@@ -416,12 +416,12 @@
         (tosentence '(to be, or not to be, that is the question))))
   (punctuate period l))
 
-(defn exclaimed (l)
+(defn exclaim (l)
   (doc (return l as a sentence... emphasized!)
        (examples
-        (exclaimed '(well, hello))
-        (exclaimed '(help))
-        (exclaimed '(begone, fiend))))
+        (exclaim '(well, hello))
+        (exclaim '(help))
+        (exclaim '(begone, fiend))))
   (punctuate bang l))
 
 (defn list* (() . args)

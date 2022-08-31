@@ -532,7 +532,7 @@
   (is (= '(You.) (tosentence '(you))))
   (is (= '(You hoo.) (tosentence '(you hoo))))
   (is (= '(Boo hoo hoo.) (tosentence '(boo hoo hoo))))
-  (is (= '(Go away!) (exclaimed '(go away)))))
+  (is (= '(Go away!) (exclaim '(go away)))))
 
 (test '(core / l1 functions)
   (is (= () (reverse ())))

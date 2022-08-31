@@ -63,7 +63,7 @@ l1 - a Lisp interpreter.
         errors  S    1+  Error checking (for tests)
           eval  N    1   Evaluate an expression
          even?  F    1   Return true if the supplied integer argument is even
-     exclaimed  F    1   Return l as a sentence... emphasized!
+       exclaim  F    1   Return l as a sentence... emphasized!
         filter  F    2   Keep only values for which function f is true
        flatten  F    1   Return a (possibly nested) list, flattened
        foreach  M    2+  Execute body for each value in a list
