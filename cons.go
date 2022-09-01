@@ -6,6 +6,10 @@ type ConsCell struct {
 	cdr Sexpr
 }
 
+func (c *ConsCell) Error() string {
+	return c.String()
+}
+
 // Nil is the empty list / cons cell.  Cons with Nil to create a list
 // of one item.
 var Nil *ConsCell = nil

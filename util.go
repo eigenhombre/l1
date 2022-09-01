@@ -6,6 +6,7 @@ import (
 	"unicode/utf8"
 )
 
+// FIXME: this should return a cons!
 func mkListAsConsWithCdr(xs []Sexpr, cdr Sexpr) Sexpr {
 	if len(xs) == 0 {
 		return cdr
