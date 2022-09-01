@@ -6,6 +6,8 @@ type ConsCell struct {
 	cdr Sexpr
 }
 
+// A cons (list) can be used as an error, and consed
+// to, to make a stacktrace:
 func (c *ConsCell) Error() string {
 	return c.String()
 }

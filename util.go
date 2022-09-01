@@ -27,6 +27,19 @@ func consToExprs(argList Sexpr) ([]Sexpr, error) {
 	return args, nil
 }
 
+func stringsToList(listElems ...string) *ConsCell {
+	xs := make([]Sexpr, len(listElems))
+	for i, s := range listElems {
+		xs[i] = Atom{s}
+	}
+	return list(xs...)
+}
+
+func list(listElems ...Sexpr) *ConsCell {
+	// FIXME: don't type assert here after mkListAsConsWithCdr returns a Cons:
+	return mkListAsConsWithCdr(listElems, Nil).(*ConsCell)
+}
+
 func capitalize(s string) string {
 	r, n := utf8.DecodeRuneInString(s)
 	return string(unicode.ToUpper(r)) + s[n:]

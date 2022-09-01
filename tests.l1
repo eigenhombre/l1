@@ -739,3 +739,55 @@
   (is (= 1 (min 1)))
   (is (= 0 (min 1 0)))
   (is (= 0 (apply min (range 10)))))
+
+(test '(exceptions, stacktraces and their contents)
+  (is (not (try)))
+  (is (= 1 (try 1)))
+  (is (= 3 (try 1 2 3)))
+  (is (not (try (catch e))))
+  (is (= 1 (try
+             1
+             (catch e))))
+  (is (= 1 (try
+             1
+             (catch e
+               2))))
+  (is (= 2 (try
+             1
+             2
+             (catch e
+               3
+               4))))
+  (is (= 2 (try
+             (/ 1 0)
+             (catch e
+               2))))
+  (is (= 4 (try
+             1
+             (/ 1 0)
+             2
+             (catch e
+               3
+               4))))
+
+  (try (/ 1 0) (catch e
+                 (len e)))
+
+  (try
+    (/ 1 0)
+    (catch e
+      (is (= e '((division by zero))))))
+
+  (try
+    1
+    (/ 1 0)
+    2
+    (catch e
+      3
+      (is (= e '((division by zero))))
+      4))
+
+  (is (= '((division by zero))
+         (try
+           (/ 1 0)
+           (catch e e)))))

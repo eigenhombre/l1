@@ -245,7 +245,7 @@ func init() {
 				}
 				for _, arg := range args[1:] {
 					if arg.Equal(Num(0)) {
-						return nil, fmt.Errorf("division by zero")
+						return nil, baseError("division by zero")
 					}
 					n, ok := arg.(Number)
 					if !ok {

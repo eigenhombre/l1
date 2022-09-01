@@ -451,6 +451,74 @@ top:
 				return nil, fmt.Errorf("%s", errorExpr)
 			case carAtom.s == "errors":
 				return evErrors(cdrCons, e)
+			case carAtom.s == "try":
+				var ret Sexpr = Nil
+				var err error = nil
+				var hadError bool = false
+				for {
+					if cdrCons == Nil {
+						return ret, err
+					}
+					car, ok := cdrCons.car.(*ConsCell)
+					if ok && car != Nil {
+						carCarAtom, ok := car.car.(Atom)
+						if ok && carCarAtom.s == "catch" {
+							fmt.Println("in catch block, hadError:", hadError, "err:", err)
+							if !hadError {
+								return ret, err
+							}
+							// ignore binding name for now:
+							cdr, ok := car.cdr.(*ConsCell)
+							if !ok {
+								return nil, fmt.Errorf("catch body must be a list with a binding name")
+							}
+							bindingName := cdr.car
+							symStr, ok := bindingName.(Atom)
+							if !ok {
+								return nil, fmt.Errorf("catch binding name must be a symbol")
+							}
+							eInner := mkEnv(e)
+							fmt.Println("error:", err)
+							errCons, ok := err.(*ConsCell)
+							if !ok {
+								errCons = stringsToList("unwrapped", "error")
+							}
+							eInner.Set(symStr.s, errCons)
+
+							cdr, ok = cdr.cdr.(*ConsCell)
+							if !ok {
+								return nil, fmt.Errorf("catch body must be a list with a binding name")
+							}
+							for {
+								if cdr == Nil {
+									return ret, err
+								}
+								ret, err = eval(cdr.car, &eInner)
+								if err != nil {
+									return nil, err
+								}
+								cdr, ok = cdr.cdr.(*ConsCell)
+								if !ok {
+									return nil, fmt.Errorf("catch body must be a list with a binding name")
+								}
+							}
+						}
+					}
+					var ev Sexpr
+					if !hadError {
+						ev, err = eval(cdrCons.car, e)
+						if err != nil {
+							hadError = true
+							fmt.Println("had error:", err)
+						} else {
+							ret = ev
+						}
+					}
+					cdrCons, ok = cdrCons.cdr.(*ConsCell)
+					if !ok {
+						return nil, fmt.Errorf("try requires a list of expressions")
+					}
+				}
 			case carAtom.s == "let":
 				args := cdrCons
 				if args == Nil {

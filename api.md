@@ -258,7 +258,7 @@ Args: `(numerator denominator1 . more)`
 2
 > (/ 1 0)
 ;;=>
-ERROR: division by zero
+ERROR: ((division by zero))
 
 ```
 
