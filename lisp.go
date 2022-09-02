@@ -220,15 +220,21 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 		return nil, err
 	}
 	ast := lambda.body
-	if ast == Nil {
-		return Nil, nil
+	var ret Sexpr = Nil
+	for {
+		if ast == Nil {
+			return ret, nil
+		}
+		toEval := ast.car
+		ret, err = eval(toEval, e)
+		if err != nil {
+			return nil, err
+		}
+		ast, ok = ast.cdr.(*ConsCell)
+		if !ok {
+			return nil, baseError("macro body must be a list")
+		}
 	}
-	toEval := ast.car
-	ret, err := eval(toEval, e)
-	if err != nil {
-		return nil, err
-	}
-	return ret, nil
 }
 
 func macroexpand(expr Sexpr, e *env) (Sexpr, error) {

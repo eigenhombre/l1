@@ -212,9 +212,10 @@
 (defn nth (n l)
   (doc (find the nth value of a list, starting from zero)
        (examples
-        (nth 3 '(one two three four five))))
+        (nth 3 '(one two three four five))
+        (nth 1000 (range 2))))
   (cond
-   ((not l) (error '(supplied list must not be empty)))
+   ((not l) ())
    ((zero? n) (car l))
    (t (nth (dec n) (cdr l)))))
 
@@ -487,13 +488,40 @@
         (colon 'remember-this))) ;;=> remember-this:
   (punctuate-atom a COLON))
 
-(defmacro is (expr)
+(defmacro is (condition)
   (doc (assert a condition is truthy, or show failing code)
        (examples
         (is t)
         (is (car (cons () '(this one should fail))))))
-  `(when-not ~expr
-     (error '(assertion ~(fuse (list 'failed COLON)) ~expr))))
+  ;; FIXME: why doesn't if / if-not work here?
+  (cond
+   ((or (not (list? condition))
+        (not (= '= (car condition)))
+        (not (= 3 (len condition))))
+    (let ((result (gensym 'result)))
+      `(let ((~result ~condition))
+         (when-not ~result
+           (error '(assertion ~(fuse (list 'failed COLON)) ~condition))))))
+   ;; Handle equality in more detail: show details when equality of
+   ;; two terms fails:
+   (t
+    (let ((lhs (nth 1 condition))
+          (rhs (nth 2 condition))
+          (lhsym (gensym 'lhs))
+          (rhsym (gensym 'rhs)))
+      `(let ((~lhsym ~lhs)
+             (~rhsym ~rhs))
+         (when-not (= ~lhsym ~rhsym)
+           (error
+            (concat (list 'expression
+                          (quote ~lhs)
+                          '==>
+                          ~lhsym)
+                    '(is not equal to)
+                    (list 'expression
+                          (quote ~rhs)
+                          '==>
+                          ~rhsym)))))))))
 
 (defmacro let* (pairs . body)
   (doc (let form with ability to refer to previously-bound
@@ -575,3 +603,6 @@
           ((= 1 n) n1)
           ((= 2 n) (if (< n2 n1) n2 n1))
           (t (reduce min (min n1 n2) (cdr (cdr args)))))))
+
+(defn not= (() . terms)
+  (not (apply = terms)))

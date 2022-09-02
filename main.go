@@ -26,7 +26,7 @@ func evalExprs(exprs []Sexpr, e env, doPrint bool) bool {
 	for _, g := range exprs {
 		res, err := eval(g, &e)
 		if err != nil {
-			fmt.Printf("ERROR in '%s':\n%v\n", g, err)
+			fmt.Printf("ERROR:\n%v\n", err)
 			return false
 		}
 		if doPrint {
@@ -87,6 +87,7 @@ func initGlobals() env {
 	globals.Set("COLON", Atom{":"})
 	globals.Set("HASH", Atom{"#"})
 	globals.Set("ATSIGN", Atom{"@"})
+	globals.Set("CHECK", Atom{"✓"})
 	return globals
 }
 
