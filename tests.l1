@@ -202,7 +202,7 @@
   (is (= 3 (a)))
   (is (not (doc a)))
   (errors '(missing argument) (doc))
-  (errors '(expected function) (doc 3))
+  (errors '(is not a function) (doc 3))
   (def b (lambda ()))
   (is (not (doc b)))
   (def bdoc (lambda () (doc (it floats))))
@@ -658,7 +658,9 @@
 
 (test '(docs and forms)
   (is (some (lambda (x) (= x 'forms))
-            (forms))))
+            (forms)))
+  (is (= '(Return a new atom with all characters in lower case)
+         (doc downcase))))
 
 (test '(shuffle)
   (is (= 100 (len (shuffle (range 100))))))

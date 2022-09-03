@@ -511,11 +511,14 @@ func init() {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
 				}
-				lambda, ok := args[0].(*lambdaFn)
-				if !ok {
-					return nil, baseErrorf("expected function, got '%s'", args[0])
+				switch t := args[0].(type) {
+				case *lambdaFn:
+					return t.doc, nil
+				case *Builtin:
+					return stringsToList(strings.Split(builtins[t.Name].Docstring, " ")...), nil
+				default:
+					return nil, baseErrorf("'%s' is not a function", args[0])
 				}
-				return lambda.doc, nil
 			},
 		},
 		"downcase": {
