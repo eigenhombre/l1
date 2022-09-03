@@ -542,16 +542,6 @@ func init() {
 				return Atom{strings.ToLower(a.s)}, nil
 			},
 		},
-		"forms": {
-			Name:       "forms",
-			Docstring:  "Return available operators, as a list",
-			FixedArity: 0,
-			NAry:       false,
-			ArgString:  "()",
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
-				return mkListAsConsWithCdr(formsAsSexprList(e), Nil), nil
-			},
-		},
 		"eval": {
 			Name:       "eval",
 			Docstring:  "Evaluate an expression",
@@ -578,6 +568,16 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				os.Exit(0)
 				return nil, nil
+			},
+		},
+		"forms": {
+			Name:       "forms",
+			Docstring:  "Return available operators, as a list",
+			FixedArity: 0,
+			NAry:       false,
+			ArgString:  "()",
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				return mkListAsConsWithCdr(formsAsSexprList(e), Nil), nil
 			},
 		},
 		"fuse": {
@@ -1115,7 +1115,8 @@ func listOfChars(s string) *ConsCell {
 	if len(s) == 0 {
 		return nil
 	}
-	return Cons(Atom{s[0:1]}, listOfChars(s[1:]))
+	r, size := utf8.DecodeRuneInString(s)
+	return Cons(Atom{string(r)}, listOfChars(s[size:]))
 }
 
 // listOfNums returns a list of single-digit numbers from another, presumably

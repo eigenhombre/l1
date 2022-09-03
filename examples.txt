@@ -3,6 +3,8 @@ $ l1
 foo
 > 'foo
 foo
+> (len (split '水果))
+2
 > '123
 123
 > (quote (the (ten (laws (of (greenspun))))))

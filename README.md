@@ -115,6 +115,8 @@ installing `l1` by looking under `$GOPATH`. For example, if the
     foo
     > 'foo
     foo
+    > (len (split '水果))
+    2
     > '123
     123
     > (quote (the (ten (laws (of (greenspun))))))

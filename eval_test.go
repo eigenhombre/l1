@@ -39,6 +39,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("3 ;; colons (:) are OK too (regression for #25)", "3", OK))},
 		{ECases(S("(quote foo)", "foo", OK))},
 		{ECases(S("'foo", "foo", OK))},
+		{ECases(S("(len (split '水果))", "2", OK))},
 		{ECases(S("'123", "123", OK))},
 		{Cases(S("'bar", "bar", OK))},
 		{Cases(S("(quote (((1 2 3))))", "(((1 2 3)))", OK))},
