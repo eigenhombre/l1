@@ -175,6 +175,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
               eval  N    1   Evaluate an expression
              even?  F    1   Return true if the supplied integer argument is even
            exclaim  F    1   Return l as a sentence... emphasized!
+              exit  N    0   Exit the program
             filter  F    2   Keep only values for which function f is true
            flatten  F    1   Return a (possibly nested) list, flattened
            foreach  M    2+  Execute body for each value in a list

@@ -12,6 +12,7 @@
 ;; Remove operators that muddle or slow the test:
 (def operators (remove (lambda (x)
                          (in? x '(eval
+                                  exit
                                   loop
                                   range
                                   readlist

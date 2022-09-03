@@ -2,6 +2,23 @@
 
 [Jump to API](#api-index) / list of operators
 
+## The REPL
+
+Examples in these docs are shown as if typed at the `l1` "REPL"
+(read-eval-print-loop).  To leave the REPL, type Control-D or
+`(exit)`:
+
+    $ l1
+    > (exit)
+    $
+
+If you want arrow keys for next/previous command or to move forward or
+backward on the line, history, etc., wrap `l1` with the `rlwrap`
+command (installed using your favorite package manager), e.g.:
+
+    $ rlwrap l1
+    >
+
 ## Expressions
 
 Expressions in `l1` are atoms, lists, numbers, or functions.

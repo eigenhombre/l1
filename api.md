@@ -1,5 +1,5 @@
 # API Index
-126 forms available:
+127 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -43,6 +43,7 @@
 [`eval`](#eval)
 [`even?`](#even?)
 [`exclaim`](#exclaim)
+[`exit`](#exit)
 [`filter`](#filter)
 [`flatten`](#flatten)
 [*`foreach`*](#foreach)
@@ -1265,6 +1266,20 @@ Args: `(l)`
 (Begone, fiend!)
 
 ```
+
+-----------------------------------------------------
+		
+
+## `exit`
+
+Exit the program
+
+Type: native function
+
+Arity: 0 
+
+Args: `()`
+
 
 -----------------------------------------------------
 		

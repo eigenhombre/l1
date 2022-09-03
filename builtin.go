@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -563,6 +564,17 @@ func init() {
 					return nil, baseError("missing argument")
 				}
 				return eval(args[0], e)
+			},
+		},
+		"exit": {
+			Name:       "exit",
+			Docstring:  "Exit the program",
+			FixedArity: 0,
+			NAry:       false,
+			ArgString:  "()",
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				os.Exit(0)
+				return nil, nil
 			},
 		},
 		"fuse": {
