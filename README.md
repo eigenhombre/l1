@@ -204,6 +204,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
                min  F    0+  Find minimum of one or more numbers
               neg?  F    1   Return true iff the supplied integer argument is less than zero
                not  N    1   Return t if the argument is nil, () otherwise
+              not=  F    0+  Complement of = function
                nth  F    2   Find the nth value of a list, starting from zero
            number?  N    1   Return true if the argument is a number, else ()
               odd?  F    1   Return true if the supplied integer argument is odd

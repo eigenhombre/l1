@@ -32,21 +32,21 @@ func evAtom(a Atom, e *env) (Sexpr, error) {
 	if ok {
 		return ret, nil
 	}
-	return nil, fmt.Errorf("unknown symbol: %s", a.s)
+	return nil, baseErrorf("unknown symbol: %s", a.s)
 }
 
 func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	if args == Nil {
-		return nil, fmt.Errorf("missing argument")
+		return nil, baseError("missing argument")
 	}
 	carAtom, ok := args.car.(Atom)
 	if !ok {
-		return nil, fmt.Errorf("first argument must be an atom")
+		return nil, baseError("first argument must be an atom")
 	}
 	name := carAtom.s
 	args, ok = args.cdr.(*ConsCell)
 	if !ok || args == Nil {
-		return nil, fmt.Errorf("missing argument")
+		return nil, baseError("missing argument")
 	}
 	val, err := eval(args.car, e)
 	if err != nil {
@@ -61,16 +61,16 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 
 func evSet(args *ConsCell, e *env) (Sexpr, error) {
 	if args == Nil {
-		return nil, fmt.Errorf("missing argument")
+		return nil, baseError("missing argument")
 	}
 	carAtom, ok := args.car.(Atom)
 	if !ok {
-		return nil, fmt.Errorf("first argument must be an atom")
+		return nil, baseError("first argument must be an atom")
 	}
 	name := carAtom.s
 	args, ok = args.cdr.(*ConsCell)
 	if !ok || args == Nil {
-		return nil, fmt.Errorf("missing argument")
+		return nil, baseError("missing argument")
 	}
 	val, err := eval(args.car, e)
 	if err != nil {
@@ -90,15 +90,15 @@ func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
 	}
 
 	if args == Nil {
-		return nil, fmt.Errorf("%s requires a function name", errPreamble)
+		return nil, baseErrorf("%s requires a function name", errPreamble)
 	}
 	name, ok := args.car.(Atom)
 	if !ok {
-		return nil, fmt.Errorf("%s name must be an atom", errPreamble)
+		return nil, baseErrorf("%s name must be an atom", errPreamble)
 	}
 	args = args.cdr.(*ConsCell)
 	if args == Nil {
-		return nil, fmt.Errorf("%s requires an argument list", errPreamble)
+		return nil, baseErrorf("%s requires an argument list", errPreamble)
 	}
 	fn, err := mkLambda(args, isMacro, e)
 	if err != nil {
@@ -113,11 +113,11 @@ func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
 
 func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	if args == Nil {
-		return nil, fmt.Errorf("no error spec given")
+		return nil, baseError("no error spec given")
 	}
 	sigExpr, ok := args.car.(*ConsCell)
 	if !ok {
-		return nil, fmt.Errorf("error signature must be a list")
+		return nil, baseError("error signature must be a list")
 	}
 	sigEvaled, err := eval(sigExpr, e)
 	if err != nil {
@@ -125,13 +125,13 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	}
 	sigList, ok := sigEvaled.(*ConsCell)
 	if !ok {
-		return nil, fmt.Errorf("error signature must be a list")
+		return nil, baseError("error signature must be a list")
 	}
 	errorStr := stringFromList(sigList)
 	bodyArgs := args.cdr.(*ConsCell)
 	for {
 		if bodyArgs == Nil {
-			return nil, fmt.Errorf("error not found in %s", args)
+			return nil, baseErrorf("error not found in %s", args)
 		}
 		toEval := bodyArgs.car
 		_, err := eval(toEval, e)
@@ -139,7 +139,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 			if strings.Contains(err.Error(), errorStr) {
 				return Nil, nil
 			}
-			return nil, fmt.Errorf("error '%s' not found in '%s'",
+			return nil, baseErrorf("error '%s' not found in '%s'",
 				errorStr, err.Error())
 		}
 		bodyArgs = bodyArgs.cdr.(*ConsCell)
@@ -152,7 +152,7 @@ func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error
 	var err error
 	if lambda.restArg != noRestArg {
 		if len(lambda.args) > len(evaledList) {
-			return fmt.Errorf("not enough arguments for function")
+			return baseError("not enough arguments for function")
 		}
 		err = newEnv.Set(lambda.restArg,
 			mkListAsConsWithCdr(evaledList[len(lambda.args):],
@@ -162,9 +162,9 @@ func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error
 		}
 	} else {
 		if len(lambda.args) < len(evaledList) {
-			return fmt.Errorf("too many arguments for function")
+			return baseError("too many arguments for function")
 		} else if len(lambda.args) > len(evaledList) {
-			return fmt.Errorf("not enough arguments for function")
+			return baseError("not enough arguments for function")
 		}
 	}
 	for i, arg := range lambda.args {
@@ -206,7 +206,7 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 	fn, _ := e.Lookup(expr.(*ConsCell).car.(Atom).s)
 	c, ok := expr.(*ConsCell)
 	if !ok {
-		return nil, fmt.Errorf("macro call must be a list")
+		return nil, baseError("macro call must be a list")
 	}
 	lambda, ok := fn.(*lambdaFn)
 	if !ok {
@@ -327,19 +327,19 @@ top:
 		}
 		cdrCons, ok := t.cdr.(*ConsCell)
 		if !ok {
-			return nil, fmt.Errorf("malformed list for eval")
+			return nil, baseError("malformed list for eval")
 		}
 		// special forms:
 		if carAtom, ok := t.car.(Atom); ok {
 			switch {
 			case carAtom.s == "quote":
 				if cdrCons == Nil {
-					return nil, fmt.Errorf("quote needs an argument")
+					return nil, baseError("quote needs an argument")
 				}
 				return cdrCons.car, nil
 			case carAtom.s == "syntax-quote":
 				if cdrCons == Nil {
-					return nil, fmt.Errorf("syntax-quote needs an argument")
+					return nil, baseError("syntax-quote needs an argument")
 				}
 				expr = syntaxQuote(cdrCons.car)
 				goto top
@@ -354,7 +354,7 @@ top:
 					}
 					pair, ok := pairList.car.(*ConsCell)
 					if !ok || pair == Nil {
-						return nil, fmt.Errorf("cond requires a list of pairs")
+						return nil, baseError("cond requires a list of pairs")
 					}
 					ev, err := eval(pair.car, e)
 					if err != nil {
@@ -367,7 +367,7 @@ top:
 					// TAIL CALL!!!
 					cdrCons, ok := pair.cdr.(*ConsCell)
 					if !ok || cdrCons == Nil {
-						return nil, fmt.Errorf("cond requires a list of pairs")
+						return nil, baseError("cond requires a list of pairs")
 					}
 					expr = cdrCons.car
 					goto top
@@ -381,14 +381,14 @@ top:
 					}
 					ev, err := eval(pairList.car, e)
 					if err != nil {
-						return nil, err
+						return nil, extendWithSplitString("and operator", err)
 					}
 					if ev == Nil {
 						return Nil, nil
 					}
 					pairList, ok = pairList.cdr.(*ConsCell)
 					if !ok {
-						return nil, fmt.Errorf("and requires a list of expressions")
+						return nil, baseError("and requires a list of expressions")
 					}
 				}
 			// FIXME: Do as a macro:
@@ -400,14 +400,14 @@ top:
 					}
 					ev, err := eval(pairList.car, e)
 					if err != nil {
-						return nil, err
+						return nil, extendWithSplitString("or operator", err)
 					}
 					if ev != Nil {
 						return ev, nil
 					}
 					pairList, ok = pairList.cdr.(*ConsCell)
 					if !ok {
-						return nil, fmt.Errorf("or requires a list of expressions")
+						return nil, baseError("or requires a list of expressions")
 					}
 				}
 			case carAtom.s == "loop":
@@ -421,7 +421,7 @@ top:
 						}
 						_, err := eval(start.car, e)
 						if err != nil {
-							return nil, err
+							return nil, extendWithSplitString("loop operator", err)
 						}
 						start = start.cdr.(*ConsCell)
 					}
@@ -448,13 +448,13 @@ top:
 				return evDefn(cdrCons, true, e)
 			case carAtom.s == "error":
 				if cdrCons == Nil {
-					return nil, fmt.Errorf("error requires a non-empty argument list")
+					return nil, baseError("error requires a non-empty argument list")
 				}
 				errorExpr, err := eval(cdrCons.car, e)
 				if err != nil {
-					return nil, err
+					return nil, extendWithSplitString("error operator", err)
 				}
-				return nil, fmt.Errorf("%s", errorExpr)
+				return nil, Cons(errorExpr, Nil)
 			case carAtom.s == "errors":
 				return evErrors(cdrCons, e)
 			case carAtom.s == "try":
@@ -469,22 +469,19 @@ top:
 					if ok && car != Nil {
 						carCarAtom, ok := car.car.(Atom)
 						if ok && carCarAtom.s == "catch" {
-							fmt.Println("in catch block, hadError:", hadError, "err:", err)
 							if !hadError {
 								return ret, err
 							}
-							// ignore binding name for now:
 							cdr, ok := car.cdr.(*ConsCell)
 							if !ok {
-								return nil, fmt.Errorf("catch body must be a list with a binding name")
+								return nil, baseError("catch body must be a list with a binding name")
 							}
 							bindingName := cdr.car
 							symStr, ok := bindingName.(Atom)
 							if !ok {
-								return nil, fmt.Errorf("catch binding name must be a symbol")
+								return nil, baseError("catch binding name must be a symbol")
 							}
 							eInner := mkEnv(e)
-							fmt.Println("error:", err)
 							errCons, ok := err.(*ConsCell)
 							if !ok {
 								errCons = stringsToList("unwrapped", "error")
@@ -493,19 +490,20 @@ top:
 
 							cdr, ok = cdr.cdr.(*ConsCell)
 							if !ok {
-								return nil, fmt.Errorf("catch body must be a list with a binding name")
+								return nil, baseError("catch body must be a list with a binding name")
 							}
+							err = nil
 							for {
 								if cdr == Nil {
 									return ret, err
 								}
 								ret, err = eval(cdr.car, &eInner)
 								if err != nil {
-									return nil, err
+									return nil, extendWithSplitString("catch body", err)
 								}
 								cdr, ok = cdr.cdr.(*ConsCell)
 								if !ok {
-									return nil, fmt.Errorf("catch body must be a list with a binding name")
+									return nil, baseError("catch body must be a list with a binding name")
 								}
 							}
 						}
@@ -515,42 +513,41 @@ top:
 						ev, err = eval(cdrCons.car, e)
 						if err != nil {
 							hadError = true
-							fmt.Println("had error:", err)
 						} else {
 							ret = ev
 						}
 					}
 					cdrCons, ok = cdrCons.cdr.(*ConsCell)
 					if !ok {
-						return nil, fmt.Errorf("try requires a list of expressions")
+						return nil, baseError("try requires a list of expressions")
 					}
 				}
 			case carAtom.s == "let":
 				args := cdrCons
 				if args == Nil {
-					return nil, fmt.Errorf("let requires a binding list")
+					return nil, baseError("let requires a binding list")
 				}
 				bindings, ok := args.car.(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("let bindings must be a list")
+					return nil, baseError("let bindings must be a list")
 				}
 				body, ok := args.cdr.(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("let requires a body")
+					return nil, baseError("let requires a body")
 				}
 				newEnv := mkEnv(e)
 				for ; bindings != Nil; bindings = bindings.cdr.(*ConsCell) {
 					binding, ok := bindings.car.(*ConsCell)
 					if !ok || binding == Nil {
-						return nil, fmt.Errorf("a let binding must be a list of binding pairs")
+						return nil, baseError("a let binding must be a list of binding pairs")
 					}
 					carAtom, ok := binding.car.(Atom)
 					if !ok {
-						return nil, fmt.Errorf("a let binding must be a list of binding pairs")
+						return nil, baseError("a let binding must be a list of binding pairs")
 					}
 					asCons, ok := binding.cdr.(*ConsCell)
 					if !ok {
-						return nil, fmt.Errorf("a let binding must be a list of binding pairs")
+						return nil, baseError("a let binding must be a list of binding pairs")
 					}
 					if asCons == Nil {
 						return Nil, nil
@@ -614,7 +611,7 @@ top:
 			newEnv := mkEnv(lambda.env)
 			err = setLambdaArgsInEnv(&newEnv, lambda, evaledList)
 			if err != nil {
-				return nil, err
+				return nil, extendWithSplitString("lambda env setup", err)
 			}
 			var ret Sexpr = Nil
 			for {
@@ -629,7 +626,9 @@ top:
 				}
 				ret, err = eval(lambda.body.car, &newEnv)
 				if err != nil {
-					return nil, err
+					return nil, extendStacktrace(
+						Cons(Atom{"lambda"}, Cons(lambda.body.car, Nil)),
+						err)
 				}
 				lambda.body = lambda.body.cdr.(*ConsCell)
 			}
@@ -637,14 +636,15 @@ top:
 		// Built-in functions:
 		builtin, ok := evalCar.(*Builtin)
 		if !ok {
-			return nil, fmt.Errorf("%s is not a function", evalCar)
+			return nil, baseErrorf("%s is not a function", evalCar)
 		}
 		biResult, err := builtin.Fn(evaledList, e)
 		if err != nil {
-			return nil, err
+			return nil, extendWithSplitString(fmt.Sprintf("builtin function %s",
+				builtin.Name), err)
 		}
 		return biResult, nil
 	default:
-		return nil, fmt.Errorf("unknown expression type: %q", t)
+		return nil, baseErrorf("unknown expression type: %q", t)
 	}
 }

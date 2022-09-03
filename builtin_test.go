@@ -17,7 +17,7 @@ func TestListOfNums(t *testing.T) {
 		{"123", "(1 2 3)", OK},
 		{"-1", "(-1)", OK},
 		{"-12345", "(-1 2 3 4 5)", OK},
-		{"-", "", "unexpected end of input"},
+		{"-", "", "((unexpected end of input))"},
 	}
 	for _, test := range tests {
 		got, err := listOfNums(test.input)

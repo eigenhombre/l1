@@ -1,5 +1,5 @@
 # API Index
-123 forms available:
+124 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -72,6 +72,7 @@
 [`min`](#min)
 [`neg?`](#neg?)
 [`not`](#not)
+[`not=`](#not=)
 [`nth`](#nth)
 [`number?`](#number?)
 [`odd?`](#odd?)
@@ -258,7 +259,7 @@ Args: `(numerator denominator1 . more)`
 2
 > (/ 1 0)
 ;;=>
-ERROR: ((division by zero))
+ERROR: ((builtin function /) (division by zero))
 
 ```
 
@@ -1204,10 +1205,10 @@ Args: `(x)`
 ```
 > (eval (quote (one two)))
 ;;=>
-ERROR: unknown symbol: one
+ERROR: ((builtin function eval) (unknown symbol: one))
 > (eval (quote ((+ 1 2))))
 ;;=>
-ERROR: 3 is not a function
+ERROR: ((builtin function eval) (3 is not a function))
 
 ```
 
@@ -1479,7 +1480,7 @@ Type: macro
 
 Arity: 1 
 
-Args: `(expr)`
+Args: `(condition)`
 
 
 ### Examples
@@ -1490,7 +1491,7 @@ Args: `(expr)`
 ()
 > (is (car (cons () (quote (this one should fail)))))
 ;;=>
-ERROR: (assertion failed: (car (cons () (quote (this one should fail)))))
+ERROR: ((assertion failed: (car (cons () (quote (this one should fail))))))
 
 ```
 
@@ -1962,6 +1963,32 @@ t
 -----------------------------------------------------
 		
 
+## `not=`
+
+Complement of = function
+
+Type: function
+
+Arity: 0+
+
+Args: `(() . terms)`
+
+
+### Examples
+
+```
+> (not= 1 2)
+;;=>
+t
+> (not= (quote a) (quote a))
+;;=>
+()
+
+```
+
+-----------------------------------------------------
+		
+
 ## `nth`
 
 Find the nth value of a list, starting from zero
@@ -1979,6 +2006,9 @@ Args: `(n l)`
 > (nth 3 (quote (one two three four five)))
 ;;=>
 four
+> (nth 1000 (range 2))
+;;=>
+()
 
 ```
 
@@ -2412,7 +2442,7 @@ Args: `(x y)`
 0
 > (rem 1 0)
 ;;=>
-ERROR: division by zero
+ERROR: ((builtin function rem) (division by zero))
 
 ```
 

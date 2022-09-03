@@ -77,11 +77,9 @@
 
 (defmacro foreach (x xs . body)
   (doc (execute body for each value in a list))
-  `(progn
-     (map (lambda (~x)
-            ~@body)
-          ~xs)
-     ()))
+  `(map (lambda (~x)
+          ~@body)
+        ~xs))
 
 (defn reduce (f x . args)
   (doc (successively apply a function against a list of arguments)
@@ -605,4 +603,8 @@
           (t (reduce min (min n1 n2) (cdr (cdr args)))))))
 
 (defn not= (() . terms)
+  (doc (complement of = function)
+       (examples
+        (not= 1 2)
+        (not= 'a 'a)))
   (not (apply = terms)))
