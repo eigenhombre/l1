@@ -34,6 +34,14 @@ func stringsToList(listElems ...string) *ConsCell {
 	return list(xs...)
 }
 
+func stringsToExprs(listElems ...string) []Sexpr {
+	xs := make([]Sexpr, len(listElems))
+	for i, s := range listElems {
+		xs[i] = Atom{s}
+	}
+	return xs
+}
+
 func list(listElems ...Sexpr) *ConsCell {
 	// FIXME: don't type assert here after mkListAsConsWithCdr returns a Cons:
 	return mkListAsConsWithCdr(listElems, Nil).(*ConsCell)

@@ -1010,6 +1010,35 @@ func init() {
 				}
 			},
 		},
+		"source": {
+			Name:       "source",
+			Docstring:  "Show source for a function",
+			FixedArity: 1,
+			NAry:       false,
+			ArgString:  "(f)",
+			Examples: E(
+				L(A("source"), A("map")),
+				L(A("source"), A("+")),
+			),
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, baseError("source expects a single argument")
+				}
+				switch t := args[0].(type) {
+				case *Builtin:
+					return nil, baseErrorf("cannot get source of builtin function %s", t)
+				case *lambdaFn:
+					var argsCdr Sexpr = Nil
+					if t.restArg != "" {
+						argsCdr = Atom{t.restArg}
+					}
+					argExprs := stringsToExprs(t.args...)
+					return Cons(Atom{"lambda"}, Cons(mkListAsConsWithCdr(argExprs, argsCdr), t.body)), nil
+				default:
+					return nil, baseErrorf("'%s' is not a function", args[0])
+				}
+			},
+		},
 		"test": {
 			Name:       "test",
 			Docstring:  "Establish a testing block (return last expression)",

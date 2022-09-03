@@ -131,6 +131,7 @@ screen-get-key  N    0   Return a keystroke as an atom
        shuffle  N    1   Return a (quickly!) shuffled list
          sleep  N    1   Sleep for the given number of milliseconds
           some  F    2   Return f applied to first element for which that result is truthy, else ()
+        source  N    1   Show source for a function
          split  N    1   Split an atom or number into a list of single-digit numbers or single-character atoms
        swallow  S    0+  Swallow errors thrown in body, return t if any occur
   syntax-quote  S    1   Syntax-quote an expression

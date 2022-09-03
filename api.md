@@ -1,5 +1,5 @@
 # API Index
-125 forms available:
+126 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -110,6 +110,7 @@
 [`shuffle`](#shuffle)
 [`sleep`](#sleep)
 [`some`](#some)
+[`source`](#source)
 [`split`](#split)
 [**`swallow`**](#swallow)
 [**`syntax-quote`**](#syntax-quote)
@@ -2738,6 +2739,32 @@ Args: `(f l)`
 > (some even? (quote (1 3 5 7 9 1000 11 13)))
 ;;=>
 t
+
+```
+
+-----------------------------------------------------
+		
+
+## `source`
+
+Show source for a function
+
+Type: native function
+
+Arity: 1 
+
+Args: `(f)`
+
+
+### Examples
+
+```
+> (source map)
+;;=>
+(lambda (f l) (when l (cons (f (car l)) (map f (cdr l)))))
+> (source +)
+;;=>
+ERROR: ((builtin function source) (cannot get source of builtin function <builtin: +>))
 
 ```
 

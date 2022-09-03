@@ -847,3 +847,26 @@
     (catch e
       (is (member '(division by zero) e))
       (is (member '(builtin function /) e)))))
+
+(test '(source function)
+  (defn funfun (x)
+    1
+    2
+    (+ 5 x))
+  (is (= '(lambda (x) 1 2 (+ 5 x))
+         (source funfun)))
+
+  (defn restyfun (x . z)
+    '(something else))
+  (is (= '(lambda (x . z)
+            '(something else))
+         (source restyfun)))
+
+  (errors '(not a function)
+    (source 3))
+
+  (errors '(not a function)
+    (source 'a))
+
+  (errors '(cannot get source of builtin)
+    (source +)))
