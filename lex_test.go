@@ -62,6 +62,8 @@ func TestLex(t *testing.T) {
 		{S(")"), toks(RP(")", 1))},
 		{S("(3)"), toks(LP("(", 1), N("3", 1), RP(")", 1))},
 		{S("Z"), toks(A("Z", 1))},
+		{S("Z "), toks(A("Z", 1))},
+		{S("ZZ"), toks(A("ZZ", 1))},
 		{S("(EQUAL ", "(TIMES ", "3 4", ") 12", ")"), toks(
 			LP("(", 1),
 			A("EQUAL", 1),
@@ -96,12 +98,12 @@ func TestLex(t *testing.T) {
 			SPLICINGUNQUOTE("~@", 1), A("c", 1), RP(")", 1))},
 		{S("((a . b))"), toks(LP("(", 1), LP("(", 1), A("a", 1), DOT(".", 1), A("b", 1), RP(")", 1), RP(")", 1))},
 		{S("((a) . b)"), toks(LP("(", 1), LP("(", 1), A("a", 1), RP(")", 1), DOT(".", 1), A("b", 1), RP(")", 1))},
-		{S("&"), toks(Err("unexpected character '&' in input", 1))},
-		{S("(", "1 ", "2 & ", "3)"), toks(
+		{S("@"), toks(Err("unexpected character '@' in input", 1))},
+		{S("(", "1 ", "2 @ ", "3)"), toks(
 			LP("(", 1),
 			N("1", 2),
 			N("2", 3),
-			Err("unexpected character '&' in input", 3),
+			Err("unexpected character '@' in input", 3),
 			N("3", 4),
 			RP(")", 4))},
 		{S("#_1"), toks(COMMENTNEXT("#_", 1), N("1", 1))},

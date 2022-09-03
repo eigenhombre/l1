@@ -49,7 +49,7 @@ func TestEval(t *testing.T) {
 		// regression tests for Issue #25 (infinite loop):
 		{Cases(S("(quote questionable?)", "questionable?", OK))},
 		{Cases(S("(quote moneybag$)", "moneybag$", OK))},
-		{Cases(S("(quote (a & b))", "", "unexpected character '&' in input"))},
+		{Cases(S("(quote (a @ b))", "", "unexpected character '@' in input"))},
 		{Cases(S("(cond (() 1) (2 3))", "3", OK))},
 		{Cases(S("(", "", "unbalanced parens"))},
 		{Cases(S("(1", "", "unbalanced parens"))},
@@ -73,7 +73,7 @@ func TestEval(t *testing.T) {
 		// Function representation:
 		{Cases(S("(lambda ())", "<lambda()>", OK))},
 		{Cases(S("(lambda (x))", "<lambda(x)>", OK))},
-		{Cases(S("&", "", "unexpected character '&'"))},
+		{Cases(S("@", "", "unexpected character '@'"))},
 		{ECases(S("((lambda (x . xs) (list x xs)) 1 2 3 4)", "(1 (2 3 4))", OK))},
 		{Cases(S("(lambda (x . y))", "<lambda(x . y)>", OK))},
 		{Cases(S("(lambda (a b zz))", "<lambda(a b zz)>", OK))},

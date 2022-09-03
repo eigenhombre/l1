@@ -872,3 +872,11 @@
 
   (errors '(cannot get source of builtin)
     (source +)))
+
+(test 'unicode
+  (def 水 'water)
+  (is (= 水 'water))
+  (is (= '▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐▖▗■□▢▣▥▧▨▩
+         (fuse'(▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▉ ▊
+                  ▋ ▌ ▍ ▎ ▏ ▐ ▖ ▗ ■
+                  □ ▢ ▣ ▥ ▧ ▨ ▩)))))

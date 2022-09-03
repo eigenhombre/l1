@@ -118,26 +118,26 @@ atoms and lists are used where strings normally would be:
 (In this example, the `Hello, world!` is output to the terminal, and
 then the return value of `printl`, namely `()`.)
 
-Atom names can be arbitrarily long (they are Go strings under the hood)
-and can start with the characters
+Atom names can be arbitrarily long (they are Go strings under the hood).
+They can start with any UTF-8-encoded unicode characters but the following:
 
-    abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+*/-=_<>?
+    0123456789+-. \t\n\r()~@#;`'
 
-After the first character,
+After the first character, anything is allowed except spaces or
 
-    0123456789!$^.,
+    \t\n\r()~@#;`'
 
-are also allowed.  Deviations from these constraints need special
-handling.  For example:
+Deviations from these constraints need special handling.  For example:
 
-    > (printl '(!Hello, world!))
-    unexpected lexeme 'unexpected character '!' in input'
+    > (printl '(@Hello, world!))
+    (...
+     (unexpected lexeme 'unexpected character '@' in input' on line 1))
 
 A workaround is to use syntax quote and unquote, described below, to
 dynamically create a new atom name using the `BANG` alias for `!`:
 
-    > (printl `(~(fuse `(~BANG Hello,)) world!))
-    !Hello, world!
+    > (printl `(~(fuse `(~ATSIGN Hello,)) world!))
+    @Hello, world!
     ()
 
 This is admittedly awkward, but rare in practice for the kinds of

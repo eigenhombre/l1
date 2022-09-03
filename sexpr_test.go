@@ -126,7 +126,7 @@ func TestStrToSexprs(T *testing.T) {
 		if err == nil {
 			T.Errorf("lexAndParse(%q) should have failed", test.input)
 		} else {
-			T.Logf("lexAndParse(%q) failed as desired: %v", test.input, err)
+			T.Logf("lexAndParse(%q) failed as desired: %v ... OK", test.input, err)
 		}
 	}
 }

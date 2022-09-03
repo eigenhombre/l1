@@ -130,16 +130,32 @@ func lexStart(l *lexutil.Lexer) lexutil.StateFn {
 	}
 }
 
-var initialAtomChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+*/-=_<>?"
-var laterAtomChars = (initialAtomChars + "0123456789" + "!$^.,")
+var disallowedForAtomAfterStart = " \t\n\r()~@#;`'"
+var disallowedForAtomStart = "0123456789+-." + disallowedForAtomAfterStart
 
 func isAtomStart(r rune) bool {
-	return strings.ContainsRune(initialAtomChars, r)
+	return !(strings.ContainsRune(disallowedForAtomStart, r))
+}
+
+func acceptIf(l *lexutil.Lexer, f func(rune) bool) bool {
+	for {
+		x := l.Peek()
+		if x == lexutil.EOF {
+			return false
+		}
+		if f(x) {
+			l.Next()
+			continue
+		}
+		return false
+	}
 }
 
 func lexAtom(l *lexutil.Lexer) lexutil.StateFn {
-	l.Accept(initialAtomChars)
-	l.AcceptRun(laterAtomChars)
+	acceptIf(l, isAtomStart)
+	acceptIf(l, func(r rune) bool {
+		return !(strings.ContainsRune(disallowedForAtomAfterStart, r))
+	})
 	l.Emit(itemAtom)
 	return lexStart
 }
