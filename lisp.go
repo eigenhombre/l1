@@ -50,11 +50,11 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	}
 	val, err := eval(args.car, e)
 	if err != nil {
-		return nil, err
+		return nil, extendError("evaluating def value", err)
 	}
 	err = e.Set(name, val)
 	if err != nil {
-		return nil, err
+		return nil, extendError("setting def result", err)
 	}
 	return val, nil
 }
@@ -74,11 +74,11 @@ func evSet(args *ConsCell, e *env) (Sexpr, error) {
 	}
 	val, err := eval(args.car, e)
 	if err != nil {
-		return nil, err
+		return nil, extendError("evaluating set value", err)
 	}
 	err = e.Update(name, val)
 	if err != nil {
-		return nil, err
+		return nil, extendError("updating set result", err)
 	}
 	return val, nil
 }
@@ -102,11 +102,11 @@ func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
 	}
 	fn, err := mkLambda(args, isMacro, e)
 	if err != nil {
-		return nil, err
+		return nil, extendError("creating lambda function", err)
 	}
 	err = e.Set(name.s, fn)
 	if err != nil {
-		return nil, err
+		return nil, extendError("setting defn result", err)
 	}
 	return Nil, nil
 }
@@ -121,7 +121,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	}
 	sigEvaled, err := eval(sigExpr, e)
 	if err != nil {
-		return nil, err
+		return nil, extendError("evaluating error signature", err)
 	}
 	sigList, ok := sigEvaled.(*ConsCell)
 	if !ok {
@@ -214,10 +214,10 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 	}
 	asCons, err := consToExprs(c.cdr)
 	if err != nil {
-		return nil, err
+		return nil, extendError("converting macro call to list", err)
 	}
 	if err := setLambdaArgsInEnv(e, lambda, asCons); err != nil {
-		return nil, err
+		return nil, extendError("setting macro call arguments", err)
 	}
 	ast := lambda.body
 	var ret Sexpr = Nil
@@ -228,7 +228,7 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 		toEval := ast.car
 		ret, err = eval(toEval, e)
 		if err != nil {
-			return nil, err
+			return nil, extendError("evaluating macro expansion", err)
 		}
 		ast, ok = ast.cdr.(*ConsCell)
 		if !ok {
@@ -243,7 +243,7 @@ func macroexpand(expr Sexpr, e *env) (Sexpr, error) {
 	for {
 		ret, err = macroexpand1(ret, e)
 		if err != nil {
-			return nil, err
+			return nil, extendError("macroexpanson", err)
 		}
 		if !isMacroCall(ret, e) {
 			return ret, nil
@@ -275,7 +275,7 @@ func splicingUnquote(l *ConsCell) (*ConsCell, error) {
 	}
 	nxt, err := splicingUnquote(cdr)
 	if err != nil {
-		return nil, err
+		return nil, extendError("splicing unquote", err)
 	}
 	elt := l.car
 	switch t := elt.(type) {
@@ -313,7 +313,7 @@ top:
 	if isMacroCall(expr, e) {
 		expr, err = macroexpand(expr, e)
 		if err != nil {
-			return nil, err
+			return nil, extendError("eval macroexpansion", err)
 		}
 	}
 	switch t := expr.(type) {
@@ -358,7 +358,7 @@ top:
 					}
 					ev, err := eval(pair.car, e)
 					if err != nil {
-						return nil, err
+						return nil, extendError("evaluating cond condition", err)
 					}
 					if ev == Nil {
 						pairList = pairList.cdr.(*ConsCell)
@@ -381,7 +381,7 @@ top:
 					}
 					ev, err := eval(pairList.car, e)
 					if err != nil {
-						return nil, extendWithSplitString("and operator", err)
+						return nil, extendError("and operator", err)
 					}
 					if ev == Nil {
 						return Nil, nil
@@ -400,7 +400,7 @@ top:
 					}
 					ev, err := eval(pairList.car, e)
 					if err != nil {
-						return nil, extendWithSplitString("or operator", err)
+						return nil, extendError("or operator", err)
 					}
 					if ev != Nil {
 						return ev, nil
@@ -421,7 +421,7 @@ top:
 						}
 						_, err := eval(start.car, e)
 						if err != nil {
-							return nil, extendWithSplitString("loop operator", err)
+							return nil, extendError("loop operator", err)
 						}
 						start = start.cdr.(*ConsCell)
 					}
@@ -452,7 +452,7 @@ top:
 				}
 				errorExpr, err := eval(cdrCons.car, e)
 				if err != nil {
-					return nil, extendWithSplitString("error operator", err)
+					return nil, extendError("error operator", err)
 				}
 				return nil, Cons(errorExpr, Nil)
 			case carAtom.s == "errors":
@@ -484,7 +484,7 @@ top:
 							eInner := mkEnv(e)
 							errCons, ok := err.(*ConsCell)
 							if !ok {
-								errCons = stringsToList("unwrapped", "error")
+								return nil, baseError("catch body must be a list with a binding name")
 							}
 							eInner.Set(symStr.s, errCons)
 
@@ -499,7 +499,7 @@ top:
 								}
 								ret, err = eval(cdr.car, &eInner)
 								if err != nil {
-									return nil, extendWithSplitString("catch body", err)
+									return nil, extendError("catch body", err)
 								}
 								cdr, ok = cdr.cdr.(*ConsCell)
 								if !ok {
@@ -554,11 +554,11 @@ top:
 					}
 					val, err := eval(asCons.car, e)
 					if err != nil {
-						return nil, err
+						return nil, extendError("evaluating let bindings", err)
 					}
 					err = newEnv.Set(carAtom.s, val)
 					if err != nil {
-						return nil, err
+						return nil, extendError("setting let bindings", err)
 					}
 				}
 
@@ -576,7 +576,7 @@ top:
 					}
 					ret, err = eval(body.car, &newEnv)
 					if err != nil {
-						return nil, err
+						return nil, extendError("evaluating let body", err)
 					}
 					body = body.cdr.(*ConsCell)
 				}
@@ -587,7 +587,7 @@ top:
 		// Functions / normal order of evaluation.  Get function to use first:
 		evalCar, err := eval(t.car, e)
 		if err != nil {
-			return nil, err
+			return nil, extendError("evaluating function object", err)
 		}
 		// In normal function application, evaluate the arguments executing the
 		// function:
@@ -599,7 +599,7 @@ top:
 			}
 			ee, err := eval(start.car, e)
 			if err != nil {
-				return nil, err
+				return nil, extendError("evaluating function arguments", err)
 			}
 			evaledList = append(evaledList, ee)
 			start = start.cdr.(*ConsCell)
@@ -611,7 +611,7 @@ top:
 			newEnv := mkEnv(lambda.env)
 			err = setLambdaArgsInEnv(&newEnv, lambda, evaledList)
 			if err != nil {
-				return nil, extendWithSplitString("lambda env setup", err)
+				return nil, extendError("lambda env setup", err)
 			}
 			var ret Sexpr = Nil
 			for {
@@ -626,7 +626,7 @@ top:
 				}
 				ret, err = eval(lambda.body.car, &newEnv)
 				if err != nil {
-					return nil, extendStacktrace(
+					return nil, extendWithList(
 						Cons(Atom{"lambda"}, Cons(lambda.body.car, Nil)),
 						err)
 				}
@@ -640,7 +640,7 @@ top:
 		}
 		biResult, err := builtin.Fn(evaledList, e)
 		if err != nil {
-			return nil, extendWithSplitString(fmt.Sprintf("builtin function %s",
+			return nil, extendError(fmt.Sprintf("builtin function %s",
 				builtin.Name), err)
 		}
 		return biResult, nil

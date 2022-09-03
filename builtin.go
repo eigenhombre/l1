@@ -77,7 +77,7 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	}
 	asCons, err := consToExprs(c)
 	if err != nil {
-		return nil, extendWithSplitString("apply", err)
+		return nil, extendError("apply", err)
 	}
 	fnArgs = append(singleArgs, asCons...)
 
@@ -92,7 +92,7 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 		newEnv := mkEnv(lambda.env)
 		err := setLambdaArgsInEnv(&newEnv, lambda, fnArgs)
 		if err != nil {
-			return nil, extendWithSplitString("apply", err)
+			return nil, extendError("apply", err)
 		}
 		var ret Sexpr = Nil
 		bodyExpr := lambda.body
@@ -102,7 +102,7 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 			}
 			ret, err = eval(bodyExpr.car, &newEnv)
 			if err != nil {
-				return nil, extendWithSplitString("apply", err)
+				return nil, extendError("apply", err)
 			}
 			bodyExpr = bodyExpr.cdr.(*ConsCell)
 		}
@@ -114,7 +114,7 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	}
 	biResult, err := builtin.Fn(fnArgs, env)
 	if err != nil {
-		return nil, extendWithSplitString("apply", err)
+		return nil, extendError("apply", err)
 	}
 	return biResult, nil
 }
@@ -833,11 +833,11 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				line, err := readLine()
 				if err != nil {
-					return nil, err
+					return nil, extendError("reading readlist input", err)
 				}
 				parsed, err := lexAndParse(strings.Split(line, "\n"))
 				if err != nil {
-					return nil, err
+					return nil, extendError("parsing readlist input", err)
 				}
 				return mkListAsConsWithCdr(parsed, Nil), nil
 			},
@@ -851,7 +851,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				err := termStart()
 				if err != nil {
-					return nil, err
+					return nil, extendError("starting screen", err)
 				}
 				return Nil, nil
 			},
@@ -865,7 +865,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				err := termEnd()
 				if err != nil {
-					return nil, err
+					return nil, extendError("stopping screen", err)
 				}
 				return Nil, nil
 			},
@@ -879,7 +879,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				width, height, err := termSize()
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-size termSize", err)
 				}
 				return Cons(Num(width), Cons(Num(height), Nil)), nil
 			},
@@ -893,7 +893,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				err := termClear()
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-clear termClear", err)
 				}
 				return Nil, nil
 			},
@@ -910,7 +910,7 @@ func init() {
 				}
 				key, err := termGetKey()
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-get-key termGetKey", err)
 				}
 				return Atom{key}, nil
 			},
@@ -939,7 +939,7 @@ func init() {
 				}
 				err := termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-write termDrawText", err)
 				}
 				return Nil, nil
 			},
@@ -960,7 +960,7 @@ func init() {
 				}
 				exprs, err := consToExprs(l)
 				if err != nil {
-					return nil, err
+					return nil, extendError("shuffle consToExprs", err)
 				}
 				rand.Shuffle(len(exprs), func(i, j int) {
 					exprs[i], exprs[j] = exprs[j], exprs[i]

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"unicode"
 	"unicode/utf8"
 )
@@ -19,7 +18,7 @@ func consToExprs(argList Sexpr) ([]Sexpr, error) {
 	for argList != Nil {
 		cons, ok := argList.(*ConsCell)
 		if !ok {
-			return nil, fmt.Errorf("expected list, got %q", argList)
+			return nil, baseErrorf("expected list, got %q", argList)
 		}
 		args = append(args, cons.car)
 		argList = cons.cdr

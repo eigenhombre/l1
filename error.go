@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func extendStacktrace(carList *ConsCell, err error) error {
+func extendWithList(carList *ConsCell, err error) error {
 	ret, ok := err.(*ConsCell)
 	if !ok {
 		return err
@@ -13,8 +13,8 @@ func extendStacktrace(carList *ConsCell, err error) error {
 	return Cons(carList, ret)
 }
 
-func extendWithSplitString(msg string, err error) error {
-	return extendStacktrace(stringsToList(strings.Split(msg, " ")...), err)
+func extendError(msg string, err error) error {
+	return extendWithList(stringsToList(strings.Split(msg, " ")...), err)
 }
 
 func startStacktrace(carList *ConsCell) error {
@@ -26,5 +26,6 @@ func baseError(msg string) error {
 }
 
 func baseErrorf(format string, a ...interface{}) error {
-	return startStacktrace(stringsToList(strings.Split(fmt.Sprintf(format, a...), " ")...))
+	return startStacktrace(stringsToList(
+		strings.Split(fmt.Sprintf(format, a...), " ")...))
 }

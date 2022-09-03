@@ -1206,7 +1206,7 @@ Args: `(x)`
 ```
 > (eval (quote (one two)))
 ;;=>
-ERROR: ((builtin function eval) (unknown symbol: one))
+ERROR: ((builtin function eval) (evaluating function object) (unknown symbol: one))
 > (eval (quote ((+ 1 2))))
 ;;=>
 ERROR: ((builtin function eval) (3 is not a function))

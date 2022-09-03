@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gdamore/tcell"
 	"github.com/mattn/go-runewidth"
 )
@@ -14,21 +12,21 @@ var screen tcell.Screen
 func termStart() error {
 	var err error
 	if screen != nil {
-		return fmt.Errorf("screen already initialized")
+		return baseError("screen already initialized")
 	}
 	screen, err = tcell.NewScreen()
 	if err != nil {
-		return err
+		return extendError("termStart NewScreen", err)
 	}
 	if err := screen.Init(); err != nil {
-		return err
+		return extendError("termStart Init", err)
 	}
 	return nil
 }
 
 func termClear() error {
 	if screen == nil {
-		return fmt.Errorf("screen not initialized")
+		return baseError("screen not initialized")
 	}
 	screen.Clear()
 	screen.Show()
@@ -37,7 +35,7 @@ func termClear() error {
 
 func termEnd() error {
 	if screen == nil {
-		return fmt.Errorf("screen not initialized")
+		return baseError("screen not initialized")
 	}
 	screen.Fini()
 	screen = nil
@@ -46,7 +44,7 @@ func termEnd() error {
 
 func termDrawText(x, y int, str string) error {
 	if screen == nil {
-		return fmt.Errorf("screen not initialized")
+		return baseError("screen not initialized")
 	}
 	for _, c := range str {
 		var combc []rune
@@ -66,7 +64,7 @@ func termDrawText(x, y int, str string) error {
 
 func termSize() (int, int, error) {
 	if screen == nil {
-		return 0, 0, fmt.Errorf("screen not initialized")
+		return 0, 0, baseError("screen not initialized")
 	}
 	x, y := screen.Size()
 	return x, y, nil
@@ -74,7 +72,7 @@ func termSize() (int, int, error) {
 
 func termGetKey() (string, error) {
 	if screen == nil {
-		return "", fmt.Errorf("screen not initialized")
+		return "", baseError("screen not initialized")
 	}
 	for {
 		ev := screen.PollEvent()

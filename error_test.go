@@ -22,11 +22,11 @@ func TestStackTrace(t *testing.T) {
 		return baseError("innerError")
 	}
 	inner2 := func() error {
-		return extendStacktrace(list(Atom{"middleError"},
+		return extendWithList(list(Atom{"middleError"},
 			stringsToList("with", "some", "extra", "info")), inner1())
 	}
 	inner3 := func() error {
-		return extendStacktrace(list(Atom{"outerError"}), inner2())
+		return extendWithList(list(Atom{"outerError"}), inner2())
 	}
 	err := inner3().(*ConsCell)
 	if err == nil {
