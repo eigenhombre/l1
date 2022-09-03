@@ -46,6 +46,7 @@ func lexParseEval(s string, e env, doPrint bool) bool {
 }
 
 func repl(e env) {
+top:
 	for {
 		fmt.Print("> ")
 		tokens := []token{}
@@ -56,7 +57,12 @@ func repl(e env) {
 			case nil:
 				these := lexItems([]string{s})
 				tokens = append(tokens, these...)
-				if isBalanced(tokens) {
+				bal, err := isBalanced(tokens)
+				if err != nil {
+					fmt.Printf("ERROR:\n%v\n", err)
+					goto top
+				}
+				if bal {
 					break Inner
 				}
 			case io.EOF:

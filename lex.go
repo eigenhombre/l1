@@ -202,7 +202,7 @@ func lexItems(ss []string) []token {
 	return ret
 }
 
-func isBalanced(tokens []token) bool {
+func isBalanced(tokens []token) (bool, error) {
 	level := 0
 	for _, token := range tokens {
 		switch token.lexeme.Typ {
@@ -212,5 +212,8 @@ func isBalanced(tokens []token) bool {
 			level--
 		}
 	}
-	return level == 0
+	if level < 0 {
+		return false, fmt.Errorf("too many right parens")
+	}
+	return level == 0, nil
 }

@@ -51,6 +51,8 @@ func TestParse(t *testing.T) {
 		{"1\n#!/bin/bash", Nil, "unexpected lexeme"},
 		// ... and that it reports line number correctly:
 		{"1\n#!/bin/bash", Nil, "on line 2"},
+		{")", Nil, "unexpected right paren"},
+		// line numbers in parse errors:
 		{"1\n2\n3\n)", Nil, "unexpected right paren on line 4"},
 	}
 	for _, test := range tests {
