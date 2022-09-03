@@ -249,6 +249,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
               test  N    0+  Establish a testing block (return last expression)
         tosentence  F    1   Return l as a sentence... capitalized, with a period at the end
              true?  F    1   Return t if the argument is t
+               try  S    0+  Try to evaluate body, catch errors and handle them
             upcase  N    1   Return the uppercase version of the given atom
            version  N    0   Return the version of the interpreter
               when  M    1+  Simple conditional with single branch

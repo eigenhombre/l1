@@ -1,5 +1,5 @@
 # API Index
-124 forms available:
+125 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -117,6 +117,7 @@
 [`test`](#test)
 [`tosentence`](#tosentence)
 [`true?`](#true?)
+[**`try`**](#try)
 [`upcase`](#upcase)
 [`version`](#version)
 [*`when`*](#when)
@@ -2904,6 +2905,39 @@ Args: `(x)`
 > (true? t)
 ;;=>
 t
+
+```
+
+-----------------------------------------------------
+		
+
+## `try`
+
+Try to evaluate body, catch errors and handle them
+
+Type: special form
+
+Arity: 0+
+
+Args: `(() . body)`
+
+
+### Examples
+
+```
+> (try (error '(boom)))
+;;=>
+ERROR:
+((boom))
+> (try
+    (error '(boom))
+    (catch e
+      (printl e)))
+;;=>
+(boom)
+> (try (/ 1 0) (catch e (len e)))
+2
+>
 
 ```
 
