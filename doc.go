@@ -295,6 +295,28 @@ foo
 (1 2 3 4)
 `,
 	},
+	{
+		name:    "try",
+		farity:  0,
+		ismulti: true,
+		doc:     "Try to evaluate body, catch errors and handle them",
+		ftype:   special,
+		argsStr: "(() . body)",
+		examples: `> (try (error '(boom)))
+;;=>
+ERROR:
+((boom))
+> (try
+    (error '(boom))
+    (catch e
+      (printl e)))
+;;=>
+(boom)
+> (try (/ 1 0) (catch e (len e)))
+2
+>
+`,
+	},
 }
 
 const columnsFormat = "%14s %2s %5s  %s"

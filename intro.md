@@ -255,6 +255,113 @@ however, possibilities are somewhat restricted compared to some
 languages, due to the inability of `l1` to handle branches or "goto"
 statements.
 
+## Assertions and Error Handling
+
+### `is`
+
+There is currently one kind of assertion expression in `l1`, namely
+the `is` macro:
+
+    > (is (= 4 (+ 2 2)))
+    > (is ())
+    ERROR:
+    ((assertion failed: ()))
+    >
+
+If the argument to `is` is falsey (`()`), then an error is printed
+and the program exits (if running a program) or the REPL
+returns to the top level prompt.
+
+If `is` is checking an equality of two items which fails, the macro is smart
+enough to print out a more detailed error report showing the two
+expressions and their values:
+
+    > (is (= 5 (+ 1 1)))
+    ERROR:
+    ((expression 5 ==> 5 is not equal to expression (+ 1 1) ==> 2))
+    >
+
+### `error`
+
+If desired, an error can be caused deliberately with the `error` function:
+
+    > (defn checking-len (x)
+        (if (list? x)
+         (len x)
+         (error '(argument must be a list))))
+    ()
+    > (checking-len 3)
+    ERROR:
+    ((argument must be a list))
+    >
+
+### `errors`
+
+In some situations, such as during automated tests, it may be
+desirable to ensure that a specific error is raised.  The `errors`
+special form takes a list argument and a body, then checks to ensure
+that the body raises an error which contains the supplied list:
+
+    > (errors '(division by zero) (/ 1 0))
+    ()
+    > (errors '(division) (/ 1 0))
+    ()
+    > (errors '(rocket crashed) (/ 1 0))
+    ERROR:
+    ((error 'rocket crashed' not found in '((builtin function /) (division by zero))'))
+    > (errors '(division by zero) (* 1 0))
+    ERROR:
+    ((error not found in ((quote (division by zero)) (* 1 0))))
+    >
+
+### `try ... catch`
+
+Most contemporary languages will print a stacktrace when an error
+occurs.  `l1` stacktraces are somewhat rudimentary: in keeping with
+the rest of the language, they are simply lists.  To capture an error
+occurring within a body of code, wrap the body in a `try` statement
+and add a `catch` clause, as follows:
+
+    > (try
+        (printl '(got here))
+        (+ 3
+           (/ 1 0))
+        (printl '(did not get here))
+      (catch e
+        (cons '(oh boy, another error)
+              e)))
+    got here
+    ((oh boy, another error) (builtin function /) (division by zero))
+    >
+
+The exception `e` is a list of lists to which items are added (in the
+front) as the error returns up the call chain.  As an ordinary list,
+it can be manipulated like any other, as shown above using `cons`.
+
+An important caveat is that, since tail recursion is optimized away,
+many "stack frames" (or their equivalent) are optimized away - there
+is no way to track the entire history in detail without losing the
+space-saving power of the optimization.  Nevertheless, the generated
+exception can be helpful for troubleshooting.
+
+There is, currently, no equivalent of the `finally` clause one sees in
+Java or Clojure.
+
+### `swallow`
+
+Rarely, one may wish to swallow any errors and continue execution.
+`swallow` will execute all the statements in its body and return `t`
+if and only if any of them causes an (uncaught) error:
+
+    > (swallow (/ 1 0))
+    t
+    > (swallow (+ 1 1))
+    ()
+    >
+
+`swallow` is used mainly in the fuzzing tests for `l1` (see the
+examples directory).
+
 ## Macros
 
 For those familiar with macros (I recommend Paul

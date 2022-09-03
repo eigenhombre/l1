@@ -11,13 +11,14 @@
 
 ;; Remove operators that muddle or slow the test:
 (def operators (remove (lambda (x)
-                         (in? x '(loop
-                                  with-screen
-                                  sleep
+                         (in? x '(eval
+                                  loop
                                   range
+                                  readlist
                                   screen-start
-                                  eval
-                                  readlist)))
+                                  sleep
+                                  while
+                                  with-screen)))
                        (forms)))
 
 (defn oper ()

@@ -21,7 +21,7 @@ func mkLambda(cdr *ConsCell, isMacro bool, e *env) (*lambdaFn, error) {
 	restArg := noRestArg
 	// look for fn name
 	if cdr == Nil {
-		return nil, fmt.Errorf("missing arguments")
+		return nil, baseError("missing arguments")
 	}
 	fnNameAtom, ok := cdr.car.(Atom)
 	var fnName string
@@ -30,11 +30,11 @@ func mkLambda(cdr *ConsCell, isMacro bool, e *env) (*lambdaFn, error) {
 		cdr = cdr.cdr.(*ConsCell)
 	}
 	if cdr == Nil {
-		return nil, fmt.Errorf("missing arguments")
+		return nil, baseError("missing arguments")
 	}
 	argList, ok := cdr.car.(*ConsCell)
 	if !ok {
-		return nil, fmt.Errorf("lambda requires an argument list")
+		return nil, baseError("lambda requires an argument list")
 	}
 	emptyArgList := false
 top:
@@ -44,7 +44,7 @@ top:
 		} else {
 			arg, ok := argList.car.(Atom)
 			if !ok {
-				return nil, fmt.Errorf("argument list item is not an atom")
+				return nil, baseError("argument list item is not an atom")
 			}
 			args = append(args, arg.s)
 		}
@@ -55,11 +55,11 @@ top:
 		case *ConsCell:
 			argList = t
 		default:
-			return nil, fmt.Errorf("unknown type in lambda arg list")
+			return nil, baseError("unknown type in lambda arg list")
 		}
 	}
 	if emptyArgList && restArg == noRestArg {
-		return nil, fmt.Errorf("lambda with () argument requires a rest argument")
+		return nil, baseError("lambda with () argument requires a rest argument")
 	}
 	body := cdr.cdr.(*ConsCell)
 	// Find `doc` form and save it if found:
@@ -69,7 +69,7 @@ top:
 		if ok && doc2.car.Equal(Atom{"doc"}) {
 			doc, ok = doc2.cdr.(*ConsCell)
 			if !ok {
-				return nil, fmt.Errorf("doc form is not a list")
+				return nil, baseError("doc form is not a list")
 			}
 			body = body.cdr.(*ConsCell) // Skip `doc` part.
 		}

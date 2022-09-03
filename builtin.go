@@ -43,17 +43,17 @@ func (b Builtin) Equal(o Sexpr) bool {
 
 func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error) {
 	if len(args) < 1 {
-		return nil, fmt.Errorf("missing argument")
+		return nil, baseError("missing argument")
 	}
 	first, ok := args[0].(Number)
 	if !ok {
-		return nil, fmt.Errorf("'%s' is not a number", args[0])
+		return nil, baseError(fmt.Sprintf("'%s' is not a number", args[0]))
 	}
 	last := first
 	for i := 1; i < len(args); i++ {
 		num, ok := args[i].(Number)
 		if !ok {
-			return nil, fmt.Errorf("'%s' is not a number", args[i])
+			return nil, baseError(fmt.Sprintf("'%s' is not a number", args[i]))
 		}
 		if !cmp(num, last) {
 			return Nil, nil
@@ -65,7 +65,7 @@ func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error
 
 func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	if len(args) < 2 {
-		return nil, fmt.Errorf("not enough arguments")
+		return nil, baseError("apply: not enough arguments")
 	}
 	l := len(args)
 	var fnArgs []Sexpr
@@ -73,11 +73,11 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	singleArgs := args[1 : l-1]
 	c, ok := args[l-1].(*ConsCell)
 	if !ok {
-		return nil, fmt.Errorf("'%s' is not a list", args[l-1])
+		return nil, baseError(fmt.Sprintf("'%s' is not a list", args[l-1]))
 	}
 	asCons, err := consToExprs(c)
 	if err != nil {
-		return nil, err
+		return nil, extendError("apply", err)
 	}
 	fnArgs = append(singleArgs, asCons...)
 
@@ -92,7 +92,7 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 		newEnv := mkEnv(lambda.env)
 		err := setLambdaArgsInEnv(&newEnv, lambda, fnArgs)
 		if err != nil {
-			return nil, err
+			return nil, extendError("apply", err)
 		}
 		var ret Sexpr = Nil
 		bodyExpr := lambda.body
@@ -102,7 +102,7 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 			}
 			ret, err = eval(bodyExpr.car, &newEnv)
 			if err != nil {
-				return nil, err
+				return nil, extendError("apply", err)
 			}
 			bodyExpr = bodyExpr.cdr.(*ConsCell)
 		}
@@ -110,11 +110,11 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	// Built-in functions:
 	builtin, ok := evalCar.(*Builtin)
 	if !ok {
-		return nil, fmt.Errorf("%s is not a function", evalCar)
+		return nil, baseError(fmt.Sprintf("%s is not a function", evalCar))
 	}
 	biResult, err := builtin.Fn(fnArgs, env)
 	if err != nil {
-		return nil, err
+		return nil, extendError("apply", err)
 	}
 	return biResult, nil
 }
@@ -160,7 +160,7 @@ func init() {
 				for _, arg := range args {
 					n, ok := arg.(Number)
 					if !ok {
-						return nil, fmt.Errorf("expected number, got '%s'", arg)
+						return nil, baseError(fmt.Sprintf("expected number, got '%s'", arg))
 					}
 					sum = sum.Add(n)
 				}
@@ -180,11 +180,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) == 0 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				sum, ok := args[0].(Number)
 				if !ok {
-					return nil, fmt.Errorf("expected number, got '%s'", args[0])
+					return nil, baseError(fmt.Sprintf("expected number, got '%s'", args[0]))
 				}
 				if len(args) == 1 {
 					return args[0].(Number).Neg(), nil
@@ -192,7 +192,7 @@ func init() {
 				for _, arg := range args[1:] {
 					n, ok := arg.(Number)
 					if !ok {
-						return nil, fmt.Errorf("expected number, got '%s'", arg)
+						return nil, baseError(fmt.Sprintf("expected number, got '%s'", arg))
 					}
 					sum = sum.Sub(n)
 				}
@@ -217,7 +217,7 @@ func init() {
 				for _, arg := range args {
 					n, ok := arg.(Number)
 					if !ok {
-						return nil, fmt.Errorf("expected number, got '%s'", arg)
+						return nil, baseError(fmt.Sprintf("expected number, got '%s'", arg))
 					}
 					prod = prod.Mul(n)
 				}
@@ -237,19 +237,19 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) < 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				quot, ok := args[0].(Number)
 				if !ok {
-					return nil, fmt.Errorf("expected number, got '%s'", args[0])
+					return nil, baseError(fmt.Sprintf("expected number, got '%s'", args[0]))
 				}
 				for _, arg := range args[1:] {
 					if arg.Equal(Num(0)) {
-						return nil, fmt.Errorf("division by zero")
+						return nil, baseError("division by zero")
 					}
 					n, ok := arg.(Number)
 					if !ok {
-						return nil, fmt.Errorf("expected number, got '%s'", arg)
+						return nil, baseError(fmt.Sprintf("expected number, got '%s'", arg))
 					}
 					quot = quot.Div(n)
 				}
@@ -269,7 +269,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) < 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				for _, arg := range args[1:] {
 					if !args[0].Equal(arg) {
@@ -292,18 +292,18 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 2 {
-					return nil, fmt.Errorf("rem requires two arguments")
+					return nil, baseError("rem requires two arguments")
 				}
 				n1, ok := args[0].(Number)
 				if !ok {
-					return nil, fmt.Errorf("expected number, got '%s'", args[0])
+					return nil, baseError(fmt.Sprintf("expected number, got '%s'", args[0]))
 				}
 				n2, ok := args[1].(Number)
 				if !ok {
-					return nil, fmt.Errorf("expected number, got '%s'", args[1])
+					return nil, baseError(fmt.Sprintf("expected number, got '%s'", args[1]))
 				}
 				if n2.Equal(Num(0)) {
-					return nil, fmt.Errorf("division by zero")
+					return nil, baseError("division by zero")
 				}
 				return n1.Rem(n2), nil
 			},
@@ -400,7 +400,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("atom? expects a single argument")
+					return nil, baseError("atom? expects a single argument")
 				}
 				if _, ok := args[0].(Atom); ok {
 					return True, nil
@@ -419,11 +419,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				l, ok := args[0].(*lambdaFn)
 				if !ok {
-					return nil, fmt.Errorf("expected lambda function, got '%s'", args[0])
+					return nil, baseErrorf("expected lambda function, got '%s'", args[0])
 				}
 				return l.body, nil
 			},
@@ -440,11 +440,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				carCons, ok := args[0].(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a list", args[0])
+					return nil, baseErrorf("'%s' is not a list", args[0])
 				}
 				if carCons == Nil {
 					return Nil, nil
@@ -464,11 +464,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				cdrCons, ok := args[0].(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a list", args[0])
+					return nil, baseErrorf("'%s' is not a list", args[0])
 				}
 				if cdrCons == Nil {
 					return Nil, nil
@@ -489,7 +489,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 2 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				return Cons(args[0], args[1]), nil
 			},
@@ -508,11 +508,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				lambda, ok := args[0].(*lambdaFn)
 				if !ok {
-					return nil, fmt.Errorf("expected function, got '%s'", args[0])
+					return nil, baseErrorf("expected function, got '%s'", args[0])
 				}
 				return lambda.doc, nil
 			},
@@ -529,11 +529,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("downcase requires one argument")
+					return nil, baseError("downcase requires one argument")
 				}
 				a, ok := args[0].(Atom)
 				if !ok {
-					return nil, fmt.Errorf("expected atom, got '%s'", args[0])
+					return nil, baseErrorf("expected atom, got '%s'", args[0])
 				}
 				return Atom{strings.ToLower(a.s)}, nil
 			},
@@ -560,7 +560,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				return eval(args[0], e)
 			},
@@ -577,7 +577,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("fuse expects a single argument")
+					return nil, baseError("fuse expects a single argument")
 				}
 				if args[0] == Nil {
 					return Nil, nil
@@ -601,7 +601,7 @@ func init() {
 					}
 					return Atom{str}, nil
 				default:
-					return nil, fmt.Errorf("fuse expects a list")
+					return nil, baseError("fuse expects a list")
 				}
 			},
 		},
@@ -613,14 +613,14 @@ func init() {
 			ArgString:  "(() . x)",
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
 				if len(args) != 0 && len(args) != 1 {
-					return nil, fmt.Errorf("gensym expects 0 or 1 arguments")
+					return nil, baseError("gensym expects 0 or 1 arguments")
 				}
 				if len(args) == 0 {
 					return Atom{gensym("")}, nil
 				}
 				prefix, ok := args[0].(Atom)
 				if !ok {
-					return nil, fmt.Errorf("gensym expects an atom as its first argument")
+					return nil, baseError("gensym expects an atom as its first argument")
 				}
 				return Atom{gensym("-" + prefix.s)}, nil
 			},
@@ -647,11 +647,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("len expects a single argument")
+					return nil, baseError("len expects a single argument")
 				}
 				list, ok := args[0].(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a list", args[0])
+					return nil, baseErrorf("'%s' is not a list", args[0])
 				}
 				count := 0
 				for list != nil {
@@ -687,7 +687,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("list? expects a single argument")
+					return nil, baseError("list? expects a single argument")
 				}
 				if _, ok := args[0].(*ConsCell); ok {
 					return True, nil
@@ -707,7 +707,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("macroexpand-1 expects a single argument")
+					return nil, baseError("macroexpand-1 expects a single argument")
 				}
 				return macroexpand1(args[0], e)
 			},
@@ -725,7 +725,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("not expects a single argument")
+					return nil, baseError("not expects a single argument")
 				}
 				if args[0] == Nil {
 					return True, nil
@@ -746,7 +746,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("number? expects a single argument")
+					return nil, baseError("number? expects a single argument")
 				}
 				_, ok := args[0].(Number)
 				if ok {
@@ -793,11 +793,11 @@ func init() {
 			ArgString:  "(x)",
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("missing argument")
+					return nil, baseError("missing argument")
 				}
 				list, ok := args[0].(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("expected list, got '%s'", args[0])
+					return nil, baseErrorf("expected list, got '%s'", args[0])
 				}
 				fmt.Println(unwrapList(list))
 				return Nil, nil
@@ -811,14 +811,14 @@ func init() {
 			ArgString:  "(x)",
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("randint expects a single argument")
+					return nil, baseError("randint expects a single argument")
 				}
 				num, ok := args[0].(Number)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a number", args[0])
+					return nil, baseErrorf("'%s' is not a number", args[0])
 				}
 				if num.Equal(N(0)) {
-					return nil, fmt.Errorf("randint expects a non-zero argument")
+					return nil, baseError("randint expects a non-zero argument")
 				}
 				r := rand.New(rand.NewSource(time.Now().UnixNano()))
 				return Num(r.Intn(int(num.bi.Uint64()))), nil
@@ -833,11 +833,11 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				line, err := readLine()
 				if err != nil {
-					return nil, err
+					return nil, extendError("reading readlist input", err)
 				}
 				parsed, err := lexAndParse(strings.Split(line, "\n"))
 				if err != nil {
-					return nil, err
+					return nil, extendError("parsing readlist input", err)
 				}
 				return mkListAsConsWithCdr(parsed, Nil), nil
 			},
@@ -851,7 +851,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				err := termStart()
 				if err != nil {
-					return nil, err
+					return nil, extendError("starting screen", err)
 				}
 				return Nil, nil
 			},
@@ -865,7 +865,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				err := termEnd()
 				if err != nil {
-					return nil, err
+					return nil, extendError("stopping screen", err)
 				}
 				return Nil, nil
 			},
@@ -879,7 +879,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				width, height, err := termSize()
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-size termSize", err)
 				}
 				return Cons(Num(width), Cons(Num(height), Nil)), nil
 			},
@@ -893,7 +893,7 @@ func init() {
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				err := termClear()
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-clear termClear", err)
 				}
 				return Nil, nil
 			},
@@ -906,11 +906,11 @@ func init() {
 			ArgString:  "()",
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 0 {
-					return nil, fmt.Errorf("getkey expects no arguments")
+					return nil, baseError("getkey expects no arguments")
 				}
 				key, err := termGetKey()
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-get-key termGetKey", err)
 				}
 				return Atom{key}, nil
 			},
@@ -923,23 +923,23 @@ func init() {
 			ArgString:  "(x y list)",
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 3 {
-					return nil, fmt.Errorf("screen-write expects 3 arguments")
+					return nil, baseError("screen-write expects 3 arguments")
 				}
 				x, ok := args[0].(Number)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a number", args[0])
+					return nil, baseErrorf("'%s' is not a number", args[0])
 				}
 				y, ok := args[1].(Number)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a number", args[1])
+					return nil, baseErrorf("'%s' is not a number", args[1])
 				}
 				s, ok := args[2].(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a list", args[2])
+					return nil, baseErrorf("'%s' is not a list", args[2])
 				}
 				err := termDrawText(int(x.bi.Uint64()), int(y.bi.Uint64()), unwrapList(s))
 				if err != nil {
-					return nil, err
+					return nil, extendError("screen-write termDrawText", err)
 				}
 				return Nil, nil
 			},
@@ -952,15 +952,15 @@ func init() {
 			ArgString:  "(xs)",
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("shuffle expects a single argument")
+					return nil, baseError("shuffle expects a single argument")
 				}
 				l, ok := args[0].(*ConsCell)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a list", args[0])
+					return nil, baseErrorf("'%s' is not a list", args[0])
 				}
 				exprs, err := consToExprs(l)
 				if err != nil {
-					return nil, err
+					return nil, extendError("shuffle consToExprs", err)
 				}
 				rand.Shuffle(len(exprs), func(i, j int) {
 					exprs[i], exprs[j] = exprs[j], exprs[i]
@@ -976,11 +976,11 @@ func init() {
 			ArgString:  "(ms)",
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("sleep expects a single argument")
+					return nil, baseError("sleep expects a single argument")
 				}
 				num, ok := args[0].(Number)
 				if !ok {
-					return nil, fmt.Errorf("'%s' is not a number", args[0])
+					return nil, baseErrorf("'%s' is not a number", args[0])
 				}
 				time.Sleep(time.Duration(num.bi.Uint64()) * time.Millisecond)
 				return Nil, nil
@@ -998,7 +998,7 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("split expects a single argument")
+					return nil, baseError("split expects a single argument")
 				}
 				switch s := args[0].(type) {
 				case Atom:
@@ -1006,7 +1006,7 @@ func init() {
 				case Number:
 					return listOfNums(s.String())
 				default:
-					return nil, fmt.Errorf("split expects an atom or a number")
+					return nil, baseError("split expects an atom or a number")
 				}
 			},
 		},
@@ -1039,11 +1039,11 @@ func init() {
 			),
 			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
 				if len(args) != 1 {
-					return nil, fmt.Errorf("upcase expects a single argument")
+					return nil, baseError("upcase expects a single argument")
 				}
 				a, ok := args[0].(Atom)
 				if !ok {
-					return nil, fmt.Errorf("upcase expects an atom")
+					return nil, baseError("upcase expects an atom")
 				}
 				return Atom{strings.ToUpper(a.s)}, nil
 			},
@@ -1083,7 +1083,7 @@ func listOfNums(s string) (*ConsCell, error) {
 	}
 	if s[0] == '-' {
 		if len(s) < 2 {
-			return nil, fmt.Errorf("unexpected end of input")
+			return nil, baseError("unexpected end of input")
 		}
 		lon, err := listOfNums(s[2:])
 		if err != nil {

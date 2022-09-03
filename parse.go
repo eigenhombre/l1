@@ -1,16 +1,12 @@
 package main
 
-import (
-	"fmt"
-)
-
 func handleQuoteItem(tokens []token, i int, operatorName string) (Sexpr, int, error) {
 	if i >= len(tokens) {
-		return nil, 0, fmt.Errorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
+		return nil, 0, baseErrorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
 	}
 	nextParsed, incr, err := parseNext(tokens, i)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, extendError("handleQuoteItem parseNext", err)
 	}
 	item := Cons(Atom{operatorName}, Cons(nextParsed, Nil))
 	return item, incr, nil
@@ -18,7 +14,7 @@ func handleQuoteItem(tokens []token, i int, operatorName string) (Sexpr, int, er
 
 func parseNext(tokens []token, i int) (Sexpr, int, error) {
 	if i >= len(tokens) {
-		return nil, 0, fmt.Errorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
+		return nil, 0, baseErrorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
 	}
 	token := tokens[i]
 	switch token.lexeme.Typ {
@@ -29,43 +25,43 @@ func parseNext(tokens []token, i int) (Sexpr, int, error) {
 	case itemForwardQuote:
 		item, incr, err := handleQuoteItem(tokens, i+1, "quote")
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, extendError("parseNext itemForwardQuote handleQuoteItem", err)
 		}
 		return item, incr + 1, nil
 	case itemSyntaxQuote:
 		item, incr, err := handleQuoteItem(tokens, i+1, "syntax-quote")
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, extendError("parseNext itemSyntaxQuote handleQuoteItem", err)
 		}
 		return item, incr + 1, nil
 	case itemUnquote:
 		item, incr, err := handleQuoteItem(tokens, i+1, "unquote")
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, extendError("parseNext itemUnquote handleQuoteItem", err)
 		}
 		return item, incr + 1, nil
 	case itemSplicingUnquote:
 		item, incr, err := handleQuoteItem(tokens, i+1, "splicing-unquote")
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, extendError("parseNext itemSplicingUnquote handleQuoteItem", err)
 		}
 		return item, incr + 1, nil
 	case itemCommentNext:
 		item, incr, err := handleQuoteItem(tokens, i+1, "comment")
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, extendError("parseNext itemCommentNext handleQuoteItem", err)
 		}
 		return item, incr + 1, nil
 	case itemLeftParen:
 		item, incr, err := parseList(tokens[i:])
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, extendError("parseNext itemLeftParen parseList", err)
 		}
 		return item, incr, nil
 	case itemRightParen:
-		return nil, 0, fmt.Errorf("unexpected right paren on line %d", token.line)
+		return nil, 0, baseErrorf("unexpected right paren on line %d", token.line)
 	default:
-		return nil, 0, fmt.Errorf("unexpected lexeme '%s' on line %d", token.lexeme.Val, token.line)
+		return nil, 0, baseErrorf("unexpected lexeme '%s' on line %d", token.lexeme.Val, token.line)
 	}
 }
 
@@ -82,7 +78,7 @@ func parse(tokens []token) ([]Sexpr, error) {
 		}
 		item, incr, err := parseNext(tokens, i)
 		if err != nil {
-			return nil, err
+			return nil, extendError("parse parseNext", err)
 		}
 		ret = append(ret, item)
 		i += incr
@@ -139,7 +135,7 @@ func listChunk(tokens []token) (int, token, error) {
 			}
 		}
 	}
-	return 0, token{}, fmt.Errorf("unbalanced parens")
+	return 0, token{}, baseError("unbalanced parens")
 }
 
 func dotChunk(tokens []token) (int, error) {
@@ -155,5 +151,5 @@ func dotChunk(tokens []token) (int, error) {
 			}
 		}
 	}
-	return 0, fmt.Errorf("unbalanced parens")
+	return 0, baseError("unbalanced parens")
 }
