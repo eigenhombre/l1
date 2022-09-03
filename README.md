@@ -54,7 +54,7 @@ Specific versions are tagged and available as well.  See [the tags
 page](https://github.com/eigenhombre/l1/tags) for available versions
 and then, for example,
 
-    go install github.com/eigenhombre/l1@v0.0.18
+    go install github.com/eigenhombre/l1@v0.0.19
 
 At this point you should be able to run `l1`:
 
@@ -100,9 +100,9 @@ Several example programs are available in the
 directory.  Most of these are run automatically as tests in the build.
 These can be obtained either by cloning this repository, or after
 installing `l1` by looking under `$GOPATH`. For example, if the
-`latest` release is `v0.0.15`,
+`latest` release is `v0.0.19`,
 
-    $ ls $GOPATH/pkg/mod/github.com/eigenhombre/l1\@v0.0.15/examples/
+    $ ls $GOPATH/pkg/mod/github.com/eigenhombre/l1\@v0.0.19/examples/
 
 ## Example REPL Session
 
