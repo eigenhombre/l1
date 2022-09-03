@@ -259,7 +259,8 @@ statements.
 
 ### `is`
 
-There is currently one kind of assertion expression in `l1`, namely `is`:
+There is currently one kind of assertion expression in `l1`, namely
+the `is` macro:
 
     > (is (= 4 (+ 2 2)))
     > (is ())
@@ -271,8 +272,9 @@ If the argument to `is` is falsey (`()`), then an error is printed
 and the program exits (if running a program) or the REPL
 returns to the top level prompt.
 
-If `is` is checking an equality of two items, `is` is smart enough to
-print out a more detailed error report:
+If `is` is checking an equality of two items which fails, the macro is smart
+enough to print out a more detailed error report showing the two
+expressions and their values:
 
     > (is (= 5 (+ 1 1)))
     ERROR:
@@ -295,8 +297,10 @@ If desired, an error can be caused deliberately with the `error` function:
 
 ### `errors`
 
-In some situations, such as during automated tests, it may be desirable to ensure that
-a specific error is raised.  The `errors` form takes a list argument and a body, then checks to ensure that the body raises an error which contains the supplied list:
+In some situations, such as during automated tests, it may be
+desirable to ensure that a specific error is raised.  The `errors`
+special form takes a list argument and a body, then checks to ensure
+that the body raises an error which contains the supplied list:
 
     > (errors '(division by zero) (/ 1 0))
     ()
@@ -315,24 +319,30 @@ a specific error is raised.  The `errors` form takes a list argument and a body,
 Most contemporary languages will print a stacktrace when an error
 occurs.  `l1` stacktraces are somewhat rudimentary: in keeping with
 the rest of the language, they are simply lists.  To capture an error
-in a body of code, wrap it in a `try` statement with a `catch` clause:
+occurring within a body of code, wrap the body in a `try` statement
+and add a `catch` clause, as follows:
 
     > (try
+        (printl '(got here))
         (+ 3
            (/ 1 0))
+        (printl '(did not get here))
       (catch e
         (cons '(oh boy, another error)
               e)))
+    got here
     ((oh boy, another error) (builtin function /) (division by zero))
     >
 
-Here `e` is the "exception," which is really just a list of lists
-which are appended as the error returned up the call chain.
+The exception `e` is a list of lists to which items are added (in the
+front) as the error returns up the call chain.  As an ordinary list,
+it can be manipulated like any other, as shown above using `cons`.
 
 An important caveat is that, since tail recursion is optimized away,
 many "stack frames" (or their equivalent) are optimized away - there
-is no way to track them in detail without losing the space-saving
-power of the optimization.
+is no way to track the entire history in detail without losing the
+space-saving power of the optimization.  Nevertheless, the generated
+exception can be helpful for troubleshooting.
 
 There is, currently, no equivalent of the `finally` clause one sees in
 Java or Clojure.
