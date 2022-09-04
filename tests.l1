@@ -892,3 +892,11 @@
                   ▋ ▌ ▍ ▎ ▏ ▐ ▖ ▗ ■
                   □ ▢ ▣ ▥ ▧ ▨ ▩))))
   (is (= 2 (len (split '水果)))))
+
+(test 'shell
+  (errors '(argument must be a nonempty list of strings)
+    (shell 'pwd))
+  (errors '(argument must be a nonempty list of strings)
+    (shell '()))
+  (errors '(file not found) (shell '(asdfkhjasdfjkh)))
+  (is (= 3 (len (shell '(pwd))))))

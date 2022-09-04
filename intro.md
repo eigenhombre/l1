@@ -379,6 +379,40 @@ if and only if any of them causes an (uncaught) error:
 `swallow` is used mainly in the fuzzing tests for `l1` (see the
 examples directory).
 
+## Subprocesses
+
+The `shell` function executes a subprocess command, which should be a
+list of atoms and numbers, and returns the result in the following
+form:
+
+    ((... stdout lines...)
+     (... stderr lines...)
+     ...exit code..)
+
+Examples (output reformatted for clarity):
+
+    > (shell '(pwd))
+    (((/Users/jacobsen/Programming/go/l1))
+     (())
+     0)
+    > (shell '(ls))
+    (((Dockerfile) (LICENSE) (Makefile) (README.md) (api.md)
+      (atom.go) (builtin.go) (builtin_test.go) (bumpver)
+      (cons.go) (core.go) (doc.go) (env.go) (env_test.go)
+      (error.go) (error_test.go) (eval_test.go) (example.l1)
+      (examples) (examples.txt) (go.mod) (go.sum) (intro.md)
+      (l1) (l1.html) (l1.jpg) (l1.l1) (l1.md) (lambda.go)
+      (lex.go) (lex_test.go) (lisp.go) (main.go) (math.go)
+      (math_test.go) (parse.go) (parse_test.go) (sexpr_test.go)
+      (shell.go) (state.go) (term.go) (tests.l1) (updatereadme.py)
+      (util.go) (version.go))
+     (())
+     0)
+    > (shell '(ls -al l1.l1))
+    (((-rw-r--r-- 1 jacobsen staff 16636 Sep 3 11:28 l1.l1)) (()) 0)
+    > (shell '(ls /watermelon))
+    ((()) ((ls: /watermelon: No such file or directory)) 1)
+
 ## Macros
 
 For those familiar with macros (I recommend Paul

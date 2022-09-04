@@ -17,6 +17,7 @@
                                   range
                                   readlist
                                   screen-start
+                                  shell
                                   sleep
                                   while
                                   with-screen)))

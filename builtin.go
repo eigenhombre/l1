@@ -983,6 +983,19 @@ func init() {
 				return mkListAsConsWithCdr(exprs, Nil), nil
 			},
 		},
+		"shell": {
+			Name:       "shell",
+			Docstring:  "Run a shell subprocess, and return stdout, stderr, and exit code",
+			FixedArity: 1,
+			NAry:       false,
+			ArgString:  "(cmd)",
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, baseError("shell expects a single argument")
+				}
+				return doShell(args[0])
+			},
+		},
 		"sleep": {
 			Name:       "sleep",
 			Docstring:  "Sleep for the given number of milliseconds",

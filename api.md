@@ -1,5 +1,5 @@
 # API Index
-127 forms available:
+128 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -108,6 +108,7 @@
 [`screen-write`](#screen-write)
 [`second`](#second)
 [**`set!`**](#set!)
+[`shell`](#shell)
 [`shuffle`](#shuffle)
 [`sleep`](#sleep)
 [`some`](#some)
@@ -2702,6 +2703,20 @@ Args: `(name value)`
 2
 
 ```
+
+-----------------------------------------------------
+		
+
+## `shell`
+
+Run a shell subprocess, and return stdout, stderr, and exit code
+
+Type: native function
+
+Arity: 1 
+
+Args: `(cmd)`
+
 
 -----------------------------------------------------
 		
