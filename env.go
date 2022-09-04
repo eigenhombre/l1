@@ -50,6 +50,14 @@ func (e *env) Set(s string, v Sexpr) error {
 	return nil
 }
 
+// SetTopLevel sets the value of a symbol in the top-level environment.
+func (e *env) SetTopLevel(s string, v Sexpr) error {
+	if e.parent == nil {
+		return e.Set(s, v)
+	}
+	return e.parent.SetTopLevel(s, v)
+}
+
 func (e *env) Update(s string, v Sexpr) error {
 	if s == "t" {
 		return baseError("cannot bind or set t")

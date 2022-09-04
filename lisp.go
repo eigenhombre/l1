@@ -52,7 +52,7 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	if err != nil {
 		return nil, extendError("evaluating def value", err)
 	}
-	err = e.Set(name, val)
+	err = e.SetTopLevel(name, val)
 	if err != nil {
 		return nil, extendError("setting def result", err)
 	}
@@ -104,7 +104,7 @@ func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
 	if err != nil {
 		return nil, extendError("creating lambda function", err)
 	}
-	err = e.Set(name.s, fn)
+	err = e.SetTopLevel(name.s, fn)
 	if err != nil {
 		return nil, extendError("setting defn result", err)
 	}

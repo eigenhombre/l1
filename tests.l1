@@ -175,11 +175,12 @@
                     (t 0)))
             (range 3)))))
 
-(test '(defn)
+(test '(def and defn)
   (defn foo ())
   (is (= () (foo)))
   (defn foo (a))
   (is (= () (foo 1)))
+
   (defn foo (a) a)
   (is (= 1 (foo 1)))
   (errors '(name must be an atom) (defn (bazzy)))
@@ -218,7 +219,17 @@
                    (something 3)
                    (example (= 'c (c))))
     'c)
-  (is (= 'c (c))))
+  (is (= 'c (c)))
+
+  (test '(defn mutates toplevel, not inner scope)
+    (let ()
+      (defn b () 4))
+    (is (= 4 (b))))
+
+  (test '(def mutates toplevel, not inner scope)
+    (let ()
+      (def b 99))
+    (is (= 99 b))))
 
 (test '(split and fuse)
   (is (= '(1) (split 1)))
