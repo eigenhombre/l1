@@ -21,7 +21,7 @@ jobs:
     - name: Smoke-test gox
       run: gox -h
     - name: gox the things
-      run: gox -osarch='darwin/arm64 darwin/amd64 linux/386 linux/amd64 linux/arm freebsd/386 freebsd/amd64 openbsd/386 openbsd/amd64 windows/386 windows/amd64 freebsd/arm netbsd/386 netbsd/amd64 netbsd/arm linux/s390x linux/mips64 linux/mips64le linux/mips linux/mipsle' -parallel=18 -output=l1-{{.OS}}-{{.Arch}}-${GITHUB_REF_NAME}
+      run: gox -osarch='darwin/arm64 darwin/amd64 linux/386 linux/amd64 linux/arm freebsd/386 freebsd/amd64 openbsd/386 openbsd/amd64 windows/386 windows/amd64 freebsd/arm netbsd/386 netbsd/amd64 netbsd/arm linux/s390x linux/mips64 linux/mips64le linux/mips linux/mipsle' -parallel=1 -output=l1-{{.OS}}-{{.Arch}}-${GITHUB_REF_NAME}
     - name: List files
       run: ls -al
     - name: Execute bit
