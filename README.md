@@ -90,7 +90,7 @@ Example (using a file in this project):
     user	0m0.007s
     sys	0m0.005s
 
-# Documentation
+# Further Documentation
 
 See the [language reference](https://github.com/eigenhombre/l1/blob/master/l1.md) and the [API docs](https://github.com/eigenhombre/l1/blob/master/l1.md#api-index).
 
