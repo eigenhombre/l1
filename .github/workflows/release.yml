@@ -18,12 +18,8 @@ jobs:
     - run: go version
     - name: Install gox
       run: go install github.com/mitchellh/gox@latest
-    - name: Test gox
-      run: echo path $PATH gopath $GOPATH end
-    - name: Which go
-      run: which go
-    - name: homedir
-      run: echo $HOME; ls $HOME/go
-    - name: try gox
+    - name: Smoke-test gox
       run: gox -h
-      
+    - name: gox the things
+      run: gox
+
