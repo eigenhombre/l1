@@ -27,5 +27,5 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "l1-*-${{ env.GITHUB_REF_NAME }}"
+        artifacts: "l1-*-*-*"
         token: ${{ secrets.GITHUB_TOKEN }}
