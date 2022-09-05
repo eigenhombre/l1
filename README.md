@@ -71,7 +71,7 @@ To execute a file:
 
     $ l1 <file.l1>
 
-Example (using a file in this project):
+Example, using a file in this project:
 
     $ cat examples/fact.l1
     ;; Return the factorial of `n`:
