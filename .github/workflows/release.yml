@@ -24,6 +24,8 @@ jobs:
       run: gox -osarch='!darwin/386' -parallel=18 -output=l1-{{.OS}}-{{.Arch}}-${GITHUB_REF_NAME}
     - name: List files
       run: ls -al
+    - name: Execute bit
+      run: chmod +x l1-*-*-*
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
