@@ -24,4 +24,8 @@ jobs:
       run: gox -osarch='!darwin/386 linux/mipsle' -parallel=18 -output=l1-{{.OS}}-{{.Arch}}-${GITHUB_REF_NAME}
     - name: List files
       run: ls -al
-
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "l1-*-${{ env.GITHUB_REF_NAME }}"
+        token: ${{ secrets.GITHUB_TOKEN }}
