@@ -53,14 +53,14 @@ many/most of these are not tested regularly!)
 1. Download the binary appropriate for your operating system.
 1. Rename it to a file `l1`.
 1. Make `l1` executable.  On Unix / Linux / MacOS sytems, `chmod +x l1`
-1. Move it to somewhere on your path (this is platform-specific)
+1. Move it to somewhere on your path (this is platform-specific).
 
 ### Note for Mac users:
 
 Mac binaries are currently unsigned, so you have to go through the following extra steps:
 
 1. Perform the above actions to get an executable file `l1` on your path.
-1. Right-click (or control-click) the executable in the Finder
+1. Right-click (or control-click) the executable in the Finder.
 1. Open with Terminal or iTerm or... whatever Terminal program you usually use.
 1. Select "Open Anyway" after acknowledging the security warning.
 
