@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-go@v3
+      with:
+        go-version: '>=1.18.0'
+    - run: go version
     - name: Install gox
       run: go install github.com/mitchellh/gox@latest
     - name: Test gox
@@ -20,8 +24,8 @@ jobs:
       run: which go
     - name: homedir
       run: echo $HOME; ls $HOME/go
-    - name: try gox
-      run: gox -h
-      env:
-        GOPATH: $HOME/go
+#     - name: try gox
+#       run: gox -h
+#       env:
+#         GOPATH: $HOME/go
         
