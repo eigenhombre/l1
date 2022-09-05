@@ -24,8 +24,6 @@ jobs:
       run: which go
     - name: homedir
       run: echo $HOME; ls $HOME/go
-#     - name: try gox
-#       run: gox -h
-#       env:
-#         GOPATH: $HOME/go
-        
+    - name: try gox
+      run: gox -h
+      
