@@ -28,4 +28,4 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "l1-*-${{ env.GITHUB_REF_NAME }}"
-        token: ${{ secrets.YOUR_GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
