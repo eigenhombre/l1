@@ -21,5 +21,7 @@ jobs:
     - name: Smoke-test gox
       run: gox -h
     - name: gox the things
-      run: gox -osarch='!darwin/386' -parallel=8  # Just to watch the action
+      run: gox -osarch='!darwin/386 linux/mipsle' -parallel=8  # Just to watch the action
+    - name: List files
+      run: ls -al
 
