@@ -24,8 +24,8 @@ jobs:
       run: gox -osarch='!darwin/386 linux/mipsle' -parallel=18 -output=l1-{{.OS}}-{{.Arch}}-${GITHUB_REF_NAME}
     - name: List files
       run: ls -al
-    - uses: actions/upload-artifact@v3
     - name: Upload Binaries
+      uses: actions/upload-artifact@v3
       with:
         path: */l1-*-${GITHUB_REF_NAME}
 
