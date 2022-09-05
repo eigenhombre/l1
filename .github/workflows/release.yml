@@ -12,3 +12,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install gox
+      run: go install github.com/mitchellh/gox@latest
