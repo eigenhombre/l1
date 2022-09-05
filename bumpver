@@ -48,8 +48,9 @@ echo 444
 
 # get current hash and see if it already has a tag
 GIT_COMMIT=`git rev-parse HEAD`
+echo 555
 NEEDS_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
-
+echo 666
 # only tag if no tag already
 if [ -z "$NEEDS_TAG" ]; then
     git tag $NEW_TAG
