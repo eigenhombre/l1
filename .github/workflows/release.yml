@@ -24,7 +24,8 @@ jobs:
       run: gox -osarch='!darwin/386 linux/mipsle' -parallel=18 -output=l1-{{.OS}}-{{.Arch}}-${GITHUB_REF_NAME}
     - name: List files
       run: ls -al
-    - name: Upload Binaries
-      uses: actions/upload-artifact@v3
+    - name: Create release
+      uses: ncipollo/release-action@v1
       with:
-        path: ./*/l1-*-${{ env.GITHUB_REF_NAME }}
+        artifacts: "l1-*-${{ env.GITHUB_REF_NAME }}"
+        token: ${{ secrets.YOUR_GITHUB_TOKEN }}
