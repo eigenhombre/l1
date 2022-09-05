@@ -46,6 +46,9 @@ tree-walking interpreters, is slow for longer calculations.
 
 ## Option 1: Download Pre-built Binary
 
+Releases are built for 22 OS / architecture combinations.  (WARNING:
+many/most of these are not tested regularly!)
+
 1. Head on over to the [Releases Page](https://github.com/eigenhombre/l1/releases).
 1. Download the binary appropriate for your operating system.
 1. Rename it to a file `l1`.
