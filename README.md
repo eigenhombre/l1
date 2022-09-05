@@ -44,6 +44,27 @@ tree-walking interpreters, is slow for longer calculations.
 
 # Setup
 
+## Option 1: Download Pre-built Binary
+
+1. Head on over to the [Releases Page](https://github.com/eigenhombre/l1/releases).
+1. Download the binary appropriate for your operating system.
+1. Rename it to a file `l1`.
+1. Make `l1` executable.  On Unix / Linux / MacOS sytems, `chmod +x l1`
+1. Move it to somewhere on your path (this is platform-specific)
+
+### Note for Mac users:
+
+Mac binaries are currently unsigned, so you have to go through the following extra steps:
+
+1. Perform the above actions to get an executable file `l1` on your path.
+1. Right-click (or control-click) the executable in the Finder
+1. Open with Terminal or iTerm or... whatever Terminal program you usually use.
+1. Select "Open Anyway" after acknowledging the security warning.
+
+You should only have to do this once, in general.
+
+## Option 2: Install using Go
+
 You should have Go installed and configured (including [setting GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).  At some later point, pre-built
 artifacts for various architectures may be available here.
 
