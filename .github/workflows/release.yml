@@ -16,4 +16,7 @@ jobs:
       run: go install github.com/mitchellh/gox@latest
     - name: Test gox
       run: echo path $PATH gopath $GOPATH end
-      
+    - name: Which go
+      run: which go
+    - name: homedir
+      run: echo $HOME; ls $HOME
