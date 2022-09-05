@@ -10,7 +10,7 @@ set -e
 STATUS=$(git status --porcelain)
 if [[ -n "$STATUS" ]]; then
    echo "Uncommitted code.  Not tagging a new version."
-   exit 1
+#   exit 1
 fi
 
 # get highest tag number
@@ -38,9 +38,13 @@ function update_version_file() {
     echo "var version string = \"$NEWVER\"" >> version.go
 }
 
+echo 111
 update_version_file $NEW_TAG
+echo 222
 go build .
+echo 333
 git commit -am "Update version prior to tag."
+echo 444
 
 # get current hash and see if it already has a tag
 GIT_COMMIT=`git rev-parse HEAD`
