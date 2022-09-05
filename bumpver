@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Adapted from https://stackoverflow.com/questions/3760086;
 # see also https://github.com/unegma/bash-functions\
 #                 /blob/main/update.sh
@@ -37,6 +39,8 @@ function update_version_file() {
 }
 
 update_version_file $NEW_TAG
+go build .
+git commit -am "Update version prior to tag."
 
 # get current hash and see if it already has a tag
 GIT_COMMIT=`git rev-parse HEAD`
