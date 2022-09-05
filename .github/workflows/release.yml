@@ -15,5 +15,5 @@ jobs:
     - name: Install gox
       run: go install github.com/mitchellh/gox@latest
     - name: Test gox
-      run: gox -h
+      run: $GOPATH/bin/gox -h
       
