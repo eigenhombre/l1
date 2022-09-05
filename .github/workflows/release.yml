@@ -21,5 +21,5 @@ jobs:
     - name: Smoke-test gox
       run: gox -h
     - name: gox the things
-      run: gox
+      run: gox -osarch='!darwin/386'
 
