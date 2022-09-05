@@ -27,4 +27,4 @@ jobs:
     - name: Upload Binaries
       uses: actions/upload-artifact@v3
       with:
-        path: ./*/l1-*-${GITHUB_REF_NAME}
+        path: ./*/l1-*-${{ env.GITHUB_REF_NAME }}
