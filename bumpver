@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # Adapted from https://stackoverflow.com/questions/3760086;
 # see also https://github.com/unegma/bash-functions\
 #                 /blob/main/update.sh
@@ -40,11 +38,14 @@ function update_version_file() {
 
 update_version_file $NEW_TAG
 go build .
+if [ $? -ne 0 ]; then
+    exit 1
+fi
 git commit -am "Update version prior to tag."
 
 # get current hash and see if it already has a tag
 GIT_COMMIT=`git rev-parse HEAD`
-NEEDS_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null || echo -n`
+NEEDS_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
 # only tag if no tag already
 if [ -z "$NEEDS_TAG" ]; then
     git tag $NEW_TAG
