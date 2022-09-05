@@ -61,7 +61,7 @@ Mac binaries are currently unsigned, so you have to go through the following ext
 1. Open with Terminal or iTerm or... whatever Terminal program you usually use.
 1. Select "Open Anyway" after acknowledging the security warning.
 
-You should only have to do this once, in general.
+You should only have to do this once per release, in general.
 
 ## Option 2: Install using Go
 
