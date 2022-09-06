@@ -12,14 +12,6 @@ type Sexpr interface {
 	Equal(Sexpr) bool
 }
 
-func stringFromList(l *ConsCell) string {
-	ret := []string{}
-	for ; l != Nil; l = l.cdr.(*ConsCell) {
-		ret = append(ret, l.car.String())
-	}
-	return strings.Join(ret, " ")
-}
-
 func evAtom(a Atom, e *env) (Sexpr, error) {
 	if a.s == "t" {
 		return a, nil
@@ -127,7 +119,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 	if !ok {
 		return nil, baseError("error signature must be a list")
 	}
-	errorStr := stringFromList(sigList)
+	errorStr := unwrapList(sigList)
 	bodyArgs := args.cdr.(*ConsCell)
 	for {
 		if bodyArgs == Nil {

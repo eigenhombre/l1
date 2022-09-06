@@ -741,7 +741,12 @@
   (errors '(doc form is not a list)
     (let ((lll (lambda ())))
       (lambda t () (doc . lll) 5)))
-  (is (not (repeat (- 1) 'a))))
+  (is (not (repeat (- 1) 'a)))
+
+  (errors '(error not found)
+    (errors (list* ()  t)))
+  (errors '(error not found)
+    (errors (list* () 695))))
 
 (test '(second)
   (is (not (second ())))
