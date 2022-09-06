@@ -17,6 +17,16 @@
                                   range
                                   readlist
                                   screen-start
+
+                                  ;; This feels like a bit of a cheat,
+                                  ;; but set! can redefine anything,
+                                  ;; including macros or functions
+                                  ;; which are built into l1, so
+                                  ;; anything goes at that point,
+                                  ;; including stack overflows (Issue
+                                  ;; #78):
+                                  set!
+
                                   shell
                                   sleep
                                   while

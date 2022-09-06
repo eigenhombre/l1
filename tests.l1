@@ -743,6 +743,7 @@
       (lambda t () (doc . lll) 5)))
   (is (not (repeat (- 1) 'a)))
 
+  ;; Issue #79:
   (errors '(error not found)
     (errors (list* ()  t)))
   (errors '(error not found)
