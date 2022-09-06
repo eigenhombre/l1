@@ -1062,28 +1062,60 @@ func init() {
 				return mkListAsConsWithCdr(exprs, Nil), nil
 			},
 		},
-		"split": {
-			Name:       "split",
-			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
-			FixedArity: 1,
+		"sort-by": {
+			Name:       "sort-by",
+			Docstring:  "Sort a list by a function",
+			FixedArity: 2,
 			NAry:       false,
-			ArgString:  "(x)",
+			ArgString:  "(f xs)",
 			Examples: E(
-				L(A("split"), N(123)),
-				L(A("split"), QA("abc")),
+				L(A("sort-by"), A("first"), QL(L(N(3)), L(N(2)), L(N(1)))),
+				L(A("sort-by"), A("first"), QL()),
+				L(A("sort-by"), A("second"), QL(L(A("quux"), N(333)), L(A("zip"), N(222)), L(A("afar"), N(111)))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				if len(args) != 1 {
-					return nil, baseError("split expects a single argument")
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				if len(args) != 2 {
+					return nil, baseError("sort-by expects two arguments")
 				}
-				switch s := args[0].(type) {
-				case Atom:
-					return listOfChars(s.String()), nil
-				case Number:
-					return listOfNums(s.String())
-				default:
-					return nil, baseError("split expects an atom or a number")
+				l, ok := args[1].(*ConsCell)
+				if !ok {
+					return nil, baseErrorf("'%s' is not a list", args[1])
 				}
+				exprs, err := consToExprs(l)
+				if err != nil {
+					return nil, extendError("sort consToExprs", err)
+				}
+				if len(exprs) == 0 {
+					return Nil, nil
+				}
+				var sortHadErr error = nil
+				sort.Slice(exprs, func(i, j int) bool {
+					apply1, err := applyFn([]Sexpr{args[0], list(exprs[i])}, e)
+					if err != nil {
+						sortHadErr = err
+						return false
+					}
+					apply2, err := applyFn([]Sexpr{args[0], list(exprs[j])}, e)
+					if err != nil {
+						sortHadErr = err
+						return false
+					}
+					if reflect.TypeOf(apply1) != reflect.TypeOf(apply2) {
+						sortHadErr = baseErrorf("apply result %s is not same type as %s",
+							apply1, apply2)
+						return false
+					}
+					switch apply1.(type) {
+					case Number:
+						return apply1.(Number).Less(apply2.(Number))
+					case Atom:
+						return apply1.(Atom).s < apply2.(Atom).s
+					default:
+						sortHadErr = baseErrorf("'%s' is not a sortable type", apply1)
+					}
+					return false
+				})
+				return mkListAsConsWithCdr(exprs, Nil), sortHadErr
 			},
 		},
 		"source": {
@@ -1112,6 +1144,30 @@ func init() {
 					return Cons(Atom{"lambda"}, Cons(mkListAsConsWithCdr(argExprs, argsCdr), t.body)), nil
 				default:
 					return nil, baseErrorf("'%s' is not a function", args[0])
+				}
+			},
+		},
+		"split": {
+			Name:       "split",
+			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
+			FixedArity: 1,
+			NAry:       false,
+			ArgString:  "(x)",
+			Examples: E(
+				L(A("split"), N(123)),
+				L(A("split"), QA("abc")),
+			),
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, baseError("split expects a single argument")
+				}
+				switch s := args[0].(type) {
+				case Atom:
+					return listOfChars(s.String()), nil
+				case Number:
+					return listOfNums(s.String())
+				default:
+					return nil, baseError("split expects an atom or a number")
 				}
 			},
 		},

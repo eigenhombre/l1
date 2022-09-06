@@ -1,5 +1,5 @@
 # API Index
-128 forms available:
+130 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -113,6 +113,7 @@
 [`sleep`](#sleep)
 [`some`](#some)
 [`sort`](#sort)
+[`sort-by`](#sort-by)
 [`source`](#source)
 [`split`](#split)
 [**`swallow`**](#swallow)
@@ -2799,6 +2800,35 @@ Args: `(xs)`
 > (sort (quote (c b a)))
 ;;=>
 (a b c)
+
+```
+
+-----------------------------------------------------
+		
+
+## `sort-by`
+
+Sort a list by a function
+
+Type: native function
+
+Arity: 2 
+
+Args: `(f xs)`
+
+
+### Examples
+
+```
+> (sort-by first (quote ((3) (2) (1))))
+;;=>
+((1) (2) (3))
+> (sort-by first (quote ()))
+;;=>
+()
+> (sort-by second (quote ((quux 333) (zip 222) (afar 111))))
+;;=>
+((afar 111) (zip 222) (quux 333))
 
 ```
 
