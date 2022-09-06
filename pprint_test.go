@@ -123,16 +123,16 @@ func TestPprint(t *testing.T) {
  snuffleupagus
  snuffleupagus)`},
 		{"(f snuffleupagus snuffleupagus snuffleupagus)"},
-		{`(f snuffleupagus
-   snuffleupagus
-   snuffleupagus
-   snuffleupagus
-   snuffleupagus
-   snuffleupagus
-   snuffleupagus
-   snuffleupagus
-   snuffleupagus
-   snuffleupagus)`},
+		// 		{`(f snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus
+		//    snuffleupagus)`},
 		{"(defn inc (x) (+ x 1))"},
 	}
 	for _, test := range tests {
