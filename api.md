@@ -112,6 +112,7 @@
 [`shuffle`](#shuffle)
 [`sleep`](#sleep)
 [`some`](#some)
+[`sort`](#sort)
 [`source`](#source)
 [`split`](#split)
 [**`swallow`**](#swallow)
@@ -2769,6 +2770,35 @@ Args: `(f l)`
 > (some even? (quote (1 3 5 7 9 1000 11 13)))
 ;;=>
 t
+
+```
+
+-----------------------------------------------------
+		
+
+## `sort`
+
+Sort a list
+
+Type: native function
+
+Arity: 1 
+
+Args: `(xs)`
+
+
+### Examples
+
+```
+> (sort (quote (3 2 1)))
+;;=>
+(1 2 3)
+> (sort (quote ()))
+;;=>
+()
+> (sort (quote (c b a)))
+;;=>
+(a b c)
 
 ```
 

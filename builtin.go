@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"reflect"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode"
@@ -1012,6 +1014,52 @@ func init() {
 				}
 				time.Sleep(time.Duration(num.bi.Uint64()) * time.Millisecond)
 				return Nil, nil
+			},
+		},
+		"sort": {
+			Name:       "sort",
+			Docstring:  "Sort a list",
+			FixedArity: 1,
+			NAry:       false,
+			ArgString:  "(xs)",
+			Examples: E(
+				L(A("sort"), QL(N(3), N(2), N(1))),
+				L(A("sort"), QL()),
+				L(A("sort"), QL(A("c"), A("b"), A("a"))),
+			),
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, baseError("sort expects a single argument")
+				}
+				l, ok := args[0].(*ConsCell)
+				if !ok {
+					return nil, baseErrorf("'%s' is not a list", args[0])
+				}
+				exprs, err := consToExprs(l)
+				if err != nil {
+					return nil, extendError("sort consToExprs", err)
+				}
+				if len(exprs) == 0 {
+					return Nil, nil
+				}
+				for i := 1; i < len(exprs); i++ {
+					if reflect.TypeOf(exprs[i]) != reflect.TypeOf(exprs[0]) {
+						return nil, baseErrorf("%s is not same type as %s", exprs[i], exprs[0])
+					}
+				}
+				switch exprs[0].(type) {
+				case Number:
+					sort.Slice(exprs, func(i, j int) bool {
+						return exprs[i].(Number).Less(exprs[j].(Number))
+					})
+				case Atom:
+					sort.Slice(exprs, func(i, j int) bool {
+						return exprs[i].(Atom).s < exprs[j].(Atom).s
+					})
+				default:
+					return nil, baseErrorf("'%s' is not a sortable type", exprs[0])
+				}
+				return mkListAsConsWithCdr(exprs, Nil), nil
 			},
 		},
 		"split": {

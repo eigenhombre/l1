@@ -900,3 +900,14 @@
     (shell '()))
   (errors '(file not found) (shell '(asdfkhjasdfjkh)))
   (is (= 3 (len (shell '(pwd))))))
+
+(test 'sort
+  (errors '(expects a single argument) (sort))
+  (errors '(expects a single argument) (sort () ()))
+  (errors '(is not a list) (sort 3))
+  (is (not (sort ())))
+  (is (= '(1 2) (sort '(1 2))))
+  (is (= '(1 2) (sort '(2 1))))
+  (is (= '(2 11) (sort '(11 2))))
+  (is (= '(a b) (sort '(b a))))
+  (errors '(is not same type) (sort '(1 a))))
