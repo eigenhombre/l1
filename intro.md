@@ -21,7 +21,9 @@ command (installed using your favorite package manager), e.g.:
 
 ## Expressions
 
-Expressions in `l1` are atoms, lists, numbers, or functions.
+Expressions in `l1` are atoms, lists, numbers, or functions:
+
+### Atoms
 
 Atoms have a name, such as `x`, `foo`, or `Eisenhower!`, and can be
 "bound to a value in the current environment," meaning,
@@ -32,6 +34,8 @@ and retrieve it:
     > a
     1
     >
+
+### Lists
 
 Lists are collections of zero or more expressions.  Examples:
 
@@ -49,6 +53,29 @@ of a list, prepend a quote character:
     (+ 2 2)
     > (+ 2 2)
     4
+
+As in most Lisps, lists are actually implemented
+"under the hood" as "cons pairs" ([Wikipedia
+page](https://en.wikipedia.org/wiki/Cons#Ordered_pairs)).  The list
+
+    (1 2 3)
+
+actually represented internally as
+
+    (1 . (2 . (3 . ())))
+
+where
+
+    (a . b)
+
+is the same as
+
+    (cons a b)
+
+In practice, the dot notation is uncommon in `l1` programs, except
+when used to represent rest arguments, described below.
+
+### Numbers
 
 Numbers are integer values and can be of arbitrary magnitude:
 
@@ -222,6 +249,30 @@ specified using the empty list as its fixed argument:
         (list* 'hello friends))
     > (say-hello 'John 'Jerry 'Eden)
     (hello John Jerry Eden)
+
+In addition to the functions described above, some `l1` functions are
+"built in" (implemented in Go as part of the language core).  Examples
+include `car`, `cdr`, `cons`, etc.  The API Docs below specify whether
+a function is built-in or not.
+
+One special family of predefined functions not shown in the API docs
+(because they are effectively infinite in number) is extensions of
+`car` and `cdr`:
+
+    > (car '(1 2 3))
+    1
+    > (cadr '(1 2 3))
+    2
+    > (caddr '(1 2 3))
+    3
+    > (caar '((one fish) (two fish)))
+    one
+    > (caadr '((one fish) (two fish)))
+    two
+    > (cadar '((one fish) (two fish)))
+    fish
+
+`(cadr x)` should be read as `(car (cdr x))`, and so on.
 
 Functions may invoke themselves recursively:
 

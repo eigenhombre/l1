@@ -62,7 +62,7 @@ func TestEval(t *testing.T) {
 		{Cases(S("(quote ((1)))", "((1))", OK))},
 		{Cases(S("(quote (()))", "(())", OK))},
 		{Cases(S("(quote (() ()))", "(() ())", OK))},
-
+		{ECases(S("(cadaaaaaaaaaar '(((((((((((hello world))))))))))))", "world", OK))},
 		// Whitespace:
 		{Cases(S(" t ", "t", OK))},
 		{Cases(S("t\n", "t", OK))},
@@ -111,7 +111,6 @@ func TestEval(t *testing.T) {
 	}
 	examples := []string{"$ l1"}
 	for _, test := range tests {
-		globals := mkEnv(nil)
 		for _, testCase := range test.evalCases {
 			got, err := lexAndParse(strings.Split(testCase.in, "\n"))
 			if isError(err, testCase) {

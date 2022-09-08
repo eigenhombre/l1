@@ -145,6 +145,8 @@ installing `l1` by looking under `$GOPATH`. For example, if the
     123
     > (quote (the (ten (laws (of (greenspun))))))
     (the (ten (laws (of (greenspun)))))
+    > (cadaaaaaaaaaar '(((((((((((hello world))))))))))))
+    world
     > ((lambda (x . xs) (list x xs)) 1 2 3 4)
     (1 (2 3 4))
     > (help)
