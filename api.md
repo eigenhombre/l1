@@ -1,5 +1,5 @@
 # API Index
-130 forms available:
+129 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -16,7 +16,6 @@
 [`bang`](#bang)
 [`body`](#body)
 [`butlast`](#butlast)
-[`caar`](#caar)
 [`capitalize`](#capitalize)
 [`car`](#car)
 [`cdr`](#cdr)
@@ -567,35 +566,6 @@ Args: `(l)`
 > (butlast (range 3))
 ;;=>
 (0 1)
-
-```
-
------------------------------------------------------
-		
-
-## `caar`
-
-First element of the first element of a list of lists
-
-Type: function
-
-Arity: 1 
-
-Args: `(l)`
-
-
-### Examples
-
-```
-> (caar ())
-;;=>
-()
-> (caar (quote (())))
-;;=>
-()
-> (caar (quote ((one two) (three four))))
-;;=>
-one
 
 ```
 

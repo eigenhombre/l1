@@ -19,6 +19,14 @@
         (t (cons (car a)
                  (concat2 (cdr a) b)))))
 
+(defn c*r (path l)
+  (doc ())  ;; undocumented, for internal use for caar, cadar, cddar, etc.
+  (cond ((not path) l)
+        ((= 'a (car path)) (c*r (cdr path) (car l)))
+        ((= 'd (car path)) (c*r (cdr path) (cdr l)))
+        (t (error (concat2 '(unknown c*r path element)
+                           (list COLON (car path)))))))
+
 (defmacro if (condition then else)
   (doc (simple conditional with two branches)
        (examples
@@ -243,15 +251,6 @@
         ((not l) ())
         (t (drop (dec n)
                  (cdr l)))))
-
-(defn caar (l)
-  (doc (first element of the first element of a list of lists)
-       (examples
-        (caar ())                ;;=> ()
-        (caar '(()))             ;;=> ()
-        (caar '((one two)
-                (three four))))) ;;=> one
-  (car (car l)))
 
 (defn complement (f)
   (doc (return the logical complement of the supplied function)

@@ -66,10 +66,14 @@ top:
 	doc := Nil
 	if body != Nil && body.car != Nil {
 		doc2, ok := body.car.(*ConsCell)
-		if ok && doc2.car.Equal(Atom{"doc"}) {
-			doc, ok = doc2.cdr.(*ConsCell)
+		if ok && doc2 != Nil && doc2.car.Equal(Atom{"doc"}) {
+			cdrCons, ok := doc2.cdr.(*ConsCell)
 			if !ok {
 				return nil, baseError("doc form is not a list")
+			}
+			// Omit explicitly undocumented functions:
+			if cdrCons != Nil && cdrCons.car != Nil {
+				doc = cdrCons
 			}
 			body = body.cdr.(*ConsCell) // Skip `doc` part.
 		}

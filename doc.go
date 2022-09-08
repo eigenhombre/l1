@@ -363,7 +363,11 @@ func functionExamplesFromDoc(l lambdaFn) *ConsCell {
 		if doc == Nil {
 			return Nil
 		}
-		if doc.car.(*ConsCell).car.Equal(Atom{"examples"}) {
+		docCons, ok := doc.car.(*ConsCell)
+		if !ok || docCons == Nil {
+			return Nil
+		}
+		if docCons.car.Equal(Atom{"examples"}) {
 			return doc.car.(*ConsCell).cdr.(*ConsCell)
 		}
 		doc = doc.cdr.(*ConsCell)
@@ -410,7 +414,8 @@ func availableForms(e *env) []formRec {
 	// Special forms - only need to add formatted column description:
 	out := []formRec{}
 	for _, form := range specialForms {
-		form.columnDoc = formatFunctionInfo(form.name, form.doc, form.farity, form.ismulti, true, false, false)
+		form.columnDoc = formatFunctionInfo(form.name,
+			form.doc, form.farity, form.ismulti, true, false, false)
 		out = append(out, form)
 	}
 
@@ -444,8 +449,8 @@ func availableForms(e *env) []formRec {
 		if l.isMacro {
 			ftype = macro
 		}
-		examples := examplesToString(functionExamplesFromDoc(*l), e)
-		if ok {
+		if ok && l.doc != Nil {
+			examples := examplesToString(functionExamplesFromDoc(*l), e)
 			out = append(out, formRec{
 				name:     lambdaName,
 				farity:   len(l.args),

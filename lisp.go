@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -25,6 +26,29 @@ func evAtom(a Atom, e *env) (Sexpr, error) {
 		return ret, nil
 	}
 	return nil, baseErrorf("unknown symbol: %s", a.s)
+}
+
+// Do this once, it's pretty expensive:
+var cxrRe = regexp.MustCompile(`^c([ad]+)r$`)
+
+func isCxr(a Atom) bool {
+	return cxrRe.MatchString(a.s) && a.s != "car" && a.s != "cdr"
+}
+
+func extractCxrLambda(t Atom, e *env) (Sexpr, error) {
+	args := Nil
+	for i := 1; i < len(t.s)-1; i++ {
+		// isCxr guarantees that the string is of the form c[ad]+r, so
+		// runes are either 'a' or 'd', of length 1:
+		args = Cons(Atom{string(t.s[i])}, args)
+	}
+	newLambda := &lambdaFn{
+		args:    []string{"xs"},
+		body:    list(list(Atom{"c*r"}, list(Atom{"quote"}, args), Atom{"xs"})),
+		isMacro: false,
+		env:     e,
+	}
+	return newLambda, nil
 }
 
 func evDef(args *ConsCell, e *env) (Sexpr, error) {
@@ -310,6 +334,9 @@ top:
 	}
 	switch t := expr.(type) {
 	case Atom:
+		if isCxr(t) {
+			return extractCxrLambda(t, e)
+		}
 		return evAtom(t, e)
 	case Number:
 		return expr, nil

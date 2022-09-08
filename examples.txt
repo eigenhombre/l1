@@ -39,7 +39,6 @@ l1 - a Lisp interpreter.
           bang  F    1   Add an exclamation point at end of atom
           body  N    1   Return the body of a lambda function
        butlast  F    1   Return everything but the last element
-          caar  F    1   First element of the first element of a list of lists
     capitalize  F    1   Return the atom argument, capitalized
            car  N    1   Return the first element of a list
            cdr  N    1   Return a list with the first element removed

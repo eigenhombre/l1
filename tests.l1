@@ -22,7 +22,6 @@
 
 (test '(basic stuff
               cons
-              car cdr
               len)
   (errors '(is not a function)
     (t))
@@ -30,16 +29,6 @@
     (1))
   (errors '(is not a function)
     (()))
-  (test '(car and cdr)
-    (is (= (car ()) ()))
-    (is (= (cdr ()) ()))
-    (is (= (cdr '(is not common lisp))
-           '(not common lisp)))
-    (is (= (car '(is not common lisp))
-           'is))
-    (is (= 1
-           (car '(1 2 3))))
-    (is (= '(2 3) (cdr '(1 2 3)))))
 
   (test '(len)
     (is (= 3 (len '(1 2 3))))
@@ -48,19 +37,35 @@
 
   (errors '(missing argument) (cons))
   (errors '(expects a single argument) (atom?))
-  (errors '(missing argument) (car))
-  (errors '(not a list) (car t))
   (errors '(missing argument) (cdr))
-  (errors '(not a list) (cdr t))
   (is (= '(1 2 3 4) (cons 1 '(2 3 4))))
   (is (= '((1 2) 3 4) (cons (cons 1 (cons 2 ())) '(3 4))))
   (is (= '(()) (cons () ())))
   (is (= '(1 . 2) (cons 1 2)))
   (is (= '(1 2) (cons 1 '(2))))
   (is (= '((1 . 2)) (cons (cons 1 2) ())))
+  (is (= '((1) . 2) (cons '(1) 2))))
+
+(test '(car and cdr)
+  (is (= (car ()) ()))
+  (is (= (cdr ()) ()))
+  (is (= (cdr '(is not common lisp))
+         '(not common lisp)))
+  (is (= (car '(is not common lisp))
+         'is))
+  (is (= 1
+         (car '(1 2 3))))
+  (is (= '(2 3) (cdr '(1 2 3))))
+  (errors '(missing argument) (car))
+  (errors '(not a list) (car t))
+  (errors '(not a list) (cdr t))
   (is (= 1 (car '(1 . 2))))
   (is (= 2 (cdr '(1 . 2))))
-  (is (= '((1) . 2) (cons '(1) 2))))
+  (is (= 1 (caar '((1 2) (3 4)))))
+  (is (= 3 (caadr '((1 2) (3 4)))))
+  (is (= 4 (cadadr '((1 2) (3 4)))))
+  (errors '(unknown symbol)
+    (cadoopdydoopdr '((1 2) (3 4)))))
 
 (test '(boolean logic)
   (is t)
@@ -582,8 +587,6 @@
   (is (= (range 10) (drop 0 (range 10))))
   (is (= '(5 6 7 8 9) (drop 5 (range 10))))
   (is (= () (drop 1000 (range 10))))
-
-  (is (= 1 (caar '((1 2) (3 4)))))
 
   (is (even? 2))
   (is (even? 2000))
