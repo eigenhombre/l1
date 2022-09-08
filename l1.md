@@ -118,8 +118,9 @@ atoms and lists are used where strings normally would be:
 (In this example, the `Hello, world!` is output to the terminal, and
 then the return value of `printl`, namely `()`.)
 
-Atom names can be arbitrarily long (they are Go strings under the hood).
-They can start with any UTF-8-encoded unicode characters but the following:
+Atom names can be arbitrarily long (they are simply Go strings under
+the hood).  When `l1` parses your code, it will interpret any UTF-8-encoded unicode characters
+but the following as the start of an atom:
 
     0123456789+-. \t\n\r()~@#;`'
 
@@ -183,14 +184,24 @@ some of which may be helpful for text games and other diversions:
 ## Functions
 
 Functions come in two flavors: temporary functions, called "lambda"
-functions for historical reasons, and functions which are defined and
-kept around in the environment for later use.  For example,
+functions for historical reasons, and functions which are defined with
+a name and kept around in the environment for later use.  For example,
 
     > (defn plus2 (x) (+ x 2))
     > (plus2 3)
     5
     > ((lambda (x) (* 5 x)) 3)
     15
+
+Since function names are atoms, their names follow the same rules for
+atoms given above.  The following function definitions are all equally valid:
+
+    > (defn increase! (x) (* x 1000))
+    ()
+    > (defn 增加! (x) (* x 1000))
+    ()
+    > (defn մեծացնել! (x) (* x 1000))
+    ()
 
 Functions can take a fixed number of arguments plus an extra "rest"
 argument, separated from the fixed arguments with a "."; the rest
