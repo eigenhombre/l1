@@ -102,7 +102,7 @@ Example, using a file in this project:
     (defn fact (n)
       (if (zero? n)
         1
-        (* n (fact (- n 1)))))))
+        (* n (fact (- n 1)))))
 
     (print (fact 100))
     $ time l1 examples/fact.l1
