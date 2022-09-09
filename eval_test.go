@@ -40,7 +40,7 @@ func TestEval(t *testing.T) {
 		{ECases(S("(quote foo)", "foo", OK))},
 		{ECases(S("'foo", "foo", OK))},
 		{ECases(S("(len (split '水果))", "2", OK))},
-		{ECases(S("'123", "123", OK))},
+		{Cases(S("'123", "123", OK))},
 		{Cases(S("'bar", "bar", OK))},
 		{Cases(S("(quote (((1 2 3))))", "(((1 2 3)))", OK))},
 		{ECases(S("(quote (the (ten (laws (of (greenspun))))))", "(the (ten (laws (of (greenspun)))))", OK))},
