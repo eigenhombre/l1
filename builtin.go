@@ -552,7 +552,7 @@ func init() {
 			ArgString:  "(x)",
 			Examples: E(
 				L(A("eval"), QL(A("one"), A("two"))),
-				L(A("eval"), QL(L(A("+"), N(1), N(2)))),
+				L(A("eval"), QL(A("+"), N(1), N(2))),
 			),
 			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
 				if len(args) != 1 {
