@@ -223,6 +223,7 @@ installing `l1` by looking under `$GOPATH`. For example, if the
               list  N    0+  Return a list of the given arguments
              list*  F    0+  Create a list by consing everything but the last arg onto the last
              list?  N    1   Return t if the argument is a list, () otherwise
+              load  N    1   Load and execute a file
               loop  S    1+  Loop forever
      macroexpand-1  N    1   Expand a macro
                map  F    2   Apply the supplied function to every element in the supplied list

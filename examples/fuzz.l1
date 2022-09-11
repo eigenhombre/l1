@@ -13,6 +13,7 @@
 (def operators (remove (lambda (x)
                          (in? x '(eval
                                   exit
+                                  load
                                   loop
                                   range
                                   readlist

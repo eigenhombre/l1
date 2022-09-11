@@ -22,30 +22,31 @@ func readLine() (string, error) {
 	}
 }
 
-func evalExprs(exprs []Sexpr, e env, doPrint bool) bool {
+func evalExprs(exprs []Sexpr, e *env, doPrint bool) error {
 	for _, g := range exprs {
-		res, err := eval(g, &e)
+		res, err := eval(g, e)
 		if err != nil {
-			fmt.Printf("ERROR:\n%v\n", err)
-			return false
+			if doPrint {
+				fmt.Printf("ERROR:\n%v\n", err)
+			}
+			return err
 		}
 		if doPrint {
 			fmt.Printf("%v\n", res)
 		}
 	}
-	return true
+	return nil
 }
 
-func lexParseEval(s string, e env, doPrint bool) bool {
+func lexParseEval(s string, e *env, doPrint bool) error {
 	got, err := lexAndParse(strings.Split(s, "\n"))
 	if err != nil {
-		fmt.Printf("%v\n", err)
-		return false
+		return err
 	}
 	return evalExprs(got, e, false)
 }
 
-func repl(e env) {
+func repl(e *env) {
 top:
 	for {
 		fmt.Print("> ")
@@ -99,9 +100,10 @@ func initGlobals() env {
 
 func main() {
 	var versionFlag, docFlag, longDocFlag bool
-	var cpuProfile string
+	var cpuProfile, evalExpr string
 	flag.BoolVar(&versionFlag, "v", false, "Get l1 version")
 	flag.StringVar(&cpuProfile, "p", "", "Write CPU profile to file")
+	flag.StringVar(&evalExpr, "e", "", "Evaluate expression")
 	flag.BoolVar(&docFlag, "doc", false, "Print documentation")
 	flag.BoolVar(&longDocFlag, "longdoc", false, "Print documentation")
 
@@ -123,7 +125,9 @@ func main() {
 
 	globals := initGlobals()
 
-	if !lexParseEval(rawCore, globals, false) {
+	err := lexParseEval(rawCore, &globals, false)
+	if err != nil {
+		fmt.Println(err)
 		fmt.Println("Failed to load l1 core library!")
 		os.Exit(1)
 	}
@@ -136,19 +140,25 @@ func main() {
 		fmt.Println(longDocStr(&globals))
 		os.Exit(0)
 	}
+	if evalExpr != "" {
+		err = lexParseEval(evalExpr, &globals, true)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		os.Exit(0)
+	}
 
 	files := flag.Args()
 	if len(files) > 0 {
 		for _, file := range files {
-			bytes, err := os.ReadFile(file)
+			err := loadFile(&globals, file)
 			if err != nil {
-				panic(err)
-			}
-			if !lexParseEval(string(bytes), globals, false) {
+				fmt.Printf("ERROR:\n%v\n", err)
 				os.Exit(1)
 			}
 		}
 		return
 	}
-	repl(globals)
+	repl(&globals)
 }

@@ -1,5 +1,5 @@
 # API Index
-129 forms available:
+130 forms available:
 [`*`](#*)
 [`**`](#**)
 [`+`](#+)
@@ -64,6 +64,7 @@
 [`list`](#list)
 [`list*`](#list*)
 [`list?`](#list?)
+[`load`](#load)
 [**`loop`**](#loop)
 [`macroexpand-1`](#macroexpand-1)
 [`map`](#map)
@@ -1727,6 +1728,20 @@ t
 ()
 
 ```
+
+-----------------------------------------------------
+		
+
+## `load`
+
+Load and execute a file
+
+Type: native function
+
+Arity: 1 
+
+Args: `(filename)`
+
 
 -----------------------------------------------------
 		

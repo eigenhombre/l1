@@ -21,6 +21,9 @@ test:
 
 l1-tests: ${PROG}
 	./l1 tests.l1
+	./l1 -e "(println (+ 1 1))"
+	./l1 -e "(load 'examples/fact.l1)"
+	./l1 -e "(error '(goodbye, cruel world))" && exit 1 || echo "Got expected error"
 
 run-examples: ${PROG}
 	./l1 examples/fact.l1

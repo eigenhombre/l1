@@ -9,8 +9,9 @@ import (
 // See also: tests.l1
 func TestEval(t *testing.T) {
 	globals := initGlobals()
-	if !lexParseEval(rawCore, globals, false) {
-		t.Error("Failed to load l1 core library!")
+	err := lexParseEval(rawCore, &globals, false)
+	if err != nil {
+		t.Fatal(err)
 	}
 	type evalCase struct {
 		in        string
@@ -147,7 +148,7 @@ func TestEval(t *testing.T) {
 	outstr += shortDocStr(&globals)
 	bs := []byte(outstr)
 	bs = append(bs, "\n> ^D\n$\n"...)
-	err := os.WriteFile("examples.txt", bs, 0644)
+	err = os.WriteFile("examples.txt", bs, 0644)
 	if err != nil {
 		t.Errorf("write file: %v", err)
 	}

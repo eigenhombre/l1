@@ -122,6 +122,18 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	return biResult, nil
 }
 
+func loadFile(e *env, filename string) error {
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+	err = lexParseEval(string(bytes), e, false)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // moving `builtins` into `init` avoids initialization loop for doHelp:
 var builtins map[string]*Builtin
 
@@ -708,6 +720,27 @@ func init() {
 				}
 				if _, ok := args[0].(*ConsCell); ok {
 					return True, nil
+				}
+				return Nil, nil
+			},
+		},
+		"load": {
+			Name:       "load",
+			Docstring:  "Load and execute a file",
+			FixedArity: 1,
+			NAry:       false,
+			ArgString:  "(filename)",
+			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, baseError("load expects a single argument")
+				}
+				filename, ok := args[0].(Atom)
+				if !ok {
+					return nil, baseError("load expects a filename")
+				}
+				err := loadFile(e, filename.s)
+				if err != nil {
+					return nil, extendError("load file", err)
 				}
 				return Nil, nil
 			},
