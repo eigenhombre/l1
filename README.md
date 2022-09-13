@@ -8,13 +8,14 @@
 1](https://en.wikipedia.org/wiki/Common_Lisp#The_function_namespace)
 written in Go.  Emphasizing simplicity of data types (atoms,
 arbitrarily large integers, and lists) and start-up speed, it aims to
-be a playground for future language experiments.
+be a playground for learning Lisp, making simple games, and exploring
+classic (pre-ML) AI work.
 
-`l1` eschews strings in favor of using atoms and lists in the style of
-[some classic AI programs](https://github.com/norvig/paip-lisp).  It
-features macros, tail-call optimization, unicode support, and a few
-unique functions for converting atoms and numbers to lists, and
-vice-versa.
+`l1` eschews strings, vectors, and records in favor of using atoms and
+lists in the style of [some classic AI
+programs](https://github.com/norvig/paip-lisp).  It features macros,
+tail-call optimization, unicode support, and a few unique functions
+for converting atoms and numbers to lists, and vice-versa.
 
 # Objectives
 
