@@ -1,139 +1,140 @@
 # API Index
 130 forms available:
-[`*`](#user-content-%2A)
-[`**`](#user-content-%2A%2A)
-[`+`](#user-content-%2B)
-[`-`](#user-content--)
-[`/`](#user-content-%2F)
-[`<`](#user-content-%3C)
-[`<=`](#user-content-%3C%3D)
-[`=`](#user-content-%3D)
-[`>`](#user-content-%3E)
-[`>=`](#user-content-%3E%3D)
-[**`and`**](#user-content-and)
-[`apply`](#user-content-apply)
-[`atom?`](#user-content-atom%3F)
-[`bang`](#user-content-bang)
-[`body`](#user-content-body)
-[`butlast`](#user-content-butlast)
-[`capitalize`](#user-content-capitalize)
-[`car`](#user-content-car)
-[`cdr`](#user-content-cdr)
-[`colon`](#user-content-colon)
-[`comma`](#user-content-comma)
-[*`comment`*](#user-content-comment)
-[`comp`](#user-content-comp)
-[`complement`](#user-content-complement)
-[`concat`](#user-content-concat)
-[`concat2`](#user-content-concat2)
-[**`cond`**](#user-content-cond)
-[`cons`](#user-content-cons)
-[`constantly`](#user-content-constantly)
-[`dec`](#user-content-dec)
-[**`def`**](#user-content-def)
-[**`defmacro`**](#user-content-defmacro)
-[**`defn`**](#user-content-defn)
-[`doc`](#user-content-doc)
-[*`dotimes`*](#user-content-dotimes)
-[`downcase`](#user-content-downcase)
-[`drop`](#user-content-drop)
-[**`error`**](#user-content-error)
-[**`errors`**](#user-content-errors)
-[`eval`](#user-content-eval)
-[`even?`](#user-content-even%3F)
-[`exclaim`](#user-content-exclaim)
-[`exit`](#user-content-exit)
-[`filter`](#user-content-filter)
-[`flatten`](#user-content-flatten)
-[*`foreach`*](#user-content-foreach)
-[`forms`](#user-content-forms)
-[`fuse`](#user-content-fuse)
-[`gensym`](#user-content-gensym)
-[`help`](#user-content-help)
-[`identity`](#user-content-identity)
-[*`if`*](#user-content-if)
-[*`if-not`*](#user-content-if-not)
-[`inc`](#user-content-inc)
-[*`is`*](#user-content-is)
-[`juxt`](#user-content-juxt)
-[**`lambda`**](#user-content-lambda)
-[`last`](#user-content-last)
-[`len`](#user-content-len)
-[**`let`**](#user-content-let)
-[*`let*`*](#user-content-let%2A)
-[`list`](#user-content-list)
-[`list*`](#user-content-list%2A)
-[`list?`](#user-content-list%3F)
-[`load`](#user-content-load)
-[**`loop`**](#user-content-loop)
-[`macroexpand-1`](#user-content-macroexpand-1)
-[`map`](#user-content-map)
-[`mapcat`](#user-content-mapcat)
-[`max`](#user-content-max)
-[`min`](#user-content-min)
-[`neg?`](#user-content-neg%3F)
-[`not`](#user-content-not)
-[`not=`](#user-content-not%3D)
-[`nth`](#user-content-nth)
-[`number?`](#user-content-number%3F)
-[`odd?`](#user-content-odd%3F)
-[**`or`**](#user-content-or)
-[`partial`](#user-content-partial)
-[`period`](#user-content-period)
-[`pos?`](#user-content-pos%3F)
-[`print`](#user-content-print)
-[`printl`](#user-content-printl)
-[`println`](#user-content-println)
-[*`progn`*](#user-content-progn)
-[`punctuate`](#user-content-punctuate)
-[`punctuate-atom`](#user-content-punctuate-atom)
-[**`quote`**](#user-content-quote)
-[`randalpha`](#user-content-randalpha)
-[`randchoice`](#user-content-randchoice)
-[`randigits`](#user-content-randigits)
-[`randint`](#user-content-randint)
-[`range`](#user-content-range)
-[`readlist`](#user-content-readlist)
-[`reduce`](#user-content-reduce)
-[`rem`](#user-content-rem)
-[`remove`](#user-content-remove)
-[`repeat`](#user-content-repeat)
-[`repeatedly`](#user-content-repeatedly)
-[`reverse`](#user-content-reverse)
-[`screen-clear`](#user-content-screen-clear)
-[`screen-end`](#user-content-screen-end)
-[`screen-get-key`](#user-content-screen-get-key)
-[`screen-size`](#user-content-screen-size)
-[`screen-start`](#user-content-screen-start)
-[`screen-write`](#user-content-screen-write)
-[`second`](#user-content-second)
-[**`set!`**](#user-content-set%21)
-[`shell`](#user-content-shell)
-[`shuffle`](#user-content-shuffle)
-[`sleep`](#user-content-sleep)
-[`some`](#user-content-some)
-[`sort`](#user-content-sort)
-[`sort-by`](#user-content-sort-by)
-[`source`](#user-content-source)
-[`split`](#user-content-split)
-[**`swallow`**](#user-content-swallow)
-[**`syntax-quote`**](#user-content-syntax-quote)
-[`take`](#user-content-take)
-[`test`](#user-content-test)
-[`tosentence`](#user-content-tosentence)
-[`true?`](#user-content-true%3F)
-[**`try`**](#user-content-try)
-[`upcase`](#user-content-upcase)
-[`version`](#user-content-version)
-[*`when`*](#user-content-when)
-[*`when-not`*](#user-content-when-not)
-[*`while`*](#user-content-while)
-[*`with-screen`*](#user-content-with-screen)
-[`zero?`](#user-content-zero%3F)
+[`*`](#-STAR)
+[`**`](#-STAR-STAR)
+[`+`](#+)
+[`-`](#-)
+[`/`](#/)
+[`<`](#<)
+[`<=`](#<=)
+[`=`](#=)
+[`>`](#>)
+[`>=`](#>=)
+[**`and`**](#and)
+[`apply`](#apply)
+[`atom?`](#atom-QMARK)
+[`bang`](#bang)
+[`body`](#body)
+[`butlast`](#butlast)
+[`capitalize`](#capitalize)
+[`car`](#car)
+[`cdr`](#cdr)
+[`colon`](#colon)
+[`comma`](#comma)
+[*`comment`*](#comment)
+[`comp`](#comp)
+[`complement`](#complement)
+[`concat`](#concat)
+[`concat2`](#concat2)
+[**`cond`**](#cond)
+[`cons`](#cons)
+[`constantly`](#constantly)
+[`dec`](#dec)
+[**`def`**](#def)
+[**`defmacro`**](#defmacro)
+[**`defn`**](#defn)
+[`doc`](#doc)
+[*`dotimes`*](#dotimes)
+[`downcase`](#downcase)
+[`drop`](#drop)
+[**`error`**](#error)
+[**`errors`**](#errors)
+[`eval`](#eval)
+[`even?`](#even-QMARK)
+[`exclaim`](#exclaim)
+[`exit`](#exit)
+[`filter`](#filter)
+[`flatten`](#flatten)
+[*`foreach`*](#foreach)
+[`forms`](#forms)
+[`fuse`](#fuse)
+[`gensym`](#gensym)
+[`help`](#help)
+[`identity`](#identity)
+[*`if`*](#if)
+[*`if-not`*](#if-not)
+[`inc`](#inc)
+[*`is`*](#is)
+[`juxt`](#juxt)
+[**`lambda`**](#lambda)
+[`last`](#last)
+[`len`](#len)
+[**`let`**](#let)
+[*`let*`*](#let-STAR)
+[`list`](#list)
+[`list*`](#list-STAR)
+[`list?`](#list-QMARK)
+[`load`](#load)
+[**`loop`**](#loop)
+[`macroexpand-1`](#macroexpand-1)
+[`map`](#map)
+[`mapcat`](#mapcat)
+[`max`](#max)
+[`min`](#min)
+[`neg?`](#neg-QMARK)
+[`not`](#not)
+[`not=`](#not=)
+[`nth`](#nth)
+[`number?`](#number-QMARK)
+[`odd?`](#odd-QMARK)
+[**`or`**](#or)
+[`partial`](#partial)
+[`period`](#period)
+[`pos?`](#pos-QMARK)
+[`print`](#print)
+[`printl`](#printl)
+[`println`](#println)
+[*`progn`*](#progn)
+[`punctuate`](#punctuate)
+[`punctuate-atom`](#punctuate-atom)
+[**`quote`**](#quote)
+[`randalpha`](#randalpha)
+[`randchoice`](#randchoice)
+[`randigits`](#randigits)
+[`randint`](#randint)
+[`range`](#range)
+[`readlist`](#readlist)
+[`reduce`](#reduce)
+[`rem`](#rem)
+[`remove`](#remove)
+[`repeat`](#repeat)
+[`repeatedly`](#repeatedly)
+[`reverse`](#reverse)
+[`screen-clear`](#screen-clear)
+[`screen-end`](#screen-end)
+[`screen-get-key`](#screen-get-key)
+[`screen-size`](#screen-size)
+[`screen-start`](#screen-start)
+[`screen-write`](#screen-write)
+[`second`](#second)
+[**`set!`**](#set-BANG)
+[`shell`](#shell)
+[`shuffle`](#shuffle)
+[`sleep`](#sleep)
+[`some`](#some)
+[`sort`](#sort)
+[`sort-by`](#sort-by)
+[`source`](#source)
+[`split`](#split)
+[**`swallow`**](#swallow)
+[**`syntax-quote`**](#syntax-quote)
+[`take`](#take)
+[`test`](#test)
+[`tosentence`](#tosentence)
+[`true?`](#true-QMARK)
+[**`try`**](#try)
+[`upcase`](#upcase)
+[`version`](#version)
+[*`when`*](#when)
+[*`when-not`*](#when-not)
+[*`while`*](#while)
+[*`with-screen`*](#with-screen)
+[`zero?`](#zero-QMARK)
 # Operators
 
 
-## <a id="%2A"></a>`*`
+<a id="-STAR"></a>
+## `*`
 
 Multiply 0 or more numbers
 
@@ -161,7 +162,8 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## <a id="%2A%2A"></a>`**`
+<a id="-STAR-STAR"></a>
+## `**`
 
 Exponentiation operator
 
@@ -192,7 +194,8 @@ Args: `(n m)`
 -----------------------------------------------------
 		
 
-## <a id="%2B"></a>`+`
+<a id="+"></a>
+## `+`
 
 Add 0 or more numbers
 
@@ -220,7 +223,8 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## <a id="-"></a>`-`
+<a id="-"></a>
+## `-`
 
 Subtract 0 or more numbers from the first argument
 
@@ -251,7 +255,8 @@ Args: `(x . xs)`
 -----------------------------------------------------
 		
 
-## <a id="%2F"></a>`/`
+<a id="/"></a>
+## `/`
 
 Divide the first argument by the rest
 
@@ -282,7 +287,8 @@ ERROR: ((builtin function /) (division by zero))
 -----------------------------------------------------
 		
 
-## <a id="%3C"></a>`<`
+<a id="<"></a>
+## `<`
 
 Return t if the arguments are in strictly increasing order, () otherwise
 
@@ -316,7 +322,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="%3C%3D"></a>`<=`
+<a id="<="></a>
+## `<=`
 
 Return t if the arguments are in increasing (or qual) order, () otherwise
 
@@ -347,7 +354,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="%3D"></a>`=`
+<a id="="></a>
+## `=`
 
 Return t if the arguments are equal, () otherwise
 
@@ -378,7 +386,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="%3E"></a>`>`
+<a id=">"></a>
+## `>`
 
 Return t if the arguments are in strictly decreasing order, () otherwise
 
@@ -409,7 +418,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="%3E%3D"></a>`>=`
+<a id=">="></a>
+## `>=`
 
 Return t if the arguments are in decreasing (or equal) order, () otherwise
 
@@ -437,7 +447,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="and"></a>`and`
+<a id="and"></a>
+## `and`
 
 Boolean and
 
@@ -471,7 +482,8 @@ true
 -----------------------------------------------------
 		
 
-## <a id="apply"></a>`apply`
+<a id="apply"></a>
+## `apply`
 
 Apply a function to a list of arguments
 
@@ -499,7 +511,8 @@ Args: `(f args)`
 -----------------------------------------------------
 		
 
-## <a id="atom%3F"></a>`atom?`
+<a id="atom-QMARK"></a>
+## `atom?`
 
 Return t if the argument is an atom, () otherwise
 
@@ -527,7 +540,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="bang"></a>`bang`
+<a id="bang"></a>
+## `bang`
 
 Add an exclamation point at end of atom
 
@@ -552,7 +566,8 @@ Bang!
 -----------------------------------------------------
 		
 
-## <a id="body"></a>`body`
+<a id="body"></a>
+## `body`
 
 Return the body of a lambda function
 
@@ -577,7 +592,8 @@ Args: `(f)`
 -----------------------------------------------------
 		
 
-## <a id="butlast"></a>`butlast`
+<a id="butlast"></a>
+## `butlast`
 
 Return everything but the last element
 
@@ -605,7 +621,8 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## <a id="capitalize"></a>`capitalize`
+<a id="capitalize"></a>
+## `capitalize`
 
 Return the atom argument, capitalized
 
@@ -630,7 +647,8 @@ Hello
 -----------------------------------------------------
 		
 
-## <a id="car"></a>`car`
+<a id="car"></a>
+## `car`
 
 Return the first element of a list
 
@@ -658,7 +676,8 @@ one
 -----------------------------------------------------
 		
 
-## <a id="cdr"></a>`cdr`
+<a id="cdr"></a>
+## `cdr`
 
 Return a list with the first element removed
 
@@ -686,7 +705,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="colon"></a>`colon`
+<a id="colon"></a>
+## `colon`
 
 Add a colon at end of atom
 
@@ -711,7 +731,8 @@ remember-this:
 -----------------------------------------------------
 		
 
-## <a id="comma"></a>`comma`
+<a id="comma"></a>
+## `comma`
 
 Add a comma at end of atom
 
@@ -736,7 +757,8 @@ hello,
 -----------------------------------------------------
 		
 
-## <a id="comment"></a>`comment`
+<a id="comment"></a>
+## `comment`
 
 Ignore the expressions in the block
 
@@ -761,7 +783,8 @@ Args: `(() . body)`
 -----------------------------------------------------
 		
 
-## <a id="comp"></a>`comp`
+<a id="comp"></a>
+## `comp`
 
 Function composition -- return a function which applies a series of functions in reverse order
 
@@ -795,7 +818,8 @@ hello
 -----------------------------------------------------
 		
 
-## <a id="complement"></a>`complement`
+<a id="complement"></a>
+## `complement`
 
 Return the logical complement of the supplied function
 
@@ -823,7 +847,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="concat"></a>`concat`
+<a id="concat"></a>
+## `concat`
 
 Concatenenate any number of lists
 
@@ -848,7 +873,8 @@ Args: `(() . lists)`
 -----------------------------------------------------
 		
 
-## <a id="concat2"></a>`concat2`
+<a id="concat2"></a>
+## `concat2`
 
 Concatenate two lists
 
@@ -876,7 +902,8 @@ Args: `(a b)`
 -----------------------------------------------------
 		
 
-## <a id="cond"></a>`cond`
+<a id="cond"></a>
+## `cond`
 
 Fundamental branching construct
 
@@ -904,7 +931,8 @@ Args: `(() . pairs)`
 -----------------------------------------------------
 		
 
-## <a id="cons"></a>`cons`
+<a id="cons"></a>
+## `cons`
 
 Add an element to the front of a (possibly empty) list
 
@@ -935,7 +963,8 @@ Args: `(x xs)`
 -----------------------------------------------------
 		
 
-## <a id="constantly"></a>`constantly`
+<a id="constantly"></a>
+## `constantly`
 
 Given a value, return a function which always returns that value
 
@@ -960,7 +989,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="dec"></a>`dec`
+<a id="dec"></a>
+## `dec`
 
 Return the supplied integer argument, minus one
 
@@ -988,7 +1018,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="def"></a>`def`
+<a id="def"></a>
+## `def`
 
 Set a value
 
@@ -1016,7 +1047,8 @@ Args: `(name value)`
 -----------------------------------------------------
 		
 
-## <a id="defmacro"></a>`defmacro`
+<a id="defmacro"></a>
+## `defmacro`
 
 Create and name a macro
 
@@ -1050,7 +1082,8 @@ Args: `(name args . body)`
 -----------------------------------------------------
 		
 
-## <a id="defn"></a>`defn`
+<a id="defn"></a>
+## `defn`
 
 Create and name a function
 
@@ -1088,7 +1121,8 @@ Args: `(name args . rest)`
 -----------------------------------------------------
 		
 
-## <a id="doc"></a>`doc`
+<a id="doc"></a>
+## `doc`
 
 Return the doclist for a function
 
@@ -1113,7 +1147,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="dotimes"></a>`dotimes`
+<a id="dotimes"></a>
+## `dotimes`
 
 Execute body for each value in a list
 
@@ -1129,7 +1164,8 @@ Args: `(n . body)`
 -----------------------------------------------------
 		
 
-## <a id="downcase"></a>`downcase`
+<a id="downcase"></a>
+## `downcase`
 
 Return a new atom with all characters in lower case
 
@@ -1157,7 +1193,8 @@ hello
 -----------------------------------------------------
 		
 
-## <a id="drop"></a>`drop`
+<a id="drop"></a>
+## `drop`
 
 Drop n items from a list, then return the rest
 
@@ -1182,7 +1219,8 @@ Args: `(n l)`
 -----------------------------------------------------
 		
 
-## <a id="error"></a>`error`
+<a id="error"></a>
+## `error`
 
 Raise an error
 
@@ -1213,7 +1251,8 @@ ERROR in '(ensure-list 3)':
 -----------------------------------------------------
 		
 
-## <a id="errors"></a>`errors`
+<a id="errors"></a>
+## `errors`
 
 Error checking (for tests)
 
@@ -1244,7 +1283,8 @@ error not found in ((quote (is not a function)) (+))
 -----------------------------------------------------
 		
 
-## <a id="eval"></a>`eval`
+<a id="eval"></a>
+## `eval`
 
 Evaluate an expression
 
@@ -1272,7 +1312,8 @@ ERROR: ((builtin function eval) (evaluating function object) (unknown symbol: on
 -----------------------------------------------------
 		
 
-## <a id="even%3F"></a>`even?`
+<a id="even-QMARK"></a>
+## `even?`
 
 Return true if the supplied integer argument is even
 
@@ -1297,7 +1338,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="exclaim"></a>`exclaim`
+<a id="exclaim"></a>
+## `exclaim`
 
 Return l as a sentence... emphasized!
 
@@ -1328,7 +1370,8 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## <a id="exit"></a>`exit`
+<a id="exit"></a>
+## `exit`
 
 Exit the program
 
@@ -1344,7 +1387,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="filter"></a>`filter`
+<a id="filter"></a>
+## `filter`
 
 Keep only values for which function f is true
 
@@ -1369,7 +1413,8 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## <a id="flatten"></a>`flatten`
+<a id="flatten"></a>
+## `flatten`
 
 Return a (possibly nested) list, flattened
 
@@ -1394,7 +1439,8 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## <a id="foreach"></a>`foreach`
+<a id="foreach"></a>
+## `foreach`
 
 Execute body for each value in a list
 
@@ -1410,7 +1456,8 @@ Args: `(x xs . body)`
 -----------------------------------------------------
 		
 
-## <a id="forms"></a>`forms`
+<a id="forms"></a>
+## `forms`
 
 Return available operators, as a list
 
@@ -1426,7 +1473,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="fuse"></a>`fuse`
+<a id="fuse"></a>
+## `fuse`
 
 Fuse a list of numbers or atoms into a single atom
 
@@ -1454,7 +1502,8 @@ ABC
 -----------------------------------------------------
 		
 
-## <a id="gensym"></a>`gensym`
+<a id="gensym"></a>
+## `gensym`
 
 Return a new symbol
 
@@ -1470,7 +1519,8 @@ Args: `(() . x)`
 -----------------------------------------------------
 		
 
-## <a id="help"></a>`help`
+<a id="help"></a>
+## `help`
 
 Print this message
 
@@ -1486,7 +1536,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="identity"></a>`identity`
+<a id="identity"></a>
+## `identity`
 
 Return the argument
 
@@ -1502,7 +1553,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="if"></a>`if`
+<a id="if"></a>
+## `if`
 
 Simple conditional with two branches
 
@@ -1530,7 +1582,8 @@ def
 -----------------------------------------------------
 		
 
-## <a id="if-not"></a>`if-not`
+<a id="if-not"></a>
+## `if-not`
 
 Simple (inverted) conditional with two branches
 
@@ -1555,7 +1608,8 @@ Args: `(condition then else)`
 -----------------------------------------------------
 		
 
-## <a id="inc"></a>`inc`
+<a id="inc"></a>
+## `inc`
 
 Return the supplied integer argument, plus one
 
@@ -1571,7 +1625,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="is"></a>`is`
+<a id="is"></a>
+## `is`
 
 Assert a condition is truthy, or show failing code
 
@@ -1599,7 +1654,8 @@ ERROR: ((assertion failed: (car (cons () (quote (this one should fail))))))
 -----------------------------------------------------
 		
 
-## <a id="juxt"></a>`juxt`
+<a id="juxt"></a>
+## `juxt`
 
 Create a function which combines multiple operations into a single list of results
 
@@ -1633,7 +1689,8 @@ Args: `(() . fs)`
 -----------------------------------------------------
 		
 
-## <a id="lambda"></a>`lambda`
+<a id="lambda"></a>
+## `lambda`
 
 Create a function
 
@@ -1668,7 +1725,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="last"></a>`last`
+<a id="last"></a>
+## `last`
 
 Return the last item in a list
 
@@ -1696,7 +1754,8 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## <a id="len"></a>`len`
+<a id="len"></a>
+## `len`
 
 Return the length of a list
 
@@ -1721,7 +1780,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="let"></a>`let`
+<a id="let"></a>
+## `let`
 
 Create a local scope with bindings
 
@@ -1748,7 +1808,8 @@ Args: `(bindings . body)`
 -----------------------------------------------------
 		
 
-## <a id="let%2A"></a>`let*`
+<a id="let-STAR"></a>
+## `let*`
 
 Let form with ability to refer to previously-bound pairs in the binding list
 
@@ -1773,7 +1834,8 @@ Args: `(pairs . body)`
 -----------------------------------------------------
 		
 
-## <a id="list"></a>`list`
+<a id="list"></a>
+## `list`
 
 Return a list of the given arguments
 
@@ -1801,7 +1863,8 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## <a id="list%2A"></a>`list*`
+<a id="list-STAR"></a>
+## `list*`
 
 Create a list by consing everything but the last arg onto the last
 
@@ -1832,7 +1895,8 @@ Args: `(() . args)`
 -----------------------------------------------------
 		
 
-## <a id="list%3F"></a>`list?`
+<a id="list-QMARK"></a>
+## `list?`
 
 Return t if the argument is a list, () otherwise
 
@@ -1860,7 +1924,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="load"></a>`load`
+<a id="load"></a>
+## `load`
 
 Load and execute a file
 
@@ -1876,7 +1941,8 @@ Args: `(filename)`
 -----------------------------------------------------
 		
 
-## <a id="loop"></a>`loop`
+<a id="loop"></a>
+## `loop`
 
 Loop forever
 
@@ -1906,7 +1972,8 @@ Help me, I am looping forever!
 -----------------------------------------------------
 		
 
-## <a id="macroexpand-1"></a>`macroexpand-1`
+<a id="macroexpand-1"></a>
+## `macroexpand-1`
 
 Expand a macro
 
@@ -1934,7 +2001,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="map"></a>`map`
+<a id="map"></a>
+## `map`
 
 Apply the supplied function to every element in the supplied list
 
@@ -1962,7 +2030,8 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## <a id="mapcat"></a>`mapcat`
+<a id="mapcat"></a>
+## `mapcat`
 
 Map a function onto a list and concatenate results
 
@@ -1996,7 +2065,8 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## <a id="max"></a>`max`
+<a id="max"></a>
+## `max`
 
 Find maximum of one or more numbers
 
@@ -2027,7 +2097,8 @@ Args: `(() . args)`
 -----------------------------------------------------
 		
 
-## <a id="min"></a>`min`
+<a id="min"></a>
+## `min`
 
 Find minimum of one or more numbers
 
@@ -2058,7 +2129,8 @@ Args: `(() . args)`
 -----------------------------------------------------
 		
 
-## <a id="neg%3F"></a>`neg?`
+<a id="neg-QMARK"></a>
+## `neg?`
 
 Return true iff the supplied integer argument is less than zero
 
@@ -2083,7 +2155,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="not"></a>`not`
+<a id="not"></a>
+## `not`
 
 Return t if the argument is nil, () otherwise
 
@@ -2114,7 +2187,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="not%3D"></a>`not=`
+<a id="not="></a>
+## `not=`
 
 Complement of = function
 
@@ -2142,7 +2216,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="nth"></a>`nth`
+<a id="nth"></a>
+## `nth`
 
 Find the nth value of a list, starting from zero
 
@@ -2170,7 +2245,8 @@ four
 -----------------------------------------------------
 		
 
-## <a id="number%3F"></a>`number?`
+<a id="number-QMARK"></a>
+## `number?`
 
 Return true if the argument is a number, else ()
 
@@ -2201,7 +2277,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="odd%3F"></a>`odd?`
+<a id="odd-QMARK"></a>
+## `odd?`
 
 Return true if the supplied integer argument is odd
 
@@ -2226,7 +2303,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="or"></a>`or`
+<a id="or"></a>
+## `or`
 
 Boolean or
 
@@ -2253,7 +2331,8 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## <a id="partial"></a>`partial`
+<a id="partial"></a>
+## `partial`
 
 Partial function application
 
@@ -2281,7 +2360,8 @@ Args: `(f . args)`
 -----------------------------------------------------
 		
 
-## <a id="period"></a>`period`
+<a id="period"></a>
+## `period`
 
 Add a period at end of atom
 
@@ -2306,7 +2386,8 @@ Woot.
 -----------------------------------------------------
 		
 
-## <a id="pos%3F"></a>`pos?`
+<a id="pos-QMARK"></a>
+## `pos?`
 
 Return true iff the supplied integer argument is greater than zero
 
@@ -2331,7 +2412,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="print"></a>`print`
+<a id="print"></a>
+## `print`
 
 Print the arguments
 
@@ -2347,7 +2429,8 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## <a id="printl"></a>`printl`
+<a id="printl"></a>
+## `printl`
 
 Print a list argument, without parentheses
 
@@ -2363,7 +2446,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="println"></a>`println`
+<a id="println"></a>
+## `println`
 
 Print the arguments and a newline
 
@@ -2379,7 +2463,8 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## <a id="progn"></a>`progn`
+<a id="progn"></a>
+## `progn`
 
 Execute multiple statements, returning the last
 
@@ -2407,7 +2492,8 @@ Args: `(() . body)`
 -----------------------------------------------------
 		
 
-## <a id="punctuate"></a>`punctuate`
+<a id="punctuate"></a>
+## `punctuate`
 
 Return x capitalized, with punctuation determined by the supplied function
 
@@ -2423,7 +2509,8 @@ Args: `(f x)`
 -----------------------------------------------------
 		
 
-## <a id="punctuate-atom"></a>`punctuate-atom`
+<a id="punctuate-atom"></a>
+## `punctuate-atom`
 
 Add a punctuation mark at end of atom
 
@@ -2451,7 +2538,8 @@ list:
 -----------------------------------------------------
 		
 
-## <a id="quote"></a>`quote`
+<a id="quote"></a>
+## `quote`
 
 Quote an expression
 
@@ -2479,7 +2567,8 @@ foo
 -----------------------------------------------------
 		
 
-## <a id="randalpha"></a>`randalpha`
+<a id="randalpha"></a>
+## `randalpha`
 
 Return a list of random (English/Latin/unaccented) lower-case alphabetic characters
 
@@ -2495,7 +2584,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="randchoice"></a>`randchoice`
+<a id="randchoice"></a>
+## `randchoice`
 
 Return an element at random from the supplied list
 
@@ -2511,7 +2601,8 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## <a id="randigits"></a>`randigits`
+<a id="randigits"></a>
+## `randigits`
 
 Return a random integer between 0 and the argument minus 1
 
@@ -2527,7 +2618,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="randint"></a>`randint`
+<a id="randint"></a>
+## `randint`
 
 Return a random integer between 0 and the argument minus 1
 
@@ -2543,7 +2635,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="range"></a>`range`
+<a id="range"></a>
+## `range`
 
 List of integers from 0 to n
 
@@ -2571,7 +2664,8 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## <a id="readlist"></a>`readlist`
+<a id="readlist"></a>
+## `readlist`
 
 Read a list from stdin
 
@@ -2587,7 +2681,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="reduce"></a>`reduce`
+<a id="reduce"></a>
+## `reduce`
 
 Successively apply a function against a list of arguments
 
@@ -2615,7 +2710,8 @@ Args: `(f x . args)`
 -----------------------------------------------------
 		
 
-## <a id="rem"></a>`rem`
+<a id="rem"></a>
+## `rem`
 
 Return remainder when second arg divides first
 
@@ -2646,7 +2742,8 @@ ERROR: ((builtin function rem) (division by zero))
 -----------------------------------------------------
 		
 
-## <a id="remove"></a>`remove`
+<a id="remove"></a>
+## `remove`
 
 Keep only values for which function f is false / the empty list
 
@@ -2671,7 +2768,8 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## <a id="repeat"></a>`repeat`
+<a id="repeat"></a>
+## `repeat`
 
 Return a list of length n whose elements are all x
 
@@ -2696,7 +2794,8 @@ Args: `(n x)`
 -----------------------------------------------------
 		
 
-## <a id="repeatedly"></a>`repeatedly`
+<a id="repeatedly"></a>
+## `repeatedly`
 
 Return a list of length n whose elements are made from calling f repeatedly
 
@@ -2721,7 +2820,8 @@ Args: `(n f)`
 -----------------------------------------------------
 		
 
-## <a id="reverse"></a>`reverse`
+<a id="reverse"></a>
+## `reverse`
 
 Reverse a list
 
@@ -2746,7 +2846,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="screen-clear"></a>`screen-clear`
+<a id="screen-clear"></a>
+## `screen-clear`
 
 Clear the screen
 
@@ -2762,7 +2863,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="screen-end"></a>`screen-end`
+<a id="screen-end"></a>
+## `screen-end`
 
 Stop screen for text UIs, return to console mode
 
@@ -2778,7 +2880,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="screen-get-key"></a>`screen-get-key`
+<a id="screen-get-key"></a>
+## `screen-get-key`
 
 Return a keystroke as an atom
 
@@ -2794,7 +2897,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="screen-size"></a>`screen-size`
+<a id="screen-size"></a>
+## `screen-size`
 
 Return the screen size (width, height)
 
@@ -2810,7 +2914,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="screen-start"></a>`screen-start`
+<a id="screen-start"></a>
+## `screen-start`
 
 Start screen for text UIs
 
@@ -2826,7 +2931,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="screen-write"></a>`screen-write`
+<a id="screen-write"></a>
+## `screen-write`
 
 Write a string to the screen
 
@@ -2842,7 +2948,8 @@ Args: `(x y list)`
 -----------------------------------------------------
 		
 
-## <a id="second"></a>`second`
+<a id="second"></a>
+## `second`
 
 Return the second element of a list, or () if not enough elements
 
@@ -2876,7 +2983,8 @@ b
 -----------------------------------------------------
 		
 
-## <a id="set%21"></a>`set!`
+<a id="set-BANG"></a>
+## `set!`
 
 Update a value in an existing binding
 
@@ -2910,7 +3018,8 @@ Args: `(name value)`
 -----------------------------------------------------
 		
 
-## <a id="shell"></a>`shell`
+<a id="shell"></a>
+## `shell`
 
 Run a shell subprocess, and return stdout, stderr, and exit code
 
@@ -2926,7 +3035,8 @@ Args: `(cmd)`
 -----------------------------------------------------
 		
 
-## <a id="shuffle"></a>`shuffle`
+<a id="shuffle"></a>
+## `shuffle`
 
 Return a (quickly!) shuffled list
 
@@ -2942,7 +3052,8 @@ Args: `(xs)`
 -----------------------------------------------------
 		
 
-## <a id="sleep"></a>`sleep`
+<a id="sleep"></a>
+## `sleep`
 
 Sleep for the given number of milliseconds
 
@@ -2958,7 +3069,8 @@ Args: `(ms)`
 -----------------------------------------------------
 		
 
-## <a id="some"></a>`some`
+<a id="some"></a>
+## `some`
 
 Return f applied to first element for which that result is truthy, else ()
 
@@ -2986,7 +3098,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="sort"></a>`sort`
+<a id="sort"></a>
+## `sort`
 
 Sort a list
 
@@ -3017,7 +3130,8 @@ Args: `(xs)`
 -----------------------------------------------------
 		
 
-## <a id="sort-by"></a>`sort-by`
+<a id="sort-by"></a>
+## `sort-by`
 
 Sort a list by a function
 
@@ -3048,7 +3162,8 @@ Args: `(f xs)`
 -----------------------------------------------------
 		
 
-## <a id="source"></a>`source`
+<a id="source"></a>
+## `source`
 
 Show source for a function
 
@@ -3076,7 +3191,8 @@ ERROR: ((builtin function source) (cannot get source of builtin function <builti
 -----------------------------------------------------
 		
 
-## <a id="split"></a>`split`
+<a id="split"></a>
+## `split`
 
 Split an atom or number into a list of single-digit numbers or single-character atoms
 
@@ -3104,7 +3220,8 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## <a id="swallow"></a>`swallow`
+<a id="swallow"></a>
+## `swallow`
 
 Swallow errors thrown in body, return t if any occur
 
@@ -3133,7 +3250,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="syntax-quote"></a>`syntax-quote`
+<a id="syntax-quote"></a>
+## `syntax-quote`
 
 Syntax-quote an expression
 
@@ -3163,7 +3281,8 @@ foo
 -----------------------------------------------------
 		
 
-## <a id="take"></a>`take`
+<a id="take"></a>
+## `take`
 
 Take up to n items from the supplied list
 
@@ -3188,7 +3307,8 @@ Args: `(n l)`
 -----------------------------------------------------
 		
 
-## <a id="test"></a>`test`
+<a id="test"></a>
+## `test`
 
 Establish a testing block (return last expression)
 
@@ -3204,7 +3324,8 @@ Args: `(() . exprs)`
 -----------------------------------------------------
 		
 
-## <a id="tosentence"></a>`tosentence`
+<a id="tosentence"></a>
+## `tosentence`
 
 Return l as a sentence... capitalized, with a period at the end
 
@@ -3229,7 +3350,8 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## <a id="true%3F"></a>`true?`
+<a id="true-QMARK"></a>
+## `true?`
 
 Return t if the argument is t
 
@@ -3257,7 +3379,8 @@ t
 -----------------------------------------------------
 		
 
-## <a id="try"></a>`try`
+<a id="try"></a>
+## `try`
 
 Try to evaluate body, catch errors and handle them
 
@@ -3292,7 +3415,8 @@ ERROR:
 -----------------------------------------------------
 		
 
-## <a id="upcase"></a>`upcase`
+<a id="upcase"></a>
+## `upcase`
 
 Return the uppercase version of the given atom
 
@@ -3317,7 +3441,8 @@ ABC
 -----------------------------------------------------
 		
 
-## <a id="version"></a>`version`
+<a id="version"></a>
+## `version`
 
 Return the version of the interpreter
 
@@ -3342,7 +3467,8 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## <a id="when"></a>`when`
+<a id="when"></a>
+## `when`
 
 Simple conditional with single branch
 
@@ -3370,7 +3496,8 @@ Args: `(condition . body)`
 -----------------------------------------------------
 		
 
-## <a id="when-not"></a>`when-not`
+<a id="when-not"></a>
+## `when-not`
 
 Complement of the when macro
 
@@ -3398,7 +3525,8 @@ Args: `(condition . body)`
 -----------------------------------------------------
 		
 
-## <a id="while"></a>`while`
+<a id="while"></a>
+## `while`
 
 Loop for as long as condition is true
 
@@ -3423,7 +3551,8 @@ Args: `(condition . body)`
 -----------------------------------------------------
 		
 
-## <a id="with-screen"></a>`with-screen`
+<a id="with-screen"></a>
+## `with-screen`
 
 Prepare for and clean up after screen operations
 
@@ -3439,7 +3568,8 @@ Args: `(() . body)`
 -----------------------------------------------------
 		
 
-## <a id="zero%3F"></a>`zero?`
+<a id="zero-QMARK"></a>
+## `zero?`
 
 Return true iff the supplied argument is zero
 

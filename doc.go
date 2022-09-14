@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/url"
 	"sort"
 	"strings"
 )
@@ -481,8 +480,11 @@ func codeQuote(s string) string {
 	return fmt.Sprintf("`%s`", s)
 }
 
-func urlEncode(s string) string {
-	return url.QueryEscape(s)
+func escapeSpecialChars(s string) string {
+	s = strings.ReplaceAll(s, "?", "-QMARK")
+	s = strings.ReplaceAll(s, "!", "-BANG")
+	s = strings.ReplaceAll(s, "*", "-STAR")
+	return s
 }
 
 func longDocStr(e *env) string {
@@ -495,7 +497,7 @@ func longDocStr(e *env) string {
 		} else if form.ftype == special {
 			nameStr = fmt.Sprintf("**`%s`**", form.name)
 		}
-		summary += fmt.Sprintf("\n[%s](#user-content-%s)", nameStr, urlEncode(form.name))
+		summary += fmt.Sprintf("\n[%s](#%s)", nameStr, escapeSpecialChars(form.name))
 	}
 	summary += "\n# Operators\n"
 	outStrs := []string{summary}
@@ -509,7 +511,8 @@ func longDocStr(e *env) string {
 			examples = fmt.Sprintf("\n### Examples\n\n```\n%s\n```\n", doc.examples)
 		}
 		outStrs = append(outStrs, fmt.Sprintf(`
-## <a id="%s"></a>%s
+<a id="%s"></a>
+## %s
 
 %s
 
@@ -524,7 +527,7 @@ Args: %s
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
 		`,
-			urlEncode(doc.name),
+			escapeSpecialChars(doc.name),
 			codeQuote(doc.name),
 			capitalize(doc.doc),
 			doc.ftype,
