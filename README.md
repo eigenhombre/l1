@@ -35,13 +35,13 @@ for converting atoms and numbers to lists, and vice-versa.
 
 # Status
 
-The language core is largely complete, but I consider it a work
-in progress still.  Issues and remaining work are [tracked on
+The language core is largely complete, though things could still
+change... *caveat emptor.*  Issues and remaining work are [tracked on
 GitHub](https://github.com/eigenhombre/l1/issues).
 
-Although there are many tests, I expect plenty of bugs and
-robustness issues remain.  The interpreter starts fast but, like most
-tree-walking interpreters, is slow for longer calculations.
+Although there are many tests, I expect some bugs remain.  The
+interpreter starts fast but, like most tree-walking interpreters, is
+slow for longer calculations.
 
 # Setup
 
