@@ -495,7 +495,7 @@ func longDocStr(e *env) string {
 		} else if form.ftype == special {
 			nameStr = fmt.Sprintf("**`%s`**", form.name)
 		}
-		summary += fmt.Sprintf("\n[%s](#%s)", nameStr, urlEncode(form.name))
+		summary += fmt.Sprintf("\n[%s](#user-content-%s)", nameStr, urlEncode(form.name))
 	}
 	summary += "\n# Operators\n"
 	outStrs := []string{summary}
