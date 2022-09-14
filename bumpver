@@ -37,7 +37,7 @@ function update_version_file() {
 }
 
 update_version_file $NEW_TAG
-go build .
+go build -o l1 ./src
 if [ $? -ne 0 ]; then
     exit 1
 fi
