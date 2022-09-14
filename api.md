@@ -1,18 +1,18 @@
 # API Index
 130 forms available:
-[`*`](#*)
-[`**`](#**)
-[`+`](#+)
+[`*`](#%2A)
+[`**`](#%2A%2A)
+[`+`](#%2B)
 [`-`](#-)
-[`/`](#/)
-[`<`](#<)
-[`<=`](#<=)
-[`=`](#=)
-[`>`](#>)
-[`>=`](#>=)
+[`/`](#%2F)
+[`<`](#%3C)
+[`<=`](#%3C%3D)
+[`=`](#%3D)
+[`>`](#%3E)
+[`>=`](#%3E%3D)
 [**`and`**](#and)
 [`apply`](#apply)
-[`atom?`](#atom?)
+[`atom?`](#atom%3F)
 [`bang`](#bang)
 [`body`](#body)
 [`butlast`](#butlast)
@@ -40,7 +40,7 @@
 [**`error`**](#error)
 [**`errors`**](#errors)
 [`eval`](#eval)
-[`even?`](#even?)
+[`even?`](#even%3F)
 [`exclaim`](#exclaim)
 [`exit`](#exit)
 [`filter`](#filter)
@@ -60,10 +60,10 @@
 [`last`](#last)
 [`len`](#len)
 [**`let`**](#let)
-[*`let*`*](#let*)
+[*`let*`*](#let%2A)
 [`list`](#list)
-[`list*`](#list*)
-[`list?`](#list?)
+[`list*`](#list%2A)
+[`list?`](#list%3F)
 [`load`](#load)
 [**`loop`**](#loop)
 [`macroexpand-1`](#macroexpand-1)
@@ -71,16 +71,16 @@
 [`mapcat`](#mapcat)
 [`max`](#max)
 [`min`](#min)
-[`neg?`](#neg?)
+[`neg?`](#neg%3F)
 [`not`](#not)
-[`not=`](#not=)
+[`not=`](#not%3D)
 [`nth`](#nth)
-[`number?`](#number?)
-[`odd?`](#odd?)
+[`number?`](#number%3F)
+[`odd?`](#odd%3F)
 [**`or`**](#or)
 [`partial`](#partial)
 [`period`](#period)
-[`pos?`](#pos?)
+[`pos?`](#pos%3F)
 [`print`](#print)
 [`printl`](#printl)
 [`println`](#println)
@@ -107,7 +107,7 @@
 [`screen-start`](#screen-start)
 [`screen-write`](#screen-write)
 [`second`](#second)
-[**`set!`**](#set!)
+[**`set!`**](#set%21)
 [`shell`](#shell)
 [`shuffle`](#shuffle)
 [`sleep`](#sleep)
@@ -121,7 +121,7 @@
 [`take`](#take)
 [`test`](#test)
 [`tosentence`](#tosentence)
-[`true?`](#true?)
+[`true?`](#true%3F)
 [**`try`**](#try)
 [`upcase`](#upcase)
 [`version`](#version)
@@ -129,11 +129,11 @@
 [*`when-not`*](#when-not)
 [*`while`*](#while)
 [*`with-screen`*](#with-screen)
-[`zero?`](#zero?)
+[`zero?`](#zero%3F)
 # Operators
 
 
-## `*`
+## <a id="%2A"></a>`*`
 
 Multiply 0 or more numbers
 
@@ -159,7 +159,7 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## `**`
+## <a id="%2A%2A"></a>`**`
 
 Exponentiation operator
 
@@ -188,7 +188,7 @@ Args: `(n m)`
 -----------------------------------------------------
 		
 
-## `+`
+## <a id="%2B"></a>`+`
 
 Add 0 or more numbers
 
@@ -214,7 +214,7 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## `-`
+## <a id="-"></a>`-`
 
 Subtract 0 or more numbers from the first argument
 
@@ -243,7 +243,7 @@ Args: `(x . xs)`
 -----------------------------------------------------
 		
 
-## `/`
+## <a id="%2F"></a>`/`
 
 Divide the first argument by the rest
 
@@ -272,7 +272,7 @@ ERROR: ((builtin function /) (division by zero))
 -----------------------------------------------------
 		
 
-## `<`
+## <a id="%3C"></a>`<`
 
 Return t if the arguments are in strictly increasing order, () otherwise
 
@@ -304,7 +304,7 @@ t
 -----------------------------------------------------
 		
 
-## `<=`
+## <a id="%3C%3D"></a>`<=`
 
 Return t if the arguments are in increasing (or qual) order, () otherwise
 
@@ -333,7 +333,7 @@ t
 -----------------------------------------------------
 		
 
-## `=`
+## <a id="%3D"></a>`=`
 
 Return t if the arguments are equal, () otherwise
 
@@ -362,7 +362,7 @@ t
 -----------------------------------------------------
 		
 
-## `>`
+## <a id="%3E"></a>`>`
 
 Return t if the arguments are in strictly decreasing order, () otherwise
 
@@ -391,7 +391,7 @@ t
 -----------------------------------------------------
 		
 
-## `>=`
+## <a id="%3E%3D"></a>`>=`
 
 Return t if the arguments are in decreasing (or equal) order, () otherwise
 
@@ -417,7 +417,7 @@ t
 -----------------------------------------------------
 		
 
-## `and`
+## <a id="and"></a>`and`
 
 Boolean and
 
@@ -449,7 +449,7 @@ true
 -----------------------------------------------------
 		
 
-## `apply`
+## <a id="apply"></a>`apply`
 
 Apply a function to a list of arguments
 
@@ -475,7 +475,7 @@ Args: `(f args)`
 -----------------------------------------------------
 		
 
-## `atom?`
+## <a id="atom%3F"></a>`atom?`
 
 Return t if the argument is an atom, () otherwise
 
@@ -501,7 +501,7 @@ t
 -----------------------------------------------------
 		
 
-## `bang`
+## <a id="bang"></a>`bang`
 
 Add an exclamation point at end of atom
 
@@ -524,7 +524,7 @@ Bang!
 -----------------------------------------------------
 		
 
-## `body`
+## <a id="body"></a>`body`
 
 Return the body of a lambda function
 
@@ -547,7 +547,7 @@ Args: `(f)`
 -----------------------------------------------------
 		
 
-## `butlast`
+## <a id="butlast"></a>`butlast`
 
 Return everything but the last element
 
@@ -573,7 +573,7 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## `capitalize`
+## <a id="capitalize"></a>`capitalize`
 
 Return the atom argument, capitalized
 
@@ -596,7 +596,7 @@ Hello
 -----------------------------------------------------
 		
 
-## `car`
+## <a id="car"></a>`car`
 
 Return the first element of a list
 
@@ -622,7 +622,7 @@ one
 -----------------------------------------------------
 		
 
-## `cdr`
+## <a id="cdr"></a>`cdr`
 
 Return a list with the first element removed
 
@@ -648,7 +648,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `colon`
+## <a id="colon"></a>`colon`
 
 Add a colon at end of atom
 
@@ -671,7 +671,7 @@ remember-this:
 -----------------------------------------------------
 		
 
-## `comma`
+## <a id="comma"></a>`comma`
 
 Add a comma at end of atom
 
@@ -694,7 +694,7 @@ hello,
 -----------------------------------------------------
 		
 
-## `comment`
+## <a id="comment"></a>`comment`
 
 Ignore the expressions in the block
 
@@ -717,7 +717,7 @@ Args: `(() . body)`
 -----------------------------------------------------
 		
 
-## `comp`
+## <a id="comp"></a>`comp`
 
 Function composition -- return a function which applies a series of functions in reverse order
 
@@ -749,7 +749,7 @@ hello
 -----------------------------------------------------
 		
 
-## `complement`
+## <a id="complement"></a>`complement`
 
 Return the logical complement of the supplied function
 
@@ -775,7 +775,7 @@ t
 -----------------------------------------------------
 		
 
-## `concat`
+## <a id="concat"></a>`concat`
 
 Concatenenate any number of lists
 
@@ -798,7 +798,7 @@ Args: `(() . lists)`
 -----------------------------------------------------
 		
 
-## `concat2`
+## <a id="concat2"></a>`concat2`
 
 Concatenate two lists
 
@@ -824,7 +824,7 @@ Args: `(a b)`
 -----------------------------------------------------
 		
 
-## `cond`
+## <a id="cond"></a>`cond`
 
 Fundamental branching construct
 
@@ -850,7 +850,7 @@ Args: `(() . pairs)`
 -----------------------------------------------------
 		
 
-## `cons`
+## <a id="cons"></a>`cons`
 
 Add an element to the front of a (possibly empty) list
 
@@ -879,7 +879,7 @@ Args: `(x xs)`
 -----------------------------------------------------
 		
 
-## `constantly`
+## <a id="constantly"></a>`constantly`
 
 Given a value, return a function which always returns that value
 
@@ -902,7 +902,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `dec`
+## <a id="dec"></a>`dec`
 
 Return the supplied integer argument, minus one
 
@@ -928,7 +928,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `def`
+## <a id="def"></a>`def`
 
 Set a value
 
@@ -954,7 +954,7 @@ Args: `(name value)`
 -----------------------------------------------------
 		
 
-## `defmacro`
+## <a id="defmacro"></a>`defmacro`
 
 Create and name a macro
 
@@ -986,7 +986,7 @@ Args: `(name args . body)`
 -----------------------------------------------------
 		
 
-## `defn`
+## <a id="defn"></a>`defn`
 
 Create and name a function
 
@@ -1022,7 +1022,7 @@ Args: `(name args . rest)`
 -----------------------------------------------------
 		
 
-## `doc`
+## <a id="doc"></a>`doc`
 
 Return the doclist for a function
 
@@ -1045,7 +1045,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `dotimes`
+## <a id="dotimes"></a>`dotimes`
 
 Execute body for each value in a list
 
@@ -1059,7 +1059,7 @@ Args: `(n . body)`
 -----------------------------------------------------
 		
 
-## `downcase`
+## <a id="downcase"></a>`downcase`
 
 Return a new atom with all characters in lower case
 
@@ -1085,7 +1085,7 @@ hello
 -----------------------------------------------------
 		
 
-## `drop`
+## <a id="drop"></a>`drop`
 
 Drop n items from a list, then return the rest
 
@@ -1108,7 +1108,7 @@ Args: `(n l)`
 -----------------------------------------------------
 		
 
-## `error`
+## <a id="error"></a>`error`
 
 Raise an error
 
@@ -1137,7 +1137,7 @@ ERROR in '(ensure-list 3)':
 -----------------------------------------------------
 		
 
-## `errors`
+## <a id="errors"></a>`errors`
 
 Error checking (for tests)
 
@@ -1166,7 +1166,7 @@ error not found in ((quote (is not a function)) (+))
 -----------------------------------------------------
 		
 
-## `eval`
+## <a id="eval"></a>`eval`
 
 Evaluate an expression
 
@@ -1192,7 +1192,7 @@ ERROR: ((builtin function eval) (evaluating function object) (unknown symbol: on
 -----------------------------------------------------
 		
 
-## `even?`
+## <a id="even%3F"></a>`even?`
 
 Return true if the supplied integer argument is even
 
@@ -1215,7 +1215,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `exclaim`
+## <a id="exclaim"></a>`exclaim`
 
 Return l as a sentence... emphasized!
 
@@ -1244,7 +1244,7 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## `exit`
+## <a id="exit"></a>`exit`
 
 Exit the program
 
@@ -1258,7 +1258,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `filter`
+## <a id="filter"></a>`filter`
 
 Keep only values for which function f is true
 
@@ -1281,7 +1281,7 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## `flatten`
+## <a id="flatten"></a>`flatten`
 
 Return a (possibly nested) list, flattened
 
@@ -1304,7 +1304,7 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## `foreach`
+## <a id="foreach"></a>`foreach`
 
 Execute body for each value in a list
 
@@ -1318,7 +1318,7 @@ Args: `(x xs . body)`
 -----------------------------------------------------
 		
 
-## `forms`
+## <a id="forms"></a>`forms`
 
 Return available operators, as a list
 
@@ -1332,7 +1332,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `fuse`
+## <a id="fuse"></a>`fuse`
 
 Fuse a list of numbers or atoms into a single atom
 
@@ -1358,7 +1358,7 @@ ABC
 -----------------------------------------------------
 		
 
-## `gensym`
+## <a id="gensym"></a>`gensym`
 
 Return a new symbol
 
@@ -1372,7 +1372,7 @@ Args: `(() . x)`
 -----------------------------------------------------
 		
 
-## `help`
+## <a id="help"></a>`help`
 
 Print this message
 
@@ -1386,7 +1386,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `identity`
+## <a id="identity"></a>`identity`
 
 Return the argument
 
@@ -1400,7 +1400,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `if`
+## <a id="if"></a>`if`
 
 Simple conditional with two branches
 
@@ -1426,7 +1426,7 @@ def
 -----------------------------------------------------
 		
 
-## `if-not`
+## <a id="if-not"></a>`if-not`
 
 Simple (inverted) conditional with two branches
 
@@ -1449,7 +1449,7 @@ Args: `(condition then else)`
 -----------------------------------------------------
 		
 
-## `inc`
+## <a id="inc"></a>`inc`
 
 Return the supplied integer argument, plus one
 
@@ -1463,7 +1463,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `is`
+## <a id="is"></a>`is`
 
 Assert a condition is truthy, or show failing code
 
@@ -1489,7 +1489,7 @@ ERROR: ((assertion failed: (car (cons () (quote (this one should fail))))))
 -----------------------------------------------------
 		
 
-## `juxt`
+## <a id="juxt"></a>`juxt`
 
 Create a function which combines multiple operations into a single list of results
 
@@ -1521,7 +1521,7 @@ Args: `(() . fs)`
 -----------------------------------------------------
 		
 
-## `lambda`
+## <a id="lambda"></a>`lambda`
 
 Create a function
 
@@ -1554,7 +1554,7 @@ t
 -----------------------------------------------------
 		
 
-## `last`
+## <a id="last"></a>`last`
 
 Return the last item in a list
 
@@ -1580,7 +1580,7 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## `len`
+## <a id="len"></a>`len`
 
 Return the length of a list
 
@@ -1603,7 +1603,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `let`
+## <a id="let"></a>`let`
 
 Create a local scope with bindings
 
@@ -1628,7 +1628,7 @@ Args: `(bindings . body)`
 -----------------------------------------------------
 		
 
-## `let*`
+## <a id="let%2A"></a>`let*`
 
 Let form with ability to refer to previously-bound pairs in the binding list
 
@@ -1651,7 +1651,7 @@ Args: `(pairs . body)`
 -----------------------------------------------------
 		
 
-## `list`
+## <a id="list"></a>`list`
 
 Return a list of the given arguments
 
@@ -1677,7 +1677,7 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## `list*`
+## <a id="list%2A"></a>`list*`
 
 Create a list by consing everything but the last arg onto the last
 
@@ -1706,7 +1706,7 @@ Args: `(() . args)`
 -----------------------------------------------------
 		
 
-## `list?`
+## <a id="list%3F"></a>`list?`
 
 Return t if the argument is a list, () otherwise
 
@@ -1732,7 +1732,7 @@ t
 -----------------------------------------------------
 		
 
-## `load`
+## <a id="load"></a>`load`
 
 Load and execute a file
 
@@ -1746,7 +1746,7 @@ Args: `(filename)`
 -----------------------------------------------------
 		
 
-## `loop`
+## <a id="loop"></a>`loop`
 
 Loop forever
 
@@ -1774,7 +1774,7 @@ Help me, I am looping forever!
 -----------------------------------------------------
 		
 
-## `macroexpand-1`
+## <a id="macroexpand-1"></a>`macroexpand-1`
 
 Expand a macro
 
@@ -1800,7 +1800,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `map`
+## <a id="map"></a>`map`
 
 Apply the supplied function to every element in the supplied list
 
@@ -1826,7 +1826,7 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## `mapcat`
+## <a id="mapcat"></a>`mapcat`
 
 Map a function onto a list and concatenate results
 
@@ -1858,7 +1858,7 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## `max`
+## <a id="max"></a>`max`
 
 Find maximum of one or more numbers
 
@@ -1887,7 +1887,7 @@ Args: `(() . args)`
 -----------------------------------------------------
 		
 
-## `min`
+## <a id="min"></a>`min`
 
 Find minimum of one or more numbers
 
@@ -1916,7 +1916,7 @@ Args: `(() . args)`
 -----------------------------------------------------
 		
 
-## `neg?`
+## <a id="neg%3F"></a>`neg?`
 
 Return true iff the supplied integer argument is less than zero
 
@@ -1939,7 +1939,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `not`
+## <a id="not"></a>`not`
 
 Return t if the argument is nil, () otherwise
 
@@ -1968,7 +1968,7 @@ t
 -----------------------------------------------------
 		
 
-## `not=`
+## <a id="not%3D"></a>`not=`
 
 Complement of = function
 
@@ -1994,7 +1994,7 @@ t
 -----------------------------------------------------
 		
 
-## `nth`
+## <a id="nth"></a>`nth`
 
 Find the nth value of a list, starting from zero
 
@@ -2020,7 +2020,7 @@ four
 -----------------------------------------------------
 		
 
-## `number?`
+## <a id="number%3F"></a>`number?`
 
 Return true if the argument is a number, else ()
 
@@ -2049,7 +2049,7 @@ t
 -----------------------------------------------------
 		
 
-## `odd?`
+## <a id="odd%3F"></a>`odd?`
 
 Return true if the supplied integer argument is odd
 
@@ -2072,7 +2072,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `or`
+## <a id="or"></a>`or`
 
 Boolean or
 
@@ -2097,7 +2097,7 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## `partial`
+## <a id="partial"></a>`partial`
 
 Partial function application
 
@@ -2123,7 +2123,7 @@ Args: `(f . args)`
 -----------------------------------------------------
 		
 
-## `period`
+## <a id="period"></a>`period`
 
 Add a period at end of atom
 
@@ -2146,7 +2146,7 @@ Woot.
 -----------------------------------------------------
 		
 
-## `pos?`
+## <a id="pos%3F"></a>`pos?`
 
 Return true iff the supplied integer argument is greater than zero
 
@@ -2169,7 +2169,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `print`
+## <a id="print"></a>`print`
 
 Print the arguments
 
@@ -2183,7 +2183,7 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## `printl`
+## <a id="printl"></a>`printl`
 
 Print a list argument, without parentheses
 
@@ -2197,7 +2197,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `println`
+## <a id="println"></a>`println`
 
 Print the arguments and a newline
 
@@ -2211,7 +2211,7 @@ Args: `(() . xs)`
 -----------------------------------------------------
 		
 
-## `progn`
+## <a id="progn"></a>`progn`
 
 Execute multiple statements, returning the last
 
@@ -2237,7 +2237,7 @@ Args: `(() . body)`
 -----------------------------------------------------
 		
 
-## `punctuate`
+## <a id="punctuate"></a>`punctuate`
 
 Return x capitalized, with punctuation determined by the supplied function
 
@@ -2251,7 +2251,7 @@ Args: `(f x)`
 -----------------------------------------------------
 		
 
-## `punctuate-atom`
+## <a id="punctuate-atom"></a>`punctuate-atom`
 
 Add a punctuation mark at end of atom
 
@@ -2277,7 +2277,7 @@ list:
 -----------------------------------------------------
 		
 
-## `quote`
+## <a id="quote"></a>`quote`
 
 Quote an expression
 
@@ -2303,7 +2303,7 @@ foo
 -----------------------------------------------------
 		
 
-## `randalpha`
+## <a id="randalpha"></a>`randalpha`
 
 Return a list of random (English/Latin/unaccented) lower-case alphabetic characters
 
@@ -2317,7 +2317,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `randchoice`
+## <a id="randchoice"></a>`randchoice`
 
 Return an element at random from the supplied list
 
@@ -2331,7 +2331,7 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## `randigits`
+## <a id="randigits"></a>`randigits`
 
 Return a random integer between 0 and the argument minus 1
 
@@ -2345,7 +2345,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `randint`
+## <a id="randint"></a>`randint`
 
 Return a random integer between 0 and the argument minus 1
 
@@ -2359,7 +2359,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `range`
+## <a id="range"></a>`range`
 
 List of integers from 0 to n
 
@@ -2385,7 +2385,7 @@ Args: `(n)`
 -----------------------------------------------------
 		
 
-## `readlist`
+## <a id="readlist"></a>`readlist`
 
 Read a list from stdin
 
@@ -2399,7 +2399,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `reduce`
+## <a id="reduce"></a>`reduce`
 
 Successively apply a function against a list of arguments
 
@@ -2425,7 +2425,7 @@ Args: `(f x . args)`
 -----------------------------------------------------
 		
 
-## `rem`
+## <a id="rem"></a>`rem`
 
 Return remainder when second arg divides first
 
@@ -2454,7 +2454,7 @@ ERROR: ((builtin function rem) (division by zero))
 -----------------------------------------------------
 		
 
-## `remove`
+## <a id="remove"></a>`remove`
 
 Keep only values for which function f is false / the empty list
 
@@ -2477,7 +2477,7 @@ Args: `(f l)`
 -----------------------------------------------------
 		
 
-## `repeat`
+## <a id="repeat"></a>`repeat`
 
 Return a list of length n whose elements are all x
 
@@ -2500,7 +2500,7 @@ Args: `(n x)`
 -----------------------------------------------------
 		
 
-## `repeatedly`
+## <a id="repeatedly"></a>`repeatedly`
 
 Return a list of length n whose elements are made from calling f repeatedly
 
@@ -2523,7 +2523,7 @@ Args: `(n f)`
 -----------------------------------------------------
 		
 
-## `reverse`
+## <a id="reverse"></a>`reverse`
 
 Reverse a list
 
@@ -2546,7 +2546,7 @@ t
 -----------------------------------------------------
 		
 
-## `screen-clear`
+## <a id="screen-clear"></a>`screen-clear`
 
 Clear the screen
 
@@ -2560,7 +2560,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `screen-end`
+## <a id="screen-end"></a>`screen-end`
 
 Stop screen for text UIs, return to console mode
 
@@ -2574,7 +2574,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `screen-get-key`
+## <a id="screen-get-key"></a>`screen-get-key`
 
 Return a keystroke as an atom
 
@@ -2588,7 +2588,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `screen-size`
+## <a id="screen-size"></a>`screen-size`
 
 Return the screen size (width, height)
 
@@ -2602,7 +2602,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `screen-start`
+## <a id="screen-start"></a>`screen-start`
 
 Start screen for text UIs
 
@@ -2616,7 +2616,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `screen-write`
+## <a id="screen-write"></a>`screen-write`
 
 Write a string to the screen
 
@@ -2630,7 +2630,7 @@ Args: `(x y list)`
 -----------------------------------------------------
 		
 
-## `second`
+## <a id="second"></a>`second`
 
 Return the second element of a list, or () if not enough elements
 
@@ -2662,7 +2662,7 @@ b
 -----------------------------------------------------
 		
 
-## `set!`
+## <a id="set%21"></a>`set!`
 
 Update a value in an existing binding
 
@@ -2694,7 +2694,7 @@ Args: `(name value)`
 -----------------------------------------------------
 		
 
-## `shell`
+## <a id="shell"></a>`shell`
 
 Run a shell subprocess, and return stdout, stderr, and exit code
 
@@ -2708,7 +2708,7 @@ Args: `(cmd)`
 -----------------------------------------------------
 		
 
-## `shuffle`
+## <a id="shuffle"></a>`shuffle`
 
 Return a (quickly!) shuffled list
 
@@ -2722,7 +2722,7 @@ Args: `(xs)`
 -----------------------------------------------------
 		
 
-## `sleep`
+## <a id="sleep"></a>`sleep`
 
 Sleep for the given number of milliseconds
 
@@ -2736,7 +2736,7 @@ Args: `(ms)`
 -----------------------------------------------------
 		
 
-## `some`
+## <a id="some"></a>`some`
 
 Return f applied to first element for which that result is truthy, else ()
 
@@ -2762,7 +2762,7 @@ t
 -----------------------------------------------------
 		
 
-## `sort`
+## <a id="sort"></a>`sort`
 
 Sort a list
 
@@ -2791,7 +2791,7 @@ Args: `(xs)`
 -----------------------------------------------------
 		
 
-## `sort-by`
+## <a id="sort-by"></a>`sort-by`
 
 Sort a list by a function
 
@@ -2820,7 +2820,7 @@ Args: `(f xs)`
 -----------------------------------------------------
 		
 
-## `source`
+## <a id="source"></a>`source`
 
 Show source for a function
 
@@ -2846,7 +2846,7 @@ ERROR: ((builtin function source) (cannot get source of builtin function <builti
 -----------------------------------------------------
 		
 
-## `split`
+## <a id="split"></a>`split`
 
 Split an atom or number into a list of single-digit numbers or single-character atoms
 
@@ -2872,7 +2872,7 @@ Args: `(x)`
 -----------------------------------------------------
 		
 
-## `swallow`
+## <a id="swallow"></a>`swallow`
 
 Swallow errors thrown in body, return t if any occur
 
@@ -2899,7 +2899,7 @@ t
 -----------------------------------------------------
 		
 
-## `syntax-quote`
+## <a id="syntax-quote"></a>`syntax-quote`
 
 Syntax-quote an expression
 
@@ -2927,7 +2927,7 @@ foo
 -----------------------------------------------------
 		
 
-## `take`
+## <a id="take"></a>`take`
 
 Take up to n items from the supplied list
 
@@ -2950,7 +2950,7 @@ Args: `(n l)`
 -----------------------------------------------------
 		
 
-## `test`
+## <a id="test"></a>`test`
 
 Establish a testing block (return last expression)
 
@@ -2964,7 +2964,7 @@ Args: `(() . exprs)`
 -----------------------------------------------------
 		
 
-## `tosentence`
+## <a id="tosentence"></a>`tosentence`
 
 Return l as a sentence... capitalized, with a period at the end
 
@@ -2987,7 +2987,7 @@ Args: `(l)`
 -----------------------------------------------------
 		
 
-## `true?`
+## <a id="true%3F"></a>`true?`
 
 Return t if the argument is t
 
@@ -3013,7 +3013,7 @@ t
 -----------------------------------------------------
 		
 
-## `try`
+## <a id="try"></a>`try`
 
 Try to evaluate body, catch errors and handle them
 
@@ -3046,7 +3046,7 @@ ERROR:
 -----------------------------------------------------
 		
 
-## `upcase`
+## <a id="upcase"></a>`upcase`
 
 Return the uppercase version of the given atom
 
@@ -3069,7 +3069,7 @@ ABC
 -----------------------------------------------------
 		
 
-## `version`
+## <a id="version"></a>`version`
 
 Return the version of the interpreter
 
@@ -3092,7 +3092,7 @@ Args: `()`
 -----------------------------------------------------
 		
 
-## `when`
+## <a id="when"></a>`when`
 
 Simple conditional with single branch
 
@@ -3118,7 +3118,7 @@ Args: `(condition . body)`
 -----------------------------------------------------
 		
 
-## `when-not`
+## <a id="when-not"></a>`when-not`
 
 Complement of the when macro
 
@@ -3144,7 +3144,7 @@ Args: `(condition . body)`
 -----------------------------------------------------
 		
 
-## `while`
+## <a id="while"></a>`while`
 
 Loop for as long as condition is true
 
@@ -3167,7 +3167,7 @@ Args: `(condition . body)`
 -----------------------------------------------------
 		
 
-## `with-screen`
+## <a id="with-screen"></a>`with-screen`
 
 Prepare for and clean up after screen operations
 
@@ -3181,7 +3181,7 @@ Args: `(() . body)`
 -----------------------------------------------------
 		
 
-## `zero?`
+## <a id="zero%3F"></a>`zero?`
 
 Return true iff the supplied argument is zero
 

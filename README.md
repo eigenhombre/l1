@@ -33,6 +33,13 @@ for converting atoms and numbers to lists, and vice-versa.
    the language itself (as is done in Clojure and many Common Lisp
    implementations).
 
+# Documentation
+
+See the [language
+reference](https://github.com/eigenhombre/l1/blob/master/l1.md) and
+the [API
+docs](https://github.com/eigenhombre/l1/blob/master/l1.md#api-index).
+
 # Status
 
 The language core is largely complete, though things could still
@@ -114,10 +121,6 @@ Example, using a file in this project:
     real	0m0.012s
     user	0m0.007s
     sys	0m0.005s
-
-# Further Documentation
-
-See the [language reference](https://github.com/eigenhombre/l1/blob/master/l1.md) and the [API docs](https://github.com/eigenhombre/l1/blob/master/l1.md#api-index).
 
 # Example Programs
 

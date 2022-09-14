@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"sort"
 	"strings"
 )
@@ -480,6 +481,10 @@ func codeQuote(s string) string {
 	return fmt.Sprintf("`%s`", s)
 }
 
+func urlEncode(s string) string {
+	return url.QueryEscape(s)
+}
+
 func longDocStr(e *env) string {
 	sortedForms := availableForms(e)
 	summary := fmt.Sprintf("# API Index\n%d forms available:", len(sortedForms))
@@ -490,7 +495,7 @@ func longDocStr(e *env) string {
 		} else if form.ftype == special {
 			nameStr = fmt.Sprintf("**`%s`**", form.name)
 		}
-		summary += fmt.Sprintf("\n[%s](#%s)", nameStr, form.name)
+		summary += fmt.Sprintf("\n[%s](#%s)", nameStr, urlEncode(form.name))
 	}
 	summary += "\n# Operators\n"
 	outStrs := []string{summary}
@@ -504,7 +509,7 @@ func longDocStr(e *env) string {
 			examples = fmt.Sprintf("\n### Examples\n\n```\n%s\n```\n", doc.examples)
 		}
 		outStrs = append(outStrs, fmt.Sprintf(`
-## %s
+## <a id="%s"></a>%s
 
 %s
 
@@ -517,6 +522,7 @@ Args: %s
 %s
 -----------------------------------------------------
 		`,
+			urlEncode(doc.name),
 			codeQuote(doc.name),
 			capitalize(doc.doc),
 			doc.ftype,
