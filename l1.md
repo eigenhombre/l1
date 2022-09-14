@@ -450,13 +450,14 @@ There are three ways of executing a source file, e.g. `main.l1`:
    /usr/bin/env l1` at the beginning of `main.l1` and change the file
    permission to execute (`chmod +x main.l1`).  Then you can just run
    `./main.l1` directly at your shell prompt.
-2. Pass `main.l1` as an argument to `l1`: `l1 main.l1`.
-3. Call the `load` function from the `l1` REPL or from within another file:
-   `(load main.l1)`.
+2. Pass `main.l1` as an argument to `l1`: `l1 main.l1`, again at the
+   shell prompt.
+3. Call the `load` function from the `l1` REPL or from within another
+   file: `(load main.l1)`.
 
 Option 3. is currently the only way of combining source files into a
 single program.  There is currently no packaging or namespacing
-functionality.
+functionality in `l1`.
 
 ## Subprocesses
 
