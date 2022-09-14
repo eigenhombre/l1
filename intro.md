@@ -441,6 +441,23 @@ if and only if any of them causes an (uncaught) error:
 `swallow` is used mainly in the fuzzing tests for `l1` (see the
 examples directory).
 
+## Loading Source Files
+
+There are three ways of executing a source file, e.g. `main.l1`:
+
+1. (Unix/Linux/Mac only) Add a
+   ["shebang"](https://en.wikipedia.org/wiki/Shebang_(Unix)) line `#!
+   /usr/bin/env l1` at the beginning of `main.l1` and change the file
+   permission to execute (`chmod +x main.l1`).  Then you can just run
+   `./main.l1` directly at your shell prompt.
+2. Pass `main.l1` as an argument to `l1`: `l1 main.l1`.
+3. Call the `load` function from the `l1` REPL or from within another file:
+   `(load main.l1)`.
+
+Option 3. is currently the only way of combining source files into a
+single program.  There is currently no packaging or namespacing
+functionality.
+
 ## Subprocesses
 
 The `shell` function executes a subprocess command, which should be a
