@@ -30,14 +30,14 @@ echo "Updating $VERSION to $NEW_TAG"
 
 function update_version_file() {
     NEWVER="$1"
-    rm -f src/version.go
-    echo "package main" > src/version.go
-    echo >> src/version.go
-    echo "var version string = \"$NEWVER\"" >> src/version.go
+    rm -f version.go
+    echo "package main" > version.go
+    echo >> version.go
+    echo "var version string = \"$NEWVER\"" >> version.go
 }
 
 update_version_file $NEW_TAG
-go build -o l1 ./src
+go build -o l1 .
 if [ $? -ne 0 ]; then
     exit 1
 fi
@@ -56,6 +56,6 @@ else
 fi
 
 update_version_file "$NEW_TAG-dirty"
-git add src/version.go
+git add version.go
 git commit -m "Taint $NEW_TAG"
 git push

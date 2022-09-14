@@ -11,13 +11,13 @@ slow: tco-test
 fast: test ${PROG} l1-tests run-examples lint doc
 
 deps:
-	go get ./src
+	go get .
 
-${PROG}: src/*.go src/l1.l1
-	go build -o l1 ./src
+${PROG}: *.go l1.l1
+	go build -o l1 .
 
 test:
-	go test ./src
+	go test .
 
 l1-tests: ${PROG}
 	./l1 tests.l1
@@ -36,8 +36,8 @@ tco-test: ${PROG}
 	./l1 examples/tco.l1
 
 lint:
-	golint -set_exit_status ./src
-	staticcheck ./src
+	golint -set_exit_status .
+	staticcheck .
 
 clean:
 	rm -f ${PROG}
@@ -46,7 +46,7 @@ install: ${PROG}
 	go install .
 
 verbose: all # The tests are fast!  Just do it again, verbosely:
-	go test -v ./src
+	go test -v .
 
 docker:
 	docker build -t ${PROG} .
