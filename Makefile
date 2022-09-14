@@ -46,7 +46,7 @@ install: ${PROG}
 	go install .
 
 verbose: all # The tests are fast!  Just do it again, verbosely:
-	go test -v
+	go test -v ./src
 
 docker:
 	docker build -t ${PROG} .
