@@ -11,13 +11,13 @@ slow: tco-test
 fast: test ${PROG} l1-tests run-examples lint doc
 
 deps:
-	go get .
+	go get ./src
 
-${PROG}: *.go l1.l1
-	go build .
+${PROG}: src/*.go src/l1.l1
+	go build -o l1 ./src
 
 test:
-	go test
+	go test ./src
 
 l1-tests: ${PROG}
 	./l1 tests.l1
@@ -36,8 +36,8 @@ tco-test: ${PROG}
 	./l1 examples/tco.l1
 
 lint:
-	golint -set_exit_status .
-	staticcheck .
+	golint -set_exit_status ./src
+	staticcheck ./src
 
 clean:
 	rm -f ${PROG}
