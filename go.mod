@@ -1,4 +1,4 @@
-module github.com/eigenhombre/l1
+module github.com/eigenhombre/l1/cmd
 
 go 1.17
 
