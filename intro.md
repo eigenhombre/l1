@@ -106,10 +106,10 @@ And lists can be turned into atoms or numbers:
 
 ## Boolean Logic
 
-In `l1`, the empty list `()` is the only "falsey" value; everything
-else is "truthy".  Falsey and truthy are important when evaluating
+In `l1`, the empty list `()` is the only logical false value; everything
+else is logical true.  Logical true and false are important when evaluating
 conditional statements such as `if`, `when`, or `cond`.  The default
-truthy value is `t`.  `t` and `()` evaluate to themselves.
+logical true value is `t`.  `t` and `()` evaluate to themselves.
 
 The `and`, `or` and `not` operators work like they do in most other
 languages:
@@ -347,7 +347,7 @@ the `is` macro:
     ((assertion failed: ()))
     >
 
-If the argument to `is` is falsey (`()`), then an error is printed
+If the argument to `is` is logical false (`()`), then an error is printed
 and the program exits (if running a program) or the REPL
 returns to the top level prompt.
 

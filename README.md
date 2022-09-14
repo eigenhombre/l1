@@ -45,7 +45,22 @@ tree-walking interpreters, is slow for longer calculations.
 
 # Setup
 
-## Option 1: Download Pre-built Binary
+## Option 1: Install using Go
+
+You should have Go installed and configured (including [setting GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).  At some later point, pre-built
+artifacts for various architectures may be available here.
+
+To install `l1`,
+
+    go install github.com/eigenhombre/l1@latest
+
+Specific versions are tagged and available as well.  See [the tags
+page](https://github.com/eigenhombre/l1/tags) for available versions
+and then, for example,
+
+    go install github.com/eigenhombre/l1@v0.0.42
+
+## Option 2: Download Pre-built Binary
 
 Releases are built for 22 OS / architecture combinations.  (WARNING:
 many/most of these are not tested regularly!)
@@ -67,20 +82,7 @@ Mac binaries are currently unsigned, so you have to go through the following ext
 
 You should only have to do this once per release, in general.
 
-## Option 2: Install using Go
-
-You should have Go installed and configured (including [setting GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).  At some later point, pre-built
-artifacts for various architectures may be available here.
-
-To install `l1`,
-
-    go install github.com/eigenhombre/l1@latest
-
-Specific versions are tagged and available as well.  See [the tags
-page](https://github.com/eigenhombre/l1/tags) for available versions
-and then, for example,
-
-    go install github.com/eigenhombre/l1@v0.0.20
+# Usage
 
 At this point you should be able to run `l1`:
 
@@ -89,8 +91,6 @@ At this point you should be able to run `l1`:
 to print a help message, or, to start a REPL:
 
     $ l1
-
-# Usage
 
 To execute a file:
 
@@ -124,11 +124,11 @@ See the [language reference](https://github.com/eigenhombre/l1/blob/master/l1.md
 Several example programs are available in the
 [`examples/`](https://github.com/eigenhombre/l1/tree/master/examples)
 directory.  Most of these are run automatically as tests in the build.
-These can be obtained either by cloning this repository, or after
-installing `l1` by looking under `$GOPATH`. For example, if the
-`latest` release is `v0.0.20`,
+These can be obtained either by cloning this repository, or if you
+installed `l1` using the Go installer, by looking under `$GOPATH`. For
+example, if the `latest` release is `v0.0.42`,
 
-    $ ls $GOPATH/pkg/mod/github.com/eigenhombre/l1\@v0.0.20/examples/
+    $ ls $GOPATH/pkg/mod/github.com/eigenhombre/l1\@v0.0.42/examples/
 
 ## Example REPL Session
 
