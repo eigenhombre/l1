@@ -520,6 +520,8 @@ Arity: %d%s
 Args: %s
 
 %s
+
+[Back to index](#api-index)
 -----------------------------------------------------
 		`,
 			urlEncode(doc.name),
