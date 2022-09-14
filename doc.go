@@ -521,6 +521,7 @@ Args: %s
 
 %s
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		`,

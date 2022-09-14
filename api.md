@@ -157,6 +157,7 @@ Args: `(() . xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -188,6 +189,7 @@ Args: `(n m)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -216,6 +218,7 @@ Args: `(() . xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -247,6 +250,7 @@ Args: `(x . xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -278,6 +282,7 @@ ERROR: ((builtin function /) (division by zero))
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -312,6 +317,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -343,6 +349,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -374,6 +381,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -405,6 +413,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -433,6 +442,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -467,6 +477,7 @@ true
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -495,6 +506,7 @@ Args: `(f args)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -523,6 +535,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -548,6 +561,7 @@ Bang!
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -573,6 +587,7 @@ Args: `(f)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -601,6 +616,7 @@ Args: `(l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -626,6 +642,7 @@ Hello
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -654,6 +671,7 @@ one
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -682,6 +700,7 @@ Args: `(x)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -707,6 +726,7 @@ remember-this:
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -732,6 +752,7 @@ hello,
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -757,6 +778,7 @@ Args: `(() . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -791,6 +813,7 @@ hello
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -819,6 +842,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -844,6 +868,7 @@ Args: `(() . lists)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -872,6 +897,7 @@ Args: `(a b)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -900,6 +926,7 @@ Args: `(() . pairs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -931,6 +958,7 @@ Args: `(x xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -956,6 +984,7 @@ Args: `(x)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -984,6 +1013,7 @@ Args: `(n)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1012,6 +1042,7 @@ Args: `(name value)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1046,6 +1077,7 @@ Args: `(name args . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1084,6 +1116,7 @@ Args: `(name args . rest)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1109,6 +1142,7 @@ Args: `(x)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1125,6 +1159,7 @@ Args: `(n . body)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1153,6 +1188,7 @@ hello
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1178,6 +1214,7 @@ Args: `(n l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1209,6 +1246,7 @@ ERROR in '(ensure-list 3)':
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1240,6 +1278,7 @@ error not found in ((quote (is not a function)) (+))
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1268,6 +1307,7 @@ ERROR: ((builtin function eval) (evaluating function object) (unknown symbol: on
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1293,6 +1333,7 @@ Args: `(n)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1324,6 +1365,7 @@ Args: `(l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1340,6 +1382,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1365,6 +1408,7 @@ Args: `(f l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1390,6 +1434,7 @@ Args: `(l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1406,6 +1451,7 @@ Args: `(x xs . body)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1422,6 +1468,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1450,6 +1497,7 @@ ABC
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1466,6 +1514,7 @@ Args: `(() . x)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1482,6 +1531,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1498,6 +1548,7 @@ Args: `(x)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1526,6 +1577,7 @@ def
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1551,6 +1603,7 @@ Args: `(condition then else)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1567,6 +1620,7 @@ Args: `(n)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1595,6 +1649,7 @@ ERROR: ((assertion failed: (car (cons () (quote (this one should fail))))))
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1629,6 +1684,7 @@ Args: `(() . fs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1664,6 +1720,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1692,6 +1749,7 @@ Args: `(l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1717,6 +1775,7 @@ Args: `(x)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1744,6 +1803,7 @@ Args: `(bindings . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1769,6 +1829,7 @@ Args: `(pairs . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1797,6 +1858,7 @@ Args: `(() . xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1828,6 +1890,7 @@ Args: `(() . args)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1856,6 +1919,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1872,6 +1936,7 @@ Args: `(filename)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1902,6 +1967,7 @@ Help me, I am looping forever!
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1930,6 +1996,7 @@ Args: `(x)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1958,6 +2025,7 @@ Args: `(f l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -1992,6 +2060,7 @@ Args: `(f l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2023,6 +2092,7 @@ Args: `(() . args)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2054,6 +2124,7 @@ Args: `(() . args)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2079,6 +2150,7 @@ Args: `(n)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2110,6 +2182,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2138,6 +2211,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2166,6 +2240,7 @@ four
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2197,6 +2272,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2222,6 +2298,7 @@ Args: `(n)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2249,6 +2326,7 @@ Args: `(() . xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2277,6 +2355,7 @@ Args: `(f . args)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2302,6 +2381,7 @@ Woot.
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2327,6 +2407,7 @@ Args: `(n)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2343,6 +2424,7 @@ Args: `(() . xs)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2359,6 +2441,7 @@ Args: `(x)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2375,6 +2458,7 @@ Args: `(() . xs)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2403,6 +2487,7 @@ Args: `(() . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2419,6 +2504,7 @@ Args: `(f x)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2447,6 +2533,7 @@ list:
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2475,6 +2562,7 @@ foo
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2491,6 +2579,7 @@ Args: `(n)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2507,6 +2596,7 @@ Args: `(l)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2523,6 +2613,7 @@ Args: `(n)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2539,6 +2630,7 @@ Args: `(x)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2567,6 +2659,7 @@ Args: `(n)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2583,6 +2676,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2611,6 +2705,7 @@ Args: `(f x . args)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2642,6 +2737,7 @@ ERROR: ((builtin function rem) (division by zero))
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2667,6 +2763,7 @@ Args: `(f l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2692,6 +2789,7 @@ Args: `(n x)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2717,6 +2815,7 @@ Args: `(n f)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2742,6 +2841,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2758,6 +2858,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2774,6 +2875,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2790,6 +2892,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2806,6 +2909,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2822,6 +2926,7 @@ Args: `()`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2838,6 +2943,7 @@ Args: `(x y list)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2872,6 +2978,7 @@ b
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2906,6 +3013,7 @@ Args: `(name value)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2922,6 +3030,7 @@ Args: `(cmd)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2938,6 +3047,7 @@ Args: `(xs)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2954,6 +3064,7 @@ Args: `(ms)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -2982,6 +3093,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3013,6 +3125,7 @@ Args: `(xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3044,6 +3157,7 @@ Args: `(f xs)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3072,6 +3186,7 @@ ERROR: ((builtin function source) (cannot get source of builtin function <builti
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3100,6 +3215,7 @@ Args: `(x)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3129,6 +3245,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3159,6 +3276,7 @@ foo
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3184,6 +3302,7 @@ Args: `(n l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3200,6 +3319,7 @@ Args: `(() . exprs)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3225,6 +3345,7 @@ Args: `(l)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3253,6 +3374,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3288,6 +3410,7 @@ ERROR:
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3313,6 +3436,7 @@ ABC
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3338,6 +3462,7 @@ Args: `()`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3366,6 +3491,7 @@ Args: `(condition . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3394,6 +3520,7 @@ Args: `(condition . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3419,6 +3546,7 @@ Args: `(condition . body)`
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3435,6 +3563,7 @@ Args: `(() . body)`
 
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
@@ -3463,6 +3592,7 @@ t
 ```
 
 
+<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
 [Back to index](#api-index)
 -----------------------------------------------------
 		
