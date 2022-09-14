@@ -521,8 +521,7 @@ Args: %s
 
 %s
 
-<a href="#api-index"><span style="font-size:5pt">Back to Index</span></a>
-[Back to index](#api-index)
+[<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
 		`,
 			urlEncode(doc.name),
