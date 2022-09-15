@@ -98,42 +98,33 @@
 
 (progn
   (with-screen
-   (intro)
-   (let* ((dims (screen-size))
-          (room (make-room dims))
-          (player-pos (random-position-in-room room))
-          (player (make-player player-pos))
-          (continue t))
-     (while continue
-       (draw-room room)
-       (draw-player player)
-       (let ((k (screen-get-key)))
-         (cond
-          ((= k 'q) (set! continue ()))
-          ((= k 'h) (when (valid-move room player '(-1 0))
-                      (set! player
-                            (move-player player '(-1 0)))))
-          ((= k 'l) (when (valid-move room player '(1 0))
-                      (set! player
-                            (move-player player '(1 0)))))
-          ((= k 'k) (when (valid-move room player '(0 -1))
-                      (set! player
-                            (move-player player '(0 -1)))))
-          ((= k 'j) (when (valid-move room player '(0 1))
-                      (set! player
-                            (move-player player '(0 1)))))
-          ((= k 'y) (when (valid-move room player '(-1 -1))
-                      (set! player
-                            (move-player player '(-1 -1)))))
-          ((= k 'u) (when (valid-move room player '(1 -1))
-                      (set! player
-                            (move-player player '(1 -1)))))
-          ((= k 'b) (when (valid-move room player '(-1 1))
-                      (set! player
-                            (move-player player '(-1 1)))))
-          ((= k 'n) (when (valid-move room player '(1 1))
-                      (set! player
-                            (move-player player '(1 1))))))))))
+      (intro)
+    (let* ((dims (screen-size))
+           (room (make-room dims))
+           (player-pos (random-position-in-room room))
+           (player (make-player player-pos))
+           (continue t)
+           (move-if-valid (lambda (coords)
+                            (when (valid-move room player coords)
+                              (set! player (move-player player coords))))))
+      (while continue
+        (draw-room room)
+        (draw-player player)
+        (let ((k (screen-get-key)))
+          (cond
+            ((= k 'q) (set! continue ()))
+            ((or (= k 'h) (= k 'LEFTARROW))
+             (move-if-valid '(-1 0)))
+            ((or (= k 'l) (= k 'RIGHTARROW))
+             (move-if-valid '(1 0)))
+            ((or (= k 'k) (= k 'UPARROW))
+             (move-if-valid '(0 -1)))
+            ((or (= k 'j) (= k 'DOWNARROW))
+             (move-if-valid '(0 1)))
+            ((= k 'y) (move-if-valid '(-1 -1)))
+            ((= k 'u) (move-if-valid '(1 -1)))
+            ((= k 'b) (move-if-valid '(-1 1)))
+            ((= k 'n) (move-if-valid '(1 1))))))))
   (println)
   (printl (exclaim '(thanks for playing)))
   (println))

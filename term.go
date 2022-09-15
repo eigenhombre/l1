@@ -97,15 +97,15 @@ func termGetKey() (string, error) {
 			case tcell.KeyDelete:
 				return "DEL", nil
 			case tcell.KeyDown:
-				return "DOWN", nil
+				return "DOWNARROW", nil
 			case tcell.KeyEnd:
 				return "END", nil
 			case tcell.KeyLeft:
-				return "LEFT", nil
+				return "LEFTARROW", nil
 			case tcell.KeyRight:
-				return "RIGHT", nil
+				return "RIGHTARROW", nil
 			case tcell.KeyUp:
-				return "UP", nil
+				return "UPARROW", nil
 			case tcell.KeyEnter:
 				return "ENTER", nil
 			case tcell.KeyEscape:
