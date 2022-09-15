@@ -164,13 +164,13 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 
 // Both eval, apply and macroexpansion use this to bind lambda arguments in the
 // supplied environment:
-func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error {
+func setLambdaArgsInEnv(e *env, lambda *lambdaFn, evaledList []Sexpr) error {
 	var err error
 	if lambda.restArg != noRestArg {
 		if len(lambda.args) > len(evaledList) {
 			return baseError("not enough arguments for function")
 		}
-		err = newEnv.Set(lambda.restArg,
+		err = e.Set(lambda.restArg,
 			mkListAsConsWithCdr(evaledList[len(lambda.args):],
 				Nil))
 		if err != nil {
@@ -184,7 +184,7 @@ func setLambdaArgsInEnv(newEnv *env, lambda *lambdaFn, evaledList []Sexpr) error
 		}
 	}
 	for i, arg := range lambda.args {
-		err := newEnv.Set(arg, evaledList[i])
+		err := e.Set(arg, evaledList[i])
 		if err != nil {
 			return err
 		}
@@ -232,7 +232,8 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 	if err != nil {
 		return nil, extendError("converting macro call to list", err)
 	}
-	if err := setLambdaArgsInEnv(e, lambda, asCons); err != nil {
+	eNew := mkEnv(e)
+	if err := setLambdaArgsInEnv(&eNew, lambda, asCons); err != nil {
 		return nil, extendError("setting macro call arguments", err)
 	}
 	ast := lambda.body
@@ -242,7 +243,7 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 			return ret, nil
 		}
 		toEval := ast.car
-		ret, err = eval(toEval, e)
+		ret, err = eval(toEval, &eNew)
 		if err != nil {
 			return nil, extendError("evaluating macro expansion", err)
 		}

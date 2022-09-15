@@ -10,7 +10,7 @@
 
 
 (defnth color '(grey white yellow orange red
-                     purple blue black green))
+                purple blue black green))
 
 (defnth color-pair `(greyish-white
                      greyish-yellow
@@ -41,10 +41,10 @@
                   (begun self-replicating)))
 
 (defnth place-adj '(dark smoky lava-filled
-                         wet icy sunny scorched))
+                    wet icy sunny scorched))
 
 (defnth on-place-noun '(plateaus peaks mountaintops
-                                 hills deserts))
+                        hills deserts))
 
 (defnth in-place-noun '(canyons rifts pits valleys craters))
 
@@ -62,117 +62,117 @@
          ~(adjective) ~@(lifeforms) have ~@(evolved)))))
 
 (def all-names
-     '(cathryn lelah rae almeda gillian katherine carla ola marlene
-               theodora myrtle trenton edward hedwig lucrecia mana jed sonya
-               yuri lyndon vasiliki creola george eladia brandie marty elisabeth
-               rayna rosa jeannie patrica gerald meridith colleen cammy vanessa
-               sau kenneth kenneth rosaline polly silvana carroll summer darby
-               chin whitney dana lezlie cameron gwyneth jarvis jeane may zandra
-               nannie amado xochitl reina chase denny aleisha rachal mireya
-               oretha carmen allyn lavina toshiko maire delmar tanja shawn dori
-               ramonita lavera brenda khalilah otis denny danika rachael rina
-               emilee alica garrett doloris ellis roland olen cheryll royce
-               dusty wilber lowell willia miki katharina mayra maida jeane dawn
-               kaley deann tosha damien elbert rickey nancee evette maryalice
-               lizette perla pam georgetta vickey alfreda soraya owen henry
-               sherron ray agnus coralie tori cary ida sueann lisette myrna
-               lesha lavon roosevelt karan micheline nevada bronwyn jenna
-               kristal ladonna adam karey casey aliza dahlia clemente alexia
-               sherly kimberlee etta hassie wilbur rufus reynaldo francie
-               shaunna tracy alessandra cora diamond ernest mel numbers scott
-               winona maisie kenda hallie guy darrin clair jamila ernestine
-               darwin yolanda rosita lacy honey napoleon neda terrence kizzy
-               celina daysi gearldine laine blythe hayley gerald yanira marilou
-               milford jude lanita wei kimiko demetra dionna tami jerrie masako
-               monnie isabella loida shelby louisa jamison ouida wynona wan chia
-               theola velva ebonie calista una luciano tora cruz claretha malena
-               kandis zina andra kenneth amie lena brande kelli charley cedrick
-               leland nellie cristina janell patience tawna fatima jessia kerri
-               kalyn michaela charmain connie ronnie keren patsy pedro arlene
-               anastacia rolando sherley lupe maricruz theo bridgette rosie ione
-               sherryl melynda cindie patience nigel josh cara desiree tristan
-               derrick blake alina maria donald vesta malena isobel harriett
-               seymour althea chet laverna taina paul delaine ilana soledad
-               randolph julie august tommye hung earleen jeanetta carter katrice
-               arlen cary vanna karlene zoe mila maurice aide jerald jonelle
-               lolita betsy charissa waneta maryanna isabell lorriane dante
-               stevie elenora jaymie marshall eunice matthew tristan lydia
-               lovetta laquanda dell sallie grayce tijuana nicholas cristen
-               cathi hulda wesley shawnta lakeshia henriette jessenia leo tyson
-               lonna shirley scotty xochitl carla leigh elenor rubi king crystal
-               jeremy mui darcy cecilia geoffrey kim danette jessica karly
-               newton yong johnny britta tisha ashely alvera sachiko timmy keena
-               leonie sammy edmond hyman maricruz vonnie joane lorine merrie
-               macie bernie vince tyree marco gail audry chloe albertha perry
-               elli cori marilynn myrna oliver laverna elwood minta violet rita
-               carlyn warren gary shirlee eloy jamila natisha annika courtney
-               eric margorie georgina arlene frankie macie bennie drucilla
-               ophelia isiah jayne hobert robert dion felipe alica carisa
-               louanne raylene melba joe everette emery chandra keitha adelia
-               salley carina nola meagan earle rita golden shavonne thea samira
-               octavia sadie kati lurlene lance juliane thomasina blossom scot
-               nikki shonda randi kyra glady linette robbie breana werner
-               romelia alma mckinley jon benjamin lieselotte twila theresia erin
-               delcie danny melisa evelin dwain beth merissa aurea na wendy
-               berry barabara mohamed amado jasmin margrett onie alpha luetta
-               ying bobby tommie jeannie earnest demetrice brandee zulma pansy
-               donella jimmy cheri coretta pearly marcell glinda leonie dorine
-               darryl tegan glenn nicholle shana donnie eustolia lane kenna abby
-               yon glen cheri ana jacqui wava zoraida edmundo aisha lorri ilona
-               silvana ralph tamekia abel viviana launa bradly latrice clint
-               ferne fannie becky elden johnie trula nannette juanita genny
-               shondra ghislaine zulma micheal bessie michael lyda irina mariam
-               allyn nichole valeri kayce lesia brock meridith nadine holley
-               shavonda freeda tyesha lakita jazmin arnetta suzi mina bernardina
-               roseann violette edmond lashonda dannie mirna jamel tiffani
-               kandice mitzie wen loretta cassondra romaine zachary harley
-               denese edward zola katerine kristal fransisca wava lucinda sha
-               tomiko ruth noemi tawny laurette donnetta darryl jamal coralie
-               tiffaney ashlie joelle catalina sidney earle consuela loren bret
-               janay yuko chantal paz annie harry allie alison octavia shanika
-               amber chantay mahalia mavis everett janay kimberli bernadette
-               dell mafalda chastity stewart liberty laurine analisa florinda
-               steve luz lauretta melanie margurite pamela bennie makeda
-               constance janeth liza larue theron jimmy marti denny merilyn
-               preston rene christinia lorri shavonne maia cheri arlinda
-               katerine lindsay madlyn alycia francine deadra cory elvis selena
-               renate kacey cyril zana jeri loan tommy henry kami christene joya
-               elisha cindie emil leda yi jutta buffy phillip aurelia rosette
-               mavis donte sima roseanna micki glen melany alan marlys basilia
-               grover ivan guillermina lea joseph belen jordan sharyn elnora
-               clarence sol fred armanda clara eleanora ming alaina tracie
-               adelina adrian jospeh karin zackary launa margrett booker
-               stephnie carri rodger kayce viva reynaldo sirena kyong janine
-               lazaro nathanial sharron charlesetta frances demarcus jesusita
-               akiko gerardo reda andres kelli aundrea so lorilee latrisha
-               ladonna gloria fonda rafaela milissa lucile otis dallas doyle
-               darrin tasha tommy dawna julietta kurt remedios mark chelsea
-               audrie alisha gladis alfonzo britany jeromy keren sydney davina
-               elmer eun marquis franklin sandi lazaro norah coral blythe
-               eldridge jack mary leola margorie lashay roseline florentina
-               donetta lourie lauretta corie shaniqua claudia kasey staci ashlee
-               delbert jeremy gale stephanie shanta alysia freida alisha brooke
-               alva ginny deb leonore anisha bronwyn blondell lynsey tyron
-               marlon christie erin dagny jarod peter crystal osvaldo vannessa
-               meg fe shamika karine sharlene kitty eduardo ashlyn sherie suzi
-               jonathan alphonso berry tula maxine taylor idella tonita carole
-               breanne thuy glendora daphine shandi nelda fredericka lizzie
-               zenia mariann grisel marissa terica crystal maryrose reynaldo
-               issac renay celena geralyn clarence jovan alane gwen wendi
-               mathilda jessie christi orpha junko eladia janae rosendo gracie
-               melva lonnie valarie debroah ladonna mikki idella lorina lincoln
-               starr marica lenna gwen catherin meredith lala delisa mervin
-               tyler fumiko marion irvin hyman tommye devin keila dottie
-               kimberlie hanh cruz kyong gregoria aron julianne adelia orville
-               robin brian lia karri dollie kitty elodia glenn dakota marica
-               rubin dustin ligia sylvia harold deandra vina bertha dodie callie
-               johnny jolanda velia brooke valentin alisa naoma kourtney
-               giovanni nicolas corene azzie harris blythe julianne annette
-               lauran ione anjelica aracelis yevette jenee philomena chara jutta
-               enola cammy dolores thurman lilliana alejandra otis van gerry
-               mikel gwenn liz janna roxanna lucia keshia earl bert easter
-               darlena arlinda arlen junita margeret anette selina wilma reena
-               tessa delma))
+    '(cathryn lelah rae almeda gillian katherine carla ola marlene
+      theodora myrtle trenton edward hedwig lucrecia mana jed sonya
+      yuri lyndon vasiliki creola george eladia brandie marty elisabeth
+      rayna rosa jeannie patrica gerald meridith colleen cammy vanessa
+      sau kenneth kenneth rosaline polly silvana carroll summer darby
+      chin whitney dana lezlie cameron gwyneth jarvis jeane may zandra
+      nannie amado xochitl reina chase denny aleisha rachal mireya
+      oretha carmen allyn lavina toshiko maire delmar tanja shawn dori
+      ramonita lavera brenda khalilah otis denny danika rachael rina
+      emilee alica garrett doloris ellis roland olen cheryll royce
+      dusty wilber lowell willia miki katharina mayra maida jeane dawn
+      kaley deann tosha damien elbert rickey nancee evette maryalice
+      lizette perla pam georgetta vickey alfreda soraya owen henry
+      sherron ray agnus coralie tori cary ida sueann lisette myrna
+      lesha lavon roosevelt karan micheline nevada bronwyn jenna
+      kristal ladonna adam karey casey aliza dahlia clemente alexia
+      sherly kimberlee etta hassie wilbur rufus reynaldo francie
+      shaunna tracy alessandra cora diamond ernest mel numbers scott
+      winona maisie kenda hallie guy darrin clair jamila ernestine
+      darwin yolanda rosita lacy honey napoleon neda terrence kizzy
+      celina daysi gearldine laine blythe hayley gerald yanira marilou
+      milford jude lanita wei kimiko demetra dionna tami jerrie masako
+      monnie isabella loida shelby louisa jamison ouida wynona wan chia
+      theola velva ebonie calista una luciano tora cruz claretha malena
+      kandis zina andra kenneth amie lena brande kelli charley cedrick
+      leland nellie cristina janell patience tawna fatima jessia kerri
+      kalyn michaela charmain connie ronnie keren patsy pedro arlene
+      anastacia rolando sherley lupe maricruz theo bridgette rosie ione
+      sherryl melynda cindie patience nigel josh cara desiree tristan
+      derrick blake alina maria donald vesta malena isobel harriett
+      seymour althea chet laverna taina paul delaine ilana soledad
+      randolph julie august tommye hung earleen jeanetta carter katrice
+      arlen cary vanna karlene zoe mila maurice aide jerald jonelle
+      lolita betsy charissa waneta maryanna isabell lorriane dante
+      stevie elenora jaymie marshall eunice matthew tristan lydia
+      lovetta laquanda dell sallie grayce tijuana nicholas cristen
+      cathi hulda wesley shawnta lakeshia henriette jessenia leo tyson
+      lonna shirley scotty xochitl carla leigh elenor rubi king crystal
+      jeremy mui darcy cecilia geoffrey kim danette jessica karly
+      newton yong johnny britta tisha ashely alvera sachiko timmy keena
+      leonie sammy edmond hyman maricruz vonnie joane lorine merrie
+      macie bernie vince tyree marco gail audry chloe albertha perry
+      elli cori marilynn myrna oliver laverna elwood minta violet rita
+      carlyn warren gary shirlee eloy jamila natisha annika courtney
+      eric margorie georgina arlene frankie macie bennie drucilla
+      ophelia isiah jayne hobert robert dion felipe alica carisa
+      louanne raylene melba joe everette emery chandra keitha adelia
+      salley carina nola meagan earle rita golden shavonne thea samira
+      octavia sadie kati lurlene lance juliane thomasina blossom scot
+      nikki shonda randi kyra glady linette robbie breana werner
+      romelia alma mckinley jon benjamin lieselotte twila theresia erin
+      delcie danny melisa evelin dwain beth merissa aurea na wendy
+      berry barabara mohamed amado jasmin margrett onie alpha luetta
+      ying bobby tommie jeannie earnest demetrice brandee zulma pansy
+      donella jimmy cheri coretta pearly marcell glinda leonie dorine
+      darryl tegan glenn nicholle shana donnie eustolia lane kenna abby
+      yon glen cheri ana jacqui wava zoraida edmundo aisha lorri ilona
+      silvana ralph tamekia abel viviana launa bradly latrice clint
+      ferne fannie becky elden johnie trula nannette juanita genny
+      shondra ghislaine zulma micheal bessie michael lyda irina mariam
+      allyn nichole valeri kayce lesia brock meridith nadine holley
+      shavonda freeda tyesha lakita jazmin arnetta suzi mina bernardina
+      roseann violette edmond lashonda dannie mirna jamel tiffani
+      kandice mitzie wen loretta cassondra romaine zachary harley
+      denese edward zola katerine kristal fransisca wava lucinda sha
+      tomiko ruth noemi tawny laurette donnetta darryl jamal coralie
+      tiffaney ashlie joelle catalina sidney earle consuela loren bret
+      janay yuko chantal paz annie harry allie alison octavia shanika
+      amber chantay mahalia mavis everett janay kimberli bernadette
+      dell mafalda chastity stewart liberty laurine analisa florinda
+      steve luz lauretta melanie margurite pamela bennie makeda
+      constance janeth liza larue theron jimmy marti denny merilyn
+      preston rene christinia lorri shavonne maia cheri arlinda
+      katerine lindsay madlyn alycia francine deadra cory elvis selena
+      renate kacey cyril zana jeri loan tommy henry kami christene joya
+      elisha cindie emil leda yi jutta buffy phillip aurelia rosette
+      mavis donte sima roseanna micki glen melany alan marlys basilia
+      grover ivan guillermina lea joseph belen jordan sharyn elnora
+      clarence sol fred armanda clara eleanora ming alaina tracie
+      adelina adrian jospeh karin zackary launa margrett booker
+      stephnie carri rodger kayce viva reynaldo sirena kyong janine
+      lazaro nathanial sharron charlesetta frances demarcus jesusita
+      akiko gerardo reda andres kelli aundrea so lorilee latrisha
+      ladonna gloria fonda rafaela milissa lucile otis dallas doyle
+      darrin tasha tommy dawna julietta kurt remedios mark chelsea
+      audrie alisha gladis alfonzo britany jeromy keren sydney davina
+      elmer eun marquis franklin sandi lazaro norah coral blythe
+      eldridge jack mary leola margorie lashay roseline florentina
+      donetta lourie lauretta corie shaniqua claudia kasey staci ashlee
+      delbert jeremy gale stephanie shanta alysia freida alisha brooke
+      alva ginny deb leonore anisha bronwyn blondell lynsey tyron
+      marlon christie erin dagny jarod peter crystal osvaldo vannessa
+      meg fe shamika karine sharlene kitty eduardo ashlyn sherie suzi
+      jonathan alphonso berry tula maxine taylor idella tonita carole
+      breanne thuy glendora daphine shandi nelda fredericka lizzie
+      zenia mariann grisel marissa terica crystal maryrose reynaldo
+      issac renay celena geralyn clarence jovan alane gwen wendi
+      mathilda jessie christi orpha junko eladia janae rosendo gracie
+      melva lonnie valarie debroah ladonna mikki idella lorina lincoln
+      starr marica lenna gwen catherin meredith lala delisa mervin
+      tyler fumiko marion irvin hyman tommye devin keila dottie
+      kimberlie hanh cruz kyong gregoria aron julianne adelia orville
+      robin brian lia karri dollie kitty elodia glenn dakota marica
+      rubin dustin ligia sylvia harold deandra vina bertha dodie callie
+      johnny jolanda velia brooke valentin alisa naoma kourtney
+      giovanni nicolas corene azzie harris blythe julianne annette
+      lauran ione anjelica aracelis yevette jenee philomena chara jutta
+      enola cammy dolores thurman lilliana alejandra otis van gerry
+      mikel gwenn liz janna roxanna lucia keshia earl bert easter
+      darlena arlinda arlen junita margeret anette selina wilma reena
+      tessa delma))
 
 (dotimes 10
   (printl (itsalive (randchoice all-names))))

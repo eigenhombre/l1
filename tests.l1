@@ -629,7 +629,22 @@
   (defmacro x () 1)
   (is (= 1 (macroexpand-1 '(x))))
   (defmacro x () 1 2)
-  (is (= 2 (macroexpand-1 '(x)))))
+  (is (= 2 (macroexpand-1 '(x))))
+
+  ;; Test for bug, #89:
+  (defmacro prepend! (l x)
+    `(set! ~l (cons ~x ~l)))
+
+  (let ((x ()))
+    (prepend! x 1)
+    (is (= '(1) x)))
+
+  ;; Another test for bug, #89:
+  (defmacro identity! (x) `(set! ~x ~x))
+
+  (let ((x 5))
+    (identity! x)
+    (is (= 5 x))))
 
 (test '(if when and when-not macro)
   (is (= 1 (if t 1 2)))

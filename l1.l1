@@ -391,7 +391,7 @@
                          (when-not (zero? count)
                            ~@body
                            (~inner-sym (- count 1))))))
-       (~inner-sym n))))
+       (~inner-sym ~n))))
 
 (defn butlast (l)
   (doc (return everything but the last element)
