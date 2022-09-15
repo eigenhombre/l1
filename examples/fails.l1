@@ -1,2 +1,3 @@
 ;; Used to integration-test nonzero exit status:
+(printl '(This statement should fail:))
 (is ())

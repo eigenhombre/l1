@@ -2,34 +2,87 @@
 ;; sentences.l1
 
 ;; Adapted from Norvig, Paradigms of Artificial Intelligence
-;; Programming, p. 36 (MIT License):
+;; Programming, pp. 36-43 (MIT License):
 (defn one-of (l) (list (randchoice l)))
 
-(defn Noun () (one-of '(man ball woman table)))
-(defn Verb () (one-of '(hit took saw liked)))
-(defn Article () (one-of '(the a)))
-(defn noun-phrase () (concat (Article) (Noun)))
-(defn verb-phrase () (concat (Verb) (noun-phrase)))
-(defn sentence () (concat (noun-phrase) (verb-phrase)))
+;; Simple, functional version:
+(comment
+ (defn Noun () (one-of '(man ball woman table thing)))
+ (defn Verb () (one-of '(hit took saw liked)))
+ (defn Article () (one-of '(the a)))
+ (defn noun-phrase () (concat (Article) (Noun)))
+ (defn verb-phrase () (concat (Verb) (noun-phrase)))
+ (defn sentence () (concat (noun-phrase) (verb-phrase)))
 
-(defn proper-sentence ()
-  (let ((s (sentence)))
-    (let ((first (capitalize (car s)))
-          (last (period (car (reverse s)))))
-      (cons first
-            (reverse (cons last
-                           (cdr (reverse (cdr s)))))))))
+ (defn proper-sentence ()
+   (let ((s (sentence)))
+     (let ((first (capitalize (car s)))
+           (last (period (car (reverse s)))))
+       (cons first
+             (reverse (cons last
+                            (cdr (reverse (cdr s)))))))))
+ (dotimes 10
+   (printl (proper-sentence)))
+ ;;=>
+ ;; A ball saw a ball.
+ ;; The ball took a table.
+ ;; The woman took the man.
+ ;; A table hit the table.
+ ;; A woman liked a man.
+ ;; The woman saw a woman.
+ ;; A table took a woman.
+ ;; The ball saw the woman.
+ ;; The man hit the man.
+ ;; A man liked the table.
+ )
+
+;; Rule-based version:
+(def simple-grammar
+    '((sentence -> (noun-phrase verb-phrase))
+      (noun-phrase -> (Article Noun))
+      (verb-phrase -> (Verb noun-phrase))
+      (Article -> the a)
+      (Noun -> man ball woman table)
+      (Verb -> hit took saw liked)))
+
+(def bigger-grammar
+    '((sentence -> (noun-phrase verb-phrase))
+      (noun-phrase -> (Article Adj* Noun PP*) (Name) (Pronoun))
+      (verb-phrase -> (Verb noun-phrase PP*))
+      (PP* -> () (PP PP*))
+      (Adj* -> () (Adj Adj*))
+      (PP -> (Prep noun-phrase))
+      (Prep -> to in by with on)
+      (Adj -> big little blue green adiabatic)
+      (Article -> the a)
+      (Name -> Pat Kim Lee Terry Robin)
+      (Noun -> man ball woman table)
+      (Verb -> hit took saw liked)
+      (Pronoun -> he she it these those that)))
+
+(defn assoc (x pairs)
+  (cond ((not pairs) ())
+        ((= x (caar pairs))
+         (car pairs))
+        (t (assoc x (cdr pairs)))))
+
+(defn rule-lhs (rule) (first rule))
+(defn rule-rhs (rule) (cddr rule))
+
+(defn rewrites (grammar category)
+  (rule-rhs (assoc category grammar)))
+
+(defn generate (grammar phrase)
+  (if (list? phrase)
+      (mapcat (partial generate grammar) phrase)
+      (let ((choices (rewrites grammar phrase)))
+        (if choices
+            (generate grammar (randchoice choices))
+            (list phrase)))))
 
 (dotimes 10
-  (printl (proper-sentence)))
-;;=>
-;; A ball saw a ball.
-;; The ball took a table.
-;; The woman took the man.
-;; A table hit the table.
-;; A woman liked a man.
-;; The woman saw a woman.
-;; A table took a woman.
-;; The ball saw the woman.
-;; The man hit the man.
-;; A man liked the table.
+  (printl
+   (tosentence
+    (generate (randchoice (list simple-grammar
+                                bigger-grammar))
+              'sentence))))
