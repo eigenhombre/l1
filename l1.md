@@ -544,6 +544,37 @@ expression.  [An example
 program](https://github.com/eigenhombre/l1/blob/master/examples/screen-test.l1)
 shows these functions in action.
 
+`screen-get-key` will return a single-character atom whose name matches the exact key pressed, except for the following keys:
+
+- `INTR`: interrupt (control-C)
+- `EOF`: end-of-file (control-D)
+- `CLEAR`: clear screen (control-L)
+- `BSP`: backspace
+- `DEL`: delete
+- `DOWNARROW`: down arrow
+- `END`: end key
+- `LEFTARROW`: left arrow
+- `RIGHTARROW`: right arrow
+- `UPARROW`: up arrow
+- `ENTER`: enter/return
+- `ESC`: escape key
+
+An example use of the special keys could be to exit a loop if the user
+types control-C or control-D:
+
+    (with-screen
+      (let ((continue t))
+        (while continue
+          ;; Do something
+          (let ((k (screen-get-key)))
+            (cond
+              ;; Exit if control-C or control-D:
+              ((or (= k 'INTR)
+                   (= k 'EOF))
+               (set! continue ()))
+              ;; Handle other keys...
+              )))))
+
 ## Running l1 Programs as Command Line Scripts
 
 Programs can be run by giving the program name as an argument to `l1`:
