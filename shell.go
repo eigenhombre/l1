@@ -35,7 +35,10 @@ func doShell(arg Sexpr) (Sexpr, error) {
 		default:
 			return nil, baseErrorf("shell argument must be a nonempty list of strings")
 		}
-		cmdCons = cmdCons.cdr.(*ConsCell)
+		cmdCons, ok = cmdCons.cdr.(*ConsCell)
+		if !ok {
+			return nil, baseErrorf("shell argument must be a nonempty list of strings")
+		}
 	}
 	if len(cmdStrings) == 0 {
 		return nil, baseErrorf("shell argument must be a nonempty list of strings")

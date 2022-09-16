@@ -374,7 +374,8 @@
 
 (defn randchoice (l)
   (doc (return an element at random from the supplied list))
-  (is l)
+  (when-not l
+    (error '(randchoice expects a nonempty list)))
   (nth (randint (len l)) l))
 
 (defn randalpha (n)

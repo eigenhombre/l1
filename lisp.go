@@ -634,23 +634,24 @@ top:
 				return nil, extendError("lambda env setup", err)
 			}
 			var ret Sexpr = Nil
+			body := lambda.body
 			for {
-				if lambda.body == Nil {
+				if body == Nil {
 					return ret, nil
 				}
 				// TCO:
-				if lambda.body.cdr == Nil {
-					expr = lambda.body.car
+				if body.cdr == Nil {
+					expr = body.car
 					e = &newEnv
 					goto top
 				}
-				ret, err = eval(lambda.body.car, &newEnv)
+				ret, err = eval(body.car, &newEnv)
 				if err != nil {
 					return nil, extendWithList(
-						Cons(Atom{"lambda"}, Cons(lambda.body.car, Nil)),
+						Cons(Atom{"lambda"}, Cons(body.car, Nil)),
 						err)
 				}
-				lambda.body = lambda.body.cdr.(*ConsCell)
+				body = body.cdr.(*ConsCell)
 			}
 		}
 		// Built-in functions:

@@ -178,7 +178,27 @@
   (is (= 3 ((lambda count (l)
               (cond (l (inc (count (cdr l))))
                     (t 0)))
-            (range 3)))))
+            (range 3))))
+
+  ;; lambda compound bodies:
+  (let* ((x 0)
+         (y 1)
+         (f (lambda ()
+              (set! x 2)
+              (set! y 3))))
+    (f)
+    (is (= x 2))
+    (is (= y 3)))
+
+  ;; repeated invocations of same:
+  (let* ((n 0)
+         (new-n!
+           (lambda ()
+             (set! n (inc n))
+             'lastthing)))
+    (dotimes 5
+      (new-n!))
+    (is (= 5 n))))
 
 (test '(def and defn)
   (defn foo ())
@@ -729,7 +749,7 @@
     (gensym 'really 'unique)))
 
 (test '(fuzz found these strange birds, each of which crashed
-             the interpreter)
+        the interpreter)
   (errors '(needs an argument)
     (quote))
   (defmacro x () () ())
@@ -749,7 +769,7 @@
     (let ((0))))
   (errors '(needs an argument)
     (syntax-quote))
-  (errors '(expects a non-zero argument)
+  (errors '(expects a nonempty list)
     (randchoice ()))
   (errors '(screen not initialized)
     (screen-write 30 87 ()))
@@ -896,7 +916,7 @@
   (defn restyfun (x . z)
     '(something else))
   (is (= '(lambda (x . z)
-            '(something else))
+           '(something else))
          (source restyfun)))
 
   (errors '(not a function)
@@ -913,8 +933,8 @@
   (is (= 水 'water))
   (is (= '▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐▖▗■□▢▣▥▧▨▩
          (fuse'(▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▉ ▊
-                  ▋ ▌ ▍ ▎ ▏ ▐ ▖ ▗ ■
-                  □ ▢ ▣ ▥ ▧ ▨ ▩))))
+                ▋ ▌ ▍ ▎ ▏ ▐ ▖ ▗ ■
+                □ ▢ ▣ ▥ ▧ ▨ ▩))))
   (is (= 2 (len (split '水果)))))
 
 (test 'shell

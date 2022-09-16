@@ -96,6 +96,32 @@
            (+ (player-y player) (second delta))
            (+ (room-y room) (room-height room) -1))))
 
+(defn make-monster (room)
+  (list* 'X (random-position-in-room room)))
+
+(defn monster-pos (monster) (cdr monster))
+
+(defn monster-x (monster) (cadr monster))
+
+(defn monster-y (monster) (caddr monster))
+
+(defn monster-char (monster) (car monster))
+
+(defn monsters-for-room (room)
+  (repeatedly (inc (randint 4))
+              (partial make-monster room)))
+
+(defn draw-monster (monster)
+  (screen-write (monster-x monster)
+                (monster-y monster)
+                (list (monster-char monster))))
+
+(defn move-monster (room player monster))
+
+(defmacro prepend! (l x)
+  `(set! ~l (cons ~x ~l)))
+
+;; main ............
 (progn
   (with-screen
       (intro)
@@ -106,10 +132,17 @@
            (continue t)
            (move-if-valid (lambda (coords)
                             (when (valid-move room player coords)
-                              (set! player (move-player player coords))))))
+                              (set! player (move-player player coords)))))
+           (monsters (monsters-for-room room))
+           (update-monsters!
+             (lambda ()
+               (prepend! monsters (make-monster room))
+               (foreach m monsters
+                 (draw-monster m)))))
       (while continue
         (draw-room room)
         (draw-player player)
+        (update-monsters!)
         (let ((k (screen-get-key)))
           (cond
             ((= k 'q) (set! continue ()))
