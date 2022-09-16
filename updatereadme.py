@@ -1,6 +1,6 @@
 # Adapted from https://stackoverflow.com/questions/33365621:
 import re
-with open('README.md', 'r') as md, open('examples.txt', 'r') as ex:
+with open('README.md', 'r') as md, open('lisp/examples.txt', 'r') as ex:
         readme = md.read()
         examples = ("\n    " +
                     "\n    ".join([l.rstrip() for l in ex.readlines()]) +
