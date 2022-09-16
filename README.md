@@ -218,6 +218,7 @@ example, if the `latest` release is `v0.0.42`,
             if-not  M    3   Simple (inverted) conditional with two branches
                inc  F    1   Return the supplied integer argument, plus one
                 is  M    1   Assert a condition is truthy, or show failing code
+             isqrt  N    1   Integer square root
               juxt  F    0+  Create a function which combines multiple operations into a single list of results
             lambda  S    1+  Create a function
               last  F    1   Return the last item in a list

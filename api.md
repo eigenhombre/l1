@@ -1,5 +1,5 @@
 # API Index
-130 forms available:
+131 forms available:
 [`*`](#-STAR)
 [`**`](#-STAR-STAR)
 [`+`](#+)
@@ -55,6 +55,7 @@
 [*`if-not`*](#if-not)
 [`inc`](#inc)
 [*`is`*](#is)
+[`isqrt`](#isqrt)
 [`juxt`](#juxt)
 [**`lambda`**](#lambda)
 [`last`](#last)
@@ -1646,6 +1647,38 @@ Args: `(condition)`
 > (is (car (cons () (quote (this one should fail)))))
 ;;=>
 ERROR: ((assertion failed: (car (cons () (quote (this one should fail))))))
+
+```
+
+
+[<sub><sup>Back to index</sup></sub>](#api-index)
+-----------------------------------------------------
+		
+
+<a id="isqrt"></a>
+## `isqrt`
+
+Integer square root
+
+Type: native function
+
+Arity: 1 
+
+Args: `(x)`
+
+
+### Examples
+
+```
+> (isqrt 4)
+;;=>
+2
+> (isqrt 5)
+;;=>
+2
+> (isqrt 9139571243709)
+;;=>
+3023172
 
 ```
 

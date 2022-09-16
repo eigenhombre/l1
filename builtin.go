@@ -665,6 +665,29 @@ func init() {
 				return Nil, nil
 			},
 		},
+		"isqrt": {
+			Name:       "isqrt",
+			Docstring:  "Integer square root",
+			FixedArity: 1,
+			NAry:       false,
+			ArgString:  "(x)",
+			Examples: E(
+				L(A("isqrt"), N(4)),
+				L(A("isqrt"), N(5)),
+				L(A("isqrt"), N(9139571243709)),
+			),
+			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, baseError("isqrt expects a single argument")
+				}
+				n, ok := args[0].(Number)
+				if !ok {
+					return nil, baseError("isqrt expects a number")
+				}
+				sqrt := n.bi.Sqrt(&n.bi)
+				return Num(sqrt.String()), nil
+			},
+		},
 		"len": {
 			Name:       "len",
 			Docstring:  "Return the length of a list",

@@ -625,6 +625,10 @@
   (is (= '(1 2 3 4 5)
          (map inc (range 5))))
 
+  (is (= '(0 2 4) (filter even? (range 5))))
+  (is (= '(1 3))) (remove even? (range 5)))
+
+(test '(math)
   (is (= 1024 (** 2 10)))
   (is (= 10000000000 (** 10 10)))
   (is (= 18446744073709551616 (** 2 64)))
@@ -633,8 +637,10 @@
   ;; testing that takes too long!
   (** 3 6093)
 
-  (is (= '(0 2 4) (filter even? (range 5))))
-  (is (= '(1 3))) (remove even? (range 5)))
+  (is (= 2 (isqrt 4)))
+  (let ((biggie (** 18446744073709551616 5)))
+    (is (= biggie
+           (isqrt (** biggie 2))))))
 
 (test '(macros)
   (defmacro f (zzz) (list '+ 2 3))

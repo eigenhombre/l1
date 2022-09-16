@@ -88,12 +88,12 @@
   (list (+ (player-x player) (first delta))
         (+ (player-y player) (second delta))))
 
-(defn valid-move (room player delta)
+(defn valid-move (room x y delta)
   (and (<= (room-x room)
-           (+ (player-x player) (first delta))
+           (+ x (first delta))
            (+ (room-x room) (room-width room) -1))
        (<= (room-y room)
-           (+ (player-y player) (second delta))
+           (+ y (second delta))
            (+ (room-y room) (room-height room) -1))))
 
 (defn make-monster (room)
@@ -116,13 +116,33 @@
                 (monster-y monster)
                 (list (monster-char monster))))
 
-(defn move-monster (room player monster))
+(defn abs (x)
+  (if (neg? x) (- x) x))
+
+(defn calc-delta (x1 x2)
+  (let ((delta (- x2 x1)))
+    (if (zero? delta)
+      0
+      (/ delta (abs delta)))))
+
+(defn move-monster (room player monster)
+  (let* ((px (player-x player))
+         (py (player-y player))
+         (mx (monster-x monster))
+         (my (monster-y monster))
+         (dx (calc-delta px mx))
+         (dy (calc-delta py my))
+         (r (isqrt (+ (** (- px mx) 2) (** (- py my) 2)))))
+    (if (zero? (randint r))
+      ;; FIXME: breaks monster encapsulation:
+      (list (car monster) (- mx dx) (- my dy))
+      monster)))
 
 (defmacro prepend! (l x)
   `(set! ~l (cons ~x ~l)))
 
 ;; main ............
-(progn
+(let ((player-alive t))
   (with-screen
       (intro)
     (let* ((dims (screen-size))
@@ -131,18 +151,32 @@
            (player (make-player player-pos))
            (continue t)
            (move-if-valid (lambda (coords)
-                            (when (valid-move room player coords)
+                            (when (valid-move room
+                                              (player-x player)
+                                              (player-y player)
+                                              coords)
                               (set! player (move-player player coords)))))
            (monsters (monsters-for-room room))
            (update-monsters!
              (lambda ()
-               (prepend! monsters (make-monster room))
+               (when (zero? (randint 5))
+                 (prepend! monsters (make-monster room)))
+               (set! monsters
+                     (map (partial move-monster room player)
+                          monsters))
                (foreach m monsters
-                 (draw-monster m)))))
+                 (draw-monster m)
+                 (when (and (= (monster-x m)
+                               (player-x player))
+                            (= (monster-y m)
+                               (player-y player)))
+                   (set! player-alive ())
+                   (set! continue ()))))))
+      (draw-room room)
+      (draw-player player)
+      (foreach m monsters
+        (draw-monster m))
       (while continue
-        (draw-room room)
-        (draw-player player)
-        (update-monsters!)
         (let ((k (screen-get-key)))
           (cond
             ((= k 'q) (set! continue ()))
@@ -157,7 +191,12 @@
             ((= k 'y) (move-if-valid '(-1 -1)))
             ((= k 'u) (move-if-valid '(1 -1)))
             ((= k 'b) (move-if-valid '(-1 1)))
-            ((= k 'n) (move-if-valid '(1 1))))))))
+            ((= k 'n) (move-if-valid '(1 1)))))
+        (draw-room room)
+        (draw-player player)
+        (update-monsters!))))
   (println)
+  (when-not player-alive
+    (printl (exclaim '(YOU WERE EATEN BY A MONSTER))))
   (printl (exclaim '(thanks for playing)))
   (println))
