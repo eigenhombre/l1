@@ -1,25 +1,25 @@
-package main
+package lisp
 
 import (
 	"fmt"
 )
 
-// env stores a local environment, possibly pointing to a caller's environment.
-type env struct {
+// Env stores a local environment, possibly pointing to a caller's environment.
+type Env struct {
 	syms   map[string]Sexpr
-	parent *env
+	parent *Env
 }
 
 // mkEnv makes a new Env.
-func mkEnv(parent *env) env {
-	return env{
+func mkEnv(parent *Env) Env {
+	return Env{
 		syms:   map[string]Sexpr{},
 		parent: parent,
 	}
 }
 
 // EnvKeys returns the keys of an environment, including any parents' keys.
-func EnvKeys(m *env) []string {
+func EnvKeys(m *Env) []string {
 	ret := []string{}
 	for k := range m.syms {
 		ret = append(ret, k)
@@ -31,7 +31,7 @@ func EnvKeys(m *env) []string {
 }
 
 // Lookup returns the value of a symbol in an environment or its parent(s).
-func (e *env) Lookup(s string) (Sexpr, bool) {
+func (e *Env) Lookup(s string) (Sexpr, bool) {
 	if v, ok := e.syms[s]; ok {
 		return v, true
 	}
@@ -42,7 +42,7 @@ func (e *env) Lookup(s string) (Sexpr, bool) {
 }
 
 // Set sets the value of a symbol in an environment.
-func (e *env) Set(s string, v Sexpr) error {
+func (e *Env) Set(s string, v Sexpr) error {
 	if s == "t" {
 		return baseError("cannot bind or set t")
 	}
@@ -51,14 +51,15 @@ func (e *env) Set(s string, v Sexpr) error {
 }
 
 // SetTopLevel sets the value of a symbol in the top-level environment.
-func (e *env) SetTopLevel(s string, v Sexpr) error {
+func (e *Env) SetTopLevel(s string, v Sexpr) error {
 	if e.parent == nil {
 		return e.Set(s, v)
 	}
 	return e.parent.SetTopLevel(s, v)
 }
 
-func (e *env) Update(s string, v Sexpr) error {
+// Update updates the value of a symbol in an environment, or in a parent.
+func (e *Env) Update(s string, v Sexpr) error {
 	if s == "t" {
 		return baseError("cannot bind or set t")
 	}
@@ -72,7 +73,7 @@ func (e *env) Update(s string, v Sexpr) error {
 	return baseErrorf("%s is not bound in any environment", s)
 }
 
-func (e *env) String() string {
+func (e *Env) String() string {
 	ret := ""
 	for k, v := range e.syms {
 		ret += fmt.Sprintf("%s=%s\n", k, v)

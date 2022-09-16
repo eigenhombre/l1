@@ -1,4 +1,4 @@
-package main
+package lisp
 
 // ConsCell is a cons cell.  Use Cons to create one.
 type ConsCell struct {

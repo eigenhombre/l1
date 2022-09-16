@@ -1,4 +1,4 @@
-package main
+package lisp
 
 import (
 	"fmt"
@@ -11,12 +11,12 @@ type lambdaFn struct {
 	body    *ConsCell
 	doc     *ConsCell
 	isMacro bool
-	env     *env
+	env     *Env
 }
 
 var noRestArg string = ""
 
-func mkLambda(cdr *ConsCell, isMacro bool, e *env) (*lambdaFn, error) {
+func mkLambda(cdr *ConsCell, isMacro bool, e *Env) (*lambdaFn, error) {
 	args := []string{}
 	restArg := noRestArg
 	// look for fn name

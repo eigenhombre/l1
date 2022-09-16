@@ -1,4 +1,4 @@
-package main
+package lisp
 
 import (
 	"fmt"
@@ -9,7 +9,8 @@ import (
 
 // Use with lexutil.go (which should eventually be its own package).
 
-type token struct {
+// Token is a lexeme with a line number.
+type Token struct {
 	lexeme lexutil.LexItem
 	line   int
 }
@@ -47,7 +48,7 @@ var typeMap = map[lexutil.ItemType]string{
 }
 
 // LexRepr returns a string representation of a known lexeme.
-func LexRepr(i token) string {
+func LexRepr(i Token) string {
 	switch i.lexeme.Typ {
 	case itemNumber:
 		return fmt.Sprintf("%s(%s)", typeMap[i.lexeme.Typ], i.lexeme.Val)
@@ -205,20 +206,22 @@ func lexInt(l *lexutil.Lexer) lexutil.StateFn {
 	return lexAtom
 }
 
-func lexItems(ss []string) []token {
-	ret := []token{}
+// LexItems lexes a string into a slice of tokens.
+func LexItems(ss []string) []Token {
+	ret := []Token{}
 	for line, s := range ss {
 		l := lexutil.Lex("main", s, lexStart)
 		for tok := range l.Items {
 			// Programmers may be civilians, counting lines from 1 rather than
 			// 0:
-			ret = append(ret, token{tok, line + 1})
+			ret = append(ret, Token{tok, line + 1})
 		}
 	}
 	return ret
 }
 
-func isBalanced(tokens []token) (bool, error) {
+// IsBalanced returns true iff parens are balanced
+func IsBalanced(tokens []Token) (bool, error) {
 	level := 0
 	for _, token := range tokens {
 		switch token.lexeme.Typ {

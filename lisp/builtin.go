@@ -1,6 +1,7 @@
-package main
+package lisp
 
 import (
+	"bufio"
 	"fmt"
 	"math/rand"
 	"os"
@@ -13,10 +14,39 @@ import (
 	"unicode/utf8"
 )
 
+func InitGlobals() Env {
+	globals := mkEnv(nil)
+	globals.Set("SPACE", Atom{" "})
+	globals.Set("NEWLINE", Atom{"\n"})
+	globals.Set("TAB", Atom{"\t"})
+	globals.Set("BANG", Atom{"!"})
+	globals.Set("QMARK", Atom{"?"})
+	globals.Set("PERIOD", Atom{"."})
+	globals.Set("COMMA", Atom{","})
+	globals.Set("COLON", Atom{":"})
+	globals.Set("HASH", Atom{"#"})
+	globals.Set("ATSIGN", Atom{"@"})
+	globals.Set("CHECK", Atom{"✓"})
+	return globals
+}
+
+// ReadLine reads a line from stdin "robustly".
+func ReadLine() (string, error) {
+	bio := bufio.NewReader(os.Stdin)
+	// FIXME: don't discard hasMoreInLine
+	line, _, err := bio.ReadLine()
+	switch err {
+	case nil:
+		return string(line), nil
+	default:
+		return "", err
+	}
+}
+
 // Builtin represents a function with a native (Go) implementation.
 type Builtin struct {
 	Name string
-	Fn   func([]Sexpr, *env) (Sexpr, error)
+	Fn   func([]Sexpr, *Env) (Sexpr, error)
 	// Fn must take at least this many arguments:
 	FixedArity int
 	// If true, fn can take more arguments:
@@ -31,7 +61,7 @@ func (b Builtin) String() string {
 }
 
 // Eval for builtin returns itself.
-func (b Builtin) Eval(e *env) (Sexpr, error) {
+func (b Builtin) Eval(e *Env) (Sexpr, error) {
 	return b, nil
 }
 
@@ -66,7 +96,7 @@ func compareMultipleNums(cmp func(a, b Number) bool, args []Sexpr) (Sexpr, error
 	return True, nil
 }
 
-func applyFn(args []Sexpr, env *env) (Sexpr, error) {
+func applyFn(args []Sexpr, env *Env) (Sexpr, error) {
 	if len(args) < 2 {
 		return nil, baseError("apply: not enough arguments")
 	}
@@ -122,12 +152,12 @@ func applyFn(args []Sexpr, env *env) (Sexpr, error) {
 	return biResult, nil
 }
 
-func loadFile(e *env, filename string) error {
+func LoadFile(e *Env, filename string) error {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
 		return err
 	}
-	err = lexParseEval(string(bytes), e, false)
+	err = LexParseEval(string(bytes), e)
 	if err != nil {
 		return err
 	}
@@ -167,7 +197,7 @@ func init() {
 				L(A("+"), N(1), N(2), N(3)),
 				L(A("+")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Num(0), nil
 				}
@@ -193,7 +223,7 @@ func init() {
 				L(A("-"), N(5), N(2), N(1)),
 				L(A("-"), N(99)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
 					return nil, baseError("missing argument")
 				}
@@ -224,7 +254,7 @@ func init() {
 				L(A("*"), N(1), N(2), N(3)),
 				L(A("*")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Num(1), nil
 				}
@@ -250,7 +280,7 @@ func init() {
 				L(A("/"), N(12), N(2), N(3)),
 				L(A("/"), N(1), N(0)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) < 1 {
 					return nil, baseError("missing argument")
 				}
@@ -282,7 +312,7 @@ func init() {
 				L(A("="), N(1), N(2)),
 				L(A("apply"), A("="), L(A("repeat"), N(10), A("t"))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) < 1 {
 					return nil, baseError("missing argument")
 				}
@@ -305,7 +335,7 @@ func init() {
 				L(A("rem"), N(4), N(2)),
 				L(A("rem"), N(1), N(0)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, baseError("rem requires two arguments")
 				}
@@ -335,7 +365,7 @@ func init() {
 				L(A("<"), N(1)),
 				L(A("apply"), A("<"), L(A("range"), N(100))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.Less(a)
 				}, args)
@@ -352,7 +382,7 @@ func init() {
 				L(A("<="), N(1), N(1)),
 				L(A("<="), N(1)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.LessEqual(a)
 				}, args)
@@ -369,7 +399,7 @@ func init() {
 				L(A(">"), N(1), N(1)),
 				L(A(">"), N(1)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.Greater(a)
 				}, args)
@@ -385,7 +415,7 @@ func init() {
 				L(A(">="), N(1), N(2)),
 				L(A(">="), N(1), N(1)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
 					return b.GreaterEqual(a)
 				}, args)
@@ -413,7 +443,7 @@ func init() {
 				L(A("atom?"), N(1)),
 				L(A("atom?"), QA("one")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("atom? expects a single argument")
 				}
@@ -432,7 +462,7 @@ func init() {
 			Examples: E(
 				L(A("body"), L(A("lambda"), L(A("x")), L(A("+"), A("x"), N(1)))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
 				}
@@ -453,7 +483,7 @@ func init() {
 				L(A("car"), QL(A("one"), A("two"))),
 				L(A("car"), L()),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
 				}
@@ -477,7 +507,7 @@ func init() {
 				L(A("cdr"), QL(A("one"), A("two"))),
 				L(A("cdr"), L()),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
 				}
@@ -502,7 +532,7 @@ func init() {
 				L(A("cons"), N(1), L()),
 				L(A("cons"), N(1), N(2)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, baseError("missing argument")
 				}
@@ -521,7 +551,7 @@ func init() {
 						L(A("and"), A("other"), A("stuff"))),
 					L(A("+"), A("x"), N(1)))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
 				}
@@ -545,7 +575,7 @@ func init() {
 				L(A("downcase"), QA("Hello")),
 				L(A("downcase"), QA("HELLO")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("downcase requires one argument")
 				}
@@ -566,7 +596,7 @@ func init() {
 				L(A("eval"), QL(A("one"), A("two"))),
 				L(A("eval"), QL(A("+"), N(1), N(2))),
 			),
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
 				}
@@ -579,7 +609,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				os.Exit(0)
 				return nil, nil
 			},
@@ -590,7 +620,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				return mkListAsConsWithCdr(formsAsSexprList(e), Nil), nil
 			},
 		},
@@ -604,7 +634,7 @@ func init() {
 				L(A("fuse"), QL(A("A"), A("B"), A("C"))),
 				L(A("fuse"), L(A("reverse"), L(A("range"), N(10)))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("fuse expects a single argument")
 				}
@@ -640,7 +670,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . x)",
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 0 && len(args) != 1 {
 					return nil, baseError("gensym expects 0 or 1 arguments")
 				}
@@ -660,8 +690,8 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
-				fmt.Println(shortDocStr(e))
+			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
+				fmt.Println(ShortDocStr(e))
 				return Nil, nil
 			},
 		},
@@ -677,7 +707,7 @@ func init() {
 				// Breaks on several platforms!
 				// L(A("isqrt"), N(9139571243709)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("isqrt expects a single argument")
 				}
@@ -698,7 +728,7 @@ func init() {
 			Examples: E(
 				L(A("len"), L(A("range"), N(10))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("len expects a single argument")
 				}
@@ -724,7 +754,7 @@ func init() {
 				L(A("list"), N(1), N(2), N(3)),
 				L(A("list")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return mkListAsConsWithCdr(args, Nil), nil
 			},
 		},
@@ -738,7 +768,7 @@ func init() {
 				L(A("list?"), L(A("range"), N(10))),
 				L(A("list?"), N(1)),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("list? expects a single argument")
 				}
@@ -754,7 +784,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(filename)",
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("load expects a single argument")
 				}
@@ -762,7 +792,7 @@ func init() {
 				if !ok {
 					return nil, baseError("load expects a filename")
 				}
-				err := loadFile(e, filename.s)
+				err := LoadFile(e, filename.s)
 				if err != nil {
 					return nil, extendError("load file", err)
 				}
@@ -779,7 +809,7 @@ func init() {
 				L(A("macroexpand-1"), QL(A("+"), A("x"), N(1))),
 				L(A("macroexpand-1"), QL(A("if"), L(), N(1), N(2))),
 			),
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("macroexpand-1 expects a single argument")
 				}
@@ -797,7 +827,7 @@ func init() {
 				L(A("not"), A("t")),
 				L(A("not"), L(A("range"), N(10))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("not expects a single argument")
 				}
@@ -818,7 +848,7 @@ func init() {
 				L(A("number?"), A("t")),
 				L(A("number?"), A("+")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("number? expects a single argument")
 				}
@@ -835,7 +865,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . xs)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				strArgs := []string{}
 				for _, arg := range args {
 					strArgs = append(strArgs, arg.String())
@@ -850,7 +880,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . xs)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				strArgs := []string{}
 				for _, arg := range args {
 					strArgs = append(strArgs, arg.String())
@@ -865,7 +895,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
 				}
@@ -883,7 +913,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("randint expects a single argument")
 				}
@@ -904,8 +934,8 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				line, err := readLine()
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
+				line, err := ReadLine()
 				if err != nil {
 					return nil, extendError("reading readlist input", err)
 				}
@@ -922,7 +952,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termStart()
 				if err != nil {
 					return nil, extendError("starting screen", err)
@@ -936,7 +966,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termEnd()
 				if err != nil {
 					return nil, extendError("stopping screen", err)
@@ -950,7 +980,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				width, height, err := termSize()
 				if err != nil {
 					return nil, extendError("screen-size termSize", err)
@@ -964,7 +994,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termClear()
 				if err != nil {
 					return nil, extendError("screen-clear termClear", err)
@@ -978,7 +1008,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 0 {
 					return nil, baseError("getkey expects no arguments")
 				}
@@ -995,7 +1025,7 @@ func init() {
 			FixedArity: 3,
 			NAry:       false,
 			ArgString:  "(x y list)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 3 {
 					return nil, baseError("screen-write expects 3 arguments")
 				}
@@ -1024,7 +1054,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(cmd)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("shell expects a single argument")
 				}
@@ -1037,7 +1067,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(xs)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("shuffle expects a single argument")
 				}
@@ -1061,7 +1091,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(ms)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("sleep expects a single argument")
 				}
@@ -1084,7 +1114,7 @@ func init() {
 				L(A("sort"), QL()),
 				L(A("sort"), QL(A("c"), A("b"), A("a"))),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("sort expects a single argument")
 				}
@@ -1130,7 +1160,7 @@ func init() {
 				L(A("sort-by"), A("first"), QL()),
 				L(A("sort-by"), A("second"), QL(L(A("quux"), N(333)), L(A("zip"), N(222)), L(A("afar"), N(111)))),
 			),
-			Fn: func(args []Sexpr, e *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 2 {
 					return nil, baseError("sort-by expects two arguments")
 				}
@@ -1185,7 +1215,7 @@ func init() {
 				L(A("source"), A("map")),
 				L(A("source"), A("+")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("source expects a single argument")
 				}
@@ -1214,7 +1244,7 @@ func init() {
 				L(A("split"), N(123)),
 				L(A("split"), QA("abc")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("split expects a single argument")
 				}
@@ -1234,7 +1264,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . exprs)",
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Nil, nil
 				}
@@ -1255,7 +1285,7 @@ func init() {
 			Examples: E(
 				L(A("upcase"), QA("abc")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("upcase expects a single argument")
 				}
@@ -1275,8 +1305,8 @@ func init() {
 			Examples: E(
 				L(A("version")),
 			),
-			Fn: func(args []Sexpr, _ *env) (Sexpr, error) {
-				versionSexprs := semverAsExprs(version)
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
+				versionSexprs := semverAsExprs(Version)
 				return mkListAsConsWithCdr(versionSexprs, Nil), nil
 			},
 		},

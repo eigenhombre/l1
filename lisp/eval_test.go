@@ -1,4 +1,4 @@
-package main
+package lisp
 
 import (
 	"os"
@@ -8,8 +8,8 @@ import (
 
 // See also: tests.l1
 func TestEval(t *testing.T) {
-	globals := initGlobals()
-	err := lexParseEval(rawCore, &globals, false)
+	globals := InitGlobals()
+	err := LexParseEval(RawCore, &globals)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -145,7 +145,7 @@ func TestEval(t *testing.T) {
 	}
 	examples = append(examples, "> (help)\n")
 	outstr := strings.Join(examples, "\n")
-	outstr += shortDocStr(&globals)
+	outstr += ShortDocStr(&globals)
 	bs := []byte(outstr)
 	bs = append(bs, "\n> ^D\n$\n"...)
 	err = os.WriteFile("examples.txt", bs, 0644)

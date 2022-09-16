@@ -1,6 +1,6 @@
-package main
+package lisp
 
-func handleQuoteItem(tokens []token, i int, operatorName string) (Sexpr, int, error) {
+func handleQuoteItem(tokens []Token, i int, operatorName string) (Sexpr, int, error) {
 	if i >= len(tokens) {
 		return nil, 0, baseErrorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
 	}
@@ -12,7 +12,7 @@ func handleQuoteItem(tokens []token, i int, operatorName string) (Sexpr, int, er
 	return item, incr, nil
 }
 
-func parseNext(tokens []token, i int) (Sexpr, int, error) {
+func parseNext(tokens []Token, i int) (Sexpr, int, error) {
 	if i >= len(tokens) {
 		return nil, 0, baseErrorf("unexpected end of input; index=%d, tokens=%v", i, tokens)
 	}
@@ -65,7 +65,8 @@ func parseNext(tokens []token, i int) (Sexpr, int, error) {
 	}
 }
 
-func parse(tokens []token) ([]Sexpr, error) {
+// Parse takes a slice of tokens and returns a slice of Sexprs.
+func Parse(tokens []Token) ([]Sexpr, error) {
 	ret := []Sexpr{}
 	i := 0
 	// Look for shebang, only at beginning of file:
@@ -87,13 +88,13 @@ func parse(tokens []token) ([]Sexpr, error) {
 }
 
 // parseList is used when a list has been detected in a slice of tokens.
-func parseList(tokens []token) (Sexpr, int, error) {
+func parseList(tokens []Token) (Sexpr, int, error) {
 	chunkEnd, endTok, err := listChunk(tokens)
 	if err != nil {
 		return nil, 0, err
 	}
 	if endTok.lexeme.Typ == itemDot {
-		carList, err := parse(tokens[1:chunkEnd])
+		carList, err := Parse(tokens[1:chunkEnd])
 		if err != nil {
 			return nil, 0, err
 		}
@@ -101,13 +102,13 @@ func parseList(tokens []token) (Sexpr, int, error) {
 		if err != nil {
 			return nil, 0, err
 		}
-		cdrList, err := parse(tokens[chunkEnd+1 : chunkEnd+chunk2End])
+		cdrList, err := Parse(tokens[chunkEnd+1 : chunkEnd+chunk2End])
 		if err != nil {
 			return nil, 0, err
 		}
 		return mkListAsConsWithCdr(carList, cdrList[0]), chunkEnd + chunk2End + 1, nil
 	}
-	contents, err := parse(tokens[1:chunkEnd])
+	contents, err := Parse(tokens[1:chunkEnd])
 	if err != nil {
 		return nil, 0, err
 	}
@@ -115,10 +116,10 @@ func parseList(tokens []token) (Sexpr, int, error) {
 }
 
 func lexAndParse(ss []string) ([]Sexpr, error) {
-	return parse(lexItems(ss))
+	return Parse(LexItems(ss))
 }
 
-func listChunk(tokens []token) (int, token, error) {
+func listChunk(tokens []Token) (int, Token, error) {
 	level := 0
 	for i, token := range tokens {
 		switch token.lexeme.Typ {
@@ -135,10 +136,10 @@ func listChunk(tokens []token) (int, token, error) {
 			}
 		}
 	}
-	return 0, token{}, baseError("unbalanced parens")
+	return 0, Token{}, baseError("unbalanced parens")
 }
 
-func dotChunk(tokens []token) (int, error) {
+func dotChunk(tokens []Token) (int, error) {
 	level := 1
 	for i, token := range tokens {
 		switch token.lexeme.Typ {

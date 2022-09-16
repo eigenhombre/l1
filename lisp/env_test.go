@@ -1,4 +1,4 @@
-package main
+package lisp
 
 import (
 	"reflect"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestEnv(t *testing.T) {
-	assertVal := func(e *env, sym string, val Sexpr) {
+	assertVal := func(e *Env, sym string, val Sexpr) {
 		lookupVal, found := e.Lookup(sym)
 		if !found {
 			t.Errorf("expected to find %s in %v", sym, e)

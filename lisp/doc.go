@@ -1,4 +1,4 @@
-package main
+package lisp
 
 import (
 	"fmt"
@@ -384,7 +384,7 @@ func formatLambdaArgs(args []string, restArg string) string {
 	return fmt.Sprintf("(%s . %s)", strings.Join(args, " "), restArg)
 }
 
-func examplesToString(examples *ConsCell, e *env) string {
+func examplesToString(examples *ConsCell, e *Env) string {
 	ret := ""
 	for {
 		if examples == Nil {
@@ -410,7 +410,7 @@ func examplesToString(examples *ConsCell, e *env) string {
 	return ret
 }
 
-func availableForms(e *env) []formRec {
+func availableForms(e *Env) []formRec {
 	// Special forms - only need to add formatted column description:
 	out := []formRec{}
 	for _, form := range specialForms {
@@ -487,7 +487,9 @@ func escapeSpecialChars(s string) string {
 	return s
 }
 
-func longDocStr(e *env) string {
+// LongDocStr returns a long, Markdown docstr for a function, macro or
+// special form.
+func LongDocStr(e *Env) string {
 	sortedForms := availableForms(e)
 	summary := fmt.Sprintf("# API Index\n%d forms available:", len(sortedForms))
 	for _, form := range sortedForms {
@@ -539,7 +541,9 @@ Args: %s
 	return strings.Join(outStrs, "\n")
 }
 
-func shortDocStr(e *env) string {
+// ShortDocStr returns an abbreviated explanation of all functions,
+// macros and special forms.
+func ShortDocStr(e *Env) string {
 	outStrs := []string{}
 	outStrs = append(outStrs,
 		"l1 - a Lisp interpreter.\n",
@@ -560,7 +564,7 @@ func shortDocStr(e *env) string {
 }
 
 // a map... my kingdom for a map...
-func formsAsSexprList(e *env) []Sexpr {
+func formsAsSexprList(e *Env) []Sexpr {
 	out := []Sexpr{}
 	for _, form := range availableForms(e) {
 		out = append(out, Atom{form.name})

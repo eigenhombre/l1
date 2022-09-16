@@ -13,11 +13,11 @@ fast: test ${PROG} l1-tests run-examples lint doc
 deps:
 	go get .
 
-${PROG}: *.go l1.l1
+${PROG}: *.go lisp/*.go lisp/l1.l1
 	go build -o l1 .
 
 test:
-	go test .
+	go test ./lisp
 
 l1-tests: ${PROG}
 	./l1 tests.l1

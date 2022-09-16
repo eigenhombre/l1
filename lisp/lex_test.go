@@ -1,4 +1,4 @@
-package main
+package lisp
 
 import (
 	"reflect"
@@ -8,9 +8,9 @@ import (
 )
 
 func TestLex(t *testing.T) {
-	abbrev := func(typ lexutil.ItemType) func(string, int) token {
-		return func(input string, line int) token {
-			return token{lexutil.LexItem{Typ: typ, Val: input}, line}
+	abbrev := func(typ lexutil.ItemType) func(string, int) Token {
+		return func(input string, line int) Token {
+			return Token{lexutil.LexItem{Typ: typ, Val: input}, line}
 		}
 	}
 	S := func(input ...string) []string {
@@ -28,15 +28,15 @@ func TestLex(t *testing.T) {
 	COMMENTNEXT := abbrev(itemCommentNext)
 	SHEBANG := abbrev(itemShebang)
 	Err := abbrev(itemError)
-	toks := func(items ...token) []token {
+	toks := func(items ...Token) []Token {
 		if len(items) == 0 {
-			return []token{}
+			return []Token{}
 		}
 		return items
 	}
 	var tests = []struct {
 		input  []string
-		output []token
+		output []Token
 	}{
 		{S(""), toks()},
 		{S(" "), toks()},
@@ -113,7 +113,7 @@ func TestLex(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		items := lexItems(test.input)
+		items := LexItems(test.input)
 		if !reflect.DeepEqual(items, test.output) {
 			t.Errorf("%q: expected %v, got %v ... ERROR", test.input, test.output, items)
 		} else {

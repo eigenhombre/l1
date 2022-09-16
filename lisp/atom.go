@@ -1,4 +1,4 @@
-package main
+package lisp
 
 // Atom is the primitive symbolic type.
 type Atom struct {

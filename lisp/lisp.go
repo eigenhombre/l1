@@ -1,4 +1,4 @@
-package main
+package lisp
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ type Sexpr interface {
 	Equal(Sexpr) bool
 }
 
-func evAtom(a Atom, e *env) (Sexpr, error) {
+func evAtom(a Atom, e *Env) (Sexpr, error) {
 	if a.s == "t" {
 		return a, nil
 	}
@@ -35,7 +35,7 @@ func isCxr(a Atom) bool {
 	return cxrRe.MatchString(a.s) && a.s != "car" && a.s != "cdr"
 }
 
-func extractCxrLambda(t Atom, e *env) (Sexpr, error) {
+func extractCxrLambda(t Atom, e *Env) (Sexpr, error) {
 	args := Nil
 	for i := 1; i < len(t.s)-1; i++ {
 		// isCxr guarantees that the string is of the form c[ad]+r, so
@@ -51,7 +51,7 @@ func extractCxrLambda(t Atom, e *env) (Sexpr, error) {
 	return newLambda, nil
 }
 
-func evDef(args *ConsCell, e *env) (Sexpr, error) {
+func evDef(args *ConsCell, e *Env) (Sexpr, error) {
 	if args == Nil {
 		return nil, baseError("missing argument")
 	}
@@ -75,7 +75,7 @@ func evDef(args *ConsCell, e *env) (Sexpr, error) {
 	return val, nil
 }
 
-func evSet(args *ConsCell, e *env) (Sexpr, error) {
+func evSet(args *ConsCell, e *Env) (Sexpr, error) {
 	if args == Nil {
 		return nil, baseError("missing argument")
 	}
@@ -99,7 +99,7 @@ func evSet(args *ConsCell, e *env) (Sexpr, error) {
 	return val, nil
 }
 
-func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
+func evDefn(args *ConsCell, isMacro bool, e *Env) (Sexpr, error) {
 	errPreamble := "defn"
 	if isMacro {
 		errPreamble = "defmacro"
@@ -127,7 +127,7 @@ func evDefn(args *ConsCell, isMacro bool, e *env) (Sexpr, error) {
 	return Nil, nil
 }
 
-func evErrors(args *ConsCell, e *env) (Sexpr, error) {
+func evErrors(args *ConsCell, e *Env) (Sexpr, error) {
 	if args == Nil {
 		return nil, baseError("no error spec given")
 	}
@@ -164,7 +164,7 @@ func evErrors(args *ConsCell, e *env) (Sexpr, error) {
 
 // Both eval, apply and macroexpansion use this to bind lambda arguments in the
 // supplied environment:
-func setLambdaArgsInEnv(e *env, lambda *lambdaFn, evaledList []Sexpr) error {
+func setLambdaArgsInEnv(e *Env, lambda *lambdaFn, evaledList []Sexpr) error {
 	var err error
 	if lambda.restArg != noRestArg {
 		if len(lambda.args) > len(evaledList) {
@@ -192,7 +192,7 @@ func setLambdaArgsInEnv(e *env, lambda *lambdaFn, evaledList []Sexpr) error {
 	return nil
 }
 
-func isMacroCall(args Sexpr, e *env) bool {
+func isMacroCall(args Sexpr, e *Env) bool {
 	if args == Nil {
 		return false
 	}
@@ -215,7 +215,7 @@ func isMacroCall(args Sexpr, e *env) bool {
 	return f.isMacro
 }
 
-func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
+func macroexpand1(expr Sexpr, e *Env) (Sexpr, error) {
 	if !isMacroCall(expr, e) {
 		return expr, nil
 	}
@@ -254,7 +254,7 @@ func macroexpand1(expr Sexpr, e *env) (Sexpr, error) {
 	}
 }
 
-func macroexpand(expr Sexpr, e *env) (Sexpr, error) {
+func macroexpand(expr Sexpr, e *Env) (Sexpr, error) {
 	var ret Sexpr = expr
 	var err error
 	for {
@@ -323,7 +323,7 @@ func syntaxQuote(arg Sexpr) Sexpr {
 	}
 }
 
-func eval(exprArg Sexpr, e *env) (Sexpr, error) {
+func eval(exprArg Sexpr, e *Env) (Sexpr, error) {
 	expr := exprArg
 	var err error
 top:
@@ -668,4 +668,30 @@ top:
 	default:
 		return nil, baseErrorf("unknown expression type: %q", t)
 	}
+}
+
+// Evaluate a list of expressions.  Return any errors.
+func EvalExprs(exprs []Sexpr, e *Env, doPrint bool) error {
+	for _, g := range exprs {
+		res, err := eval(g, e)
+		if err != nil {
+			if doPrint {
+				fmt.Printf("ERROR:\n%v\n", err)
+			}
+			return err
+		}
+		if doPrint {
+			fmt.Printf("%v\n", res)
+		}
+	}
+	return nil
+}
+
+// LexParseEval lexes, parses, and evaluates the given string.
+func LexParseEval(s string, e *Env) error {
+	got, err := lexAndParse(strings.Split(s, "\n"))
+	if err != nil {
+		return err
+	}
+	return EvalExprs(got, e, false)
 }
