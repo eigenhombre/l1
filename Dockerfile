@@ -11,4 +11,3 @@ RUN go install -v golang.org/x/lint/golint@latest
 COPY . .
 
 RUN make clean verbose
-RUN cat examples.txt
