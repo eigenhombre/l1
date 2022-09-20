@@ -180,6 +180,9 @@ helpful for this sort of construction:
     QMARK
     SPACE
     TAB
+    QUOTE
+    DQUOTE
+    BQUOTE
 
 These all evaluate to atoms whose names are the unreadable characters,
 some of which may be helpful for text games and other diversions:
