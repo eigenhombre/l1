@@ -19,7 +19,7 @@ for converting atoms and numbers to lists, and vice-versa.
 
 # Objectives
 
-1. Provide a Lisp one can build [roguelikes](https://en.wikipedia.org/wiki/Roguelike) and other text games with.
+1. Provide a Lisp one can build [roguelikes](https://github.com/eigenhombre/onomat/) and other text games with.
 1. Provide a Lisp for studying "[Good Old Fashioned
    AI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)"
    programs such as those described in [Paradigms of Artificial
