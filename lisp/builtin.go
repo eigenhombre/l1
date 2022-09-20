@@ -27,6 +27,9 @@ func InitGlobals() Env {
 	globals.Set("HASH", Atom{"#"})
 	globals.Set("ATSIGN", Atom{"@"})
 	globals.Set("CHECK", Atom{"✓"})
+	globals.Set("QUOTE", Atom{"'"})
+	globals.Set("BQUOTE", Atom{"`"})
+	globals.Set("DQUOTE", Atom{"\""})
 	return globals
 }
 
