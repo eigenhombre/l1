@@ -19,7 +19,9 @@ for converting atoms and numbers to lists, and vice-versa.
 
 # Objectives
 
-1. Provide a Lisp one can build [roguelikes](https://github.com/eigenhombre/onomat/) and other text games with.
+1. Provide a Lisp one can easily build
+   [roguelikes](https://github.com/eigenhombre/onomat/) and other text
+   games with.
 1. Provide a Lisp for studying "[Good Old Fashioned
    AI](https://en.wikipedia.org/wiki/Symbolic_artificial_intelligence)"
    programs such as those described in [Paradigms of Artificial
@@ -135,6 +137,10 @@ installed `l1` using the Go installer, by looking under `$GOPATH`. For
 example, if the `latest` release is `v0.0.42`,
 
     $ ls $GOPATH/pkg/mod/github.com/eigenhombre/l1\@v0.0.42/examples/
+
+[An example roguelike game](https://github.com/eigenhombre/onomat/)
+lives in [a separate
+repository](https://github.com/eigenhombre/onomat/).
 
 ## Example REPL Session
 
