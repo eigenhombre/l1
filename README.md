@@ -54,8 +54,10 @@ slow for longer calculations.
 
 ## Option 1: Install using Go
 
-You should have Go installed and configured (including [setting GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).  At some later point, pre-built
-artifacts for various architectures may be available here.
+You should have Go installed and configured (including [setting
+GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).
+At some later point, pre-built artifacts for various architectures may
+be available here.
 
 To install `l1`,
 
@@ -69,8 +71,9 @@ and then, for example,
 
 ## Option 2: Download Pre-built Binary
 
-Releases are built for 22 OS / architecture combinations.  (WARNING:
-many/most of these are not tested regularly!)
+If you don't want to install Go, `l1` binaries are built for 22 OS /
+architecture combinations for every release.  (WARNING: many/most of
+these are not tested regularly!)
 
 1. Head on over to the [Releases Page](https://github.com/eigenhombre/l1/releases).
 1. Download the binary appropriate for your operating system.
