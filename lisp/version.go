@@ -1,3 +1,3 @@
 package lisp
 
-var Version string = "v0.0.52-dirty"
+var Version string = "v0.0.53"
