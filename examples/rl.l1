@@ -22,20 +22,29 @@
   (press-any-key)
   (screen-clear))
 
-(def MAXROOM 20)
-(def MINROOM 4)
+(def MAXROOM-SIZE 20)
+(def MINROOM-SIZE 4)
+(def MSGBOX-MIN-X 1)
+(def MSGBOX-MIN-Y 2)
+(def MSGBOX-MAX-X 30)
+(def MSGBOX-MAX-Y 20)
+
+(defn minmax (x mn mx)
+  (max mn (min mx x)))
 
 (defn make-room (screen-dims)
   (let* ((w (first screen-dims))
          (h (second screen-dims))
-         (room-width (min MAXROOM
-                          (max MINROOM
-                               (inc (randint (dec w))))))
-         (room-height (min MAXROOM
-                           (max MINROOM
-                                (inc (randint (dec h))))))
-         (room-pos-w (inc (randint (inc (- w room-width)))))
-         (room-pos-h (inc (randint (inc (- h room-height))))))
+         (room-width (minmax (inc (randint (dec w)))
+                             MINROOM-SIZE
+                             MAXROOM-SIZE))
+         (room-height (minmax (inc (randint (dec h)))
+                              MINROOM-SIZE
+                              MAXROOM-SIZE))
+         (available-w (- w room-width MSGBOX-MAX-X))
+         (available-h (- h room-height))
+         (room-pos-w (+ MSGBOX-MAX-X (inc (randint available-w))))
+         (room-pos-h (inc (randint available-h))))
     (list room-pos-w
           room-pos-h
           room-width
@@ -70,10 +79,6 @@
   (screen-write (player-x player)
                 (player-y player)
                 (list ATSIGN)))
-
-(defn move-player-y (player incr)
-  (list (first player)
-        (+ (second player) incr)))
 
 (defn update-pos (l n f)
   (doc (update nth position of a list by applying f to the
@@ -116,9 +121,6 @@
                 (monster-y monster)
                 (list (monster-char monster))))
 
-(defn abs (x)
-  (if (neg? x) (- x) x))
-
 (defn calc-delta (x1 x2)
   (let ((delta (- x2 x1)))
     (if (zero? delta)
@@ -133,70 +135,141 @@
          (dx (calc-delta px mx))
          (dy (calc-delta py my))
          (r (isqrt (+ (** (- px mx) 2) (** (- py my) 2)))))
-    (if (zero? (randint r))
+    (if (zero? (randint (inc r)))
       ;; FIXME: breaks monster encapsulation:
       (list (car monster) (- mx dx) (- my dy))
       monster)))
 
-(defmacro prepend! (l x)
+(defmacro prepend! (x l)
   `(set! ~l (cons ~x ~l)))
 
-;; main ............
-(let ((player-alive t))
-  (with-screen
+(defmacro append-circular! (x l)
+  `(set! ~l (concat2 (take 30 ~l) (list ~x))))
+
+(defn line-points (x1 y1 x2 y2)
+  (cond ((= x1 x2)
+         (map (comp (lambda (q) (list x1 q))
+                    (partial + (min y1 y2)))
+              (range (inc (abs (- y2 y1))))))
+        ((= y1 y2)
+         (map (comp (lambda (q) (list q y1))
+                    (partial + (min x1 x2)))
+              (range (inc (abs (- x2 x1))))))
+        (t (let* ((x x2)
+                  (y y2)
+                  (ret (list (list x y))))
+             (while (< x1 x)
+               (let ((delta (if (> x2 x1) -1 1)))
+                 (set! x (+ x delta))
+                 (set! y (+ y2 (/ (* (- x x2)
+                                     (- y2 y1))
+                                  (- x2 x1))))
+                 (prepend! (list x y) ret)))
+             ret))))
+
+(defn draw-line (chratom x1 y1 x2 y2)
+  (let ((points (line-points x1 y1 x2 y2)))
+    (foreach p points
+      (screen-write (car p) (cadr p) (list chratom)))))
+
+(defn draw-box (chratom x1 y1 x2 y2)
+  (draw-line chratom x1 y1 x1 y2)
+  (draw-line chratom x1 y2 x2 y2)
+  (draw-line chratom x2 y1 x2 y2)
+  (draw-line chratom x1 y1 x2 y1))
+
+(def msgbox-msgs ())
+
+(defn list-to-atom (l)
+  (fuse (interpose SPACE l)))
+
+(defn render-msgs (max-msg-y)
+  ;; (draw-box '/
+  ;;           MSGBOX-MIN-X
+  ;;           (- max-msg-y 20)
+  ;;           MSGBOX-MAX-X max-msg-y)
+  (foreach pair (enumerate msgbox-msgs)
+    (screen-write (inc MSGBOX-MIN-X)
+                  (+ max-msg-y -19 (car pair))
+                  (list (list-to-atom (cadr pair))))))
+
+(defn printm (x)
+  (append-circular! x msgbox-msgs))
+
+(defn main ()
+  (let ((player-alive t)
+        (continue t))
+    (with-screen
       (intro)
-    (let* ((dims (screen-size))
-           (room (make-room dims))
-           (player-pos (random-position-in-room room))
-           (player (make-player player-pos))
-           (continue t)
-           (move-if-valid (lambda (coords)
-                            (when (valid-move room
-                                              (player-x player)
-                                              (player-y player)
-                                              coords)
-                              (set! player (move-player player coords)))))
-           (monsters (monsters-for-room room))
-           (update-monsters!
-             (lambda ()
-               (when (zero? (randint 5))
-                 (prepend! monsters (make-monster room)))
-               (set! monsters
-                     (map (partial move-monster room player)
-                          monsters))
-               (foreach m monsters
-                 (draw-monster m)
-                 (when (and (= (monster-x m)
-                               (player-x player))
-                            (= (monster-y m)
-                               (player-y player)))
-                   (set! player-alive ())
-                   (set! continue ()))))))
-      (draw-room room)
-      (draw-player player)
-      (foreach m monsters
-        (draw-monster m))
-      (while continue
-        (let ((k (screen-get-key)))
-          (cond
-            ((= k 'q) (set! continue ()))
-            ((or (= k 'h) (= k 'LEFTARROW))
-             (move-if-valid '(-1 0)))
-            ((or (= k 'l) (= k 'RIGHTARROW))
-             (move-if-valid '(1 0)))
-            ((or (= k 'k) (= k 'UPARROW))
-             (move-if-valid '(0 -1)))
-            ((or (= k 'j) (= k 'DOWNARROW))
-             (move-if-valid '(0 1)))
-            ((= k 'y) (move-if-valid '(-1 -1)))
-            ((= k 'u) (move-if-valid '(1 -1)))
-            ((= k 'b) (move-if-valid '(-1 1)))
-            ((= k 'n) (move-if-valid '(1 1)))))
-        (draw-room room)
-        (draw-player player)
-        (update-monsters!))))
-  (println)
-  (when-not player-alive
-    (printl (exclaim '(YOU WERE EATEN BY A MONSTER))))
-  (printl (exclaim '(thanks for playing)))
-  (println))
+      (try
+        (let* ((dims (screen-size))
+               (w (first dims))
+               (h (second dims))
+               (room (make-room dims))
+               (player-pos (random-position-in-room room))
+               (player (make-player player-pos))
+               (teleport
+                 (lambda ()
+                   (set! player (random-position-in-room room))))
+               (move-if-valid
+                 (lambda (coords)
+                   (when (valid-move room
+                                     (player-x player)
+                                     (player-y player)
+                                     coords)
+                     (set! player (move-player player coords)))))
+               (monsters (monsters-for-room room))
+               (update-monsters!
+                 (lambda ()
+                   (when (zero? (randint 5))
+                     (printm (exclaim '(a monster has spawned)))
+                     (prepend! (make-monster room) monsters))
+                   (set! monsters
+                         (map (partial move-monster room player)
+                              monsters))
+                   (foreach m monsters
+                     (draw-monster m)
+                     (when (and (= (monster-x m)
+                                   (player-x player))
+                                (= (monster-y m)
+                                   (player-y player)))
+                       (set! player-alive ())
+                       (printm (exclaim '(YOU DIED)))
+                       (render-msgs (dec h))
+                       (screen-get-key)
+                       (set! continue ()))))))
+          (draw-room room)
+          (draw-player player)
+          (foreach m monsters
+            (draw-monster m))
+          (while (and continue player-alive)
+            (render-msgs (dec h))
+            (let ((k (screen-get-key)))
+              (cond
+                ((= k 'q) (set! continue ()))
+                ((or (= k 'h) (= k 'LEFTARROW))
+                 (move-if-valid '(-1 0)))
+                ((or (= k 'l) (= k 'RIGHTARROW))
+                 (move-if-valid '(1 0)))
+                ((or (= k 'k) (= k 'UPARROW))
+                 (move-if-valid '(0 -1)))
+                ((or (= k 'j) (= k 'DOWNARROW))
+                 (move-if-valid '(0 1)))
+                ((= k 'y) (move-if-valid '(-1 -1)))
+                ((= k 'u) (move-if-valid '(1 -1)))
+                ((= k 'b) (move-if-valid '(-1 1)))
+                ((= k 'n) (move-if-valid '(1 1)))
+                ((= k 't) (teleport))))
+            (draw-room room)
+            (draw-player player)
+            (update-monsters!)))
+        (catch e
+          (screen-end)
+          (println e))))
+    (println)
+    (when-not player-alive
+      (printl (exclaim '(YOU WERE EATEN BY A MONSTER))))
+    (printl (exclaim '(thanks for playing)))
+    (println)))
+
+(main)

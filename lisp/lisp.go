@@ -57,7 +57,7 @@ func evDef(args *ConsCell, e *Env) (Sexpr, error) {
 	}
 	carAtom, ok := args.car.(Atom)
 	if !ok {
-		return nil, baseError("first argument must be an atom")
+		return nil, baseError("def: first argument must be an atom")
 	}
 	name := carAtom.s
 	args, ok = args.cdr.(*ConsCell)
@@ -79,9 +79,12 @@ func evSet(args *ConsCell, e *Env) (Sexpr, error) {
 	if args == Nil {
 		return nil, baseError("missing argument")
 	}
+	if args.car == Nil {
+		return nil, baseError("set!: first argument cannot be nil!")
+	}
 	carAtom, ok := args.car.(Atom)
 	if !ok {
-		return nil, baseError("first argument must be an atom")
+		return nil, baseErrorf("set!: first argument must be an atom")
 	}
 	name := carAtom.s
 	args, ok = args.cdr.(*ConsCell)

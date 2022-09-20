@@ -35,7 +35,8 @@ func termClear() error {
 
 func termEnd() error {
 	if screen == nil {
-		return baseError("screen not initialized")
+		// Do nothing -- already ended / not initialized
+		return nil
 	}
 	screen.Fini()
 	screen = nil

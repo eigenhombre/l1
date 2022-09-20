@@ -608,3 +608,31 @@
         (not= 1 2)
         (not= 'a 'a)))
   (not (apply = terms)))
+
+(defn interpose (x l)
+  (doc (interpose x between all elements of l)
+       (examples (interpose BANG (range 5))))
+  (cond ((not l) ())
+        ((not (cdr l)) l)
+        (t (cons (car l)
+                 (cons x (interpose x (cdr l)))))))
+
+(defn enumerate (l)
+  (doc (returning list of (i, x) pairs where i is the index
+                  (from zero) and x is the original element from l)
+       (examples
+        (enumerate '(a b c))))
+  (let ((c 0)
+        (ret ()))
+    (foreach x l
+      (set! ret (cons (list c x)
+                      ret))
+      (set! c (inc c)))
+    (reverse ret)))
+
+(defn abs (x)
+  (doc (return absolute value of x)
+       (examples
+        (abs 1)
+        (abs -100)))
+  (if (neg? x) (- x) x))

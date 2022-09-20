@@ -173,6 +173,7 @@ example, if the `latest` release is `v0.0.42`,
                  =  N    1+  Return t if the arguments are equal, () otherwise
                  >  N    1+  Return t if the arguments are in strictly decreasing order, () otherwise
                 >=  N    1+  Return t if the arguments are in decreasing (or equal) order, () otherwise
+               abs  F    1   Return absolute value of x
                and  S    0+  Boolean and
              apply  N    2   Apply a function to a list of arguments
              atom?  N    1   Return t if the argument is an atom, () otherwise
@@ -200,6 +201,7 @@ example, if the `latest` release is `v0.0.42`,
            dotimes  M    1+  Execute body for each value in a list
           downcase  N    1   Return a new atom with all characters in lower case
               drop  F    2   Drop n items from a list, then return the rest
+         enumerate  F    1   Returning list of (i, x) pairs where i is the index (from zero) and x is the original element from l
              error  S    1   Raise an error
             errors  S    1+  Error checking (for tests)
               eval  N    1   Evaluate an expression
@@ -217,6 +219,7 @@ example, if the `latest` release is `v0.0.42`,
                 if  M    3   Simple conditional with two branches
             if-not  M    3   Simple (inverted) conditional with two branches
                inc  F    1   Return the supplied integer argument, plus one
+         interpose  F    2   Interpose x between all elements of l
                 is  M    1   Assert a condition is truthy, or show failing code
              isqrt  N    1   Integer square root
               juxt  F    0+  Create a function which combines multiple operations into a single list of results

@@ -1,5 +1,5 @@
 # API Index
-131 forms available:
+134 forms available:
 [`*`](#-STAR)
 [`**`](#-STAR-STAR)
 [`+`](#+)
@@ -10,6 +10,7 @@
 [`=`](#=)
 [`>`](#>)
 [`>=`](#>=)
+[`abs`](#abs)
 [**`and`**](#and)
 [`apply`](#apply)
 [`atom?`](#atom-QMARK)
@@ -37,6 +38,7 @@
 [*`dotimes`*](#dotimes)
 [`downcase`](#downcase)
 [`drop`](#drop)
+[`enumerate`](#enumerate)
 [**`error`**](#error)
 [**`errors`**](#errors)
 [`eval`](#eval)
@@ -54,6 +56,7 @@
 [*`if`*](#if)
 [*`if-not`*](#if-not)
 [`inc`](#inc)
+[`interpose`](#interpose)
 [*`is`*](#is)
 [`isqrt`](#isqrt)
 [`juxt`](#juxt)
@@ -440,6 +443,35 @@ Args: `(x . xs)`
 > (>= 1 1)
 ;;=>
 t
+
+```
+
+
+[<sub><sup>Back to index</sup></sub>](#api-index)
+-----------------------------------------------------
+		
+
+<a id="abs"></a>
+## `abs`
+
+Return absolute value of x
+
+Type: function
+
+Arity: 1 
+
+Args: `(x)`
+
+
+### Examples
+
+```
+> (abs 1)
+;;=>
+1
+> (abs -100)
+;;=>
+100
 
 ```
 
@@ -1220,6 +1252,32 @@ Args: `(n l)`
 -----------------------------------------------------
 		
 
+<a id="enumerate"></a>
+## `enumerate`
+
+Returning list of (i, x) pairs where i is the index (from zero) and x is the original element from l
+
+Type: function
+
+Arity: 1 
+
+Args: `(l)`
+
+
+### Examples
+
+```
+> (enumerate (quote (a b c)))
+;;=>
+((0 a) (1 b) (2 c))
+
+```
+
+
+[<sub><sup>Back to index</sup></sub>](#api-index)
+-----------------------------------------------------
+		
+
 <a id="error"></a>
 ## `error`
 
@@ -1620,6 +1678,32 @@ Arity: 1
 
 Args: `(n)`
 
+
+
+[<sub><sup>Back to index</sup></sub>](#api-index)
+-----------------------------------------------------
+		
+
+<a id="interpose"></a>
+## `interpose`
+
+Interpose x between all elements of l
+
+Type: function
+
+Arity: 2 
+
+Args: `(x l)`
+
+
+### Examples
+
+```
+> (interpose BANG (range 5))
+;;=>
+(0 ! 1 ! 2 ! 3 ! 4)
+
+```
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
