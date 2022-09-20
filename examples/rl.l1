@@ -127,7 +127,14 @@
       0
       (/ delta (abs delta)))))
 
-(defn move-monster (room player monster)
+(defn monster-at? (monsters x y)
+  ;; FIXME: Getting inefficient.  Better for a crowded board to
+  ;; associate one or more occupants with room locations?
+  (some (lambda (m) (and (= x (monster-x m))
+                         (= y (monster-y m))))
+        monsters))
+
+(defn move-monster (room player monsters monster)
   (let* ((px (player-x player))
          (py (player-y player))
          (mx (monster-x monster))
@@ -135,10 +142,11 @@
          (dx (calc-delta px mx))
          (dy (calc-delta py my))
          (r (isqrt (+ (** (- px mx) 2) (** (- py my) 2)))))
-    (if (zero? (randint (inc r)))
+    (cond
+      ((pos? (randint (inc r))) monster)
+      ((monster-at? monsters (- mx dx) (- my dy)) monster)
       ;; FIXME: breaks monster encapsulation:
-      (list (car monster) (- mx dx) (- my dy))
-      monster)))
+      (t (list (car monster) (- mx dx) (- my dy))))))
 
 (defmacro prepend! (x l)
   `(set! ~l (cons ~x ~l)))
@@ -198,7 +206,9 @@
 
 (defn main ()
   (let ((player-alive t)
-        (continue t))
+        (continue t)
+        (turns 0)
+        (monsters ()))
     (with-screen
       (intro)
       (try
@@ -208,9 +218,6 @@
                (room (make-room dims))
                (player-pos (random-position-in-room room))
                (player (make-player player-pos))
-               (teleport
-                 (lambda ()
-                   (set! player (random-position-in-room room))))
                (move-if-valid
                  (lambda (coords)
                    (when (valid-move room
@@ -218,14 +225,23 @@
                                      (player-y player)
                                      coords)
                      (set! player (move-player player coords)))))
-               (monsters (monsters-for-room room))
+               (_ (set! monsters (monsters-for-room room)))
+               (add-monster!
+                 (lambda ()
+                   (printm (exclaim '(a monster has spawned)))
+                   (prepend! (make-monster room) monsters)))
+               (teleport
+                 (lambda ()
+                   (printm '(You teleport.))
+                   (add-monster!)
+                   (add-monster!)
+                   (set! player (random-position-in-room room))))
                (update-monsters!
                  (lambda ()
                    (when (zero? (randint 5))
-                     (printm (exclaim '(a monster has spawned)))
-                     (prepend! (make-monster room) monsters))
+                     (add-monster!))
                    (set! monsters
-                         (map (partial move-monster room player)
+                         (map (partial move-monster room player monsters)
                               monsters))
                    (foreach m monsters
                      (draw-monster m)
@@ -243,6 +259,7 @@
           (foreach m monsters
             (draw-monster m))
           (while (and continue player-alive)
+            (set! turns (inc turns))
             (render-msgs (dec h))
             (let ((k (screen-get-key)))
               (cond
@@ -268,7 +285,8 @@
           (println e))))
     (println)
     (when-not player-alive
-      (printl (exclaim '(YOU WERE EATEN BY A MONSTER))))
+      (printl `(You were eaten by a monster after ~turns turns.
+                    Your score is ~(* turns (len monsters)) points.)))
     (printl (exclaim '(thanks for playing)))
     (println)))
 
