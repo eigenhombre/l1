@@ -1,4 +1,4 @@
-.PHONY: test clean deps lint all
+.PHONY: test clean deps lint all fuzz
 .PHONY: verbose doc l1-tests release
 .PHONY: tco-test slow fast run-examples
 
@@ -60,3 +60,7 @@ release:
 	./bumpver
 	make clean
 	make
+
+fuzz:
+	make
+	./l1 examples/fuzz.l1
