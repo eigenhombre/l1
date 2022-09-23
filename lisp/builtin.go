@@ -53,11 +53,10 @@ type Builtin struct {
 	// Fn must take at least this many arguments:
 	FixedArity int
 	// If true, fn can take more arguments:
-	NAry      bool
-	docString string
-	Doc       *ConsCell
-	Args      *ConsCell
-	Examples  *ConsCell
+	NAry     bool
+	Doc      *ConsCell
+	Args     *ConsCell
+	Examples *ConsCell
 }
 
 func (b Builtin) String() string {
