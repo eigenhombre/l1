@@ -32,7 +32,7 @@
                                   sleep
                                   while
                                   with-screen)))
-                       (forms)))
+                       (map car (forms))))
 
 (defn oper ()
   (randchoice operators))
