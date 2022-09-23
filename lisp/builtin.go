@@ -171,23 +171,29 @@ func LoadFile(e *Env, filename string) error {
 var builtins map[string]*Builtin
 
 func init() {
+	// Helper functions to DRY out examples and args:
 	A := func(s string) Atom {
 		return Atom{s}
 	}
 	N := func(n int) Number {
 		return Num(n)
 	}
-	L := func(args ...Sexpr) Sexpr {
+	// FIXME: LE and LC are different because mkListAsConsCell still doesn't
+	// return a ConsCell (see FIXME in that function):
+	LE := func(args ...Sexpr) Sexpr {
 		return mkListAsConsWithCdr(args, Nil)
+	}
+	LC := func(args ...Sexpr) *ConsCell {
+		return list(args...)
 	}
 	E := func(args ...Sexpr) *ConsCell {
 		return mkListAsConsWithCdr(args, Nil).(*ConsCell)
 	}
 	QL := func(args ...Sexpr) *ConsCell {
-		return L(A("quote"), L(args...)).(*ConsCell)
+		return LE(A("quote"), LE(args...)).(*ConsCell)
 	}
 	QA := func(s string) *ConsCell {
-		return L(A("quote"), A(s)).(*ConsCell)
+		return LE(A("quote"), A(s)).(*ConsCell)
 	}
 	C := func(a, b Sexpr) *ConsCell { return Cons(a, b) }
 	RO := func(s string) *ConsCell {
@@ -201,8 +207,8 @@ func init() {
 			NAry:       true,
 			Args:       RO("xs"),
 			Examples: E(
-				L(A("+"), N(1), N(2), N(3)),
-				L(A("+")),
+				LE(A("+"), N(1), N(2), N(3)),
+				LE(A("+")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
@@ -226,9 +232,9 @@ func init() {
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
-				L(A("-"), N(1), N(1)),
-				L(A("-"), N(5), N(2), N(1)),
-				L(A("-"), N(99)),
+				LE(A("-"), N(1), N(1)),
+				LE(A("-"), N(5), N(2), N(1)),
+				LE(A("-"), N(99)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
@@ -258,8 +264,8 @@ func init() {
 			NAry:       true,
 			Args:       RO("xs"),
 			Examples: E(
-				L(A("*"), N(1), N(2), N(3)),
-				L(A("*")),
+				LE(A("*"), N(1), N(2), N(3)),
+				LE(A("*")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
@@ -283,9 +289,9 @@ func init() {
 			NAry:       true,
 			Args:       C(A("numerator"), C(A("denominator1"), A("more"))),
 			Examples: E(
-				L(A("/"), N(1), N(2)),
-				L(A("/"), N(12), N(2), N(3)),
-				L(A("/"), N(1), N(0)),
+				LE(A("/"), N(1), N(2)),
+				LE(A("/"), N(12), N(2), N(3)),
+				LE(A("/"), N(1), N(0)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) < 1 {
@@ -315,9 +321,9 @@ func init() {
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
-				L(A("="), N(1), N(1)),
-				L(A("="), N(1), N(2)),
-				L(A("apply"), A("="), L(A("repeat"), N(10), A("t"))),
+				LE(A("="), N(1), N(1)),
+				LE(A("="), N(1), N(2)),
+				LE(A("apply"), A("="), LE(A("repeat"), N(10), A("t"))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) < 1 {
@@ -336,11 +342,11 @@ func init() {
 			Docstring:  "Return remainder when second arg divides first",
 			FixedArity: 2,
 			NAry:       false,
-			Args:       list(A("x"), A("y")),
+			Args:       LC(A("x"), A("y")),
 			Examples: E(
-				L(A("rem"), N(5), N(2)),
-				L(A("rem"), N(4), N(2)),
-				L(A("rem"), N(1), N(0)),
+				LE(A("rem"), N(5), N(2)),
+				LE(A("rem"), N(4), N(2)),
+				LE(A("rem"), N(1), N(0)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 2 {
@@ -367,10 +373,10 @@ func init() {
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
-				L(A("<"), N(1), N(2)),
-				L(A("<"), N(1), N(1)),
-				L(A("<"), N(1)),
-				L(A("apply"), A("<"), L(A("range"), N(100))),
+				LE(A("<"), N(1), N(2)),
+				LE(A("<"), N(1), N(1)),
+				LE(A("<"), N(1)),
+				LE(A("apply"), A("<"), LE(A("range"), N(100))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
@@ -385,9 +391,9 @@ func init() {
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
-				L(A("<="), N(1), N(2)),
-				L(A("<="), N(1), N(1)),
-				L(A("<="), N(1)),
+				LE(A("<="), N(1), N(2)),
+				LE(A("<="), N(1), N(1)),
+				LE(A("<="), N(1)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
@@ -402,9 +408,9 @@ func init() {
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
-				L(A(">"), N(1), N(2)),
-				L(A(">"), N(1), N(1)),
-				L(A(">"), N(1)),
+				LE(A(">"), N(1), N(2)),
+				LE(A(">"), N(1), N(1)),
+				LE(A(">"), N(1)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
@@ -419,8 +425,8 @@ func init() {
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
-				L(A(">="), N(1), N(2)),
-				L(A(">="), N(1), N(1)),
+				LE(A(">="), N(1), N(2)),
+				LE(A(">="), N(1), N(1)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return compareMultipleNums(func(a, b Number) bool {
@@ -433,10 +439,10 @@ func init() {
 			Docstring:  "Apply a function to a list of arguments",
 			FixedArity: 2,
 			NAry:       false,
-			Args:       list(A("f"), A("args")),
+			Args:       LC(A("f"), A("args")),
 			Examples: E(
-				L(A("apply"), A("+"), L(A("repeat"), N(10), N(1))),
-				L(A("apply"), A("*"), L(A("cdr"), L(A("range"), N(10)))),
+				LE(A("apply"), A("+"), LE(A("repeat"), N(10), N(1))),
+				LE(A("apply"), A("*"), LE(A("cdr"), LE(A("range"), N(10)))),
 			),
 			Fn: applyFn,
 		},
@@ -445,10 +451,10 @@ func init() {
 			Docstring:  "Return t if the argument is an atom, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("atom?"), N(1)),
-				L(A("atom?"), QA("one")),
+				LE(A("atom?"), N(1)),
+				LE(A("atom?"), QA("one")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -465,9 +471,9 @@ func init() {
 			Docstring:  "Return the body of a lambda function",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("f")),
+			Args:       LC(A("f")),
 			Examples: E(
-				L(A("body"), L(A("lambda"), L(A("x")), L(A("+"), A("x"), N(1)))),
+				LE(A("body"), LE(A("lambda"), LE(A("x")), LE(A("+"), A("x"), N(1)))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -485,10 +491,10 @@ func init() {
 			Docstring:  "Return the first element of a list",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("car"), QL(A("one"), A("two"))),
-				L(A("car"), L()),
+				LE(A("car"), QL(A("one"), A("two"))),
+				LE(A("car"), LE()),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -509,11 +515,11 @@ func init() {
 			Docstring:  "Return a list with the first element removed",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 
 			Examples: E(
-				L(A("cdr"), QL(A("one"), A("two"))),
-				L(A("cdr"), L()),
+				LE(A("cdr"), QL(A("one"), A("two"))),
+				LE(A("cdr"), LE()),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -534,11 +540,11 @@ func init() {
 			Docstring:  "Add an element to the front of a (possibly empty) list",
 			FixedArity: 2,
 			NAry:       false,
-			Args:       list(A("x"), A("xs")),
+			Args:       LC(A("x"), A("xs")),
 			Examples: E(
-				L(A("cons"), N(1), QL(A("one"), A("two"))),
-				L(A("cons"), N(1), L()),
-				L(A("cons"), N(1), N(2)),
+				LE(A("cons"), N(1), QL(A("one"), A("two"))),
+				LE(A("cons"), N(1), LE()),
+				LE(A("cons"), N(1), N(2)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 2 {
@@ -552,13 +558,13 @@ func init() {
 			Docstring:  "Return the doclist for a function",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 
 			Examples: E(
-				L(A("doc"), L(A("lambda"), L(A("x")),
-					L(A("doc"), L(A("does"), A("stuff")),
-						L(A("and"), A("other"), A("stuff"))),
-					L(A("+"), A("x"), N(1)))),
+				LE(A("doc"), LE(A("lambda"), LE(A("x")),
+					LE(A("doc"), LE(A("does"), A("stuff")),
+						LE(A("and"), A("other"), A("stuff"))),
+					LE(A("+"), A("x"), N(1)))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -579,10 +585,10 @@ func init() {
 			Docstring:  "Return a new atom with all characters in lower case",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("downcase"), QA("Hello")),
-				L(A("downcase"), QA("HELLO")),
+				LE(A("downcase"), QA("Hello")),
+				LE(A("downcase"), QA("HELLO")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -600,10 +606,10 @@ func init() {
 			Docstring:  "Evaluate an expression",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("eval"), QL(A("one"), A("two"))),
-				L(A("eval"), QL(A("+"), N(1), N(2))),
+				LE(A("eval"), QL(A("one"), A("two"))),
+				LE(A("eval"), QL(A("+"), N(1), N(2))),
 			),
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -642,10 +648,10 @@ func init() {
 			Docstring:  "Fuse a list of numbers or atoms into a single atom",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("fuse"), QL(A("A"), A("B"), A("C"))),
-				L(A("fuse"), L(A("reverse"), L(A("range"), N(10)))),
+				LE(A("fuse"), QL(A("A"), A("B"), A("C"))),
+				LE(A("fuse"), LE(A("reverse"), LE(A("range"), N(10)))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -713,10 +719,10 @@ func init() {
 			Docstring:  "Integer square root",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("isqrt"), N(4)),
-				L(A("isqrt"), N(5)),
+				LE(A("isqrt"), N(4)),
+				LE(A("isqrt"), N(5)),
 				// Breaks on several platforms!
 				// L(A("isqrt"), N(9139571243709)),
 			),
@@ -737,9 +743,9 @@ func init() {
 			Docstring:  "Return the length of a list",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("len"), L(A("range"), N(10))),
+				LE(A("len"), LE(A("range"), N(10))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -764,8 +770,8 @@ func init() {
 			NAry:       true,
 			Args:       RO("xs"),
 			Examples: E(
-				L(A("list"), N(1), N(2), N(3)),
-				L(A("list")),
+				LE(A("list"), N(1), N(2), N(3)),
+				LE(A("list")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				return mkListAsConsWithCdr(args, Nil), nil
@@ -776,10 +782,10 @@ func init() {
 			Docstring:  "Return t if the argument is a list, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("list?"), L(A("range"), N(10))),
-				L(A("list?"), N(1)),
+				LE(A("list?"), LE(A("range"), N(10))),
+				LE(A("list?"), N(1)),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -796,7 +802,7 @@ func init() {
 			Docstring:  "Load and execute a file",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("filename")),
+			Args:       LC(A("filename")),
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("load expects a single argument")
@@ -817,10 +823,10 @@ func init() {
 			Docstring:  "Expand a macro",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("macroexpand-1"), QL(A("+"), A("x"), N(1))),
-				L(A("macroexpand-1"), QL(A("if"), L(), N(1), N(2))),
+				LE(A("macroexpand-1"), QL(A("+"), A("x"), N(1))),
+				LE(A("macroexpand-1"), QL(A("if"), LE(), N(1), N(2))),
 			),
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -834,11 +840,11 @@ func init() {
 			Docstring:  "Return t if the argument is nil, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("not"), L()),
-				L(A("not"), A("t")),
-				L(A("not"), L(A("range"), N(10))),
+				LE(A("not"), LE()),
+				LE(A("not"), A("t")),
+				LE(A("not"), LE(A("range"), N(10))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -855,11 +861,11 @@ func init() {
 			Docstring:  "Return true if the argument is a number, else ()",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("number?"), N(1)),
-				L(A("number?"), A("t")),
-				L(A("number?"), A("+")),
+				LE(A("number?"), N(1)),
+				LE(A("number?"), A("t")),
+				LE(A("number?"), A("+")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -907,7 +913,7 @@ func init() {
 			Docstring:  "Print a list argument, without parentheses",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
@@ -925,7 +931,7 @@ func init() {
 			Docstring:  "Return a random integer between 0 and the argument minus 1",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("randint expects a single argument")
@@ -1037,7 +1043,7 @@ func init() {
 			Docstring:  "Write a string to the screen",
 			FixedArity: 3,
 			NAry:       false,
-			Args:       list(A("x"), A("y"), A("list")),
+			Args:       LC(A("x"), A("y"), A("list")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 3 {
 					return nil, baseError("screen-write expects 3 arguments")
@@ -1066,7 +1072,7 @@ func init() {
 			Docstring:  "Run a shell subprocess, and return stdout, stderr, and exit code",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("cmd")),
+			Args:       LC(A("cmd")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("shell expects a single argument")
@@ -1079,7 +1085,7 @@ func init() {
 			Docstring:  "Return a (quickly!) shuffled list",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("xs")),
+			Args:       LC(A("xs")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("shuffle expects a single argument")
@@ -1103,7 +1109,7 @@ func init() {
 			Docstring:  "Sleep for the given number of milliseconds",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("ms")),
+			Args:       LC(A("ms")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("sleep expects a single argument")
@@ -1121,11 +1127,11 @@ func init() {
 			Docstring:  "Sort a list",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("xs")),
+			Args:       LC(A("xs")),
 			Examples: E(
-				L(A("sort"), QL(N(3), N(2), N(1))),
-				L(A("sort"), QL()),
-				L(A("sort"), QL(A("c"), A("b"), A("a"))),
+				LE(A("sort"), QL(N(3), N(2), N(1))),
+				LE(A("sort"), QL()),
+				LE(A("sort"), QL(A("c"), A("b"), A("a"))),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -1167,11 +1173,11 @@ func init() {
 			Docstring:  "Sort a list by a function",
 			FixedArity: 2,
 			NAry:       false,
-			Args:       list(A("f"), A("xs")),
+			Args:       LC(A("f"), A("xs")),
 			Examples: E(
-				L(A("sort-by"), A("first"), QL(L(N(3)), L(N(2)), L(N(1)))),
-				L(A("sort-by"), A("first"), QL()),
-				L(A("sort-by"), A("second"), QL(L(A("quux"), N(333)), L(A("zip"), N(222)), L(A("afar"), N(111)))),
+				LE(A("sort-by"), A("first"), QL(LE(N(3)), LE(N(2)), LE(N(1)))),
+				LE(A("sort-by"), A("first"), QL()),
+				LE(A("sort-by"), A("second"), QL(LE(A("quux"), N(333)), LE(A("zip"), N(222)), LE(A("afar"), N(111)))),
 			),
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 2 {
@@ -1223,10 +1229,10 @@ func init() {
 			Docstring:  "Show source for a function",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("form")),
+			Args:       LC(A("form")),
 			Examples: E(
-				L(A("source"), A("map")),
-				L(A("source"), A("+")),
+				LE(A("source"), A("map")),
+				LE(A("source"), A("+")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -1250,10 +1256,10 @@ func init() {
 			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("split"), N(123)),
-				L(A("split"), QA("abc")),
+				LE(A("split"), N(123)),
+				LE(A("split"), QA("abc")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -1292,9 +1298,9 @@ func init() {
 			Docstring:  "Return the uppercase version of the given atom",
 			FixedArity: 1,
 			NAry:       false,
-			Args:       list(A("x")),
+			Args:       LC(A("x")),
 			Examples: E(
-				L(A("upcase"), QA("abc")),
+				LE(A("upcase"), QA("abc")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -1314,7 +1320,7 @@ func init() {
 			NAry:       false,
 			Args:       Nil,
 			Examples: E(
-				L(A("version")),
+				LE(A("version")),
 			),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				versionSexprs := semverAsExprs(Version)
