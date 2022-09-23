@@ -167,10 +167,6 @@ func LoadFile(e *Env, filename string) error {
 	return nil
 }
 
-func restArgsOnly(s string) *ConsCell {
-	return Cons(Nil, Atom{s})
-}
-
 // moving `builtins` into `init` avoids initialization loop for doHelp:
 var builtins map[string]*Builtin
 
@@ -194,13 +190,16 @@ func init() {
 		return L(A("quote"), A(s)).(*ConsCell)
 	}
 	C := func(a, b Sexpr) *ConsCell { return Cons(a, b) }
+	RO := func(s string) *ConsCell {
+		return Cons(Nil, Atom{s})
+	}
 	builtins = map[string]*Builtin{
 		"+": {
 			Name:       "+",
 			Docstring:  "Add 0 or more numbers",
 			FixedArity: 0,
 			NAry:       true,
-			Args:       restArgsOnly("xs"),
+			Args:       RO("xs"),
 			Examples: E(
 				L(A("+"), N(1), N(2), N(3)),
 				L(A("+")),
@@ -257,7 +256,7 @@ func init() {
 			Docstring:  "Multiply 0 or more numbers",
 			FixedArity: 0,
 			NAry:       true,
-			Args:       restArgsOnly("xs"),
+			Args:       RO("xs"),
 			Examples: E(
 				L(A("*"), N(1), N(2), N(3)),
 				L(A("*")),
@@ -683,7 +682,7 @@ func init() {
 			Docstring:  "Return a new symbol",
 			FixedArity: 0,
 			NAry:       true,
-			Args:       restArgsOnly("more"),
+			Args:       RO("more"),
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 0 && len(args) != 1 {
 					return nil, baseError("gensym expects 0 or 1 arguments")
@@ -763,7 +762,7 @@ func init() {
 			Docstring:  "Return a list of the given arguments",
 			FixedArity: 0,
 			NAry:       true,
-			Args:       restArgsOnly("xs"),
+			Args:       RO("xs"),
 			Examples: E(
 				L(A("list"), N(1), N(2), N(3)),
 				L(A("list")),
@@ -878,7 +877,7 @@ func init() {
 			Docstring:  "Print the arguments",
 			FixedArity: 0,
 			NAry:       true,
-			Args:       restArgsOnly("xs"),
+			Args:       RO("xs"),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				strArgs := []string{}
 				for _, arg := range args {
@@ -893,7 +892,7 @@ func init() {
 			Docstring:  "Print the arguments and a newline",
 			FixedArity: 0,
 			NAry:       true,
-			Args:       restArgsOnly("xs"),
+			Args:       RO("xs"),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				strArgs := []string{}
 				for _, arg := range args {
@@ -1275,7 +1274,7 @@ func init() {
 			Docstring:  "Establish a testing block (return last expression)",
 			FixedArity: 0,
 			NAry:       true,
-			Args:       restArgsOnly("exprs"),
+			Args:       RO("exprs"),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Nil, nil
