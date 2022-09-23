@@ -387,12 +387,15 @@
 
 (defmacro dotimes (n . body)
   (doc (execute body for each value in a list))
-  (let ((inner-sym (gensym)))
-    `(let ((~inner-sym (lambda ~inner-sym (count)
-                         (when-not (zero? count)
-                           ~@body
-                           (~inner-sym (- count 1))))))
-       (~inner-sym ~n))))
+  (let ((inner-sym (gensym))
+        (n-sym (gensym)))
+    `(let ((~n-sym ~n))
+       (when-not (neg? ~n-sym)
+         (let ((~inner-sym (lambda ~inner-sym (count)
+                             (when-not (zero? count)
+                               ~@body
+                               (~inner-sym (- count 1))))))
+           (~inner-sym ~n-sym))))))
 
 (defn butlast (l)
   (doc (return everything but the last element)

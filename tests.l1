@@ -794,7 +794,9 @@
   (errors '(error not found)
     (errors (list* ()  t)))
   (errors '(error not found)
-    (errors (list* () 695))))
+    (errors (list* () 695)))
+
+  (is (not (dotimes (- 100)))))
 
 (test '(second)
   (is (not (second ())))
