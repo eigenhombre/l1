@@ -714,9 +714,16 @@
     (is (= '(a b c 0 1 2 d e)
            `(a b c ~@l d e)))))
 
+(test '(some and every)
+  (is (every pos? (cdr (range 5))))
+  (is (every odd? '(1 3 5)))
+  (is (not (some neg? (cdr (range 5))))))
+
 (test '(docs and forms)
-  (is (some (lambda (x) (= x 'forms))
+  (is (< 10 (len (forms))))
+  (is (some (comp (partial = 'forms) first)
             (forms)))
+  (is (every (comp (partial = 4) len) (forms)))
   (is (= '(Return a new atom with all characters in lower case)
          (doc downcase))))
 

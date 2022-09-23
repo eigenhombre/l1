@@ -591,7 +591,10 @@ func ShortDocStr(e *Env) (string, error) {
 	return strings.Join(outStrs, "\n"), nil
 }
 
-// a map... my kingdom for a map...
+// The (forms) function returns a list of builtins, macros and special
+// forms.  Each element of the list is a list of the form:
+// (name type arity hasRest)
+// FIXME: add doc.
 func formsAsSexprList(e *Env) ([]Sexpr, error) {
 	out := []Sexpr{}
 	af, err := availableForms(e)
@@ -599,7 +602,14 @@ func formsAsSexprList(e *Env) ([]Sexpr, error) {
 		return nil, extendError("sexpr forms", err)
 	}
 	for _, form := range af {
-		out = append(out, Atom{form.name})
+		var multi Sexpr = Nil
+		if form.ismulti {
+			multi = True
+		}
+		out = append(out, list(Atom{form.name},
+			Atom{strings.Replace(form.ftype, " ", "-", -1)},
+			Num(form.farity),
+			multi))
 	}
 	return out, nil
 }

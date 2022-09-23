@@ -457,6 +457,18 @@
         result
         (some f (cdr l))))))
 
+(defn every (f l)
+  (doc (return t if f applied to every element in l is truthy, else ())
+       (examples
+        (every odd? '(1 3 5))
+        (every odd? '(1 2 3 5))))
+  (if-not l
+    t
+    (let ((result (f (car l))))
+      (if (not result)
+        ()
+        (every f (cdr l))))))
+
 (defn punctuate-atom (a mark)
   (doc (add a punctuation mark at end of atom)
        (examples

@@ -1,5 +1,5 @@
 # API Index
-134 forms available:
+135 forms available:
 [`*`](#-STAR)
 [`**`](#-STAR-STAR)
 [`+`](#+)
@@ -43,6 +43,7 @@
 [**`errors`**](#errors)
 [`eval`](#eval)
 [`even?`](#even-QMARK)
+[`every`](#every)
 [`exclaim`](#exclaim)
 [`exit`](#exit)
 [`filter`](#filter)
@@ -1389,6 +1390,35 @@ Args: `(n)`
 > (map even? (range 5))
 ;;=>
 (t () t () t)
+
+```
+
+
+[<sub><sup>Back to index</sup></sub>](#api-index)
+-----------------------------------------------------
+
+
+<a id="every"></a>
+## `every`
+
+Return t if f applied to every element in l is truthy, else ()
+
+Type: function
+
+Arity: 2
+
+Args: `(f l)`
+
+
+### Examples
+
+```
+> (every odd? (quote (1 3 5)))
+;;=>
+t
+> (every odd? (quote (1 2 3 5)))
+;;=>
+()
 
 ```
 

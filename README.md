@@ -215,6 +215,7 @@ repository](https://github.com/eigenhombre/onomat/).
             errors  S    1+  Error checking (for tests)
               eval  N    1   Evaluate an expression
              even?  F    1   Return true if the supplied integer argument is even
+             every  F    2   Return t if f applied to every element in l is truthy, else ()
            exclaim  F    1   Return l as a sentence... emphasized!
               exit  N    0   Exit the program
             filter  F    2   Keep only values for which function f is true
