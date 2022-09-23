@@ -600,7 +600,6 @@ func ShortDocStr(e *Env) (string, error) {
 // The (forms) function returns a list of builtins, macros and special
 // forms.  Each element of the list is a list of the form:
 // (name type arity hasRest)
-// FIXME: add doc.
 func formsAsSexprList(e *Env) ([]Sexpr, error) {
 	out := []Sexpr{}
 	af, err := availableForms(e)
@@ -615,6 +614,7 @@ func formsAsSexprList(e *Env) ([]Sexpr, error) {
 		out = append(out, list(Atom{form.name},
 			Atom{strings.Replace(form.ftype, " ", "-", -1)},
 			Num(form.farity),
+			form.doc,
 			multi))
 	}
 	return out, nil
