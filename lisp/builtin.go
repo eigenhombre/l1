@@ -54,7 +54,8 @@ type Builtin struct {
 	FixedArity int
 	// If true, fn can take more arguments:
 	NAry      bool
-	Docstring string
+	docString string
+	Doc       *ConsCell
 	Args      *ConsCell
 	Examples  *ConsCell
 }
@@ -199,10 +200,13 @@ func init() {
 	RO := func(s string) *ConsCell {
 		return Cons(Nil, Atom{s})
 	}
+	DOC := func(s string) *ConsCell {
+		return convertStringToDoc(capitalize(s))
+	}
 	builtins = map[string]*Builtin{
 		"+": {
 			Name:       "+",
-			Docstring:  "Add 0 or more numbers",
+			Doc:        DOC("Add 0 or more numbers"),
 			FixedArity: 0,
 			NAry:       true,
 			Args:       RO("xs"),
@@ -227,7 +231,7 @@ func init() {
 		},
 		"-": {
 			Name:       "-",
-			Docstring:  "Subtract 0 or more numbers from the first argument",
+			Doc:        DOC("Subtract 0 or more numbers from the first argument"),
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
@@ -259,7 +263,7 @@ func init() {
 		},
 		"*": {
 			Name:       "*",
-			Docstring:  "Multiply 0 or more numbers",
+			Doc:        DOC("Multiply 0 or more numbers"),
 			FixedArity: 0,
 			NAry:       true,
 			Args:       RO("xs"),
@@ -284,7 +288,7 @@ func init() {
 		},
 		"/": {
 			Name:       "/",
-			Docstring:  "Divide the first argument by the rest",
+			Doc:        DOC("Divide the first argument by the rest"),
 			FixedArity: 2,
 			NAry:       true,
 			Args:       C(A("numerator"), C(A("denominator1"), A("more"))),
@@ -316,7 +320,7 @@ func init() {
 		},
 		"=": {
 			Name:       "=",
-			Docstring:  "Return t if the arguments are equal, () otherwise",
+			Doc:        DOC("Return t if the arguments are equal, () otherwise"),
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
@@ -339,7 +343,7 @@ func init() {
 		},
 		"rem": {
 			Name:       "rem",
-			Docstring:  "Return remainder when second arg divides first",
+			Doc:        DOC("Return remainder when second arg divides first"),
 			FixedArity: 2,
 			NAry:       false,
 			Args:       LC(A("x"), A("y")),
@@ -368,7 +372,7 @@ func init() {
 		},
 		"<": {
 			Name:       "<",
-			Docstring:  "Return t if the arguments are in strictly increasing order, () otherwise",
+			Doc:        DOC("Return t if the arguments are in strictly increasing order, () otherwise"),
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
@@ -386,7 +390,7 @@ func init() {
 		},
 		"<=": {
 			Name:       "<=",
-			Docstring:  "Return t if the arguments are in increasing (or qual) order, () otherwise",
+			Doc:        DOC("Return t if the arguments are in increasing or equal order, () otherwise"),
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
@@ -403,7 +407,7 @@ func init() {
 		},
 		">": {
 			Name:       ">",
-			Docstring:  "Return t if the arguments are in strictly decreasing order, () otherwise",
+			Doc:        DOC("Return t if the arguments are in strictly decreasing order, () otherwise"),
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
@@ -420,7 +424,7 @@ func init() {
 		},
 		">=": {
 			Name:       ">=",
-			Docstring:  "Return t if the arguments are in decreasing (or equal) order, () otherwise",
+			Doc:        DOC("Return t if the arguments are in decreasing or equal order, () otherwise"),
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
@@ -436,7 +440,7 @@ func init() {
 		},
 		"apply": {
 			Name:       "apply",
-			Docstring:  "Apply a function to a list of arguments",
+			Doc:        DOC("Apply a function to a list of arguments"),
 			FixedArity: 2,
 			NAry:       false,
 			Args:       LC(A("f"), A("args")),
@@ -448,7 +452,7 @@ func init() {
 		},
 		"atom?": {
 			Name:       "atom?",
-			Docstring:  "Return t if the argument is an atom, () otherwise",
+			Doc:        DOC("Return t if the argument is an atom, () otherwise"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -468,7 +472,7 @@ func init() {
 		},
 		"body": {
 			Name:       "body",
-			Docstring:  "Return the body of a lambda function",
+			Doc:        DOC("Return the body of a lambda function"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("f")),
@@ -488,7 +492,7 @@ func init() {
 		},
 		"car": {
 			Name:       "car",
-			Docstring:  "Return the first element of a list",
+			Doc:        DOC("Return the first element of a list"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -512,7 +516,7 @@ func init() {
 		},
 		"cdr": {
 			Name:       "cdr",
-			Docstring:  "Return a list with the first element removed",
+			Doc:        DOC("Return a list with the first element removed"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -537,7 +541,7 @@ func init() {
 		},
 		"cons": {
 			Name:       "cons",
-			Docstring:  "Add an element to the front of a (possibly empty) list",
+			Doc:        DOC("Add an element to the front of a (possibly empty) list"),
 			FixedArity: 2,
 			NAry:       false,
 			Args:       LC(A("x"), A("xs")),
@@ -555,7 +559,7 @@ func init() {
 		},
 		"doc": {
 			Name:       "doc",
-			Docstring:  "Return the doclist for a function",
+			Doc:        DOC("Return the doclist for a function"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -574,7 +578,7 @@ func init() {
 				case *lambdaFn:
 					return t.doc, nil
 				case *Builtin:
-					return stringsToList(strings.Split(builtins[t.Name].Docstring, " ")...), nil
+					return t.Doc.car, nil
 				default:
 					return nil, baseErrorf("'%s' is not a function", args[0])
 				}
@@ -582,7 +586,7 @@ func init() {
 		},
 		"downcase": {
 			Name:       "downcase",
-			Docstring:  "Return a new atom with all characters in lower case",
+			Doc:        DOC("Return a new atom with all characters in lower case"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -603,7 +607,7 @@ func init() {
 		},
 		"eval": {
 			Name:       "eval",
-			Docstring:  "Evaluate an expression",
+			Doc:        DOC("Evaluate an expression"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -620,7 +624,7 @@ func init() {
 		},
 		"exit": {
 			Name:       "exit",
-			Docstring:  "Exit the program",
+			Doc:        DOC("Exit the program"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -631,7 +635,7 @@ func init() {
 		},
 		"forms": {
 			Name:       "forms",
-			Docstring:  "Return available operators, as a list",
+			Doc:        DOC("Return available operators, as a list"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -645,7 +649,7 @@ func init() {
 		},
 		"fuse": {
 			Name:       "fuse",
-			Docstring:  "Fuse a list of numbers or atoms into a single atom",
+			Doc:        DOC("Fuse a list of numbers or atoms into a single atom"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -685,7 +689,7 @@ func init() {
 		},
 		"gensym": {
 			Name:       "gensym",
-			Docstring:  "Return a new symbol",
+			Doc:        DOC("Return a new symbol"),
 			FixedArity: 0,
 			NAry:       true,
 			Args:       RO("more"),
@@ -705,7 +709,7 @@ func init() {
 		},
 		"help": {
 			Name:       "help",
-			Docstring:  "Print this message",
+			Doc:        DOC("Print a help message"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -716,7 +720,7 @@ func init() {
 		},
 		"isqrt": {
 			Name:       "isqrt",
-			Docstring:  "Integer square root",
+			Doc:        DOC("Integer square root"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -740,7 +744,7 @@ func init() {
 		},
 		"len": {
 			Name:       "len",
-			Docstring:  "Return the length of a list",
+			Doc:        DOC("Return the length of a list"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -765,7 +769,7 @@ func init() {
 		},
 		"list": {
 			Name:       "list",
-			Docstring:  "Return a list of the given arguments",
+			Doc:        DOC("Return a list of the given arguments"),
 			FixedArity: 0,
 			NAry:       true,
 			Args:       RO("xs"),
@@ -779,7 +783,7 @@ func init() {
 		},
 		"list?": {
 			Name:       "list?",
-			Docstring:  "Return t if the argument is a list, () otherwise",
+			Doc:        DOC("Return t if the argument is a list, () otherwise"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -799,7 +803,7 @@ func init() {
 		},
 		"load": {
 			Name:       "load",
-			Docstring:  "Load and execute a file",
+			Doc:        DOC("Load and execute a file"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("filename")),
@@ -820,7 +824,7 @@ func init() {
 		},
 		"macroexpand-1": {
 			Name:       "macroexpand-1",
-			Docstring:  "Expand a macro",
+			Doc:        DOC("Expand a macro"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -837,7 +841,7 @@ func init() {
 		},
 		"not": {
 			Name:       "not",
-			Docstring:  "Return t if the argument is nil, () otherwise",
+			Doc:        DOC("Return t if the argument is nil, () otherwise"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -858,7 +862,7 @@ func init() {
 		},
 		"number?": {
 			Name:       "number?",
-			Docstring:  "Return true if the argument is a number, else ()",
+			Doc:        DOC("Return true if the argument is a number, else ()"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -880,7 +884,7 @@ func init() {
 		},
 		"print": {
 			Name:       "print",
-			Docstring:  "Print the arguments",
+			Doc:        DOC("Print the arguments"),
 			FixedArity: 0,
 			NAry:       true,
 			Args:       RO("xs"),
@@ -895,7 +899,7 @@ func init() {
 		},
 		"println": {
 			Name:       "println",
-			Docstring:  "Print the arguments and a newline",
+			Doc:        DOC("Print the arguments and a newline"),
 			FixedArity: 0,
 			NAry:       true,
 			Args:       RO("xs"),
@@ -910,7 +914,7 @@ func init() {
 		},
 		"printl": {
 			Name:       "printl",
-			Docstring:  "Print a list argument, without parentheses",
+			Doc:        DOC("Print a list argument, without parentheses"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -928,7 +932,7 @@ func init() {
 		},
 		"randint": {
 			Name:       "randint",
-			Docstring:  "Return a random integer between 0 and the argument minus 1",
+			Doc:        DOC("Return a random integer between 0 and the argument minus 1"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -949,7 +953,7 @@ func init() {
 		},
 		"readlist": {
 			Name:       "readlist",
-			Docstring:  "Read a list from stdin",
+			Doc:        DOC("Read a list from stdin"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -967,7 +971,7 @@ func init() {
 		},
 		"screen-start": {
 			Name:       "screen-start",
-			Docstring:  "Start screen for text UIs",
+			Doc:        DOC("Start screen for text UIs"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -981,7 +985,7 @@ func init() {
 		},
 		"screen-end": {
 			Name:       "screen-end",
-			Docstring:  "Stop screen for text UIs, return to console mode",
+			Doc:        DOC("Stop screen for text UIs, return to console mode"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -995,7 +999,7 @@ func init() {
 		},
 		"screen-size": {
 			Name:       "screen-size",
-			Docstring:  "Return the screen size (width, height)",
+			Doc:        DOC("Return the screen size: width, height"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -1009,7 +1013,7 @@ func init() {
 		},
 		"screen-clear": {
 			Name:       "screen-clear",
-			Docstring:  "Clear the screen",
+			Doc:        DOC("Clear the screen"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -1023,7 +1027,7 @@ func init() {
 		},
 		"screen-get-key": {
 			Name:       "screen-get-key",
-			Docstring:  "Return a keystroke as an atom",
+			Doc:        DOC("Return a keystroke as an atom"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,
@@ -1040,7 +1044,7 @@ func init() {
 		},
 		"screen-write": {
 			Name:       "screen-write",
-			Docstring:  "Write a string to the screen",
+			Doc:        DOC("Write a string to the screen"),
 			FixedArity: 3,
 			NAry:       false,
 			Args:       LC(A("x"), A("y"), A("list")),
@@ -1069,7 +1073,7 @@ func init() {
 		},
 		"shell": {
 			Name:       "shell",
-			Docstring:  "Run a shell subprocess, and return stdout, stderr, and exit code",
+			Doc:        DOC("Run a shell subprocess, and return stdout, stderr, and exit code"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("cmd")),
@@ -1082,7 +1086,7 @@ func init() {
 		},
 		"shuffle": {
 			Name:       "shuffle",
-			Docstring:  "Return a (quickly!) shuffled list",
+			Doc:        DOC("Return a (quickly!) shuffled list"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("xs")),
@@ -1106,7 +1110,7 @@ func init() {
 		},
 		"sleep": {
 			Name:       "sleep",
-			Docstring:  "Sleep for the given number of milliseconds",
+			Doc:        DOC("Sleep for the given number of milliseconds"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("ms")),
@@ -1124,7 +1128,7 @@ func init() {
 		},
 		"sort": {
 			Name:       "sort",
-			Docstring:  "Sort a list",
+			Doc:        DOC("Sort a list"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("xs")),
@@ -1170,7 +1174,7 @@ func init() {
 		},
 		"sort-by": {
 			Name:       "sort-by",
-			Docstring:  "Sort a list by a function",
+			Doc:        DOC("Sort a list by a function"),
 			FixedArity: 2,
 			NAry:       false,
 			Args:       LC(A("f"), A("xs")),
@@ -1226,7 +1230,7 @@ func init() {
 		},
 		"source": {
 			Name:       "source",
-			Docstring:  "Show source for a function",
+			Doc:        DOC("Show source for a function"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("form")),
@@ -1253,7 +1257,7 @@ func init() {
 		},
 		"split": {
 			Name:       "split",
-			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
+			Doc:        DOC("Split an atom or number into a list of single-digit numbers or single-character atoms"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -1275,27 +1279,9 @@ func init() {
 				}
 			},
 		},
-		"test": {
-			Name:       "test",
-			Docstring:  "Establish a testing block (return last expression)",
-			FixedArity: 0,
-			NAry:       true,
-			Args:       RO("exprs"),
-			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
-				if len(args) == 0 {
-					return Nil, nil
-				}
-				fmt.Printf("TEST %s ", args[0].String())
-				for range args[1:] {
-					fmt.Print(".")
-				}
-				fmt.Println("✓")
-				return args[len(args)-1], nil
-			},
-		},
 		"upcase": {
 			Name:       "upcase",
-			Docstring:  "Return the uppercase version of the given atom",
+			Doc:        DOC("Return the uppercase version of the given atom"),
 			FixedArity: 1,
 			NAry:       false,
 			Args:       LC(A("x")),
@@ -1315,7 +1301,7 @@ func init() {
 		},
 		"version": {
 			Name:       "version",
-			Docstring:  "Return the version of the interpreter",
+			Doc:        DOC("Return the version of the interpreter"),
 			FixedArity: 0,
 			NAry:       false,
 			Args:       Nil,

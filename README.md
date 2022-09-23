@@ -178,10 +178,10 @@ repository](https://github.com/eigenhombre/onomat/).
                  -  N    1+  Subtract 0 or more numbers from the first argument
                  /  N    2+  Divide the first argument by the rest
                  <  N    1+  Return t if the arguments are in strictly increasing order, () otherwise
-                <=  N    1+  Return t if the arguments are in increasing (or qual) order, () otherwise
+                <=  N    1+  Return t if the arguments are in increasing or equal order, () otherwise
                  =  N    1+  Return t if the arguments are equal, () otherwise
                  >  N    1+  Return t if the arguments are in strictly decreasing order, () otherwise
-                >=  N    1+  Return t if the arguments are in decreasing (or equal) order, () otherwise
+                >=  N    1+  Return t if the arguments are in decreasing or equal order, () otherwise
                abs  F    1   Return absolute value of x
                and  S    0+  Boolean and
              apply  N    2   Apply a function to a list of arguments
@@ -212,7 +212,7 @@ repository](https://github.com/eigenhombre/onomat/).
               drop  F    2   Drop n items from a list, then return the rest
          enumerate  F    1   Returning list of (i, x) pairs where i is the index (from zero) and x is the original element from l
              error  S    1   Raise an error
-            errors  S    1+  Error checking (for tests)
+            errors  S    1+  Error checking, for tests
               eval  N    1   Evaluate an expression
              even?  F    1   Return true if the supplied integer argument is even
              every  F    2   Return t if f applied to every element in l is truthy, else ()
@@ -224,7 +224,7 @@ repository](https://github.com/eigenhombre/onomat/).
              forms  N    0   Return available operators, as a list
               fuse  N    1   Fuse a list of numbers or atoms into a single atom
             gensym  N    0+  Return a new symbol
-              help  N    0   Print this message
+              help  N    0   Print a help message
           identity  F    1   Return the argument
                 if  M    3   Simple conditional with two branches
             if-not  M    3   Simple (inverted) conditional with two branches
@@ -280,7 +280,7 @@ repository](https://github.com/eigenhombre/onomat/).
       screen-clear  N    0   Clear the screen
         screen-end  N    0   Stop screen for text UIs, return to console mode
     screen-get-key  N    0   Return a keystroke as an atom
-       screen-size  N    0   Return the screen size (width, height)
+       screen-size  N    0   Return the screen size: width, height
       screen-start  N    0   Start screen for text UIs
       screen-write  N    3   Write a string to the screen
             second  F    1   Return the second element of a list, or () if not enough elements
@@ -296,7 +296,7 @@ repository](https://github.com/eigenhombre/onomat/).
            swallow  S    0+  Swallow errors thrown in body, return t if any occur
       syntax-quote  S    1   Syntax-quote an expression
               take  F    2   Take up to n items from the supplied list
-              test  N    0+  Establish a testing block (return last expression)
+              test  S    0+  Run tests
         tosentence  F    1   Return l as a sentence... capitalized, with a period at the end
              true?  F    1   Return t if the argument is t
                try  S    0+  Try to evaluate body, catch errors and handle them

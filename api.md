@@ -124,7 +124,7 @@
 [**`swallow`**](#swallow)
 [**`syntax-quote`**](#syntax-quote)
 [`take`](#take)
-[`test`](#test)
+[**`test`**](#test)
 [`tosentence`](#tosentence)
 [`true?`](#true-QMARK)
 [**`try`**](#try)
@@ -330,7 +330,7 @@ t
 <a id="<="></a>
 ## `<=`
 
-Return t if the arguments are in increasing (or qual) order, () otherwise
+Return t if the arguments are in increasing or equal order, () otherwise
 
 Type: native function
 
@@ -426,7 +426,7 @@ t
 <a id=">="></a>
 ## `>=`
 
-Return t if the arguments are in decreasing (or equal) order, () otherwise
+Return t if the arguments are in decreasing or equal order, () otherwise
 
 Type: native function
 
@@ -1314,7 +1314,7 @@ ERROR in '(ensure-list 3)':
 <a id="errors"></a>
 ## `errors`
 
-Error checking (for tests)
+Error checking, for tests
 
 Type: special form
 
@@ -1611,7 +1611,7 @@ Args: `(() . more)`
 <a id="help"></a>
 ## `help`
 
-Print this message
+Print a help message
 
 Type: native function
 
@@ -3044,7 +3044,7 @@ Args: `()`
 <a id="screen-size"></a>
 ## `screen-size`
 
-Return the screen size (width, height)
+Return the screen size: width, height
 
 Type: native function
 
@@ -3454,13 +3454,13 @@ Args: `(n l)`
 <a id="test"></a>
 ## `test`
 
-Establish a testing block (return last expression)
+Run tests
 
-Type: native function
+Type: special form
 
 Arity: 0+
 
-Args: `(() . exprs)`
+Args: `(() . body)`
 
 
 

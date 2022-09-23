@@ -341,6 +341,37 @@ func syntaxQuote(arg Sexpr) Sexpr {
 	}
 }
 
+func evalTest(body *ConsCell, e *Env) (Sexpr, error) {
+	if body == Nil {
+		return Nil, nil
+	}
+	testDesc := body.car
+	evDesc, err := eval(testDesc, e)
+	if err != nil {
+		return nil, extendError("evaluating test description", err)
+	}
+	fmt.Printf("TEST %s ", evDesc)
+	expr, ok := body.cdr.(*ConsCell)
+	if !ok {
+		return nil, baseError("test body must be a list")
+	}
+	for {
+		if expr == Nil {
+			fmt.Println("✓")
+			return Nil, nil
+		}
+		_, err := eval(expr.car, e)
+		if err != nil {
+			return nil, extendError(fmt.Sprintf("evaluating test %s", expr.car), err)
+		}
+		fmt.Print(".")
+		expr, ok = expr.cdr.(*ConsCell)
+		if !ok {
+			return nil, baseError("test body must be a list")
+		}
+	}
+}
+
 func eval(exprArg Sexpr, e *Env) (Sexpr, error) {
 	expr := exprArg
 	var err error
@@ -381,6 +412,12 @@ top:
 				}
 				expr = syntaxQuote(cdrCons.car)
 				goto top
+			case carAtom.s == "test":
+				_, err := evalTest(cdrCons, e)
+				if err != nil {
+					return nil, extendError("test", err)
+				}
+				return Nil, nil
 			case carAtom.s == "cond":
 				pairList := cdrCons
 				if pairList == Nil {

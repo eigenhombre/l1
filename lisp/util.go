@@ -1,6 +1,7 @@
 package lisp
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
 )
@@ -38,6 +39,10 @@ func consLength(l *ConsCell) (int, error) {
 		ret += 1
 	}
 	return ret, nil
+}
+
+func convertStringToDoc(s string) *ConsCell {
+	return list(stringsToList(strings.Split(s, " ")...))
 }
 
 func stringsToList(listElems ...string) *ConsCell {

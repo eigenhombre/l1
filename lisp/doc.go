@@ -20,7 +20,8 @@ type formRec struct {
 	isNative  bool
 	farity    int
 	ismulti   bool
-	doc       string
+	docStr    string
+	doc       *ConsCell
 	ftype     string
 	args      *ConsCell
 	examples  string
@@ -35,7 +36,8 @@ var specialForms = []formRec{
 		farity:    0,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Boolean and",
+		docStr:    "Boolean and",
+		doc:       convertStringToDoc("Boolean and"),
 		ftype:     special,
 		args:      Cons(Nil, a("xs")),
 		examples: `(and)
@@ -57,7 +59,8 @@ true
 		farity:    0,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Fundamental branching construct",
+		docStr:    "Fundamental branching construct",
+		doc:       convertStringToDoc("Fundamental branching construct"),
 		ftype:     special,
 		args:      Cons(Nil, a("pairs")),
 		examples: `> (cond)
@@ -73,7 +76,8 @@ true
 		farity:    2,
 		isSpecial: true,
 		ismulti:   false,
-		doc:       "Set a value",
+		docStr:    "Set a value",
+		doc:       convertStringToDoc("Set a value"),
 		ftype:     special,
 		args:      list(a("name"), a("value")),
 		examples: `> (def a 1)
@@ -89,7 +93,8 @@ true
 		farity:    2,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Create and name a function",
+		docStr:    "Create and name a function",
+		doc:       convertStringToDoc("Create and name a function"),
 		ftype:     special,
 		args:      Cons(a("name"), Cons(a("args"), a("body"))),
 		examples: `> (defn add (x y) (+ x y))
@@ -115,7 +120,8 @@ true
 		farity:    2,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Create and name a macro",
+		docStr:    "Create and name a macro",
+		doc:       convertStringToDoc("Create and name a macro"),
 		ftype:     special,
 		args:      Cons(a("name"), Cons(a("args"), a("body"))),
 		examples: `> (defmacro ignore-car (l)
@@ -137,7 +143,8 @@ true
 		farity:    1,
 		isSpecial: true,
 		ismulti:   false,
-		doc:       "Raise an error",
+		docStr:    "Raise an error",
+		doc:       convertStringToDoc("Raise an error"),
 		ftype:     special,
 		args:      list(a("l")),
 		examples: `> (defn ensure-list (x)
@@ -156,7 +163,8 @@ ERROR in '(ensure-list 3)':
 		farity:    1,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Error checking (for tests)",
+		docStr:    "Error checking (for tests)",
+		doc:       convertStringToDoc("Error checking, for tests"),
 		args:      Cons(a("expected"), a("body")),
 		ftype:     special,
 		examples: `> (errors '(is not a function)
@@ -175,7 +183,8 @@ error not found in ((quote (is not a function)) (+))
 		farity:    1,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Create a function",
+		docStr:    "Create a function",
+		doc:       convertStringToDoc("Create a function"),
 		ftype:     special,
 		args:      Cons(a("args"), a("more")),
 		examples: `> ((lambda () t))
@@ -198,7 +207,8 @@ t
 		farity:    1,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Create a local scope with bindings",
+		docStr:    "Create a local scope with bindings",
+		doc:       convertStringToDoc("Create a local scope with bindings"),
 		ftype:     special,
 		args:      Cons(a("binding-pairs"), a("body")),
 
@@ -214,7 +224,8 @@ t
 		farity:    1,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Loop forever",
+		docStr:    "Loop forever",
+		doc:       convertStringToDoc("Loop forever"),
 		ftype:     special,
 		args:      Nil,
 		examples: `> (loop
@@ -232,7 +243,8 @@ Help me, I am looping forever!
 		farity:    0,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Boolean or",
+		docStr:    "Boolean or",
+		doc:       convertStringToDoc("Boolean or"),
 		ftype:     special,
 		args:      Cons(Nil, a("xs")),
 		examples: `> (or)
@@ -247,7 +259,8 @@ Help me, I am looping forever!
 		farity:    1,
 		isSpecial: true,
 		ismulti:   false,
-		doc:       "Quote an expression",
+		docStr:    "Quote an expression",
+		doc:       convertStringToDoc("Quote an expression"),
 		ftype:     special,
 		args:      list(a("x")),
 		examples: `> (quote foo)
@@ -263,7 +276,8 @@ foo
 		farity:    2,
 		isSpecial: true,
 		ismulti:   false,
-		doc:       "Update a value in an existing binding",
+		docStr:    "Update a value in an existing binding",
+		doc:       convertStringToDoc("Update a value in an existing binding"),
 		ftype:     special,
 		args:      list(a("name"), a("value")),
 		examples: `> (def a 1)
@@ -285,7 +299,8 @@ foo
 		farity:    0,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Swallow errors thrown in body, return t if any occur",
+		docStr:    "Swallow errors thrown in body, return t if any occur",
+		doc:       convertStringToDoc("Swallow errors thrown in body, return t if any occur"),
 		ftype:     special,
 		args:      Cons(Nil, a("body")),
 		examples: `> (swallow
@@ -302,7 +317,8 @@ t
 		farity:    1,
 		isSpecial: true,
 		ismulti:   false,
-		doc:       "Syntax-quote an expression",
+		docStr:    "Syntax-quote an expression",
+		doc:       convertStringToDoc("Syntax-quote an expression"),
 		ftype:     special,
 		args:      list(a("x")),
 		examples: `> (syntax-quote foo)
@@ -320,7 +336,8 @@ foo
 		farity:    0,
 		isSpecial: true,
 		ismulti:   true,
-		doc:       "Try to evaluate body, catch errors and handle them",
+		docStr:    "Try to evaluate body, catch errors and handle them",
+		doc:       convertStringToDoc("Try to evaluate body, catch errors and handle them"),
 		ftype:     special,
 		args:      Cons(Nil, a("body")),
 		examples: `> (try (error '(boom)))
@@ -337,6 +354,16 @@ ERROR:
 2
 >
 `,
+	},
+	{
+		name:      "test",
+		farity:    0,
+		isSpecial: true,
+		ismulti:   true,
+		docStr:    "Run a block of tests (first argument is description)",
+		doc:       convertStringToDoc("Run tests"),
+		ftype:     special,
+		args:      Cons(Nil, a("body")),
 	},
 }
 
@@ -364,15 +391,6 @@ func formatFunctionInfo(name, shortDesc string,
 		formType,
 		argstr,
 		capitalize(shortDesc))
-}
-
-func functionDescriptionFromDoc(l lambdaFn) string {
-	if l.doc == Nil {
-		return "UNDOCUMENTED"
-	}
-	carDoc := l.doc.car.String()
-	shortDoc := carDoc[1 : len(carDoc)-1]
-	return shortDoc
 }
 
 func functionExamplesFromDoc(l lambdaFn) *ConsCell {
@@ -432,7 +450,8 @@ func availableForms(e *Env) ([]formRec, error) {
 			farity:   builtin.FixedArity,
 			ismulti:  builtin.NAry,
 			isNative: true,
-			doc:      builtin.Docstring,
+			docStr:   builtin.docString,
+			doc:      builtin.Doc,
 			ftype:    native,
 			args:     builtin.Args,
 			examples: examplesToString(builtin.Examples, e),
@@ -464,7 +483,7 @@ func availableForms(e *Env) ([]formRec, error) {
 				farity:   cl,
 				isMacro:  l.isMacro,
 				ismulti:  l.restArg != "",
-				doc:      functionDescriptionFromDoc(*l),
+				doc:      l.doc,
 				ftype:    ftype,
 				args:     args,
 				examples: examples,
@@ -550,7 +569,7 @@ Args: %s
 `,
 			escapeSpecialChars(doc.name),
 			codeQuote(doc.name),
-			capitalize(doc.doc),
+			capitalize(docToString(doc.doc)),
 			doc.ftype,
 			doc.farity,
 			isMulti,
@@ -558,6 +577,12 @@ Args: %s
 			examples))
 	}
 	return strings.Join(outStrs, "\n"), nil
+}
+
+func docToString(doc *ConsCell) string {
+	carDoc := doc.car.String()
+	shortDoc := carDoc[1 : len(carDoc)-1]
+	return shortDoc
 }
 
 // ShortDocStr returns an abbreviated explanation of all functions,
@@ -581,7 +606,7 @@ func ShortDocStr(e *Env) (string, error) {
 	}
 	for _, doc := range af {
 		outStrs = append(outStrs, formatFunctionInfo(doc.name,
-			doc.doc,
+			docToString(doc.doc),
 			doc.farity,
 			doc.ismulti,
 			doc.isSpecial,

@@ -90,8 +90,8 @@ func TestEval(t *testing.T) {
 		{Cases(S("(errors '(one) (/ 1 0))", "", "division by zero"))},
 		{Cases(S("(errors '(zero) (/ 1 1))", "", "error not found"))},
 		{Cases(S("(test)", "()", OK))},
-		{Cases(S("(test 1)", "1", OK))},
-		{Cases(S("(test 1 2)", "2", OK))},
+		{Cases(S("(test 1)", "()", OK))},
+		{Cases(S("(test 1 2)", "()", OK))},
 		{Cases(S("(test '(divide by zero) (errors '(zero) (/ 1 0)))", "()", OK))},
 	}
 
