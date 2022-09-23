@@ -2,22 +2,22 @@ package lisp
 
 import (
 	"fmt"
-	"strings"
 )
 
 type lambdaFn struct {
-	args    []string
-	restArg string
-	body    *ConsCell
-	doc     *ConsCell
-	isMacro bool
-	env     *Env
+	argstrings []string
+	args       *ConsCell
+	restArg    string
+	body       *ConsCell
+	doc        *ConsCell
+	isMacro    bool
+	env        *Env
 }
 
 var noRestArg string = ""
 
 func mkLambda(cdr *ConsCell, isMacro bool, e *Env) (*lambdaFn, error) {
-	args := []string{}
+	argstrings := []string{}
 	restArg := noRestArg
 	// look for fn name
 	if cdr == Nil {
@@ -46,7 +46,7 @@ top:
 			if !ok {
 				return nil, baseError("argument list item is not an atom")
 			}
-			args = append(args, arg.s)
+			argstrings = append(argstrings, arg.s)
 		}
 		switch t := argList.cdr.(type) {
 		case Atom:
@@ -78,7 +78,8 @@ top:
 			body = body.cdr.(*ConsCell) // Skip `doc` part.
 		}
 	}
-	f := lambdaFn{args,
+	f := lambdaFn{argstrings,
+		stringsToList(argstrings...),
 		restArg,
 		body,
 		doc,
@@ -98,7 +99,8 @@ func (f *lambdaFn) String() string {
 		restArgsRepr = fmt.Sprintf(" . %s", f.restArg)
 	}
 	return fmt.Sprintf("<lambda(%s%s)>",
-		strings.Join(f.args, " "), restArgsRepr)
+		unwrapList(f.args),
+		restArgsRepr)
 }
 
 func (f *lambdaFn) Equal(o Sexpr) bool {

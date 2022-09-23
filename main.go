@@ -85,7 +85,12 @@ func main() {
 		os.Exit(0)
 	}
 	if longDocFlag {
-		fmt.Println(lisp.LongDocStr(&globals))
+		ld, err := lisp.LongDocStr(&globals)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Println(ld)
 		os.Exit(0)
 	}
 	if evalExpr != "" {

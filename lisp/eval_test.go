@@ -145,7 +145,11 @@ func TestEval(t *testing.T) {
 	}
 	examples = append(examples, "> (help)\n")
 	outstr := strings.Join(examples, "\n")
-	outstr += ShortDocStr(&globals)
+	shortDoc, err := ShortDocStr(&globals)
+	if err != nil {
+		t.Errorf("ShortDocStr: %v", err)
+	}
+	outstr += shortDoc
 	bs := []byte(outstr)
 	bs = append(bs, "\n> ^D\n$\n"...)
 	err = os.WriteFile("examples.txt", bs, 0644)

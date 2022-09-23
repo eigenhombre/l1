@@ -15,24 +15,29 @@ const (
 
 type formRec struct {
 	name      string
+	isSpecial bool
+	isMacro   bool
+	isNative  bool
 	farity    int
 	ismulti   bool
 	doc       string
-	columnDoc string
 	ftype     string
-	argsStr   string
+	args      *ConsCell
 	examples  string
 }
+
+func a(s string) Sexpr { return Atom{s} }
 
 // When you add a special form to eval, you should add it here as well:
 var specialForms = []formRec{
 	{
-		name:    "and",
-		farity:  0,
-		ismulti: true,
-		doc:     "Boolean and",
-		ftype:   special,
-		argsStr: "(() . xs)",
+		name:      "and",
+		farity:    0,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Boolean and",
+		ftype:     special,
+		args:      Cons(Nil, a("xs")),
 		examples: `(and)
 ;;=>
 true
@@ -48,12 +53,13 @@ true
 `,
 	},
 	{
-		name:    "cond",
-		farity:  0,
-		ismulti: true,
-		doc:     "Fundamental branching construct",
-		ftype:   special,
-		argsStr: "(() . pairs)",
+		name:      "cond",
+		farity:    0,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Fundamental branching construct",
+		ftype:     special,
+		args:      Cons(Nil, a("pairs")),
 		examples: `> (cond)
 ;;=> ()
 > (cond (t 1) (t 2) (t 3))
@@ -63,12 +69,13 @@ true
 `,
 	},
 	{
-		name:    "def",
-		farity:  2,
-		ismulti: false,
-		doc:     "Set a value",
-		ftype:   special,
-		argsStr: "(name value)",
+		name:      "def",
+		farity:    2,
+		isSpecial: true,
+		ismulti:   false,
+		doc:       "Set a value",
+		ftype:     special,
+		args:      list(a("name"), a("value")),
 		examples: `> (def a 1)
 ;;=>
 1
@@ -78,12 +85,13 @@ true
 `,
 	},
 	{
-		name:    "defn",
-		farity:  2,
-		ismulti: true,
-		doc:     "Create and name a function",
-		ftype:   special,
-		argsStr: "(name args . rest)",
+		name:      "defn",
+		farity:    2,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Create and name a function",
+		ftype:     special,
+		args:      Cons(a("name"), Cons(a("args"), a("body"))),
 		examples: `> (defn add (x y) (+ x y))
 ;;=>
 ()
@@ -103,12 +111,13 @@ true
 `,
 	},
 	{
-		name:    "defmacro",
-		farity:  2,
-		ismulti: true,
-		doc:     "Create and name a macro",
-		ftype:   special,
-		argsStr: "(name args . body)",
+		name:      "defmacro",
+		farity:    2,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Create and name a macro",
+		ftype:     special,
+		args:      Cons(a("name"), Cons(a("args"), a("body"))),
 		examples: `> (defmacro ignore-car (l)
     (doc (ignore first element of list,
                  treat rest as normal expression)
@@ -124,12 +133,13 @@ true
 	`,
 	},
 	{
-		name:    "error",
-		farity:  1,
-		ismulti: false,
-		doc:     "Raise an error",
-		ftype:   special,
-		argsStr: "(msg-list)",
+		name:      "error",
+		farity:    1,
+		isSpecial: true,
+		ismulti:   false,
+		doc:       "Raise an error",
+		ftype:     special,
+		args:      list(a("l")),
 		examples: `> (defn ensure-list (x)
     (when-not (list? x)
       (error '(ensure-list argument not a list!))))
@@ -142,12 +152,13 @@ ERROR in '(ensure-list 3)':
 `,
 	},
 	{
-		name:    "errors",
-		farity:  1,
-		ismulti: true,
-		doc:     "Error checking (for tests)",
-		ftype:   special,
-		argsStr: "(message-pattern-list . exprs)",
+		name:      "errors",
+		farity:    1,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Error checking (for tests)",
+		args:      Cons(a("expected"), a("body")),
+		ftype:     special,
 		examples: `> (errors '(is not a function)
     (1))
 ;;=>
@@ -160,12 +171,13 @@ error not found in ((quote (is not a function)) (+))
 `,
 	},
 	{
-		name:    "lambda",
-		farity:  1,
-		ismulti: true,
-		doc:     "Create a function",
-		ftype:   special,
-		argsStr: "(args . body) or (name args . body)",
+		name:      "lambda",
+		farity:    1,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Create a function",
+		ftype:     special,
+		args:      Cons(a("args"), a("more")),
 		examples: `> ((lambda () t))
 ;;=>
 t
@@ -182,12 +194,14 @@ t
 `,
 	},
 	{
-		name:    "let",
-		farity:  1,
-		ismulti: true,
-		doc:     "Create a local scope with bindings",
-		ftype:   special,
-		argsStr: "(bindings . body)",
+		name:      "let",
+		farity:    1,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Create a local scope with bindings",
+		ftype:     special,
+		args:      Cons(a("binding-pairs"), a("body")),
+
 		examples: `> (let ((a 1)
         (b 2))
     (+ a b))
@@ -196,12 +210,13 @@ t
 `,
 	},
 	{
-		name:    "loop",
-		farity:  1,
-		ismulti: true,
-		doc:     "Loop forever",
-		ftype:   special,
-		argsStr: "(() . body)",
+		name:      "loop",
+		farity:    1,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Loop forever",
+		ftype:     special,
+		args:      Nil,
 		examples: `> (loop
     (printl '(Help me, I am looping forever!))
     (sleep 1000))
@@ -213,12 +228,13 @@ Help me, I am looping forever!
 `,
 	},
 	{
-		name:    "or",
-		farity:  0,
-		ismulti: true,
-		doc:     "Boolean or",
-		ftype:   special,
-		argsStr: "(() . xs)",
+		name:      "or",
+		farity:    0,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Boolean or",
+		ftype:     special,
+		args:      Cons(Nil, a("xs")),
 		examples: `> (or)
 ;; => false
 > (or t t)
@@ -227,12 +243,13 @@ Help me, I am looping forever!
 ;; => t`,
 	},
 	{
-		name:    "quote",
-		farity:  1,
-		ismulti: false,
-		doc:     "Quote an expression",
-		ftype:   special,
-		argsStr: "(x)",
+		name:      "quote",
+		farity:    1,
+		isSpecial: true,
+		ismulti:   false,
+		doc:       "Quote an expression",
+		ftype:     special,
+		args:      list(a("x")),
 		examples: `> (quote foo)
 foo
 > (quote (1 2 3))
@@ -242,12 +259,13 @@ foo
 `,
 	},
 	{
-		name:    "set!",
-		farity:  2,
-		ismulti: false,
-		doc:     "Update a value in an existing binding",
-		ftype:   special,
-		argsStr: "(name value)",
+		name:      "set!",
+		farity:    2,
+		isSpecial: true,
+		ismulti:   false,
+		doc:       "Update a value in an existing binding",
+		ftype:     special,
+		args:      list(a("name"), a("value")),
 		examples: `> (def a 1)
 ;;=>
 1
@@ -263,12 +281,13 @@ foo
 `,
 	},
 	{
-		name:    "swallow",
-		farity:  0,
-		ismulti: true,
-		doc:     "Swallow errors thrown in body, return t if any occur",
-		ftype:   special,
-		argsStr: "(() . body)",
+		name:      "swallow",
+		farity:    0,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Swallow errors thrown in body, return t if any occur",
+		ftype:     special,
+		args:      Cons(Nil, a("body")),
 		examples: `> (swallow
 	(error '(boom)))
 ;;=>
@@ -279,12 +298,13 @@ t
 `,
 	},
 	{
-		name:    "syntax-quote",
-		farity:  1,
-		ismulti: false,
-		doc:     "Syntax-quote an expression",
-		ftype:   special,
-		argsStr: "(x)",
+		name:      "syntax-quote",
+		farity:    1,
+		isSpecial: true,
+		ismulti:   false,
+		doc:       "Syntax-quote an expression",
+		ftype:     special,
+		args:      list(a("x")),
 		examples: `> (syntax-quote foo)
 foo
 > (syntax-quote (1 2 3 4))
@@ -296,12 +316,13 @@ foo
 `,
 	},
 	{
-		name:    "try",
-		farity:  0,
-		ismulti: true,
-		doc:     "Try to evaluate body, catch errors and handle them",
-		ftype:   special,
-		argsStr: "(() . body)",
+		name:      "try",
+		farity:    0,
+		isSpecial: true,
+		ismulti:   true,
+		doc:       "Try to evaluate body, catch errors and handle them",
+		ftype:     special,
+		args:      Cons(Nil, a("body")),
 		examples: `> (try (error '(boom)))
 ;;=>
 ERROR:
@@ -410,35 +431,24 @@ func examplesToString(examples *ConsCell, e *Env) string {
 	return ret
 }
 
-func availableForms(e *Env) []formRec {
-	// Special forms - only need to add formatted column description:
-	out := []formRec{}
-	for _, form := range specialForms {
-		form.columnDoc = formatFunctionInfo(form.name,
-			form.doc, form.farity, form.ismulti, true, false, false)
-		out = append(out, form)
-	}
+func availableForms(e *Env) ([]formRec, error) {
+	// Start with special forms...
+	out := specialForms
 
-	// Builtins:
+	// Add builtins...:
 	for _, builtin := range builtins {
 		out = append(out, formRec{
 			name:     builtin.Name,
 			farity:   builtin.FixedArity,
 			ismulti:  builtin.NAry,
+			isNative: true,
 			doc:      builtin.Docstring,
 			ftype:    native,
-			argsStr:  builtin.ArgString,
+			args:     builtin.Args,
 			examples: examplesToString(builtin.Examples, e),
-			columnDoc: formatFunctionInfo(builtin.Name,
-				builtin.Docstring,
-				builtin.FixedArity,
-				builtin.NAry,
-				false,
-				false,
-				true),
 		})
 	}
-	// User-defined / internal l1 functions:
+	// Add user-defined / internal l1 functions...:
 	for _, lambdaName := range EnvKeys(e) {
 		expr, _ := e.Lookup(lambdaName)
 		l, ok := expr.(*lambdaFn)
@@ -449,31 +459,47 @@ func availableForms(e *Env) []formRec {
 		if l.isMacro {
 			ftype = macro
 		}
+		cl, err := consLength(l.args)
+		if err != nil {
+			return nil, extendError("availableForms", err)
+		}
+		args := l.args
+		if l.restArg != "" {
+			args = combineArgs(l.args, Atom{l.restArg})
+		}
 		if ok && l.doc != Nil {
 			examples := examplesToString(functionExamplesFromDoc(*l), e)
 			out = append(out, formRec{
 				name:     lambdaName,
-				farity:   len(l.args),
+				farity:   cl,
+				isMacro:  l.isMacro,
 				ismulti:  l.restArg != "",
 				doc:      functionDescriptionFromDoc(*l),
 				ftype:    ftype,
-				argsStr:  formatLambdaArgs(l.args, l.restArg),
+				args:     args,
 				examples: examples,
-				columnDoc: formatFunctionInfo(lambdaName,
-					functionDescriptionFromDoc(*l),
-					len(l.args),
-					l.restArg != "",
-					false,
-					l.isMacro,
-					false),
 			})
 		}
 
 	}
+	// Order by name:
 	sort.Slice(out, func(i, j int) bool {
 		return out[i].name < out[j].name
 	})
-	return out
+	return out, nil
+}
+
+func combineArgs(args *ConsCell, cdr Sexpr) *ConsCell {
+	if cdr == Nil {
+		return args
+	}
+	if args == Nil {
+		return Cons(Nil, cdr)
+	}
+	if args.cdr == Nil {
+		return Cons(args.car, cdr)
+	}
+	return Cons(args.car, combineArgs(args.cdr.(*ConsCell), cdr))
 }
 
 func codeQuote(s string) string {
@@ -489,8 +515,11 @@ func escapeSpecialChars(s string) string {
 
 // LongDocStr returns a long, Markdown docstr for a function, macro or
 // special form.
-func LongDocStr(e *Env) string {
-	sortedForms := availableForms(e)
+func LongDocStr(e *Env) (string, error) {
+	sortedForms, err := availableForms(e)
+	if err != nil {
+		return "", extendError("long-form doc", err)
+	}
 	summary := fmt.Sprintf("# API Index\n%d forms available:", len(sortedForms))
 	for _, form := range sortedForms {
 		nameStr := fmt.Sprintf("`%s`", form.name)
@@ -504,7 +533,7 @@ func LongDocStr(e *Env) string {
 	summary += "\n# Operators\n"
 	outStrs := []string{summary}
 	for _, doc := range sortedForms {
-		isMulti := " "
+		isMulti := ""
 		if doc.ismulti {
 			isMulti = "+"
 		}
@@ -528,22 +557,22 @@ Args: %s
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		`,
+`,
 			escapeSpecialChars(doc.name),
 			codeQuote(doc.name),
 			capitalize(doc.doc),
 			doc.ftype,
 			doc.farity,
 			isMulti,
-			fmt.Sprintf("`%s`", doc.argsStr),
+			fmt.Sprintf("`%s`", doc.args),
 			examples))
 	}
-	return strings.Join(outStrs, "\n")
+	return strings.Join(outStrs, "\n"), nil
 }
 
 // ShortDocStr returns an abbreviated explanation of all functions,
 // macros and special forms.
-func ShortDocStr(e *Env) string {
+func ShortDocStr(e *Env) (string, error) {
 	outStrs := []string{}
 	outStrs = append(outStrs,
 		"l1 - a Lisp interpreter.\n",
@@ -556,18 +585,31 @@ func ShortDocStr(e *Env) string {
 		fmt.Sprintf(columnsFormat, "Name", "Type", "Arity", "Description"),
 		fmt.Sprintf(columnsFormat, "----", "---", "----", "-----------"),
 	)
-	sortedForms := availableForms(e)
-	for _, doc := range sortedForms {
-		outStrs = append(outStrs, doc.columnDoc)
+	af, err := availableForms(e)
+	if err != nil {
+		return "", extendError("short-form doc", err)
 	}
-	return strings.Join(outStrs, "\n")
+	for _, doc := range af {
+		outStrs = append(outStrs, formatFunctionInfo(doc.name,
+			doc.doc,
+			doc.farity,
+			doc.ismulti,
+			doc.isSpecial,
+			doc.isMacro,
+			doc.isNative))
+	}
+	return strings.Join(outStrs, "\n"), nil
 }
 
 // a map... my kingdom for a map...
-func formsAsSexprList(e *Env) []Sexpr {
+func formsAsSexprList(e *Env) ([]Sexpr, error) {
 	out := []Sexpr{}
-	for _, form := range availableForms(e) {
+	af, err := availableForms(e)
+	if err != nil {
+		return nil, extendError("sexpr forms", err)
+	}
+	for _, form := range af {
 		out = append(out, Atom{form.name})
 	}
-	return out
+	return out, nil
 }

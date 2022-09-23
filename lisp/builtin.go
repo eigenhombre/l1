@@ -56,6 +56,7 @@ type Builtin struct {
 	NAry      bool
 	Docstring string
 	ArgString string
+	Args      *ConsCell
 	Examples  *ConsCell
 }
 
@@ -167,6 +168,22 @@ func LoadFile(e *Env, filename string) error {
 	return nil
 }
 
+func shapeArgStringsAsCons(stringsForCar []string, stringForCdr string) *ConsCell {
+	var ret *ConsCell
+	var cdr Sexpr = Nil
+	if stringForCdr != "" {
+		cdr = Atom{stringForCdr}
+	}
+	if len(stringsForCar) == 0 {
+		return Cons(Nil, cdr)
+	}
+	ret = Cons(Atom{stringsForCar[len(stringsForCar)-1]}, cdr)
+	for i := len(stringsForCar) - 2; i >= 0; i-- {
+		ret = Cons(Atom{stringsForCar[i]}, ret)
+	}
+	return ret
+}
+
 // moving `builtins` into `init` avoids initialization loop for doHelp:
 var builtins map[string]*Builtin
 
@@ -189,6 +206,7 @@ func init() {
 	QA := func(s string) *ConsCell {
 		return L(A("quote"), A(s)).(*ConsCell)
 	}
+	C := func(a, b Sexpr) *ConsCell { return Cons(a, b) }
 	builtins = map[string]*Builtin{
 		"+": {
 			Name:       "+",
@@ -196,6 +214,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . xs)",
+			Args:       C(Nil, A("xs")),
 			Examples: E(
 				L(A("+"), N(1), N(2), N(3)),
 				L(A("+")),
@@ -221,6 +240,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Args:       C(A("x"), A("xs")),
 			Examples: E(
 				L(A("-"), N(1), N(1)),
 				L(A("-"), N(5), N(2), N(1)),
@@ -253,6 +273,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       true,
 			ArgString:  "(() . xs)",
+			Args:       C(Nil, A("xs")),
 			Examples: E(
 				L(A("*"), N(1), N(2), N(3)),
 				L(A("*")),
@@ -278,6 +299,7 @@ func init() {
 			FixedArity: 2,
 			NAry:       true,
 			ArgString:  "(numerator denominator1 . more)",
+			Args:       C(A("numerator"), C(A("denominator1"), A("more"))),
 			Examples: E(
 				L(A("/"), N(1), N(2)),
 				L(A("/"), N(12), N(2), N(3)),
@@ -310,6 +332,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Args:       C(A("x"), A("xs")),
 			Examples: E(
 				L(A("="), N(1), N(1)),
 				L(A("="), N(1), N(2)),
@@ -333,6 +356,7 @@ func init() {
 			FixedArity: 2,
 			NAry:       false,
 			ArgString:  "(x y)",
+			Args:       list(A("x"), A("y")),
 			Examples: E(
 				L(A("rem"), N(5), N(2)),
 				L(A("rem"), N(4), N(2)),
@@ -362,6 +386,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			ArgString:  "(x . xs)",
+			Args:       C(A("x"), A("xs")),
 			Examples: E(
 				L(A("<"), N(1), N(2)),
 				L(A("<"), N(1), N(1)),
@@ -379,7 +404,7 @@ func init() {
 			Docstring:  "Return t if the arguments are in increasing (or qual) order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			ArgString:  "(x . xs)",
+			Args:       C(A("x"), A("xs")),
 			Examples: E(
 				L(A("<="), N(1), N(2)),
 				L(A("<="), N(1), N(1)),
@@ -396,6 +421,7 @@ func init() {
 			Docstring:  "Return t if the arguments are in strictly decreasing order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
+			Args:       C(A("x"), A("xs")),
 			ArgString:  "(x . xs)",
 			Examples: E(
 				L(A(">"), N(1), N(2)),
@@ -413,6 +439,7 @@ func init() {
 			Docstring:  "Return t if the arguments are in decreasing (or equal) order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
+			Args:       C(A("x"), A("xs")),
 			ArgString:  "(x . xs)",
 			Examples: E(
 				L(A(">="), N(1), N(2)),
@@ -430,6 +457,7 @@ func init() {
 			FixedArity: 2,
 			NAry:       false,
 			ArgString:  "(f args)",
+			Args:       list(A("f"), A("args")),
 			Examples: E(
 				L(A("apply"), A("+"), L(A("repeat"), N(10), N(1))),
 				L(A("apply"), A("*"), L(A("cdr"), L(A("range"), N(10)))),
@@ -442,6 +470,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("atom?"), N(1)),
 				L(A("atom?"), QA("one")),
@@ -462,6 +491,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(f)",
+			Args:       list(A("f")),
 			Examples: E(
 				L(A("body"), L(A("lambda"), L(A("x")), L(A("+"), A("x"), N(1)))),
 			),
@@ -482,6 +512,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("car"), QL(A("one"), A("two"))),
 				L(A("car"), L()),
@@ -506,6 +537,8 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
+
 			Examples: E(
 				L(A("cdr"), QL(A("one"), A("two"))),
 				L(A("cdr"), L()),
@@ -530,6 +563,7 @@ func init() {
 			FixedArity: 2,
 			NAry:       false,
 			ArgString:  "(x xs)",
+			Args:       list(A("x"), A("xs")),
 			Examples: E(
 				L(A("cons"), N(1), QL(A("one"), A("two"))),
 				L(A("cons"), N(1), L()),
@@ -548,6 +582,8 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
+
 			Examples: E(
 				L(A("doc"), L(A("lambda"), L(A("x")),
 					L(A("doc"), L(A("does"), A("stuff")),
@@ -574,6 +610,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("downcase"), QA("Hello")),
 				L(A("downcase"), QA("HELLO")),
@@ -595,6 +632,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("eval"), QL(A("one"), A("two"))),
 				L(A("eval"), QL(A("+"), N(1), N(2))),
@@ -612,6 +650,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				os.Exit(0)
 				return nil, nil
@@ -623,8 +662,13 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
-				return mkListAsConsWithCdr(formsAsSexprList(e), Nil), nil
+				forms, err := formsAsSexprList(e)
+				if err != nil {
+					return nil, extendError("forms", err)
+				}
+				return mkListAsConsWithCdr(forms, Nil), nil
 			},
 		},
 		"fuse": {
@@ -633,6 +677,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("fuse"), QL(A("A"), A("B"), A("C"))),
 				L(A("fuse"), L(A("reverse"), L(A("range"), N(10)))),
@@ -693,6 +738,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				fmt.Println(ShortDocStr(e))
 				return Nil, nil
@@ -704,6 +750,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("isqrt"), N(4)),
 				L(A("isqrt"), N(5)),
@@ -728,6 +775,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("len"), L(A("range"), N(10))),
 			),
@@ -767,6 +815,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("list?"), L(A("range"), N(10))),
 				L(A("list?"), N(1)),
@@ -808,6 +857,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("macroexpand-1"), QL(A("+"), A("x"), N(1))),
 				L(A("macroexpand-1"), QL(A("if"), L(), N(1), N(2))),
@@ -825,6 +875,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("not"), L()),
 				L(A("not"), A("t")),
@@ -846,6 +897,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("number?"), N(1)),
 				L(A("number?"), A("t")),
@@ -898,6 +950,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("missing argument")
@@ -916,6 +969,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("randint expects a single argument")
@@ -937,6 +991,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				line, err := ReadLine()
 				if err != nil {
@@ -955,6 +1010,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termStart()
 				if err != nil {
@@ -969,6 +1025,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termEnd()
 				if err != nil {
@@ -983,6 +1040,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				width, height, err := termSize()
 				if err != nil {
@@ -997,6 +1055,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termClear()
 				if err != nil {
@@ -1011,6 +1070,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 0 {
 					return nil, baseError("getkey expects no arguments")
@@ -1070,6 +1130,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(xs)",
+			Args:       list(A("xs")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("shuffle expects a single argument")
@@ -1112,6 +1173,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(xs)",
+			Args:       list(A("xs")),
 			Examples: E(
 				L(A("sort"), QL(N(3), N(2), N(1))),
 				L(A("sort"), QL()),
@@ -1226,12 +1288,7 @@ func init() {
 				case *Builtin:
 					return nil, baseErrorf("cannot get source of builtin function %s", t)
 				case *lambdaFn:
-					var argsCdr Sexpr = Nil
-					if t.restArg != "" {
-						argsCdr = Atom{t.restArg}
-					}
-					argExprs := stringsToExprs(t.args...)
-					return Cons(Atom{"lambda"}, Cons(mkListAsConsWithCdr(argExprs, argsCdr), t.body)), nil
+					return Cons(Atom{"lambda"}, Cons(shapeArgStringsAsCons(t.argstrings, t.restArg), t.body)), nil
 				default:
 					return nil, baseErrorf("'%s' is not a function", args[0])
 				}
@@ -1243,6 +1300,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("split"), N(123)),
 				L(A("split"), QA("abc")),
@@ -1285,6 +1343,7 @@ func init() {
 			FixedArity: 1,
 			NAry:       false,
 			ArgString:  "(x)",
+			Args:       list(A("x")),
 			Examples: E(
 				L(A("upcase"), QA("abc")),
 			),
@@ -1305,6 +1364,7 @@ func init() {
 			FixedArity: 0,
 			NAry:       false,
 			ArgString:  "()",
+			Args:       Nil,
 			Examples: E(
 				L(A("version")),
 			),

@@ -43,7 +43,7 @@ func extractCxrLambda(t Atom, e *Env) (Sexpr, error) {
 		args = Cons(Atom{string(t.s[i])}, args)
 	}
 	newLambda := &lambdaFn{
-		args:    []string{"xs"},
+		args:    list(Atom{"xs"}),
 		body:    list(list(Atom{"c*r"}, list(Atom{"quote"}, args), Atom{"xs"})),
 		isMacro: false,
 		env:     e,
@@ -168,29 +168,44 @@ func evErrors(args *ConsCell, e *Env) (Sexpr, error) {
 // Both eval, apply and macroexpansion use this to bind lambda arguments in the
 // supplied environment:
 func setLambdaArgsInEnv(e *Env, lambda *lambdaFn, evaledList []Sexpr) error {
-	var err error
+	numArgs, err := consLength(lambda.args)
+	if err != nil {
+		return extendError("setting lambda args", err)
+	}
 	if lambda.restArg != noRestArg {
-		if len(lambda.args) > len(evaledList) {
+		if numArgs > len(evaledList) {
 			return baseError("not enough arguments for function")
 		}
 		err = e.Set(lambda.restArg,
-			mkListAsConsWithCdr(evaledList[len(lambda.args):],
+			mkListAsConsWithCdr(evaledList[numArgs:],
 				Nil))
 		if err != nil {
 			return err
 		}
 	} else {
-		if len(lambda.args) < len(evaledList) {
+		if numArgs < len(evaledList) {
 			return baseError("too many arguments for function")
-		} else if len(lambda.args) > len(evaledList) {
+		} else if numArgs > len(evaledList) {
 			return baseError("not enough arguments for function")
 		}
 	}
-	for i, arg := range lambda.args {
-		err := e.Set(arg, evaledList[i])
-		if err != nil {
-			return err
+	// // iterate over lambda.args and evaledList, binding each:
+	start := lambda.args
+	i := 0
+	for start != Nil {
+		arg, ok := start.car.(Atom)
+		if !ok {
+			return baseError("lambda argument must be an atom")
 		}
+		err = e.Set(arg.s, evaledList[i])
+		if err != nil {
+			return extendError("setting lambda arg", err)
+		}
+		start, ok = start.cdr.(*ConsCell)
+		if !ok {
+			return baseError("lambda argument list must be a list")
+		}
+		i++
 	}
 	return nil
 }

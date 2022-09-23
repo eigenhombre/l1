@@ -17,7 +17,7 @@ ${PROG}: *.go lisp/*.go lisp/l1.l1
 	go build -o l1 .
 
 test:
-	go test ./lisp
+	go test -v ./lisp
 
 l1-tests: ${PROG}
 	./l1 tests.l1

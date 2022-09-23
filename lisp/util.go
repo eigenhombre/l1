@@ -26,20 +26,26 @@ func consToExprs(argList Sexpr) ([]Sexpr, error) {
 	return args, nil
 }
 
+func consLength(l *ConsCell) (int, error) {
+	ret := 0
+	x := l
+	var ok bool
+	for x != Nil {
+		x, ok = x.cdr.(*ConsCell)
+		if !ok {
+			return 0, baseErrorf("consLength: expected list, got %q", l)
+		}
+		ret += 1
+	}
+	return ret, nil
+}
+
 func stringsToList(listElems ...string) *ConsCell {
 	xs := make([]Sexpr, len(listElems))
 	for i, s := range listElems {
 		xs[i] = Atom{s}
 	}
 	return list(xs...)
-}
-
-func stringsToExprs(listElems ...string) []Sexpr {
-	xs := make([]Sexpr, len(listElems))
-	for i, s := range listElems {
-		xs[i] = Atom{s}
-	}
-	return xs
 }
 
 func list(listElems ...Sexpr) *ConsCell {

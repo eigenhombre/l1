@@ -164,7 +164,7 @@ Args: `(() . xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="-STAR-STAR"></a>
 ## `**`
@@ -173,7 +173,7 @@ Exponentiation operator
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(n m)`
 
@@ -196,7 +196,7 @@ Args: `(n m)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="+"></a>
 ## `+`
@@ -225,7 +225,7 @@ Args: `(() . xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="-"></a>
 ## `-`
@@ -257,7 +257,7 @@ Args: `(x . xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="/"></a>
 ## `/`
@@ -289,7 +289,7 @@ ERROR: ((builtin function /) (division by zero))
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="<"></a>
 ## `<`
@@ -324,7 +324,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="<="></a>
 ## `<=`
@@ -356,7 +356,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="="></a>
 ## `=`
@@ -388,7 +388,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id=">"></a>
 ## `>`
@@ -420,7 +420,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id=">="></a>
 ## `>=`
@@ -449,7 +449,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="abs"></a>
 ## `abs`
@@ -458,7 +458,7 @@ Return absolute value of x
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -478,7 +478,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="and"></a>
 ## `and`
@@ -513,7 +513,7 @@ true
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="apply"></a>
 ## `apply`
@@ -522,7 +522,7 @@ Apply a function to a list of arguments
 
 Type: native function
 
-Arity: 2 
+Arity: 2
 
 Args: `(f args)`
 
@@ -542,7 +542,7 @@ Args: `(f args)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="atom-QMARK"></a>
 ## `atom?`
@@ -551,7 +551,7 @@ Return t if the argument is an atom, () otherwise
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -571,7 +571,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="bang"></a>
 ## `bang`
@@ -580,7 +580,7 @@ Add an exclamation point at end of atom
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(a)`
 
@@ -597,7 +597,7 @@ Bang!
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="body"></a>
 ## `body`
@@ -606,7 +606,7 @@ Return the body of a lambda function
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(f)`
 
@@ -623,7 +623,7 @@ Args: `(f)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="butlast"></a>
 ## `butlast`
@@ -632,7 +632,7 @@ Return everything but the last element
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -652,7 +652,7 @@ Args: `(l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="capitalize"></a>
 ## `capitalize`
@@ -661,7 +661,7 @@ Return the atom argument, capitalized
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(a)`
 
@@ -678,7 +678,7 @@ Hello
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="car"></a>
 ## `car`
@@ -687,7 +687,7 @@ Return the first element of a list
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -707,7 +707,7 @@ one
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="cdr"></a>
 ## `cdr`
@@ -716,7 +716,7 @@ Return a list with the first element removed
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -736,7 +736,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="colon"></a>
 ## `colon`
@@ -745,7 +745,7 @@ Add a colon at end of atom
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(a)`
 
@@ -762,7 +762,7 @@ remember-this:
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="comma"></a>
 ## `comma`
@@ -771,7 +771,7 @@ Add a comma at end of atom
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(a)`
 
@@ -788,7 +788,7 @@ hello,
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="comment"></a>
 ## `comment`
@@ -814,7 +814,7 @@ Args: `(() . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="comp"></a>
 ## `comp`
@@ -849,7 +849,7 @@ hello
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="complement"></a>
 ## `complement`
@@ -858,7 +858,7 @@ Return the logical complement of the supplied function
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(f)`
 
@@ -878,7 +878,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="concat"></a>
 ## `concat`
@@ -904,7 +904,7 @@ Args: `(() . lists)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="concat2"></a>
 ## `concat2`
@@ -913,7 +913,7 @@ Concatenate two lists
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(a b)`
 
@@ -933,7 +933,7 @@ Args: `(a b)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="cond"></a>
 ## `cond`
@@ -962,7 +962,7 @@ Args: `(() . pairs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="cons"></a>
 ## `cons`
@@ -971,7 +971,7 @@ Add an element to the front of a (possibly empty) list
 
 Type: native function
 
-Arity: 2 
+Arity: 2
 
 Args: `(x xs)`
 
@@ -994,7 +994,7 @@ Args: `(x xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="constantly"></a>
 ## `constantly`
@@ -1003,7 +1003,7 @@ Given a value, return a function which always returns that value
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1020,7 +1020,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="dec"></a>
 ## `dec`
@@ -1029,7 +1029,7 @@ Return the supplied integer argument, minus one
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -1049,7 +1049,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="def"></a>
 ## `def`
@@ -1058,7 +1058,7 @@ Set a value
 
 Type: special form
 
-Arity: 2 
+Arity: 2
 
 Args: `(name value)`
 
@@ -1078,7 +1078,7 @@ Args: `(name value)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="defmacro"></a>
 ## `defmacro`
@@ -1113,7 +1113,7 @@ Args: `(name args . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="defn"></a>
 ## `defn`
@@ -1124,7 +1124,7 @@ Type: special form
 
 Arity: 2+
 
-Args: `(name args . rest)`
+Args: `(name args . body)`
 
 
 ### Examples
@@ -1152,7 +1152,7 @@ Args: `(name args . rest)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="doc"></a>
 ## `doc`
@@ -1161,7 +1161,7 @@ Return the doclist for a function
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1178,7 +1178,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="dotimes"></a>
 ## `dotimes`
@@ -1195,7 +1195,7 @@ Args: `(n . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="downcase"></a>
 ## `downcase`
@@ -1204,7 +1204,7 @@ Return a new atom with all characters in lower case
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1224,7 +1224,7 @@ hello
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="drop"></a>
 ## `drop`
@@ -1233,7 +1233,7 @@ Drop n items from a list, then return the rest
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(n l)`
 
@@ -1250,7 +1250,7 @@ Args: `(n l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="enumerate"></a>
 ## `enumerate`
@@ -1259,7 +1259,7 @@ Returning list of (i, x) pairs where i is the index (from zero) and x is the ori
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -1276,7 +1276,7 @@ Args: `(l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="error"></a>
 ## `error`
@@ -1285,9 +1285,9 @@ Raise an error
 
 Type: special form
 
-Arity: 1 
+Arity: 1
 
-Args: `(msg-list)`
+Args: `(l)`
 
 
 ### Examples
@@ -1308,7 +1308,7 @@ ERROR in '(ensure-list 3)':
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="errors"></a>
 ## `errors`
@@ -1319,7 +1319,7 @@ Type: special form
 
 Arity: 1+
 
-Args: `(message-pattern-list . exprs)`
+Args: `(expected . body)`
 
 
 ### Examples
@@ -1340,7 +1340,7 @@ error not found in ((quote (is not a function)) (+))
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="eval"></a>
 ## `eval`
@@ -1349,7 +1349,7 @@ Evaluate an expression
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1369,7 +1369,7 @@ ERROR: ((builtin function eval) (evaluating function object) (unknown symbol: on
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="even-QMARK"></a>
 ## `even?`
@@ -1378,7 +1378,7 @@ Return true if the supplied integer argument is even
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -1395,7 +1395,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="exclaim"></a>
 ## `exclaim`
@@ -1404,7 +1404,7 @@ Return l as a sentence... emphasized!
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -1427,7 +1427,7 @@ Args: `(l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="exit"></a>
 ## `exit`
@@ -1436,7 +1436,7 @@ Exit the program
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -1444,7 +1444,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="filter"></a>
 ## `filter`
@@ -1453,7 +1453,7 @@ Keep only values for which function f is true
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(f l)`
 
@@ -1470,7 +1470,7 @@ Args: `(f l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="flatten"></a>
 ## `flatten`
@@ -1479,7 +1479,7 @@ Return a (possibly nested) list, flattened
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -1496,7 +1496,7 @@ Args: `(l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="foreach"></a>
 ## `foreach`
@@ -1513,7 +1513,7 @@ Args: `(x xs . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="forms"></a>
 ## `forms`
@@ -1522,7 +1522,7 @@ Return available operators, as a list
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -1530,7 +1530,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="fuse"></a>
 ## `fuse`
@@ -1539,7 +1539,7 @@ Fuse a list of numbers or atoms into a single atom
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1559,7 +1559,7 @@ ABC
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="gensym"></a>
 ## `gensym`
@@ -1570,13 +1570,13 @@ Type: native function
 
 Arity: 0+
 
-Args: `(() . x)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="help"></a>
 ## `help`
@@ -1585,7 +1585,7 @@ Print this message
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -1593,7 +1593,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="identity"></a>
 ## `identity`
@@ -1602,7 +1602,7 @@ Return the argument
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1610,7 +1610,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="if"></a>
 ## `if`
@@ -1619,7 +1619,7 @@ Simple conditional with two branches
 
 Type: macro
 
-Arity: 3 
+Arity: 3
 
 Args: `(condition then else)`
 
@@ -1639,7 +1639,7 @@ def
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="if-not"></a>
 ## `if-not`
@@ -1648,7 +1648,7 @@ Simple (inverted) conditional with two branches
 
 Type: macro
 
-Arity: 3 
+Arity: 3
 
 Args: `(condition then else)`
 
@@ -1665,7 +1665,7 @@ Args: `(condition then else)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="inc"></a>
 ## `inc`
@@ -1674,7 +1674,7 @@ Return the supplied integer argument, plus one
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -1682,7 +1682,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="interpose"></a>
 ## `interpose`
@@ -1691,7 +1691,7 @@ Interpose x between all elements of l
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(x l)`
 
@@ -1708,7 +1708,7 @@ Args: `(x l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="is"></a>
 ## `is`
@@ -1717,7 +1717,7 @@ Assert a condition is truthy, or show failing code
 
 Type: macro
 
-Arity: 1 
+Arity: 1
 
 Args: `(condition)`
 
@@ -1737,7 +1737,7 @@ ERROR: ((assertion failed: (car (cons () (quote (this one should fail))))))
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="isqrt"></a>
 ## `isqrt`
@@ -1746,7 +1746,7 @@ Integer square root
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1766,7 +1766,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="juxt"></a>
 ## `juxt`
@@ -1801,7 +1801,7 @@ Args: `(() . fs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="lambda"></a>
 ## `lambda`
@@ -1812,7 +1812,7 @@ Type: special form
 
 Arity: 1+
 
-Args: `(args . body) or (name args . body)`
+Args: `(args . more)`
 
 
 ### Examples
@@ -1837,7 +1837,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="last"></a>
 ## `last`
@@ -1846,7 +1846,7 @@ Return the last item in a list
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -1866,7 +1866,7 @@ Args: `(l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="len"></a>
 ## `len`
@@ -1875,7 +1875,7 @@ Return the length of a list
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -1892,7 +1892,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="let"></a>
 ## `let`
@@ -1903,7 +1903,7 @@ Type: special form
 
 Arity: 1+
 
-Args: `(bindings . body)`
+Args: `(binding-pairs . body)`
 
 
 ### Examples
@@ -1920,7 +1920,7 @@ Args: `(bindings . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="let-STAR"></a>
 ## `let*`
@@ -1946,7 +1946,7 @@ Args: `(pairs . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="list"></a>
 ## `list`
@@ -1957,7 +1957,7 @@ Type: native function
 
 Arity: 0+
 
-Args: `(() . xs)`
+Args: `()`
 
 
 ### Examples
@@ -1975,7 +1975,7 @@ Args: `(() . xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="list-STAR"></a>
 ## `list*`
@@ -2007,7 +2007,7 @@ Args: `(() . args)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="list-QMARK"></a>
 ## `list?`
@@ -2016,7 +2016,7 @@ Return t if the argument is a list, () otherwise
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -2036,7 +2036,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="load"></a>
 ## `load`
@@ -2045,15 +2045,15 @@ Load and execute a file
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
-Args: `(filename)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="loop"></a>
 ## `loop`
@@ -2064,7 +2064,7 @@ Type: special form
 
 Arity: 1+
 
-Args: `(() . body)`
+Args: `()`
 
 
 ### Examples
@@ -2084,7 +2084,7 @@ Help me, I am looping forever!
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="macroexpand-1"></a>
 ## `macroexpand-1`
@@ -2093,7 +2093,7 @@ Expand a macro
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -2113,7 +2113,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="map"></a>
 ## `map`
@@ -2122,7 +2122,7 @@ Apply the supplied function to every element in the supplied list
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(f l)`
 
@@ -2142,7 +2142,7 @@ Args: `(f l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="mapcat"></a>
 ## `mapcat`
@@ -2151,7 +2151,7 @@ Map a function onto a list and concatenate results
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(f l)`
 
@@ -2177,7 +2177,7 @@ Args: `(f l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="max"></a>
 ## `max`
@@ -2209,7 +2209,7 @@ Args: `(() . args)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="min"></a>
 ## `min`
@@ -2241,7 +2241,7 @@ Args: `(() . args)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="neg-QMARK"></a>
 ## `neg?`
@@ -2250,7 +2250,7 @@ Return true iff the supplied integer argument is less than zero
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -2267,7 +2267,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="not"></a>
 ## `not`
@@ -2276,7 +2276,7 @@ Return t if the argument is nil, () otherwise
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -2299,7 +2299,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="not="></a>
 ## `not=`
@@ -2328,7 +2328,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="nth"></a>
 ## `nth`
@@ -2337,7 +2337,7 @@ Find the nth value of a list, starting from zero
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(n l)`
 
@@ -2357,7 +2357,7 @@ four
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="number-QMARK"></a>
 ## `number?`
@@ -2366,7 +2366,7 @@ Return true if the argument is a number, else ()
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -2389,7 +2389,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="odd-QMARK"></a>
 ## `odd?`
@@ -2398,7 +2398,7 @@ Return true if the supplied integer argument is odd
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -2415,7 +2415,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="or"></a>
 ## `or`
@@ -2443,7 +2443,7 @@ Args: `(() . xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="partial"></a>
 ## `partial`
@@ -2472,7 +2472,7 @@ Args: `(f . args)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="period"></a>
 ## `period`
@@ -2481,7 +2481,7 @@ Add a period at end of atom
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(a)`
 
@@ -2498,7 +2498,7 @@ Woot.
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="pos-QMARK"></a>
 ## `pos?`
@@ -2507,7 +2507,7 @@ Return true iff the supplied integer argument is greater than zero
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -2524,7 +2524,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="print"></a>
 ## `print`
@@ -2535,13 +2535,13 @@ Type: native function
 
 Arity: 0+
 
-Args: `(() . xs)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="printl"></a>
 ## `printl`
@@ -2550,7 +2550,7 @@ Print a list argument, without parentheses
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -2558,7 +2558,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="println"></a>
 ## `println`
@@ -2569,13 +2569,13 @@ Type: native function
 
 Arity: 0+
 
-Args: `(() . xs)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="progn"></a>
 ## `progn`
@@ -2604,7 +2604,7 @@ Args: `(() . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="punctuate"></a>
 ## `punctuate`
@@ -2613,7 +2613,7 @@ Return x capitalized, with punctuation determined by the supplied function
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(f x)`
 
@@ -2621,7 +2621,7 @@ Args: `(f x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="punctuate-atom"></a>
 ## `punctuate-atom`
@@ -2630,7 +2630,7 @@ Add a punctuation mark at end of atom
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(a mark)`
 
@@ -2650,7 +2650,7 @@ list:
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="quote"></a>
 ## `quote`
@@ -2659,7 +2659,7 @@ Quote an expression
 
 Type: special form
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -2679,7 +2679,7 @@ foo
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="randalpha"></a>
 ## `randalpha`
@@ -2688,7 +2688,7 @@ Return a list of random (English/Latin/unaccented) lower-case alphabetic charact
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -2696,7 +2696,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="randchoice"></a>
 ## `randchoice`
@@ -2705,7 +2705,7 @@ Return an element at random from the supplied list
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -2713,7 +2713,7 @@ Args: `(l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="randigits"></a>
 ## `randigits`
@@ -2722,7 +2722,7 @@ Return a random integer between 0 and the argument minus 1
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -2730,7 +2730,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="randint"></a>
 ## `randint`
@@ -2739,7 +2739,7 @@ Return a random integer between 0 and the argument minus 1
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -2747,7 +2747,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="range"></a>
 ## `range`
@@ -2756,7 +2756,7 @@ List of integers from 0 to n
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -2776,7 +2776,7 @@ Args: `(n)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="readlist"></a>
 ## `readlist`
@@ -2785,7 +2785,7 @@ Read a list from stdin
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -2793,7 +2793,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="reduce"></a>
 ## `reduce`
@@ -2822,7 +2822,7 @@ Args: `(f x . args)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="rem"></a>
 ## `rem`
@@ -2831,7 +2831,7 @@ Return remainder when second arg divides first
 
 Type: native function
 
-Arity: 2 
+Arity: 2
 
 Args: `(x y)`
 
@@ -2854,7 +2854,7 @@ ERROR: ((builtin function rem) (division by zero))
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="remove"></a>
 ## `remove`
@@ -2863,7 +2863,7 @@ Keep only values for which function f is false / the empty list
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(f l)`
 
@@ -2880,7 +2880,7 @@ Args: `(f l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="repeat"></a>
 ## `repeat`
@@ -2889,7 +2889,7 @@ Return a list of length n whose elements are all x
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(n x)`
 
@@ -2906,7 +2906,7 @@ Args: `(n x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="repeatedly"></a>
 ## `repeatedly`
@@ -2915,7 +2915,7 @@ Return a list of length n whose elements are made from calling f repeatedly
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(n f)`
 
@@ -2932,7 +2932,7 @@ Args: `(n f)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="reverse"></a>
 ## `reverse`
@@ -2941,7 +2941,7 @@ Reverse a list
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -2958,7 +2958,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="screen-clear"></a>
 ## `screen-clear`
@@ -2967,7 +2967,7 @@ Clear the screen
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -2975,7 +2975,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="screen-end"></a>
 ## `screen-end`
@@ -2984,7 +2984,7 @@ Stop screen for text UIs, return to console mode
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -2992,7 +2992,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="screen-get-key"></a>
 ## `screen-get-key`
@@ -3001,7 +3001,7 @@ Return a keystroke as an atom
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -3009,7 +3009,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="screen-size"></a>
 ## `screen-size`
@@ -3018,7 +3018,7 @@ Return the screen size (width, height)
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -3026,7 +3026,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="screen-start"></a>
 ## `screen-start`
@@ -3035,7 +3035,7 @@ Start screen for text UIs
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -3043,7 +3043,7 @@ Args: `()`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="screen-write"></a>
 ## `screen-write`
@@ -3052,15 +3052,15 @@ Write a string to the screen
 
 Type: native function
 
-Arity: 3 
+Arity: 3
 
-Args: `(x y list)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="second"></a>
 ## `second`
@@ -3069,7 +3069,7 @@ Return the second element of a list, or () if not enough elements
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -3095,7 +3095,7 @@ b
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="set-BANG"></a>
 ## `set!`
@@ -3104,7 +3104,7 @@ Update a value in an existing binding
 
 Type: special form
 
-Arity: 2 
+Arity: 2
 
 Args: `(name value)`
 
@@ -3130,7 +3130,7 @@ Args: `(name value)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="shell"></a>
 ## `shell`
@@ -3139,15 +3139,15 @@ Run a shell subprocess, and return stdout, stderr, and exit code
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
-Args: `(cmd)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="shuffle"></a>
 ## `shuffle`
@@ -3156,7 +3156,7 @@ Return a (quickly!) shuffled list
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(xs)`
 
@@ -3164,7 +3164,7 @@ Args: `(xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="sleep"></a>
 ## `sleep`
@@ -3173,15 +3173,15 @@ Sleep for the given number of milliseconds
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
-Args: `(ms)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="some"></a>
 ## `some`
@@ -3190,7 +3190,7 @@ Return f applied to first element for which that result is truthy, else ()
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(f l)`
 
@@ -3210,7 +3210,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="sort"></a>
 ## `sort`
@@ -3219,7 +3219,7 @@ Sort a list
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(xs)`
 
@@ -3242,7 +3242,7 @@ Args: `(xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="sort-by"></a>
 ## `sort-by`
@@ -3251,9 +3251,9 @@ Sort a list by a function
 
 Type: native function
 
-Arity: 2 
+Arity: 2
 
-Args: `(f xs)`
+Args: `()`
 
 
 ### Examples
@@ -3274,7 +3274,7 @@ Args: `(f xs)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="source"></a>
 ## `source`
@@ -3283,9 +3283,9 @@ Show source for a function
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
-Args: `(f)`
+Args: `()`
 
 
 ### Examples
@@ -3303,7 +3303,7 @@ ERROR: ((builtin function source) (cannot get source of builtin function <builti
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="split"></a>
 ## `split`
@@ -3312,7 +3312,7 @@ Split an atom or number into a list of single-digit numbers or single-character 
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -3332,7 +3332,7 @@ Args: `(x)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="swallow"></a>
 ## `swallow`
@@ -3362,7 +3362,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="syntax-quote"></a>
 ## `syntax-quote`
@@ -3371,7 +3371,7 @@ Syntax-quote an expression
 
 Type: special form
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -3393,7 +3393,7 @@ foo
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="take"></a>
 ## `take`
@@ -3402,7 +3402,7 @@ Take up to n items from the supplied list
 
 Type: function
 
-Arity: 2 
+Arity: 2
 
 Args: `(n l)`
 
@@ -3419,7 +3419,7 @@ Args: `(n l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="test"></a>
 ## `test`
@@ -3430,13 +3430,13 @@ Type: native function
 
 Arity: 0+
 
-Args: `(() . exprs)`
+Args: `()`
 
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="tosentence"></a>
 ## `tosentence`
@@ -3445,7 +3445,7 @@ Return l as a sentence... capitalized, with a period at the end
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(l)`
 
@@ -3462,7 +3462,7 @@ Args: `(l)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="true-QMARK"></a>
 ## `true?`
@@ -3471,7 +3471,7 @@ Return t if the argument is t
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -3491,7 +3491,7 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="try"></a>
 ## `try`
@@ -3527,7 +3527,7 @@ ERROR:
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="upcase"></a>
 ## `upcase`
@@ -3536,7 +3536,7 @@ Return the uppercase version of the given atom
 
 Type: native function
 
-Arity: 1 
+Arity: 1
 
 Args: `(x)`
 
@@ -3553,7 +3553,7 @@ ABC
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="version"></a>
 ## `version`
@@ -3562,7 +3562,7 @@ Return the version of the interpreter
 
 Type: native function
 
-Arity: 0 
+Arity: 0
 
 Args: `()`
 
@@ -3572,14 +3572,14 @@ Args: `()`
 ```
 > (version)
 ;;=>
-(0 0 52 dirty)
+(0 0 53 dirty)
 
 ```
 
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="when"></a>
 ## `when`
@@ -3608,7 +3608,7 @@ Args: `(condition . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="when-not"></a>
 ## `when-not`
@@ -3637,7 +3637,7 @@ Args: `(condition . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="while"></a>
 ## `while`
@@ -3663,7 +3663,7 @@ Args: `(condition . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="with-screen"></a>
 ## `with-screen`
@@ -3680,7 +3680,7 @@ Args: `(() . body)`
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
 
 <a id="zero-QMARK"></a>
 ## `zero?`
@@ -3689,7 +3689,7 @@ Return true iff the supplied argument is zero
 
 Type: function
 
-Arity: 1 
+Arity: 1
 
 Args: `(n)`
 
@@ -3709,4 +3709,4 @@ t
 
 [<sub><sup>Back to index</sup></sub>](#api-index)
 -----------------------------------------------------
-		
+
