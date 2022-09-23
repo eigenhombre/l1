@@ -55,7 +55,6 @@ type Builtin struct {
 	// If true, fn can take more arguments:
 	NAry      bool
 	Docstring string
-	ArgString string
 	Args      *ConsCell
 	Examples  *ConsCell
 }
@@ -168,20 +167,8 @@ func LoadFile(e *Env, filename string) error {
 	return nil
 }
 
-func shapeArgStringsAsCons(stringsForCar []string, stringForCdr string) *ConsCell {
-	var ret *ConsCell
-	var cdr Sexpr = Nil
-	if stringForCdr != "" {
-		cdr = Atom{stringForCdr}
-	}
-	if len(stringsForCar) == 0 {
-		return Cons(Nil, cdr)
-	}
-	ret = Cons(Atom{stringsForCar[len(stringsForCar)-1]}, cdr)
-	for i := len(stringsForCar) - 2; i >= 0; i-- {
-		ret = Cons(Atom{stringsForCar[i]}, ret)
-	}
-	return ret
+func restArgsOnly(s string) *ConsCell {
+	return Cons(Nil, Atom{s})
 }
 
 // moving `builtins` into `init` avoids initialization loop for doHelp:
@@ -213,8 +200,7 @@ func init() {
 			Docstring:  "Add 0 or more numbers",
 			FixedArity: 0,
 			NAry:       true,
-			ArgString:  "(() . xs)",
-			Args:       C(Nil, A("xs")),
+			Args:       restArgsOnly("xs"),
 			Examples: E(
 				L(A("+"), N(1), N(2), N(3)),
 				L(A("+")),
@@ -239,7 +225,6 @@ func init() {
 			Docstring:  "Subtract 0 or more numbers from the first argument",
 			FixedArity: 1,
 			NAry:       true,
-			ArgString:  "(x . xs)",
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
 				L(A("-"), N(1), N(1)),
@@ -272,8 +257,7 @@ func init() {
 			Docstring:  "Multiply 0 or more numbers",
 			FixedArity: 0,
 			NAry:       true,
-			ArgString:  "(() . xs)",
-			Args:       C(Nil, A("xs")),
+			Args:       restArgsOnly("xs"),
 			Examples: E(
 				L(A("*"), N(1), N(2), N(3)),
 				L(A("*")),
@@ -298,7 +282,6 @@ func init() {
 			Docstring:  "Divide the first argument by the rest",
 			FixedArity: 2,
 			NAry:       true,
-			ArgString:  "(numerator denominator1 . more)",
 			Args:       C(A("numerator"), C(A("denominator1"), A("more"))),
 			Examples: E(
 				L(A("/"), N(1), N(2)),
@@ -331,7 +314,6 @@ func init() {
 			Docstring:  "Return t if the arguments are equal, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			ArgString:  "(x . xs)",
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
 				L(A("="), N(1), N(1)),
@@ -355,7 +337,6 @@ func init() {
 			Docstring:  "Return remainder when second arg divides first",
 			FixedArity: 2,
 			NAry:       false,
-			ArgString:  "(x y)",
 			Args:       list(A("x"), A("y")),
 			Examples: E(
 				L(A("rem"), N(5), N(2)),
@@ -385,7 +366,6 @@ func init() {
 			Docstring:  "Return t if the arguments are in strictly increasing order, () otherwise",
 			FixedArity: 1,
 			NAry:       true,
-			ArgString:  "(x . xs)",
 			Args:       C(A("x"), A("xs")),
 			Examples: E(
 				L(A("<"), N(1), N(2)),
@@ -422,7 +402,6 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
-			ArgString:  "(x . xs)",
 			Examples: E(
 				L(A(">"), N(1), N(2)),
 				L(A(">"), N(1), N(1)),
@@ -440,7 +419,6 @@ func init() {
 			FixedArity: 1,
 			NAry:       true,
 			Args:       C(A("x"), A("xs")),
-			ArgString:  "(x . xs)",
 			Examples: E(
 				L(A(">="), N(1), N(2)),
 				L(A(">="), N(1), N(1)),
@@ -456,7 +434,6 @@ func init() {
 			Docstring:  "Apply a function to a list of arguments",
 			FixedArity: 2,
 			NAry:       false,
-			ArgString:  "(f args)",
 			Args:       list(A("f"), A("args")),
 			Examples: E(
 				L(A("apply"), A("+"), L(A("repeat"), N(10), N(1))),
@@ -469,7 +446,6 @@ func init() {
 			Docstring:  "Return t if the argument is an atom, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("atom?"), N(1)),
@@ -490,7 +466,6 @@ func init() {
 			Docstring:  "Return the body of a lambda function",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(f)",
 			Args:       list(A("f")),
 			Examples: E(
 				L(A("body"), L(A("lambda"), L(A("x")), L(A("+"), A("x"), N(1)))),
@@ -511,7 +486,6 @@ func init() {
 			Docstring:  "Return the first element of a list",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("car"), QL(A("one"), A("two"))),
@@ -536,7 +510,6 @@ func init() {
 			Docstring:  "Return a list with the first element removed",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 
 			Examples: E(
@@ -562,7 +535,6 @@ func init() {
 			Docstring:  "Add an element to the front of a (possibly empty) list",
 			FixedArity: 2,
 			NAry:       false,
-			ArgString:  "(x xs)",
 			Args:       list(A("x"), A("xs")),
 			Examples: E(
 				L(A("cons"), N(1), QL(A("one"), A("two"))),
@@ -581,7 +553,6 @@ func init() {
 			Docstring:  "Return the doclist for a function",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 
 			Examples: E(
@@ -609,7 +580,6 @@ func init() {
 			Docstring:  "Return a new atom with all characters in lower case",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("downcase"), QA("Hello")),
@@ -631,7 +601,6 @@ func init() {
 			Docstring:  "Evaluate an expression",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("eval"), QL(A("one"), A("two"))),
@@ -649,7 +618,6 @@ func init() {
 			Docstring:  "Exit the program",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				os.Exit(0)
@@ -661,7 +629,6 @@ func init() {
 			Docstring:  "Return available operators, as a list",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				forms, err := formsAsSexprList(e)
@@ -676,7 +643,6 @@ func init() {
 			Docstring:  "Fuse a list of numbers or atoms into a single atom",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("fuse"), QL(A("A"), A("B"), A("C"))),
@@ -717,7 +683,7 @@ func init() {
 			Docstring:  "Return a new symbol",
 			FixedArity: 0,
 			NAry:       true,
-			ArgString:  "(() . x)",
+			Args:       restArgsOnly("more"),
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 0 && len(args) != 1 {
 					return nil, baseError("gensym expects 0 or 1 arguments")
@@ -737,7 +703,6 @@ func init() {
 			Docstring:  "Print this message",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				fmt.Println(ShortDocStr(e))
@@ -749,7 +714,6 @@ func init() {
 			Docstring:  "Integer square root",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("isqrt"), N(4)),
@@ -774,7 +738,6 @@ func init() {
 			Docstring:  "Return the length of a list",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("len"), L(A("range"), N(10))),
@@ -800,7 +763,7 @@ func init() {
 			Docstring:  "Return a list of the given arguments",
 			FixedArity: 0,
 			NAry:       true,
-			ArgString:  "(() . xs)",
+			Args:       restArgsOnly("xs"),
 			Examples: E(
 				L(A("list"), N(1), N(2), N(3)),
 				L(A("list")),
@@ -814,7 +777,6 @@ func init() {
 			Docstring:  "Return t if the argument is a list, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("list?"), L(A("range"), N(10))),
@@ -835,7 +797,7 @@ func init() {
 			Docstring:  "Load and execute a file",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(filename)",
+			Args:       list(A("filename")),
 			Fn: func(args []Sexpr, e *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("load expects a single argument")
@@ -856,7 +818,6 @@ func init() {
 			Docstring:  "Expand a macro",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("macroexpand-1"), QL(A("+"), A("x"), N(1))),
@@ -874,7 +835,6 @@ func init() {
 			Docstring:  "Return t if the argument is nil, () otherwise",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("not"), L()),
@@ -896,7 +856,6 @@ func init() {
 			Docstring:  "Return true if the argument is a number, else ()",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("number?"), N(1)),
@@ -919,7 +878,7 @@ func init() {
 			Docstring:  "Print the arguments",
 			FixedArity: 0,
 			NAry:       true,
-			ArgString:  "(() . xs)",
+			Args:       restArgsOnly("xs"),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				strArgs := []string{}
 				for _, arg := range args {
@@ -934,7 +893,7 @@ func init() {
 			Docstring:  "Print the arguments and a newline",
 			FixedArity: 0,
 			NAry:       true,
-			ArgString:  "(() . xs)",
+			Args:       restArgsOnly("xs"),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				strArgs := []string{}
 				for _, arg := range args {
@@ -949,7 +908,6 @@ func init() {
 			Docstring:  "Print a list argument, without parentheses",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -968,7 +926,6 @@ func init() {
 			Docstring:  "Return a random integer between 0 and the argument minus 1",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -990,7 +947,6 @@ func init() {
 			Docstring:  "Read a list from stdin",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				line, err := ReadLine()
@@ -1009,7 +965,6 @@ func init() {
 			Docstring:  "Start screen for text UIs",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termStart()
@@ -1024,7 +979,6 @@ func init() {
 			Docstring:  "Stop screen for text UIs, return to console mode",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termEnd()
@@ -1039,7 +993,6 @@ func init() {
 			Docstring:  "Return the screen size (width, height)",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				width, height, err := termSize()
@@ -1054,7 +1007,6 @@ func init() {
 			Docstring:  "Clear the screen",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				err := termClear()
@@ -1069,7 +1021,6 @@ func init() {
 			Docstring:  "Return a keystroke as an atom",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 0 {
@@ -1087,7 +1038,7 @@ func init() {
 			Docstring:  "Write a string to the screen",
 			FixedArity: 3,
 			NAry:       false,
-			ArgString:  "(x y list)",
+			Args:       list(A("x"), A("y"), A("list")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 3 {
 					return nil, baseError("screen-write expects 3 arguments")
@@ -1116,7 +1067,7 @@ func init() {
 			Docstring:  "Run a shell subprocess, and return stdout, stderr, and exit code",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(cmd)",
+			Args:       list(A("cmd")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("shell expects a single argument")
@@ -1129,7 +1080,6 @@ func init() {
 			Docstring:  "Return a (quickly!) shuffled list",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(xs)",
 			Args:       list(A("xs")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
@@ -1154,7 +1104,7 @@ func init() {
 			Docstring:  "Sleep for the given number of milliseconds",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(ms)",
+			Args:       list(A("ms")),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) != 1 {
 					return nil, baseError("sleep expects a single argument")
@@ -1172,7 +1122,6 @@ func init() {
 			Docstring:  "Sort a list",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(xs)",
 			Args:       list(A("xs")),
 			Examples: E(
 				L(A("sort"), QL(N(3), N(2), N(1))),
@@ -1219,7 +1168,7 @@ func init() {
 			Docstring:  "Sort a list by a function",
 			FixedArity: 2,
 			NAry:       false,
-			ArgString:  "(f xs)",
+			Args:       list(A("f"), A("xs")),
 			Examples: E(
 				L(A("sort-by"), A("first"), QL(L(N(3)), L(N(2)), L(N(1)))),
 				L(A("sort-by"), A("first"), QL()),
@@ -1275,7 +1224,7 @@ func init() {
 			Docstring:  "Show source for a function",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(f)",
+			Args:       list(A("form")),
 			Examples: E(
 				L(A("source"), A("map")),
 				L(A("source"), A("+")),
@@ -1288,7 +1237,10 @@ func init() {
 				case *Builtin:
 					return nil, baseErrorf("cannot get source of builtin function %s", t)
 				case *lambdaFn:
-					return Cons(Atom{"lambda"}, Cons(shapeArgStringsAsCons(t.argstrings, t.restArg), t.body)), nil
+					if t.restArg == "" {
+						return Cons(A("lambda"), Cons(t.args, t.body)), nil
+					}
+					return Cons(A("lambda"), Cons(combineArgs(t.args, A(t.restArg)), t.body)), nil
 				default:
 					return nil, baseErrorf("'%s' is not a function", args[0])
 				}
@@ -1299,7 +1251,6 @@ func init() {
 			Docstring:  "Split an atom or number into a list of single-digit numbers or single-character atoms",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("split"), N(123)),
@@ -1324,7 +1275,7 @@ func init() {
 			Docstring:  "Establish a testing block (return last expression)",
 			FixedArity: 0,
 			NAry:       true,
-			ArgString:  "(() . exprs)",
+			Args:       restArgsOnly("exprs"),
 			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
 				if len(args) == 0 {
 					return Nil, nil
@@ -1342,7 +1293,6 @@ func init() {
 			Docstring:  "Return the uppercase version of the given atom",
 			FixedArity: 1,
 			NAry:       false,
-			ArgString:  "(x)",
 			Args:       list(A("x")),
 			Examples: E(
 				L(A("upcase"), QA("abc")),
@@ -1363,7 +1313,6 @@ func init() {
 			Docstring:  "Return the version of the interpreter",
 			FixedArity: 0,
 			NAry:       false,
-			ArgString:  "()",
 			Args:       Nil,
 			Examples: E(
 				L(A("version")),

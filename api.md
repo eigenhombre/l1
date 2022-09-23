@@ -1570,7 +1570,7 @@ Type: native function
 
 Arity: 0+
 
-Args: `()`
+Args: `(() . more)`
 
 
 
@@ -1957,7 +1957,7 @@ Type: native function
 
 Arity: 0+
 
-Args: `()`
+Args: `(() . xs)`
 
 
 ### Examples
@@ -2047,7 +2047,7 @@ Type: native function
 
 Arity: 1
 
-Args: `()`
+Args: `(filename)`
 
 
 
@@ -2535,7 +2535,7 @@ Type: native function
 
 Arity: 0+
 
-Args: `()`
+Args: `(() . xs)`
 
 
 
@@ -2569,7 +2569,7 @@ Type: native function
 
 Arity: 0+
 
-Args: `()`
+Args: `(() . xs)`
 
 
 
@@ -3054,7 +3054,7 @@ Type: native function
 
 Arity: 3
 
-Args: `()`
+Args: `(x y list)`
 
 
 
@@ -3141,7 +3141,7 @@ Type: native function
 
 Arity: 1
 
-Args: `()`
+Args: `(cmd)`
 
 
 
@@ -3175,7 +3175,7 @@ Type: native function
 
 Arity: 1
 
-Args: `()`
+Args: `(ms)`
 
 
 
@@ -3253,7 +3253,7 @@ Type: native function
 
 Arity: 2
 
-Args: `()`
+Args: `(f xs)`
 
 
 ### Examples
@@ -3285,7 +3285,7 @@ Type: native function
 
 Arity: 1
 
-Args: `()`
+Args: `(form)`
 
 
 ### Examples
@@ -3430,7 +3430,7 @@ Type: native function
 
 Arity: 0+
 
-Args: `()`
+Args: `(() . exprs)`
 
 
 
