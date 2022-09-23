@@ -5,19 +5,17 @@ import (
 )
 
 type lambdaFn struct {
-	argstrings []string
-	args       *ConsCell
-	restArg    string
-	body       *ConsCell
-	doc        *ConsCell
-	isMacro    bool
-	env        *Env
+	args    *ConsCell
+	restArg string
+	body    *ConsCell
+	doc     *ConsCell
+	isMacro bool
+	env     *Env
 }
 
 var noRestArg string = ""
 
 func mkLambda(cdr *ConsCell, isMacro bool, e *Env) (*lambdaFn, error) {
-	argstrings := []string{}
 	restArg := noRestArg
 	// look for fn name
 	if cdr == Nil {
@@ -37,6 +35,7 @@ func mkLambda(cdr *ConsCell, isMacro bool, e *Env) (*lambdaFn, error) {
 		return nil, baseError("lambda requires an argument list")
 	}
 	emptyArgList := false
+	args := []string{}
 top:
 	for argList != Nil && !emptyArgList {
 		if argList.car == Nil {
@@ -46,7 +45,7 @@ top:
 			if !ok {
 				return nil, baseError("argument list item is not an atom")
 			}
-			argstrings = append(argstrings, arg.s)
+			args = append(args, arg.s)
 		}
 		switch t := argList.cdr.(type) {
 		case Atom:
@@ -78,8 +77,8 @@ top:
 			body = body.cdr.(*ConsCell) // Skip `doc` part.
 		}
 	}
-	f := lambdaFn{argstrings,
-		stringsToList(argstrings...),
+	f := lambdaFn{
+		stringsToList(args...),
 		restArg,
 		body,
 		doc,

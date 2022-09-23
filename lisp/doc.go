@@ -395,16 +395,6 @@ func functionExamplesFromDoc(l lambdaFn) *ConsCell {
 	}
 }
 
-func formatLambdaArgs(args []string, restArg string) string {
-	if restArg == "" {
-		return fmt.Sprintf("(%s)", strings.Join(args, " "))
-	}
-	if len(args) == 0 {
-		return fmt.Sprintf("(() . %s)", restArg)
-	}
-	return fmt.Sprintf("(%s . %s)", strings.Join(args, " "), restArg)
-}
-
 func examplesToString(examples *ConsCell, e *Env) string {
 	ret := ""
 	for {
