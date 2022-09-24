@@ -723,7 +723,7 @@
   (is (< 10 (len (forms))))
   (is (some (comp (partial = 'forms) first)
             (forms)))
-  (is (every (comp (partial = 5) len) (forms)))
+  (is (every (comp (partial = 6) len) (forms)))
   (is (= '(Return a new atom with all characters in lower case)
          (doc downcase))))
 

@@ -615,6 +615,7 @@ func formsAsSexprList(e *Env) ([]Sexpr, error) {
 			Atom{strings.Replace(form.ftype, " ", "-", -1)},
 			Num(form.farity),
 			multi,
+			form.args,
 			form.doc))
 	}
 	return out, nil
