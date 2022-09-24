@@ -614,8 +614,8 @@ func formsAsSexprList(e *Env) ([]Sexpr, error) {
 		out = append(out, list(Atom{form.name},
 			Atom{strings.Replace(form.ftype, " ", "-", -1)},
 			Num(form.farity),
-			form.doc,
-			multi))
+			multi,
+			form.doc))
 	}
 	return out, nil
 }

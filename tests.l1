@@ -841,9 +841,7 @@
   (is (= 0 (apply min (range 10)))))
 
 (defn member (x l)
-  (cond ((not l) ())
-        ((= x (car l)) t)
-        (member x (cdr l))))
+  (some (partial = x) l))
 
 (test '(exceptions, stacktraces and their contents)
   (is (not (try)))

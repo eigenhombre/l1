@@ -1,0 +1,38 @@
+(defn member (x l)
+  (some (partial = x) l))
+
+(defn assoc (x pairs)
+  (cond ((not pairs) ())
+        ((= x (caar pairs))
+         (car pairs))
+        (t (assoc x (cdr pairs)))))
+
+(defn increment-key (k pairs)
+  (let ((pair (assoc k pairs)))
+    (if-not pair
+      (cons (cons k 0) pairs)
+      (cons (cons k (inc (cdr pair))) pairs))))
+
+(defn clear-dup-keys (pairs)
+  (let ((seen ())
+        (ret ()))
+    (foreach p pairs
+      (when-not (member (car p) seen)
+        (set! seen (cons (car p) seen))
+        (set! ret (cons p ret))))
+    ret))
+
+(defn frequencies (l)
+  (let ((state ()))
+    (foreach x l
+      (set! state (increment-key x state)))
+    (clear-dup-keys state)))
+
+(let ((fs (forms)))
+  (printl `(There are ~(len fs) forms ~COLON))
+  (foreach pair (reverse
+                 (sort-by cdr
+                          (frequencies
+                           (map second fs))))
+    (printl `(~TAB type ~(car pair) ~COLON ~(cdr pair))))
+  ())

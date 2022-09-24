@@ -31,6 +31,7 @@ run-examples: ${PROG}
 	./l1 examples/primes.l1
 	./l1 examples/sentences.l1
 	./l1 examples/galax.l1
+	./l1 examples/meta.l1
 
 tco-test: ${PROG}
 	./l1 examples/tco.l1
