@@ -127,6 +127,10 @@ Example, using a file in this project:
     user	0m0.007s
     sys	0m0.005s
 
+See [these
+instructions](https://github.com/eigenhombre/l1/blob/master/l1.md#making-binary-executables)
+for turning an `l1` program into an executable binary.
+
 # Example Programs
 
 Several example programs are available in the

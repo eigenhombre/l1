@@ -444,56 +444,6 @@ if and only if any of them causes an (uncaught) error:
 `swallow` is used mainly in the fuzzing tests for `l1` (see the
 examples directory).
 
-## Loading Source Files
-
-There are three ways of executing a source file, e.g. `main.l1`:
-
-1. (Unix/Linux/Mac only) Add a
-   ["shebang"](https://en.wikipedia.org/wiki/Shebang_(Unix)) line `#!
-   /usr/bin/env l1` at the beginning of `main.l1` and change the file
-   permission to execute (`chmod +x main.l1`).  Then you can just run
-   `./main.l1` directly at your shell prompt.
-2. Pass `main.l1` as an argument to `l1`: `l1 main.l1`, again at the
-   shell prompt.
-3. Call the `load` function from the `l1` REPL or from within another
-   file: `(load main.l1)`.
-
-Option 3. is currently the only way of combining source files into a
-single program.  There is currently no packaging or namespacing
-functionality in `l1`.
-
-### Making Binary Executables
-
-A script `l1c` is provided which allows one to build a stand-alone
-binary from an `l1` program.  It requires a working Go installation
-and probably only works on Linux / Mac / Un*x machines.  Example:
-
-    $ cat hello.l1
-    (printl '(Hello, World!))
-
-    $ l1c hello.l1 -o hello
-    /var/folders/v2/yxn9b9h93lzgjsz645mblbt80000gt/T/tmp.QecBxTkp ~/Somedir/l1
-    go: creating new go.mod: module myprog
-    go: to add module requirements and sums:
-        go mod tidy
-    go: finding module for package github.com/eigenhombre/l1/lisp
-    go: found github.com/eigenhombre/l1/lisp in github.com/eigenhombre/l1 v0.0.56
-    ~/Somedir/l1
-    ...
-
-    $ ls -l hello
-    -rwxr-xr-x  1 jacobsen  staff  3750418 Feb 14 10:46 hello
-    $ ./hello
-    Hello, World!
-    $
-
-Because `l1c` is a Bash script tied to the Go language build system,
-you should install `l1` [via the `go`
-tool](https://github.com/eigenhombre/l1#option-1-install-using-go)
-rather than [via a downloaded
-binary](https://github.com/eigenhombre/l1#option-1-install-using-go)
-if you wish to use `l1c`.
-
 ## Subprocesses
 
 The `shell` function executes a subprocess command, which should be a
@@ -610,13 +560,31 @@ types control-C or control-D:
               ;; Handle other keys...
               )))))
 
-## Running l1 Programs as Command Line Scripts
+## Loading Source Files
+
+There are four ways of executing a source file, e.g. `main.l1`:
+
+1. (Unix/Linux/Mac only) [Add a
+   shebang](#running-l1-programs-as-command-line-scripts) at the
+   beginning of the script;
+2. Pass `main.l1` as an argument to `l1`: `l1 main.l1`, again at the
+   shell prompt.
+3. Call the `load` function from the `l1` REPL or from within another
+   file: `(load main.l1)`.
+4. ["Compile" the source into an executable binary](#making-binary-executables) using `l1c`.
+
+Option 3. is currently the only way of combining multiple source files
+into a single program.  There is currently no packaging or namespacing
+functionality in `l1`.
+
+### Running l1 Programs as Command Line Scripts
 
 Programs can be run by giving the program name as an argument to `l1`:
 
     l1 hello.l1
 
-However, if you add `#!/usr/bin/env l1` at the beginning of an `l1` file:
+However, if you add a ["shebang"](https://en.wikipedia.org/wiki/Shebang_(Unix)) line
+`#!/usr/bin/env l1` at the beginning of an `l1` file:
 
     #!/usr/bin/env l1
     ;; hello.l1
@@ -631,6 +599,39 @@ then you can run `hello.l1` "by itself," without explicitly invoking `l1`:
     $ ./hello.l1
     hello world
     $
+
+### Making Binary Executables
+
+A script `l1c` is provided which allows one to build a stand-alone
+binary from an `l1` program.  It requires a working Go installation
+and probably only works on Linux / Mac / Un*x machines.  Example:
+
+    $ cat hello.l1
+    (printl '(Hello, World!))
+
+    $ l1c hello.l1 -o hello
+    /var/folders/v2/yxn9b9h93lzgjsz645mblbt80000gt/T/tmp.QecBxTkp ~/Somedir/l1
+    go: creating new go.mod: module myprog
+    go: to add module requirements and sums:
+        go mod tidy
+    go: finding module for package github.com/eigenhombre/l1/lisp
+    go: found github.com/eigenhombre/l1/lisp in github.com/eigenhombre/l1 v0.0.56
+    ~/Somedir/l1
+    ...
+
+    $ ls -l hello
+    -rwxr-xr-x  1 jacobsen  staff  3750418 Feb 14 10:46 hello
+    $ ./hello
+    Hello, World!
+    $
+
+Because `l1c` is a Bash script tied to the Go language build system,
+you should install `l1` [via the `go`
+tool](https://github.com/eigenhombre/l1#option-1-install-using-go)
+rather than [via a downloaded
+binary](https://github.com/eigenhombre/l1#option-1-install-using-go)
+if you wish to use `l1c`.
+
 
 ## Emacs Integration
 
