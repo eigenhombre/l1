@@ -4,7 +4,7 @@
 
 PROG=l1
 
-all: deps fast slow
+all: deps fast slow l1c-test
 
 slow: tco-test
 
@@ -35,6 +35,11 @@ run-examples: ${PROG}
 
 tco-test: ${PROG}
 	./l1 examples/tco.l1
+
+l1c-test: ${PROG}
+	echo "(println 1 2 3)" > l123.l1
+	./l1c l123.l1 -o l123
+	./l123
 
 lint:
 	golint -set_exit_status .

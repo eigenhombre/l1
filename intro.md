@@ -487,6 +487,13 @@ and probably only works on Linux / Mac / Un*x machines.  Example:
     Hello, World!
     $
 
+Because `l1c` is a Bash script tied to the Go language build system,
+you should install `l1` [via the `go`
+tool](https://github.com/eigenhombre/l1#option-1-install-using-go)
+rather than [via a downloaded
+binary](https://github.com/eigenhombre/l1#option-1-install-using-go)
+if you wish to use `l1c`.
+
 ## Subprocesses
 
 The `shell` function executes a subprocess command, which should be a
