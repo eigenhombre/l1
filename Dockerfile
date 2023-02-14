@@ -6,7 +6,7 @@ RUN apt-get -qq -y upgrade
 RUN apt-get install -qq -y make python
 
 WORKDIR /work
-RUN go install honnef.co/go/tools/cmd/staticcheck@latest
+RUN go install honnef.co/go/tools/cmd/staticcheck@2022.1
 RUN go install -v golang.org/x/lint/golint@latest
 COPY . .
 
