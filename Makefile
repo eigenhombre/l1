@@ -45,6 +45,7 @@ clean:
 
 install: ${PROG}
 	go install .
+	cp l1c ${GOPATH}/bin
 
 verbose: all # The tests are fast!  Just do it again, verbosely:
 	go test -v ./lisp

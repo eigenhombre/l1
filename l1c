@@ -1,0 +1,54 @@
+#!/bin/bash
+
+unset -v outfile
+unset -v filename
+unset -v tmpdir
+
+filename=$1
+shift 1
+
+while getopts o: opt; do
+    case $opt in
+        o) outfile=$OPTARG ;;
+        *)
+            echo "$0: Unrecognized argument." >& 2
+            exit 1
+    esac
+done
+
+shift "$(( OPTIND -1 ))"
+
+if [ -z "$outfile" ]; then
+    outfile="goprog"
+fi
+
+tmpdir=$(mktemp -d)
+
+mkdir -p $tmpdir
+
+echo $filename $outfile $tmpdir
+
+cp $filename $tmpdir
+pushd $tmpdir
+cat <<EOF > main.go
+package main
+
+import (
+	"github.com/eigenhombre/l1/lisp"
+        _ "embed"
+)
+
+//go:embed $filename
+var FileSource string
+
+func main() {
+	globals := lisp.InitGlobals()
+	lisp.LexParseEval(lisp.RawCore, &globals)
+	lisp.LexParseEval(FileSource, &globals)
+}
+EOF
+go mod init myprog
+go mod tidy
+go build .
+popd
+mv $tmpdir/myprog $outfile
