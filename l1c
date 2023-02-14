@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 unset -v outfile
 unset -v filename
 unset -v tmpdir
@@ -28,7 +30,7 @@ mkdir -p $tmpdir
 
 echo $filename $outfile $tmpdir
 
-cp $filename $tmpdir
+cp $filename $tmpdir/src.l1
 pushd $tmpdir
 cat <<EOF > main.go
 package main
@@ -38,7 +40,7 @@ import (
         _ "embed"
 )
 
-//go:embed $filename
+//go:embed src.l1
 var FileSource string
 
 func main() {

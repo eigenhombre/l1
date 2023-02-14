@@ -37,9 +37,9 @@ tco-test: ${PROG}
 	./l1 examples/tco.l1
 
 l1c-test: ${PROG}
-	echo "(println 1 2 3)" > l123.l1
-	./l1c l123.l1 -o l123
-	./l123
+	echo "(println 1 2 3)" > /tmp/l123.l1
+	./l1c /tmp/l123.l1 -o /tmp/l123
+	/tmp/l123
 
 lint:
 	golint -set_exit_status .
