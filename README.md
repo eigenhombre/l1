@@ -351,8 +351,9 @@ Many of the [unit tests](https://github.com/eigenhombre/l1/blob/master/tests.l1)
 ```
 
 Several core library functions are also implemented in `l1`.  The file
-[`l1.l1`](https://github.com/eigenhombre/l1/blob/master/src/l1.l1) contains these, and is evaluated when the interpreter starts.
-This currently runs quite quickly (12 milliseconds on my Mac M1 Air).
+[`l1.l1`](https://github.com/eigenhombre/l1/blob/master/lisp/l1.l1)
+contains these, and is evaluated when the interpreter starts.  This
+currently runs quite quickly (about 12 milliseconds on my Mac M1 Air).
 
 # Local Development
 
