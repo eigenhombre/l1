@@ -56,10 +56,8 @@ slow for longer calculations.
 
 ## Option 1: Install using Go
 
-You should have Go installed and configured (including [setting
+To use this method, have Go installed and configured (including [setting
 GOPATH](https://medium.com/@devesu/golang-quickstart-with-homebrew-macos-f3b3dacbc5dc)).
-At some later point, pre-built artifacts for various architectures may
-be available here.
 
 To install `l1`,
 
