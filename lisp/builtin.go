@@ -30,6 +30,7 @@ func InitGlobals() Env {
 	globals.Set("QUOTE", Atom{"'"})
 	globals.Set("BQUOTE", Atom{"`"})
 	globals.Set("DQUOTE", Atom{"\""})
+	globals.Set("UPLINE", Atom{"\033[F"})
 	return globals
 }
 

@@ -183,6 +183,7 @@ helpful for this sort of construction:
     QUOTE
     DQUOTE
     BQUOTE
+    UPLINE
 
 These all evaluate to atoms whose names are the unreadable characters,
 some of which may be helpful for text games and other diversions:
@@ -210,6 +211,11 @@ some of which may be helpful for text games and other diversions:
     ??.,,:.:..
     ()
     >
+
+The `UPLINE` character, in particular, which moves the cursor to the
+beginning of the previous line, is useful for making command-line
+output which repeatedly updates the line in place, rather than
+printing multiple lines.
 
 ## Functions
 
