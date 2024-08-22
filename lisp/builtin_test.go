@@ -68,3 +68,19 @@ func TestListFromSemver(t *testing.T) {
 		}
 	}
 }
+
+// Test that the number function returns the number it is given.
+// Primarily useful for handling argv values.
+func TestNumberTest(t *testing.T) {
+	// Emulate setting of an argv value:
+	env := mkEnv(nil)
+	env.Set("h", Atom{"100"})
+	// Check the function proper:
+	result, err := eval(Cons(Atom{"number"}, Cons(Atom{"h"}, Nil)), &env)
+	if err != nil {
+		t.Errorf("eval(num 100) = %q", err)
+	}
+	if !result.Equal(Num(100)) {
+		t.Errorf("eval(num 100) = %q", result)
+	}
+}

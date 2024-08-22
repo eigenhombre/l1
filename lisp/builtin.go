@@ -31,6 +31,12 @@ func InitGlobals() Env {
 	globals.Set("BQUOTE", Atom{"`"})
 	globals.Set("DQUOTE", Atom{"\""})
 	globals.Set("UPLINE", Atom{"\033[F"})
+	// Form up ARGV:
+	var args []Sexpr
+	for _, arg := range os.Args {
+		args = append(args, Atom{arg})
+	}
+	globals.Set("ARGV", mkListAsConsWithCdr(args, Nil))
 	return globals
 }
 
@@ -880,6 +886,20 @@ func init() {
 					return True, nil
 				}
 				return Nil, nil
+			},
+		},
+		"number": {
+			Name:       "number",
+			Doc:        DOC("Cast an atom, probably from an external source, to a number. Mostly used for parsing ARGV."),
+			FixedArity: 1,
+			NAry:       false,
+			Args:       LC(A("x")),
+			Fn: func(args []Sexpr, _ *Env) (Sexpr, error) {
+				if len(args) != 1 {
+					return nil, baseError("number expects a single argument")
+				}
+				n := Num(args[0].String())
+				return n, nil
 			},
 		},
 		"print": {

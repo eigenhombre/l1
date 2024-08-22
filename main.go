@@ -104,12 +104,10 @@ func main() {
 
 	files := flag.Args()
 	if len(files) > 0 {
-		for _, file := range files {
-			err := lisp.LoadFile(&globals, file)
-			if err != nil {
-				fmt.Printf("ERROR:\n%v\n", err)
-				os.Exit(1)
-			}
+		err := lisp.LoadFile(&globals, files[0])
+		if err != nil {
+			fmt.Printf("ERROR:\n%v\n", err)
+			os.Exit(1)
 		}
 		return
 	}

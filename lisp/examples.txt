@@ -103,6 +103,7 @@ l1 - a Lisp interpreter.
            not  N    1   Return t if the argument is nil, () otherwise
           not=  F    0+  Complement of = function
            nth  F    2   Find the nth value of a list, starting from zero
+        number  N    1   Cast an atom, probably from an external source, to a number. Mostly used for parsing ARGV.
        number?  N    1   Return true if the argument is a number, else ()
           odd?  F    1   Return true if the supplied integer argument is odd
             or  S    0+  Boolean or
