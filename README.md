@@ -391,7 +391,7 @@ outstanding changes first.
 
 # License
 
-Copyright © 2022, John Jacobsen. MIT License.
+Copyright © 2022-2024, John Jacobsen. MIT License.
 
 Two of the programs in `examples/` were adapted from P. Norvig,
 [Paradigms of Artificial Intelligence Programming: Case Studies in
