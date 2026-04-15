@@ -15,3 +15,15 @@ jobs:
           go-version: '>=1.18.0'
       - name: Build and test
         run: make docker
+      - name: Play success sound
+        if: success()
+        run: |
+          if [ -x "$HOME/bin/success-sound" ]; then
+            "$HOME/bin/success-sound" || true
+          fi
+      - name: Play failure sound
+        if: failure()
+        run: |
+          if [ -x "$HOME/bin/failure-sound" ]; then
+            "$HOME/bin/failure-sound" || true
+          fi
