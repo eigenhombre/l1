@@ -174,5 +174,6 @@
       darlena arlinda arlen junita margeret anette selina wilma reena
       tessa delma))
 
-(dotimes 10
-  (printl (itsalive (randchoice all-names))))
+(let ((n (number (or (caddr ARGV) 10))))
+  (dotimes n
+    (printl (itsalive (randchoice all-names)))))
